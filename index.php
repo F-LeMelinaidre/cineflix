@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+// Point d'entrée de l'application
 
 // pour affichage du temps de generation de page
 define('DEBUG_TIME', microtime(true));
