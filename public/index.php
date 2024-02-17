@@ -11,4 +11,6 @@ date_default_timezone_set('Europe/Paris');
 
 // Appel La function load de la class App, qui gère l'ensemble de l'appli
 
-require '../vendor/autoload.php';
+require '../Core/App.php';
+
+\Cineflix\Core\App::load();

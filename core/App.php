@@ -5,6 +5,6 @@ class App {
 
     public static function load()
     {
-        echo "ok";
+        echo 'Class: ' . __CLASS__ . ' | Function: ' . __FUNCTION__;
     }
 }
