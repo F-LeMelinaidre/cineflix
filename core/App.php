@@ -1,10 +1,10 @@
 <?php
 
-namespace Core;
+namespace Cineflix\Core;
 class App {
 
     public static function load()
     {
-
+        echo "ok";
     }
 }
