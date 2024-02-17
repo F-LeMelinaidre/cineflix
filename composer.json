@@ -1,0 +1,14 @@
+{
+    "name": "projet-web/cineflix",
+    "authors": [
+        {
+            "name": "Major",
+            "email": "major.max.englishbull@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Cineflix\\": "/public/"
+        }
+    }
+}
