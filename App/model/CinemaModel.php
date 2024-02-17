@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model;
+namespace Cineflix\App\Model;
 
-class MovieModel
+class CinemaModel
 {
 
     public function __construct()

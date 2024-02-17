@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model;
+namespace Cineflix\App\Model;
 
-class StreamingModel
+class ProfilModel
 {
 
     public function __construct()

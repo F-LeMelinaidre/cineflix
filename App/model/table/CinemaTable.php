@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model\Table;
+namespace Cineflix\App\Model\Table;
 
-class MovieTable
+class CinemaTable
 {
 
     public function __construct()

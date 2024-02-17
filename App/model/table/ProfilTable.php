@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model;
+namespace Cineflix\App\Model\Table;
 
-class CinemaModel
+class ProfilTable
 {
 
     public function __construct()

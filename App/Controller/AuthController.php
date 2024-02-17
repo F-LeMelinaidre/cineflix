@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace Cineflix\App\Controller;
 
 class AuthController
 {

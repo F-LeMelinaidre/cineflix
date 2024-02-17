@@ -8,7 +8,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "Cineflix\\": "/public/"
+            "CineFlix\\App\\": "App/",
+            "Cineflix\\Core\\": "Core/"
         }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace Cineflix\App\Controller\Admin;
 
 class MovieController
 {

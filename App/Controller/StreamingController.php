@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace Cineflix\App\Controller;
 
-class CinemaController
+class StreamingController
 {
 
     public function __construct()
@@ -16,16 +16,6 @@ class CinemaController
     }
 
     public function show()
-    {
-
-    }
-
-    public function edit()
-    {
-
-    }
-
-    public function delete()
     {
 
     }

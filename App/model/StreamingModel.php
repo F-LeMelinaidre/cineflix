@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model\Table;
+namespace Cineflix\App\Model;
 
-class UserTable
+class StreamingModel
 {
 
     public function __construct()
