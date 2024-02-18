@@ -21,11 +21,18 @@ class Router
      * @param string $name
      * @return Route
      */
-    public function get(string $path, callable $callable, string $name):Route
+    public function get(string $path, callable $callable, string $name = null):Route
     {
         return $this->add($path, $callable, $name, 'GET');
     }
-    public function post(string $path, callable $callable, string $name):Route
+
+    /**
+     * @param string $path
+     * @param callable $callable
+     * @param string|null $name
+     * @return Route
+     */
+    public function post(string $path, callable $callable, string $name = null):Route
     {
         return $this->add($path, $callable, $name, 'POST');
     }
@@ -37,14 +44,26 @@ class Router
      * @param string $method
      * @return Route
      */
-    private function add(string $path, callable $callable, string $name, string $method)
+    private function add(string $path, callable $callable, string $name, string $method):Route
     {
         $route = new Route($path, $callable);
         $this->routes[$method][] = $route;
 
+        if($name) {
+            $this->routes_name[$name] = $route;
+        }
         return $route;
     }
 
+    /**
+     * @param string $name
+     * @param array $params
+     * @return void
+     */
+    public function url(string $name, array $params = [])
+    {
+        //TODO ajouter getUrl dans la Class Route
+    }
     /**
      * @return void
      */
