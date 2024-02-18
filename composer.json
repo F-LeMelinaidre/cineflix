@@ -8,8 +8,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "CineFlix\\App\\": "App/",
-            "Cineflix\\Core\\": "Core/"
+            "Cineflix\\Core\\": "Core/",
+            "Cineflix\\App\\": "App/"
         }
     }
 }
