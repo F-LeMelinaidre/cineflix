@@ -31,6 +31,9 @@ class Route
     }
 
     public function call() {
+        if(is_string($this->callable)) {
+            echo $this->callable;
+        }
         return call_user_func_array($this->callable, $this->matches);
     }
 }

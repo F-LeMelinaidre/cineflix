@@ -8,22 +8,46 @@ class Router
 
     private string $url = '';
     private array $routes = [];
+    private array $routes_name = [];
 
     public function __construct()
     {
         if(isset($_GET['uri'])) $this->url = $_GET['uri'];
     }
-    public function get(string $path, callable $callable):void
+
+    /**
+     * @param string $path
+     * @param callable $callable
+     * @param string $name
+     * @return Route
+     */
+    public function get(string $path, callable $callable, string $name):Route
     {
-        $route = new Route($path, $callable);
-        $this->routes['GET'][] = $route;
+        return $this->add($path, $callable, $name, 'GET');
     }
-    public function post(string $path, callable $callable):void
+    public function post(string $path, callable $callable, string $name):Route
     {
-        $route = new Route($path, $callable);
-        $this->routes['POST'][] = $route;
+        return $this->add($path, $callable, $name, 'POST');
     }
 
+    /**
+     * @param string $path
+     * @param callable $callable
+     * @param string $name
+     * @param string $method
+     * @return Route
+     */
+    private function add(string $path, callable $callable, string $name, string $method)
+    {
+        $route = new Route($path, $callable);
+        $this->routes[$method][] = $route;
+
+        return $route;
+    }
+
+    /**
+     * @return void
+     */
     public function run() {
         $req_method = $_SERVER['REQUEST_METHOD'];
 

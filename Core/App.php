@@ -15,12 +15,13 @@ class App
     {
         $router = new Router();
 
-        $router->get('/', function(){ echo 'Accueil'; });
-        $router->get('/Auth', function(){ echo 'Afficher Auth'; });
-        $router->get('/movies', function(){ echo 'Afficher les films'; });
-        $router->get('/profil', function(){ echo 'Afficher le profil'; });
-        $router->get('/Streams', function(){ echo 'Afficher les streams'; });
-        $router->get('/User', function(){ echo 'Afficher User'; });
+        $router->get('/', function(){ echo 'Home | index'; }, 'home.index');
+        $router->get('/Auth/signin', function(){ echo 'Auth | signin'; }, 'auth.signin');
+        $router->get('/Auth/signout', function(){ echo 'Auth | signout'; }, 'auth.signout');
+        $router->get('/movies', function(){ echo 'Movie | index'; }, 'movies.index');
+        $router->get('/profil', function(){ echo 'Profil | index'; }, 'profil.index');
+        $router->get('/Streams', function(){ echo 'Streaming | index'; }, 'streaming.index');
+        $router->get('/User', function(){ echo 'User | index'; }, 'user.index');
         $router->run();
 
         echo '<p>Class: ' . __CLASS__ . ' | Function: ' . __FUNCTION__ . '</p>';
