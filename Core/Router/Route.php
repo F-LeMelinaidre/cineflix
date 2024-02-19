@@ -13,6 +13,8 @@ namespace Cineflix\Core\Router;
  * $path = chemin de la route, sans les / en debut et fin
  * $params = tableau des paramètres de la route ['controller' => ..., 'action' => ..., 'params' => ['nom' => 'regex']]
  * $matches
+ *
+ * TODO gestion des paramètres controller action
  */
 
 class Route
@@ -79,7 +81,7 @@ class Route
      * Route defini avec la function get() de la class Router get('/pages/:id',['params' => ['id' => '[0-9]+']],pages.show)
      *
      *
-     * @param $match
+     * @param $match // nom du paramètre correspondant à la clé du tableau params pour récupérer le regex, si défini, sinon regex par defaut ([^\]+)
      * @return void
      */
     private function paramMatch($match) {
