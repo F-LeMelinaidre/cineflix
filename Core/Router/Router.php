@@ -9,7 +9,7 @@ use Cineflix\Core\Router\RouterException;
  * $routes = tableau des routes de l'application
  *
  * function add() stock la route dans le tableau routes, suivant la fonction parente utilisé.
- * function get() pour les méthode $_GET
+ * function get() pour les méthode $_GET exemple: get('/pages/:id',['params' => ['id' => '[0-9]+']],pages.show)
  * function post() pour les méthode $_POST
  * Schéma du tableau route:
  *
@@ -49,9 +49,9 @@ class Router
      * @param string $name
      * @return Route
      */
-    public function get(string $path, string $name = null):Route
+    public function get(string $path, array $params, string $name = null):Route
     {
-        return $this->add($path, $name, 'GET');
+        return $this->add($path, $params, $name, 'GET');
     }
 
     /**
@@ -61,22 +61,21 @@ class Router
      * @param string|null $name
      * @return Route
      */
-    public function post(string $path, string $name = null):Route
+    public function post(string $path, array $params, string $name = null):Route
     {
-        return $this->add($path, $name, 'POST');
+        return $this->add($path, $params, $name, 'POST');
     }
 
     /**
      * Ajout des routes definient par les function get() et post() au tableau $routes
      * @param string $path
-     * @param array $params
      * @param string $name
      * @param string $method
      * @return Route
      */
-    private function add(string $path, string $name, string $method):Route
+    private function add(string $path, array $params, string $name, string $method):Route
     {
-        $route = new Route($path);
+        $route = new Route($path, $params);
         $this->routes[$method][] = $route;
 
         if($name) {
