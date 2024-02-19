@@ -97,8 +97,8 @@ class Route
     /**
      * @return void
      */
-    public function call():void
+    public function call():array
     {
-
+        return [];
     }
 }
