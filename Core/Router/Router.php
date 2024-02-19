@@ -33,7 +33,7 @@ class Router
 
     private string $url = '';
     private array $routes = [];
-    //private array $routes_name = [];
+    private array $routes_name = [];
 
     public function __construct()
     {

@@ -16,7 +16,7 @@ class App
         // Création de l'ensemble des routes de l'application
         $router = new Router();
 
-        $router->get('/', 'home.index');
+        $router->get('/', [],'home.index');
         $router->get('/Auth/signin', [], 'auth.signin');
         $router->get('/Auth/signout', [], 'auth.signout');
         $router->get('/movies', [], 'movies.index');

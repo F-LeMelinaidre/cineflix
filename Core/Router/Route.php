@@ -19,13 +19,13 @@ class Route
 {
 
     private $path;
-    private array $params;
+    private array $params = [];
     private array $matches;
 
     public function __construct($path, $params)
     {
         $this->path = trim($path, '/');
-        $this->params = $params;
+        if(count($params)) $this->params = $params['params'];
     }
 
     /**
@@ -60,16 +60,17 @@ class Route
         $url = trim($url, '/');
         $path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $this->path);
         $reg = "#^$path$#i"; //i prend en concidération majuscule et minuscule
+        $return = false;
 
-
-
-        if(!preg_match($reg, $url, $matches)) {
-            return false;
+        if(preg_match($reg, $url, $matches)) {
+            $return = true;
         }
+
         array_shift($matches);
         $this->matches = $matches;
 
-        return true;
+        echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.'<br>Line: '.__LINE__.'<br>Path: '.$path.'<br>Match = '.var_export($return, TRUE).'<br><br>';
+        return $return;
     }
 
     /**
@@ -82,7 +83,12 @@ class Route
      * @return void
      */
     private function paramMatch($match) {
-        //'([^\]+)'
+        $return = '([^\]+)';
+        if(isset($this->params[$match[1]])) {
+            $return = '('.$this->params[$match[1]].')';
+        }
+
+        return $return;
     }
 
     /**
