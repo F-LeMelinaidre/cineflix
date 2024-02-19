@@ -2,24 +2,27 @@
 
 namespace Cineflix\Core\Router;
 
+use Psr\Http\Message\MessageInterface;
+
 class Route
 {
 
     private $path;
-    private $callable;
+    private array $params;
     private array $matches;
 
-    public function __construct($path, $callable)
+    public function __construct($path)
     {
         $this->path = trim($path, '/');
-        $this->callable = $callable;
     }
 
     public function match($url):bool
     {
         $url = trim($url, '/');
-        $path = preg_replace('#:([\w]+)#', '([^\]+)', $this->path);
+        $path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $this->path);
         $regex = "#^$path$#i";
+
+
 
         if(!preg_match($regex, $url, $matches)) {
             return false;
@@ -30,10 +33,10 @@ class Route
         return true;
     }
 
+    private function paramMatch($match) {
+        //'([^\]+)'
+    }
     public function call() {
-        if(is_string($this->callable)) {
-            echo $this->callable;
-        }
-        return call_user_func_array($this->callable, $this->matches);
+
     }
 }
