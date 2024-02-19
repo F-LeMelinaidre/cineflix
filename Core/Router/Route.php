@@ -84,12 +84,21 @@ class Route
      * @param $match // nom du paramètre correspondant à la clé du tableau params pour récupérer le regex, si défini, sinon regex par defaut ([^\]+)
      * @return void
      */
-    private function paramMatch($match) {
+    private function paramMatch($match):string
+    {
         $return = '([^\]+)';
         if(isset($this->params[$match[1]])) {
             $return = '('.$this->params[$match[1]].')';
         }
 
         return $return;
+    }
+
+    /**
+     * @return void
+     */
+    public function call():void
+    {
+
     }
 }

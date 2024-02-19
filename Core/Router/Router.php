@@ -97,7 +97,8 @@ class Router
      * TODO créer les exceptions
      * @return void
      */
-    public function run() {
+    public function run()
+    {
         $req_method = $_SERVER['REQUEST_METHOD'];
 
 
