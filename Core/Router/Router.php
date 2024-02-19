@@ -18,12 +18,13 @@ use Cineflix\Core\Router\RouterException;
  *     'POST' => [url appelé, nom de l'url],
  * };
  *
+ *  l'intérêt d'indexer les routes par GET ou POST est de réduire les tests, ou la récupération d'url suivant la méthode
+ *  sur un tableau qui pourrait en contenir un grand nombre.
+ *
  * Url appelé: url de l'application matchable
  * Nom de l'url: Pour la création des url des liens ( function url())
  *
- * l'intérêt d'indexer les routes par GET ou POST est de réduire les tests, ou la récupération d'url suivant la méthode
- * sur un tableau qui pourrait en contenir un grand nombre.
- *
+ * function run() Vérifie si l'url courante correspond à une url de l'application
  *
  * Après avoir instancié la class au niveau de l'entrée de l'application,
  * ajouter les routes en utilisant les fonctions get() ou post()
@@ -66,7 +67,7 @@ class Router
     }
 
     /**
-     * Ajout des routes definient dans App au tableau $routes
+     * Ajout des routes definient par les function get() et post() au tableau $routes
      * @param string $path
      * @param array $params
      * @param string $name
@@ -93,7 +94,10 @@ class Router
     {
         //TODO ajouter getUrl dans la Class Route
     }
+
     /**
+     * Vérifie si l'url courante correspond à une url du tableau $routes
+     * TODO créer les exceptions
      * @return void
      */
     public function run() {
