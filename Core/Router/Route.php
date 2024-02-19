@@ -42,7 +42,7 @@ class Route
      * on appel la fonction paramMatch pour remplacer le nom du paramètre, exemple :id,
      * par l'expression regulière correspondant, defini par ['params' => ['id' => '[0-9]+']]
      *
-     * Ainsi l'expression régulière pour la route /pages/:id sera celle-ci /pages/[0+9]+
+     * Ainsi l'expression régulière pour la route /pages/:id sera celle-ci /pages/([0+9]+)
      *
      *  1er paramètre une expression réguilière
      *  :([\w])+ recherche \w n'importe quel caractère alpha numérique + plusieurs fois après :
