@@ -46,10 +46,10 @@ class Route
      *
      *  1er paramètre une expression réguilière
      *  :([\w])+ recherche \w n'importe quel caractère alpha numérique + plusieurs fois après :
-     *  2nd paramètre Appel la function paramMatch() lorsqu'il y a match :([\w])+
+     *  2nd paramètre Appel la function paramMatch() lorsqu'il y a match de :([\w])+
      *  3ème la chaine de caratère dans la quelle le remplacement s'effectue
      *
-     * Condition if(!preg_match(...)) renvoi false si l'url courante ne match pas avec la route
+     * Condition if(preg_match(...)) renvoi true si l'url courante match avec la route, par defaut la méthode renvoi false
      *  1er paramètre $reg expression regulière représentant le chemin $path
      *  2nd url courante à tester avec path
      *  3ème $matches tableau retourné, contenant les éléments de l'url suivante les expressions régulières, si elle match avec le chemin
