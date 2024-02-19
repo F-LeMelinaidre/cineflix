@@ -92,11 +92,4 @@ class Route
 
         return $return;
     }
-
-    /**
-     * @return void
-     */
-    public function call() {
-
-    }
 }
