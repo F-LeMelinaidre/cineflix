@@ -2,8 +2,6 @@
 
 namespace Cineflix\Core\Router;
 
-use Psr\Http\Message\MessageInterface;
-
 /**
  * Class Route représente une route
  * Exemple de route sans le nom de domaine: /pages
