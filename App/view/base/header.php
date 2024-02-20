@@ -7,7 +7,7 @@
 >
   <div >
     <h1 class="d-none">Cinéflix</h1>
-    <a href="index.html">
+    <a href="/">
       <svg version="1.1" width="260px" height="50px" style="fill: #ffc107; filter:drop-shadow(4px 3px 2px rgba(0, 0, 0, 1))">
         <path
           d="M250.04,40.99c-3.7-5.75-7.41-11.37-11.11-16.87c3.91-5.65,7.82-11.42,11.74-17.32c-2.56,0-5.13-0.01-7.69-0.01
