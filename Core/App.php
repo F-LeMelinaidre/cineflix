@@ -85,8 +85,7 @@ class App
                     );
         
         $router->run();
-
-        echo '<p>Class: ' . __CLASS__ . ' | Function: ' . __FUNCTION__ . '</p>';
+        
     }
 
 
