@@ -42,22 +42,22 @@ class App
         
         $router->get('/Movies',
                          [
-                             'controller' => 'movies',
+                             'controller' => 'movie',
                              'action' => 'index'
                          ],
                          'movies.index'
                     );
         
-        $router->get('/Movies/:slug-:id',
+        $router->get('/Movie/:slug-:id',
                          [
-                             'controller' => 'movies',
+                             'controller' => 'movie',
                              'action' => 'show',
                              'params' => [
                                              'slug' => '[a-z\-0-9]+',
                                              'id' => '[0-9]+'
                                          ]
                          ],
-                        'movies.show'
+                        'movie.show'
                     );
         
         $router->get('/Profil',
@@ -75,6 +75,18 @@ class App
                          ],
                          'streaming.index'
                     );
+
+        $router->get('/Stream/:slug-:id',
+            [
+                'controller' => 'streaming',
+                'action' => 'index',
+                'params' => [
+                    'slug' => '[a-z\-0-9]+',
+                    'id' => '[0-9]+'
+                ]
+            ],
+            'streaming.show'
+        );
         
         $router->get('/User',
                          [

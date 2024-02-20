@@ -102,11 +102,9 @@ class Router
      * TODO créer les exceptions
      * @return void
      */
-    public function run():array
+    public function run()
     {
         $req_method = $_SERVER['REQUEST_METHOD'];
-
-
 
         foreach ($this->routes[$req_method] as $route) {
             if($route->match($this->url)) {
@@ -114,6 +112,5 @@ class Router
             }
         }
 
-        return [];
     }
 }

@@ -103,10 +103,13 @@ class Route
     /**
      * @return void
      */
-    public function call():array
+    public function call():mixed
     {
+        $controller = "Cineflix\\App\\Controller\\".ucfirst($this->controller)."Controller";
+        $controller = new $controller();
+        $action = $this->action;
 
-        return [];
+        return $controller->$action();
     }
 
     public function getUrl(array $params):string
