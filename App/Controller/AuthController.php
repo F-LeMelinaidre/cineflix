@@ -7,7 +7,7 @@ class AuthController
 
     public function __construct()
     {
-        echo 'Class: '.__CLASS__.'<br>';
+        echo '<br>Class: '.__CLASS__.'<br>';
         
     }
 
