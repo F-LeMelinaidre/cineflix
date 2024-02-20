@@ -87,9 +87,14 @@ class Router
      * @param array $params
      * @return void
      */
-    public function url(string $name)
+    public function getUrl(string $name, array $params = []):string
     {
-        //TODO ajouter getUrl dans la Class Route
+        if(isset($this->routes_name[$name])) {
+            return $this->routes_name[$name]->getUrl($params);
+        }
+
+        throw new \Exception('Url inconnu!');
+
     }
 
     /**
@@ -108,5 +113,7 @@ class Router
                 return $route->call();
             }
         }
+
+        return [];
     }
 }

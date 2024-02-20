@@ -21,13 +21,19 @@ class Route
 {
 
     private $path;
+    private string $controller;
+    private string $action;
     private array $params = [];
     private array $matches;
 
     public function __construct($path, $params)
     {
         $this->path = trim($path, '/');
-        if(count($params)) $this->params = $params['params'];
+
+        $this->controller = (isset($params['controller'])) ? $params['controller'] : 'home';
+        $this->action = (isset($params['action'])) ? $params['action'] : 'index';
+
+        if(isset($params['params'])) $this->params = $params['params'];
     }
 
     /**
@@ -99,6 +105,17 @@ class Route
      */
     public function call():array
     {
+
         return [];
+    }
+
+    public function getUrl(array $params):string
+    {
+        $path = $this->path;
+
+        foreach ($params as $key => $val) {
+            $path = str_replace(":$key", $val, $path);
+        }
+        return $path;
     }
 }
