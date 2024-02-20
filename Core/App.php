@@ -49,7 +49,7 @@ class App
                     );
         
         $router->get('/Movies/:slug-:id',
-                     [
+                         [
                              'controller' => 'movies',
                              'action' => 'show',
                              'params' => [
