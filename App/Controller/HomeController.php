@@ -6,6 +6,7 @@ class HomeController
 {
     public function __construct()
     {
+        echo '<br>Class: '.__CLASS__.'<br>';
 
     }
 
