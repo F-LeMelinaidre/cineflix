@@ -1,8 +1,6 @@
 <?php
 // Point d'entrée de l'application
 
-use Cineflix\Core\Util\HelperDebug;
-
 session_start();
 
 // défini le fuseau horaire de site

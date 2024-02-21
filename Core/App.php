@@ -7,8 +7,15 @@ use Cineflix\Core\Router\Router;
 
 require '../vendor/autoload.php';
 
-// TODO Remonter l'instanciation des controller effectué dans la Class Route Methode call() ici
-// TODO Creer une methode ou class pour gérer l'affichage d'erreur, et la redirection vers les pages d'erreurs
+// TODO
+//      - Remonter l'instanciation des controller effectué dans la Class Route Methode call() ici
+//      - Creer une methode ou class pour gérer l'affichage d'erreur, et la redirection vers les pages d'erreurs
+//      - Déplacer et Renommer Les Constantes ROOT et WEBROOT ici
+//      - Essayer de ne laisser dans l'index seulement:
+//          ini_set()
+//          session_start()
+//          date_default_timezone_set()
+//          ainsi que l'appel à APP::load() biensûr sinon rien ne fonctionne
 
 class App
 {
