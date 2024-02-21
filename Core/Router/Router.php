@@ -85,7 +85,7 @@ class Router
     /**
      * @param string $name
      * @param array $params
-     * @return void
+     * @return string url
      */
     public function getUrl(string $name, array $params = []):string
     {
@@ -100,7 +100,7 @@ class Router
     /**
      * Vérifie si l'url courante correspond à une url du tableau $routes
      * TODO créer les exceptions
-     * @return void
+     * @return Cineflix\App\Controller
      */
     public function run()
     {
@@ -111,6 +111,6 @@ class Router
                 return $route->call();
             }
         }
-
+        throw new \Exception('Page inconnu!');
     }
 }

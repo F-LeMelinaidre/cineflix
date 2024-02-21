@@ -2,24 +2,27 @@
 
 namespace Cineflix\App\Controller;
 
-class StreamingController
+use Cineflix\Core\AbstractController;
+
+class StreamingController extends AbstractController
 {
 
     public function __construct()
     {
-        echo '<br>Class: '.__CLASS__.'<br>';
+
+        $this->title_page .= ' Streaming';
 
     }
 
     public function index()
     {
-        echo 'Function: '.__FUNCTION__.'<br>Line: '.__LINE__.'<br><br>';
+
+        $this->render('Streaming.index',[]);
 
     }
 
     public function show()
     {
-        echo 'Function: '.__FUNCTION__.'<br>Line: '.__LINE__.'<br><br>';
 
     }
 

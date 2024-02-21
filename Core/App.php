@@ -10,6 +10,7 @@ require '../vendor/autoload.php';
 
 class App
 {
+    const APP_NAME = 'Cinéflix';
 
     public static function load():void
     {

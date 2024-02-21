@@ -2,7 +2,9 @@
 
 namespace Cineflix\App\Controller;
 
-class ProfilController
+use Cineflix\Core\AbstractController;
+
+class ProfilController extends AbstractController
 {
     // Voir si ce controller peux gerer l'historique films/streaming, les points
     // et autre infos à définir
