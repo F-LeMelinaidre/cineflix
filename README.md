@@ -15,9 +15,7 @@ composer.phar dump-autoload
 
 TODO
     - Revoir l'import de header.php dans index.php
-    
         Pour la gestion des liens
-        
         Et si le header doit être importé ou non suivant les pages (exemple: connexion, et création de compte)
     
     - Remonter l'instanciation des controller effectué dans la Class Route Methode call() ici
@@ -27,11 +25,7 @@ TODO
     - Déplacer et Renommer Les Constantes ROOT et WEBROOT ici
     
     - Essayer de ne laisser dans l'index seulement:
-    
-      ini_set()
-      
-      session_start()
-      
-      date_default_timezone_set()
-      
-      ainsi que l'appel à APP::load() biensûr sinon rien ne fonctionne
+        ini_set()
+        session_start()
+        date_default_timezone_set()
+        ainsi que l'appel à APP::load() biensûr sinon rien ne fonctionne
