@@ -101,7 +101,7 @@ class Router
 
     /**
      * Vérifie si l'url courante correspond à une url du tableau $routes
-     * TODO créer les exceptions - Modifier l'endroit ou est instancié le controller, le remonter dans la Class App pour faciliter la lecture du code
+     * TODO Modifier l'endroit ou est instancié le controller, le remonter dans la Class App pour faciliter la lecture du code
      * @return Cineflix\App\Controller
      */
     public function run()
