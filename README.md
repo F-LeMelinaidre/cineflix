@@ -14,6 +14,7 @@ Depuis le terminal, à la racine de l'application, après avoir installé compos
 composer.phar dump-autoload
 
 TODO
+
     - Revoir l'import de header.php dans index.php
         Pour la gestion des liens
         Et si le header doit être importé ou non suivant les pages (exemple: connexion, et création de compte)
