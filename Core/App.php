@@ -15,7 +15,7 @@ class App
     public static function load():void
     {
         // Création de l'ensemble des routes de l'application
-        $router = new Router();
+        $router = Router::getInstance();
 
         $router->get('/',
                          [

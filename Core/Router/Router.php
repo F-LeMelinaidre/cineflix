@@ -31,13 +31,15 @@ namespace Cineflix\Core\Router;
 class Router
 {
 
+    private static $instance;
     private string $url = '';
     private array $routes = [];
     private array $routes_name = [];
 
-    public function __construct()
-    {
-        if(isset($_GET['uri'])) $this->url = $_GET['uri'];
+    public static function getInstance() {
+        if(!self::$instance) self::$instance = new Router();
+
+        return self::$instance;
     }
 
     /**
@@ -99,11 +101,13 @@ class Router
 
     /**
      * Vérifie si l'url courante correspond à une url du tableau $routes
-     * TODO créer les exceptions
+     * TODO créer les exceptions - Modifier l'endroit ou est instancié le controller, le remonter dans la Class App pour faciliter la lecture du code
      * @return Cineflix\App\Controller
      */
     public function run()
     {
+        if(isset($_GET['uri'])) $this->url = $_GET['uri'];
+
         $req_method = $_SERVER['REQUEST_METHOD'];
 
         foreach ($this->routes[$req_method] as $route) {
