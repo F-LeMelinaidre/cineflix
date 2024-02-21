@@ -2,6 +2,8 @@
 
 namespace Cineflix\Core;
 
+use Cineflix\Core\Router\Router;
+
 class AbstractController
 
 {
@@ -24,6 +26,9 @@ class AbstractController
      */
     public function render(string $view, array $data)
     {
+        $route = Router::getInstance();
+        $signin_link = $route->getUrl('auth.signin');
+
         $this->setPageId($view);
 
         ob_start();
