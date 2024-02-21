@@ -9,24 +9,25 @@ class AuthController extends AbstractController
 
     public function __construct()
     {
-        echo '<br>Class: '.__CLASS__.'<br>';
-        
+        $this->header = false;
     }
 
     public function signin()
     {
-        echo 'Function: '.__FUNCTION__.'<br>Line: '.__LINE__.'<br><br>';
+
+        $this->render('Auth.signin',[]);
+
     }
 
     public function signout()
     {
-        echo 'Function: '.__FUNCTION__.'<br>Line: '.__LINE__.'<br><br>';
+
+        $this->render('Account.create',[]);
 
     }
 
     public function logout()
     {
-        echo 'Function: '.__FUNCTION__.'<br>Line: '.__LINE__.'<br><br>';
 
     }
 }

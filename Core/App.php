@@ -37,12 +37,12 @@ class App
                          'home.index'
                     );
         
-        $router->get('/Auth/signin',
+        $router->get('/Signin',
                          [
                              'controller' => 'Auth',
                              'action' => 'signin'
                          ],
-                         'auth.signin'
+                         'signin'
                     );
         
         $router->get('/Auth/signout',

@@ -7,10 +7,9 @@
     <link rel="stylesheet" href="<?= ROOT ?>css/style.css" type="text/css" media="screen" />
 </head>
 <body class="bg-black">
+    <?php if($this->header === true) include(WEBROOT . "/app/View/Base/header.php"); ?>
 
-    <?php include(WEBROOT . "/app/View/Base/header.php"); ?>
-
-    <main id ="<?= $this->page_id ?>" class="container-fluid m-0 p-0">
+    <main id ="<?= $this->page_id ?>" class="<?= $class ?>">
 
         <?= $content ?>
 

@@ -16,6 +16,7 @@ class AbstractController
 
     protected string $page_id;
     // Définir l'id de l'element <main></main>
+    protected bool $header = true;
 
     private string $path_view = WEBROOT.'/App/View/';
 
@@ -27,8 +28,9 @@ class AbstractController
     public function render(string $view, array $data)
     {
         $route = Router::getInstance();
-        $signin_link = $route->getUrl('auth.signin');
+        $signin_link = $route->getUrl('signin');
 
+        $class = ($this->header === true)? 'container-fluid m-0 p-0' : 'container-xl container-fluid mx-lg-auto my-5';
         $this->setPageId($view);
 
         ob_start();
