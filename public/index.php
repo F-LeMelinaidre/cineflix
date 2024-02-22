@@ -12,8 +12,9 @@ define('DEBUG_TIME', microtime(true));
 define( 'ROOT', str_replace( 'index.php', '', $_SERVER['SCRIPT_NAME'] ) );
 define( 'WEBROOT', $_SERVER['DOCUMENT_ROOT'] );
 
-// Appel La function load de la class App, qui gère l'ensemble de l'appli
+// Appel La function load de la class AppController, qui gère l'ensemble de l'appli
 
-require WEBROOT.'/Core/App.php'; // Corrigez le chemin relatif
+require WEBROOT . '/App/AppController.php'; // Corrigez le chemin relatif
 
-\Cineflix\Core\App::load();
+$app = \Cineflix\App\AppController::getInstance();
+$app->load();

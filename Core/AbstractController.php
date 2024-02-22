@@ -2,6 +2,7 @@
 
 namespace Cineflix\Core;
 
+use Cineflix\App\AppController;
 use Cineflix\Core\Router\Router;
 
 class AbstractController
@@ -9,8 +10,8 @@ class AbstractController
 {
 
 
-    protected string $title_page = APP::APP_NAME;
-    // APP_NAME est défini dans la Class App
+    protected string $title_page = AppController::APP_NAME;
+    // APP_NAME est défini dans la Class AppController
     // $title_page correspond à la valeur de l'élément <title></title>
     // Peux être complèté ou modifié directement dans le controller de la page
 

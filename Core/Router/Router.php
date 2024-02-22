@@ -32,7 +32,6 @@ class Router
 {
 
     private static $instance;
-    private string $url = '';
     private array $routes = [];
     private array $routes_name = [];
 
@@ -101,20 +100,26 @@ class Router
 
     /**
      * Vérifie si l'url courante correspond à une url du tableau $routes
-     * TODO Modifier l'endroit ou est instancié le controller, le remonter dans la Class App pour faciliter la lecture du code
-     * @return Cineflix\App\Controller
+     * TODO Modifier l'endroit ou est instancié le controller, le remonter dans la Class AppController pour faciliter la lecture du code
+     * @return Cineflix\AppController\Controller
      */
-    public function run()
+    public function match():array
     {
-        if(isset($_GET['uri'])) $this->url = $_GET['uri'];
-
+        $url = (isset($_GET['uri']))? $_GET['uri'] : '';
         $req_method = $_SERVER['REQUEST_METHOD'];
 
-        foreach ($this->routes[$req_method] as $route) {
-            if($route->match($this->url)) {
-                return $route->call();
+        $routes = $this->routes[$req_method];
+
+        $nb = count($routes) - 1;
+        $i = 0;
+        while($i <= $nb && !isset($route)) {
+            if($routes[$i]->match($url)) {
+                $route = $routes[$i]->call();
             }
+            $i++;
         }
-        throw new \Exception('Page inconnu!');
+
+        $result = (isset($route)) ? $route : [];
+        return $result;
     }
 }
