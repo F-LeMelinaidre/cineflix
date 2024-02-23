@@ -4,28 +4,26 @@ namespace Cineflix\App\Controller;
 
 use Cineflix\Core\AbstractController;
 
-class MovieController extends AbstractController
+class Streaming extends AbstractController
 {
 
     public function __construct()
     {
 
-        $this->title_page .= ' Films';
+        $this->title_page .= ' Streaming';
 
     }
 
     public function index()
     {
 
-        $this->render('Movie.index',[]);
+        $this->render('Streaming.index',[]);
 
     }
 
     public function show()
     {
 
-        $this->title_page .= ' | Titre du film';
-        $this->render('Movie.show',[]);
-
     }
+
 }

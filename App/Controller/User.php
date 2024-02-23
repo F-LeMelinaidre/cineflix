@@ -4,7 +4,7 @@ namespace Cineflix\App\Controller;
 
 use Cineflix\Core\AbstractController;
 
-class UserController extends AbstractController
+class User extends AbstractController
 {
 
     public function __construct()

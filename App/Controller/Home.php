@@ -4,13 +4,10 @@ namespace Cineflix\App\Controller;
 
 use Cineflix\Core\AbstractController;
 
-class StreamingController extends AbstractController
+class Home extends AbstractController
 {
-
     public function __construct()
     {
-
-        $this->title_page .= ' Streaming';
 
     }
 
@@ -20,10 +17,4 @@ class StreamingController extends AbstractController
         $this->render('Streaming.index',[]);
 
     }
-
-    public function show()
-    {
-
-    }
-
 }
