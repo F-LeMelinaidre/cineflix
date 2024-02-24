@@ -19,14 +19,11 @@ TODO
         Pour la gestion des liens
         Et si le header doit être importé ou non suivant les pages (exemple: connexion, et création de compte)
     
-    - Remonter l'instanciation des controller effectué dans la Class Route Methode call() ici
+    - Creer une interface d'Exception
+        - Trouver une solution pour gerer les messages d'erreurs, et les pages d'erreurs
+        - Voir les problème d'interdépendance
+        - Voir pour la journalisation de erreur
     
-    - Creer une methode ou class pour gérer l'affichage d'erreur, et la redirection vers les pages d'erreurs
-    
-    - Déplacer et Renommer Les Constantes ROOT et WEBROOT ici
-    
-    - Essayer de ne laisser dans l'index seulement:
-        ini_set()
-        session_start()
-        date_default_timezone_set()
-        ainsi que l'appel à APP::load() biensûr sinon rien ne fonctionne
+    - Renommer Les Constantes ROOT et WEBROOT
+
+    - Deplacer le dossier Element dans View
