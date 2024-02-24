@@ -2,6 +2,8 @@
 
 namespace Cineflix\Core\Router;
 
+use Exception;
+
 /**
  * $url = url courante
  * $routes = tableau des routes de l'application
@@ -34,6 +36,7 @@ class Router
     private static $instance;
     private array $routes = [];
     private array $routes_name = [];
+    private array $route = [];
 
     public static function getInstance() {
         if(!self::$instance) self::$instance = new Router();
@@ -77,9 +80,10 @@ class Router
         $route = new Route($path, $params);
         $this->routes[$method][] = $route;
 
-        if($name) {
-            $this->routes_name[$name] = $route;
-        }
+        if(is_null($name)) $name = str_replace('/', '.',$path);
+
+        $this->routes_name[$name] = $route;
+
         return $route;
     }
 
@@ -90,21 +94,17 @@ class Router
      */
     public function getUrl(string $name, array $params = []):string
     {
-        if(isset($this->routes_name[$name])) {
-            return $this->routes_name[$name]->getUrl($params);
-        }
-
-        throw new \Exception('Url inconnu!');
-
+        // TODO Creer une Exception type info bulle
+        return (!isset($this->routes_name[$name]))? $this->routes_name[$name]->getUrl($params) : '';
     }
 
     /**
      * Vérifie si l'url courante correspond à une url du tableau $routes
-     * TODO Modifier l'endroit ou est instancié le controller, le remonter dans la Class AppController pour faciliter la lecture du code
      * @return Cineflix\AppController\Controller
      */
-    public function match():array
+    public function routeMatched():array
     {
+
         $url = (isset($_GET['uri']))? $_GET['uri'] : '';
         $req_method = $_SERVER['REQUEST_METHOD'];
 
@@ -112,14 +112,21 @@ class Router
 
         $nb = count($routes) - 1;
         $i = 0;
-        while($i <= $nb && !isset($route)) {
+        while($i <= $nb && empty($this->route)) {
+
             if($routes[$i]->match($url)) {
                 $route = $routes[$i]->call();
             }
+
             $i++;
         }
 
-        $result = (isset($route)) ? $route : [];
-        return $result;
+        if(!isset($route)) {
+            throw new RouteNotFoundException("Aucune route correspondante n'a été trouvée");
+        }
+
+        return $route;
+
     }
+
 }

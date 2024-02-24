@@ -67,11 +67,8 @@ class Route
         $url = trim($url, '/');
         $path = preg_replace_callback('#:([\w]+)#', [$this, 'requiredMatch'], $this->path);
         $reg = "#^$path$#i"; //i prend en concidération majuscule et minuscule
-        $return = false;
 
-        if(preg_match($reg, $url, $matches)) {
-            $return = true;
-        }
+        $return = (preg_match($reg, $url, $matches))? true : false;
 
         array_shift($matches);
         $this->matches = $matches;
@@ -90,12 +87,7 @@ class Route
      */
     private function requiredMatch($match):string
     {
-        $return = '([^\]+)';
-        if(isset($this->require[$match[1]])) {
-            $return = '('.$this->require[$match[1]].')';
-        }
-
-        return $return;
+        return (isset($this->require[$match[1]]))? '('.$this->require[$match[1]].')' : '([^\]+)';
     }
 
     /**
