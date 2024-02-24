@@ -19,14 +19,14 @@ class Auth extends AbstractController
 
     }
 
-    public function signout()
+    public function signup()
     {
-
+echo 'ok';
         $this->render('Account.create',[]);
 
     }
 
-    public function logout()
+    public function signout()
     {
 
     }
