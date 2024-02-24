@@ -3,6 +3,7 @@
 namespace Cineflix\App;
 
 
+use Cineflix\Core\Router\RouteNotFoundException;
 use Cineflix\Core\Router\Router;
 
 require '../vendor/autoload.php';
@@ -23,9 +24,11 @@ require '../vendor/autoload.php';
 class AppController
 {
     const APP_NAME = 'Cinéflix';
-    const CONTROLLER_PATH = '\\Cineflix\\App\\Controller\\';
 
     private static $instance;
+
+    private string $controller_path = '\\Cineflix\\App\\Controller\\';
+
     public static function getInstance() {
         if(!self::$instance) self::$instance = new AppController();
 
@@ -34,114 +37,88 @@ class AppController
     public function load():void
     {
         // Création de l'ensemble des routes de l'application
-        $router = Router::getInstance();
-        $router = $this->createRoute($router);
 
-        $route = $router->match();
+        $router = Router::getInstance($this->controller_path);
 
-        $this->loadPage($route);
-
-    }
-
-    // TODO
-    //  Gerer les pages erreurs if(!empty($route)) ...
-    //  Creer les routes et les pages erreurs
-    private function loadPage(array $route) {
-
-        $controller = self::CONTROLLER_PATH.$route['controller'].'Controller';
-
-        $action = $route['action'];
-
-        $controller = new $controller();
-        $controller->$action();
-    }
-
-    private function createRoute(Router $router):Router
-    {
-
-
-        $router->get('/',
-            [
-                'controller' => 'home',
-                'action' => 'index'
-            ],
+        $router->get(
+            '/',
+            ['controller' => 'home', 'action' => 'index'],
             'home.index'
         );
 
-        $router->get('/Signin',
+        $router->get(
+            '/Signin',
             [
-                'controller' => 'Auth',
-                'action' => 'signin'
+                'controller' => 'Auth', 'action' => 'signin'
             ],
             'signin'
         );
 
-        $router->get('/Auth/signout',
+        $router->get(
+            '/Auth/signup',
             [
-                'controller' => 'Auth',
-                'action' => 'signout'
+                'controller' => 'Auth', 'action' => 'signup'
             ],
-            'auth.signout'
+            'Account.create'
         );
 
-        $router->get('/Movies',
+        $router->get(
+            '/Movies',
             [
-                'controller' => 'movie',
-                'action' => 'index'
+                'controller' => 'movie', 'action' => 'index'
             ],
             'movies.index'
         );
-
-        $router->get('/Movie/:slug-:id',
+        $router->get(
+            '/Movie/:slug-:id',
             [
-                'controller' => 'movie',
-                'action' => 'show',
-                'require' => [
-                    'slug' => '[a-z\-0-9]+',
-                    'id' => '[0-9]+'
-                ]
+                'controller' => 'movie', 'action' => 'show', 'require' => ['slug' => '[a-z\-0-9]+', 'id' => '[0-9]+']
             ],
             'movie.show'
         );
 
         $router->get('/Profil',
             [
-                'controller' => 'profil',
-                'action' => 'index'
+                'controller' => 'profil', 'action' => 'index'
             ],
             'profil.index'
         );
 
         $router->get('/Streams',
             [
-                'controller' => 'streaming',
-                'action' => 'index'
+                'controller' => 'streaming', 'action' => 'index'
             ],
             'streaming.index'
         );
-
-        $router->get('/Stream/:slug-:id',
+        $router->get(
+            '/Stream/:slug-:id',
             [
-                'controller' => 'streaming',
-                'action' => 'index',
-                'require' => [
-                    'slug' => '[a-z\-0-9]+',
-                    'id' => '[0-9]+'
-                ]
+                'controller' => 'streaming', 'action' => 'index', 'require' => ['slug' => '[a-z\-0-9]+', 'id' => '[0-9]+']
             ],
             'streaming.show'
         );
 
-        $router->get('/User',
+        $router->get(
+            '/User',
             [
-                'controller' => 'user',
-                'action' => 'index'
+                'controller' => 'user', 'action' => 'index'
             ],
             'user.index'
         );
 
-        return $router;
+        try {
+            $route = $router->routeMatched();
+
+            $controller = $this->controller_path.ucfirst($route['controller']);
+            $action = $route['action'];
+
+            $controller = new $controller();
+
+            $controller->$action();
+        } catch (RouteNotFoundException $exception) {
+            // TODO Créer les pages d'erreur
+            echo "Erreur : " . $exception->getMessage();
+        }
+
     }
-
-
 }
