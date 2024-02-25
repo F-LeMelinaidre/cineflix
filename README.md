@@ -22,6 +22,7 @@ TODO
 
     - Voir L'injection de dépendance, Container Dependancy injection
         - PSR-11
+        - API de reflexivité PHP
     
     - Creer une interface d'Exception
         - Trouver une solution pour gerer les messages d'erreurs, et les pages d'erreurs
