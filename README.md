@@ -20,7 +20,8 @@ composer.phar dump-autoload
 
 TODO
 
-    - Voir L'injection de dépendance
+    - Voir L'injection de dépendance, Container Dependancy injection
+        - PSR-11
     
     - Creer une interface d'Exception
         - Trouver une solution pour gerer les messages d'erreurs, et les pages d'erreurs
