@@ -20,11 +20,7 @@ composer.phar dump-autoload
 
 TODO
 
-    - Sortir la methode render() de ControllerAbstract et creer une class render
-      Pour régler le problème des header et footer spécifique au différente pages
-    - Revoir l'import de header.php dans index.php
-        Pour la gestion des liens
-        Et si le header doit être importé ou non suivant les pages (exemple: connexion, et création de compte)
+    - Voir L'injection de dépendance
     
     - Creer une interface d'Exception
         - Trouver une solution pour gerer les messages d'erreurs, et les pages d'erreurs
