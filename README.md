@@ -20,6 +20,8 @@ composer.phar dump-autoload
 
 TODO
 
+    - Refonte du router au standard PSR-7: HTTP message interfaces
+
     - Voir L'injection de dépendance, Container Dependancy injection
         - PSR-11
         - API de reflexivité PHP
