@@ -9,9 +9,6 @@ use Cineflix\Core\Router\Router;
 require '../vendor/autoload.php';
 
 // TODO
-//      - Revoir l'import de header.php dans index.php
-//          Pour la gestion des liens
-//          Et si le header doit être importé ou non suivant les pages (exemple: connexion, et création de compte)
 //      - Remonter l'instanciation des controller effectué dans la Class Route Methode call() ici
 //      - Creer une methode ou class pour gérer l'affichage d'erreur, et la redirection vers les pages d'erreurs
 //      - Déplacer et Renommer Les Constantes ROOT et WEBROOT ici
@@ -27,6 +24,7 @@ class AppController
 
     public static string $_Root;
     public static string $_Webroot;
+    public static Router $_Router;
 
     private string $controller_path = '\\Cineflix\\App\\Controller\\';
 
@@ -37,19 +35,19 @@ class AppController
 
     }
 
-    public function run():void
+    public function run()
     {
         // Création de l'ensemble des routes de l'application
 
-        $router = Router::getInstance();
+        self::$_Router = Router::getInstance();
 
-        $router->get(
+        self::$_Router->get(
             '/',
             ['controller' => 'home', 'action' => 'index'],
             'home.index'
         );
 
-        $router->get(
+        self::$_Router->get(
             '/Signin',
             [
                 'controller' => 'Auth', 'action' => 'signin'
@@ -57,7 +55,7 @@ class AppController
             'signin'
         );
 
-        $router->get(
+        self::$_Router->get(
             '/Auth/signup',
             [
                 'controller' => 'Auth', 'action' => 'signup'
@@ -65,14 +63,14 @@ class AppController
             'Account.create'
         );
 
-        $router->get(
+        self::$_Router->get(
             '/Movies',
             [
                 'controller' => 'movie', 'action' => 'index'
             ],
             'movies.index'
         );
-        $router->get(
+        self::$_Router->get(
             '/Movie/:slug-:id',
             [
                 'controller' => 'movie', 'action' => 'show', 'require' => ['slug' => '[a-z\-0-9]+', 'id' => '[0-9]+']
@@ -80,20 +78,20 @@ class AppController
             'movie.show'
         );
 
-        $router->get('/Profil',
+        self::$_Router->get('/Profil',
             [
                 'controller' => 'profil', 'action' => 'index'
             ],
             'profil.index'
         );
 
-        $router->get('/Streams',
+        self::$_Router->get('/Streams',
             [
                 'controller' => 'streaming', 'action' => 'index'
             ],
             'streaming.index'
         );
-        $router->get(
+        self::$_Router->get(
             '/Stream/:slug-:id',
             [
                 'controller' => 'streaming', 'action' => 'index', 'require' => ['slug' => '[a-z\-0-9]+', 'id' => '[0-9]+']
@@ -101,7 +99,7 @@ class AppController
             'streaming.show'
         );
 
-        $router->get(
+        self::$_Router->get(
             '/User',
             [
                 'controller' => 'user', 'action' => 'index'
@@ -110,17 +108,18 @@ class AppController
         );
 
         try {
-            $route = $router->routeMatched();
+            $route = self::$_Router->routeMatched();
 
             $controller = $this->controller_path.ucfirst($route['controller']);
             $action = $route['action'];
 
             $controller = new $controller();
 
-            $controller->$action();
+            return $controller->$action();
+
         } catch (RouteNotFoundException $exception) {
             // TODO Créer les pages d'erreur
-            echo "Erreur : " . $exception->getMessage();
+            return "Erreur : " . $exception->getMessage();
         }
 
     }

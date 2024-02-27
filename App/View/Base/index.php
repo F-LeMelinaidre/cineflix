@@ -7,15 +7,8 @@
     <link rel="stylesheet" href="../public/css/style.css" type="text/css" media="screen" />
 </head>
 <body class="bg-black">
-    <?php if($this->header === true) include(\Cineflix\App\AppController::$_Root."/app/View/Base/header.php"); ?>
 
-    <main id ="<?= $this->page_id ?>" class="<?= $class ?>">
-
-        <?= $content ?>
-
-    </main>
-
-    <?php include(\Cineflix\App\AppController::$_Root . "/app/View/Base/footer.php"); ?>
+        {{layout}}
 
 </body>
 </html>

@@ -7,23 +7,19 @@ use Cineflix\Core\AbstractController;
 class Auth extends AbstractController
 {
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->header = false;
-    }
-
+    protected string $layout = 'auth';
+    
     public function signin()
     {
 
-        $this->render('Auth.signin',[]);
+        return $this->render('Auth.signin',[]);
 
     }
 
     public function signup()
     {
 
-        $this->render('Account.create',[]);
+        return $this->render('Account.create',[]);
 
     }
 

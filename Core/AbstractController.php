@@ -11,6 +11,7 @@ class AbstractController
 
 
     protected static Router $_Router;
+    protected string $layout = 'main';
     protected string $title_page = AppController::APP_NAME;
     // APP_NAME est défini dans la Class AppController
     // $title_page correspond à la valeur de l'élément <title></title>
@@ -32,24 +33,37 @@ class AbstractController
      * @param array $data
      * @return void
      */
-    public function render(string $view, array $data)
+    public function render(string $contentView, array $data)
     {
-        $signin_link = self::$_Router->getUrl('signin');
 
-        $class = ($this->header === true)? 'container-fluid m-0 p-0' : 'container-xl container-fluid mx-lg-auto my-5';
-        $this->setPageId($view);
+        $this->setPageId($contentView);
+
+        $layout = $this->layoutContent();
+        $contentView = $this->renderOnlyView($contentView);
+        $layout = str_replace('{{content}}', $contentView, $layout);
 
         ob_start();
         extract($data);
+        include_once($this->path_view."Base/index.php");
+        $view = ob_get_clean();
 
-        require($this->path_view . str_replace('.', '/', $view) . '.php');
 
-        // $content contient la view lier à l'action du controller
-        $content = ob_get_clean();
-
-        require($this->path_view. 'Base/index.php');
+        $view = str_replace('{{layout}}', $layout, $view);
+        return $view;
+    }
+    protected function layoutContent()
+    {
+        ob_start();
+        include_once $this->path_view."Layout/$this->layout.php";
+        return ob_get_clean();
     }
 
+    protected function renderOnlyView($view)
+    {
+        ob_start();
+        include_once $this->path_view.str_replace('.', '/', $view).".php";
+        return ob_get_clean();
+    }
     /**
      * Transforme la syntax du path de la vue
      * exemple Home.index => HomeIndex

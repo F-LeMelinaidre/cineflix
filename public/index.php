@@ -12,4 +12,5 @@ define('DEBUG_TIME', microtime(true));
 // Appel La function load de la class AppController, qui gère l'ensemble de l'appli
 require ("../App/AppController.php");
 $app = new \Cineflix\App\AppController();
-$app->run();
+
+echo $app->run();

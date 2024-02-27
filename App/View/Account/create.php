@@ -1,6 +1,3 @@
-<?php
-$route = \Cineflix\Core\Router\Router::getInstance();
-?>
 <section class="d-flex col-12 rounded-2 bg-dark-subtle">
     <div class="col-6 order-1 py-4 border-start border-dark-subtle">
         <header class="mb-4">
@@ -40,7 +37,7 @@ $route = \Cineflix\Core\Router\Router::getInstance();
             </a>
             <h1 class="mx-xl-4 mx-sm-4">Votre cinéma à portée de main</h1>
             <p class="mx-xl-5 mx-sm-4 mb-1">Explorez les films près de chez vous!</p>
-            <p class="mx-xl-5 mx-sm-4">Vous avez déjà un compte? <a href="<?= $route->getUrl("signin") ?>">Connexion!</a></p>
+            <p class="mx-xl-5 mx-sm-4">Vous avez déjà un compte? <a href="<?= self::$_Router->getUrl("signin") ?>">Connexion!</a></p>
         </header>
         <form action="#" id="Signout" class="d-flex justify-content-center flex-wrap row-gap-2 column-gap-4 mx-auto mb-5">
             <div class="flex-grow-1">

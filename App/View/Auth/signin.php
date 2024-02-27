@@ -1,6 +1,3 @@
-<?php
-$route = \Cineflix\Core\Router\Router::getInstance();
-?>
 <section class="d-flex col-12 rounded-2 bg-dark-subtle">
     <div class="col-6 order-1 py-4 border-start border-dark-subtle">
         <header class="mb-4">
@@ -39,7 +36,7 @@ $route = \Cineflix\Core\Router\Router::getInstance();
                 </svg>
             </a>
             <h1 class="mx-xl-4 mx-sm-4">Content de vous revoir</h1>
-            <p class="mx-xl-5 mx-sm-4">Nouveau ici? <a href="<?= $route->getUrl('Account.create') ?>">Créer un compte</a></p>
+            <p class="mx-xl-5 mx-sm-4">Nouveau ici? <a href="<?= self::$_Router->getUrl('Account.create') ?>">Créer un compte</a></p>
         </header>
         <form action="#" class="d-flex flex-column align-items-center row-gap-2 mb-5">
             <label for="Identifiant" class="w-50">Identifiant</label>

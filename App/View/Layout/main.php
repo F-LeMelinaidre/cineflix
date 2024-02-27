@@ -1,3 +1,4 @@
+
 <header class=" d-flex
                 justify-content-between
                 align-items-center
@@ -10,7 +11,7 @@
         <a href="/">
             <svg version="1.1" width="260px" height="50px" style="fill: #ffc107; filter:drop-shadow(4px 3px 2px rgba(0, 0, 0, 1))">
                 <path
-                        d="M250.04,40.99c-3.7-5.75-7.41-11.37-11.11-16.87c3.91-5.65,7.82-11.42,11.74-17.32c-2.56,0-5.13-0.01-7.69-0.01
+                    d="M250.04,40.99c-3.7-5.75-7.41-11.37-11.11-16.87c3.91-5.65,7.82-11.42,11.74-17.32c-2.56,0-5.13-0.01-7.69-0.01
 		      c-2.74,4.04-5.47,8.01-8.21,11.93c-0.09,0-0.18,0-0.26-0.01c-2.74-4.04-5.48-8.03-8.23-11.95c-2.56,0-5.13-0.01-7.69-0.01
 		      c3.92,5.59,7.84,11.28,11.76,17.09c-3.72,5.17-7.43,10.25-11.15,15.25c-0.75-0.04-1.51-0.08-2.26-0.12
 		      c-0.93-0.05-1.86-0.09-2.79-0.14c-0.77-0.04-1.54-0.08-2.32-0.11c-0.01-10.66-0.02-21.32-0.03-31.98c-2.07,0-4.14,0-6.22-0.01
@@ -41,8 +42,19 @@
             </svg>
         </a>
     </div>
-    <a href="<?= $signin_link ?>" class="btn btn-sm btn-outline-warning me-lg-5">
+    <a href="<?= self::$_Router->getUrl("signin") ?>" class="btn btn-sm btn-outline-warning me-lg-5">
         Connexion
     </a>
 
 </header>
+
+<main class="container-fluid m-0 p-0">
+    {{content}}
+</main>
+
+<footer class="container-fluid
+               fixed-bottom
+               border-top border-light-subtle
+               bg-dark-subtle">
+    footer
+</footer>

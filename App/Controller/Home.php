@@ -9,8 +9,6 @@ class Home extends AbstractController
 
     public function index()
     {
-
-        $this->render('Streaming.index',[]);
-
+        return $this->render('Streaming.index',[]);
     }
 }
