@@ -21,4 +21,3 @@ composer.phar dump-autoload
 TODO
 Bloquer l'accès aux dossiers.
 Tester les qu'elles sont accessible par la barre url.
-j ai pu entrer dans le dossier css par exemple...
