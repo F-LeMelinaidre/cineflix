@@ -9,6 +9,7 @@ class Movie extends AbstractController
 
     public function __construct()
     {
+        parent::__construct();
 
         $this->title_page .= ' Films';
 

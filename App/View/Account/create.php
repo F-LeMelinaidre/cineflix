@@ -40,7 +40,7 @@ $route = \Cineflix\Core\Router\Router::getInstance();
             </a>
             <h1 class="mx-xl-4 mx-sm-4">Votre cinéma à portée de main</h1>
             <p class="mx-xl-5 mx-sm-4 mb-1">Explorez les films près de chez vous!</p>
-            <p class="mx-xl-5 mx-sm-4">Vous avez déjà un compte? <a href="<?= $route->getUrl("Auth.signin") ?>">Connexion!</a></p>
+            <p class="mx-xl-5 mx-sm-4">Vous avez déjà un compte? <a href="<?= $route->getUrl("signin") ?>">Connexion!</a></p>
         </header>
         <form action="#" id="Signout" class="d-flex justify-content-center flex-wrap row-gap-2 column-gap-4 mx-auto mb-5">
             <div class="flex-grow-1">

@@ -10,6 +10,7 @@ class AbstractController
 {
 
 
+    protected static Router $_Router;
     protected string $title_page = AppController::APP_NAME;
     // APP_NAME est défini dans la Class AppController
     // $title_page correspond à la valeur de l'élément <title></title>
@@ -19,8 +20,13 @@ class AbstractController
     // Définir l'id de l'element <main></main>
     protected bool $header = true;
 
-    private string $path_view = WEBROOT.'/App/View/';
+    private string $path_view;
 
+    public function __construct()
+    {
+        self::$_Router = Router::getInstance();
+        $this->path_view = AppController::$_Root.'/App/View/';
+    }
     /**
      * @param string $view
      * @param array $data
@@ -28,8 +34,7 @@ class AbstractController
      */
     public function render(string $view, array $data)
     {
-        $route = Router::getInstance();
-        $signin_link = $route->getUrl('signin');
+        $signin_link = self::$_Router->getUrl('signin');
 
         $class = ($this->header === true)? 'container-fluid m-0 p-0' : 'container-xl container-fluid mx-lg-auto my-5';
         $this->setPageId($view);

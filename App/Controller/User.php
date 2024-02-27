@@ -7,12 +7,6 @@ use Cineflix\Core\AbstractController;
 class User extends AbstractController
 {
 
-    public function __construct()
-    {
-        echo '<br>Class: '.__CLASS__.'<br>';
-
-    }
-
     public function index()
     {
         echo 'Function: '.__FUNCTION__.'<br>Line: '.__LINE__.'<br><br>';

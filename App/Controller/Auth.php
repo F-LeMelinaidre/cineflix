@@ -9,6 +9,7 @@ class Auth extends AbstractController
 
     public function __construct()
     {
+        parent::__construct();
         $this->header = false;
     }
 
@@ -21,7 +22,7 @@ class Auth extends AbstractController
 
     public function signup()
     {
-echo 'ok';
+
         $this->render('Account.create',[]);
 
     }

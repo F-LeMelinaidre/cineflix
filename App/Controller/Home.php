@@ -6,10 +6,6 @@ use Cineflix\Core\AbstractController;
 
 class Home extends AbstractController
 {
-    public function __construct()
-    {
-
-    }
 
     public function index()
     {

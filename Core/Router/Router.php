@@ -95,7 +95,7 @@ class Router
     public function getUrl(string $name, array $params = []):string
     {
         // TODO Creer une Exception type info bulle
-        return (!isset($this->routes_name[$name]))? $this->routes_name[$name]->getUrl($params) : '';
+        return (isset($this->routes_name[$name]))? $this->routes_name[$name]->getUrl($params) : '';
     }
 
     /**

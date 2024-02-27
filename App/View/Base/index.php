@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title><?= $this->title_page; ?></title>
-    <link rel="stylesheet" href="<?= ROOT ?>css/bootstrap.min.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="<?= ROOT ?>css/style.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="../public/css/bootstrap.min.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="../public/css/style.css" type="text/css" media="screen" />
 </head>
 <body class="bg-black">
-    <?php if($this->header === true) include(WEBROOT . "/app/View/Base/header.php"); ?>
+    <?php if($this->header === true) include(\Cineflix\App\AppController::$_Root."/app/View/Base/header.php"); ?>
 
     <main id ="<?= $this->page_id ?>" class="<?= $class ?>">
 
@@ -15,7 +15,7 @@
 
     </main>
 
-    <?php include(WEBROOT . "/app/View/Base/footer.php"); ?>
+    <?php include(\Cineflix\App\AppController::$_Root . "/app/View/Base/footer.php"); ?>
 
 </body>
 </html>

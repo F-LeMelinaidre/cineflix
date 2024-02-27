@@ -25,20 +25,23 @@ class AppController
 {
     const APP_NAME = 'Cinéflix';
 
-    private static $instance;
+    public static string $_Root;
+    public static string $_Webroot;
 
     private string $controller_path = '\\Cineflix\\App\\Controller\\';
 
-    public static function getInstance() {
-        if(!self::$instance) self::$instance = new AppController();
+    public function __construct() {
+        self::$_Root = dirname(__DIR__);
+        self::$_Webroot = self::$_Root.'/public/';
 
-        return self::$instance;
+
     }
-    public function load():void
+
+    public function run():void
     {
         // Création de l'ensemble des routes de l'application
 
-        $router = Router::getInstance($this->controller_path);
+        $router = Router::getInstance();
 
         $router->get(
             '/',
