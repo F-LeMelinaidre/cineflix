@@ -1,6 +1,6 @@
 
 <?php
-
+///
 return array(
     'db_user' => "root",
     'db_pwd' => "",
