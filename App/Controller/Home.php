@@ -15,9 +15,8 @@ class Home extends AbstractController
         $query = "SELECT * FROM fiche WHERE date_sortie > :date_sortie";
         $binvalue[] = ['col' => 'date_sortie', 'val' => '1999-09-21 22:00:00'];
         $req = $db->prepare($query, $binvalue);
-        $data= $req->fetchAll(PDO::FETCH_ASSOC);
+        $movies= $req->fetchAll(PDO::FETCH_ASSOC);
 
-        var_dump($data);
-        return $this->render('Streaming.index',[]);
+        return $this->render('Home.index',compact('movies'));
     }
 }

@@ -39,11 +39,10 @@ class AbstractController
         $this->setPageId($contentView);
 
         $layout = $this->layoutContent();
-        $contentView = $this->renderOnlyView($contentView);
+        $contentView = $this->renderOnlyView($contentView, $data);
         $layout = str_replace('{{content}}', $contentView, $layout);
 
         ob_start();
-        extract($data);
         include_once($this->path_view."Base/index.php");
         $view = ob_get_clean();
 
@@ -58,9 +57,10 @@ class AbstractController
         return ob_get_clean();
     }
 
-    protected function renderOnlyView($view)
+    protected function renderOnlyView($view, $data)
     {
         ob_start();
+        extract($data);
         include_once $this->path_view.str_replace('.', '/', $view).".php";
         return ob_get_clean();
     }
