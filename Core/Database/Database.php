@@ -5,7 +5,7 @@ namespace Cineflix\Core\Database;
 use Cineflix\Core\Util\MessageFlash;
 use Exception;
 use PDO;
-///
+
 class Database
 {
     public static $_Instance;

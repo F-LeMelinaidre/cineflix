@@ -10,7 +10,7 @@ use Cineflix\Core\Router\Router;
 require '../vendor/autoload.php';
 
 // TODO
-//      - Creer une methode ou class pour gérer l'affichage d'erreur, et la redirection vers les pages d'erreurs
+//  - Creer une methode ou class pour gérer l'affichage d'erreur, et la redirection vers les pages d'erreurs
 
 class AppController
 {
