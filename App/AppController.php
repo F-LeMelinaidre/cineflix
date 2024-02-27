@@ -3,20 +3,14 @@
 namespace Cineflix\App;
 
 
+use Cineflix\Core\Database\Database;
 use Cineflix\Core\Router\RouteNotFoundException;
 use Cineflix\Core\Router\Router;
 
 require '../vendor/autoload.php';
 
 // TODO
-//      - Remonter l'instanciation des controller effectué dans la Class Route Methode call() ici
 //      - Creer une methode ou class pour gérer l'affichage d'erreur, et la redirection vers les pages d'erreurs
-//      - Déplacer et Renommer Les Constantes ROOT et WEBROOT ici
-//      - Essayer de ne laisser dans l'index seulement:
-//          ini_set()
-//          session_start()
-//          date_default_timezone_set()
-//          ainsi que l'appel à APP::load() biensûr sinon rien ne fonctionne
 
 class AppController
 {
@@ -25,6 +19,7 @@ class AppController
     public static string $_Root;
     public static string $_Webroot;
     public static Router $_Router;
+    public static Database $_Database;
 
     private string $controller_path = '\\Cineflix\\App\\Controller\\';
 
@@ -32,14 +27,15 @@ class AppController
         self::$_Root = dirname(__DIR__);
         self::$_Webroot = self::$_Root.'/public/';
 
-
+        self::$_Router = Router::getInstance();
+        self::$_Database = Database::getInstance(self::$_Root);
     }
 
     public function run()
     {
         // Création de l'ensemble des routes de l'application
 
-        self::$_Router = Router::getInstance();
+
 
         self::$_Router->get(
             '/',
