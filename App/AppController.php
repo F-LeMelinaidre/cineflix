@@ -22,7 +22,7 @@ class AppController
     public static Database $_Database;
 
     private string $controller_path = '\\Cineflix\\App\\Controller\\';
-///
+
     public function __construct() {
         self::$_Root = dirname(__DIR__);
         self::$_Webroot = self::$_Root.'/public/';
