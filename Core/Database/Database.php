@@ -49,11 +49,9 @@ class Database
     public function prepare(string $query, array $bindvalues = [])
     {
         try {
-echo 'connexion';
             $pre = $this->connexion->prepare($query);
 
             if (!empty($bindvalues)) {
-                var_dump($bindvalues);
                 foreach ($bindvalues as $val) {
                     $pre->bindValue($val['col'], $val['val'], PDO::PARAM_STR);
                 }
