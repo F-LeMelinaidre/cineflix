@@ -18,7 +18,7 @@ class Movie extends AbstractController
     public function index()
     {
 
-        $this->render('Movie.index',[]);
+        return $this->render('Movie.index',[]);
 
     }
 
@@ -26,7 +26,7 @@ class Movie extends AbstractController
     {
 
         $this->title_page .= ' | Titre du film';
-        $this->render('Movie.show',[]);
+        return $this->render('Movie.show',[]);
 
     }
 }

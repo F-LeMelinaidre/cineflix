@@ -69,7 +69,7 @@ class AppController
         self::$_Router->get(
             '/Movie/:slug-:id',
             [
-                'controller' => 'movie', 'action' => 'show', 'require' => ['slug' => '[a-z\-0-9]+', 'id' => '[0-9]+']
+                'controller' => 'movie', 'action' => 'show', 'require' => ['slug' => '[a-z\_\-0-9]+', 'id' => '[0-9]+']
             ],
             'movie.show'
         );
