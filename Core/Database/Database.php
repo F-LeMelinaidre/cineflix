@@ -84,12 +84,13 @@ class Database
         }
     }
 
-    public function fetch() {
+    public function fetch(string $model = null) {
+        $this->request->setFetchMode(PDO::FETCH_CLASS, $model);
 
+        return $this->request->fetch();
     }
 
     public function fetchall(string $model = null) {
-
         $this->request->setFetchMode(PDO::FETCH_CLASS, $model);
 
         return $this->request->fetchAll();

@@ -102,7 +102,7 @@ class Router
      * Vérifie si l'url courante correspond à une url du tableau $routes
      * @return Cineflix\AppController\Controller
      */
-    public function routeMatched():array
+    public function routeMatched():Route
     {
 
         $url = (isset($_GET['uri']))? $_GET['uri'] : '';

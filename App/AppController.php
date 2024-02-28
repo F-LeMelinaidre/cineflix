@@ -105,13 +105,12 @@ class AppController
 
         try {
             $route = self::$_Router->routeMatched();
-
-            $controller = $this->controller_path.ucfirst($route['controller']);
-            $action = $route['action'];
+            $controller = $this->controller_path.ucfirst($route->controller);
+            $action = $route->action;
 
             $controller = new $controller();
 
-            return $controller->$action();
+            return $controller->$action(...$route->params);
 
         } catch (RouteNotFoundException $exception) {
             // TODO Créer les pages d'erreur

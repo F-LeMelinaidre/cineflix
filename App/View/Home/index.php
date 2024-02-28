@@ -12,7 +12,7 @@
 
     <div class="card card-info">
         <div class="bill-container">
-            <a href="#">
+            <a href="<?= self::$_Router->getUrl("movie.show",['slug' => $movie->slug, 'id' => $movie->id]) ?>">
                 <img src="<?= $movie->affiche ?>" alt="la bête" class="bill card-img-top">
             </a>
         </div>
@@ -20,7 +20,7 @@
             <h5 class="card-title">
                 <a href="<?= self::$_Router->getUrl("movie.show",['slug' => $movie->slug, 'id' => $movie->id]) ?>" class="link-warning link-offset-1
                 link-underline-opacity-50
-                link-underline-opacity-100-hover">
+                link-underline-opacity-100-hover text-capitalize">
                     <?= $movie->nom ?>
                 </a>
             </h5>

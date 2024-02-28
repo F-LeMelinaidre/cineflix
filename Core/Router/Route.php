@@ -21,18 +21,24 @@ class Route
 {
 
     private $path;
-
-    private array $params;
     private array $require = [];
-    private array $matches;
+    private array $requireKeys = [];
+
+    public string $controller;
+    public string $action;
+    public array $params;
 
     public function __construct($path, $params)
     {
         $this->path = trim($path, '/');
 
-        $this->params = array_diff_key($params, ['require' => null]);
+        $this->controller = $params['controller'];
+        $this->action = $params['action'];
 
-        if(isset($params['require'])) $this->require = $params['require'];
+        if(isset($params['require'])) {
+            $this->require = $params['require'];
+            $this->requireKeys = array_keys($this->require);
+        }
     }
 
     /**
@@ -70,8 +76,11 @@ class Route
 
         $return = (preg_match($reg, $url, $matches))? true : false;
 
-        array_shift($matches);
-        $this->matches = $matches;
+        // Si l'url contient des paramètres matché, on réassocie les clés au valeurs matché
+        if(!empty($matches)) {
+            array_shift($matches);
+            $this->params = array_combine($this->requireKeys, $matches);
+        }
 
         //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.'<br>Line: '.__LINE__.'<br>Path: '.$path.'<br>Match = '.var_export($return, TRUE).'<br><br>';
         return $return;
@@ -93,9 +102,9 @@ class Route
     /**
      * @return void
      */
-    public function call():array
+    public function call():self
     {
-        return $this->params;
+        return $this;
     }
 
     public function getUrl(array $params):string
@@ -107,4 +116,5 @@ class Route
         }
         return '/'.$path;
     }
+
 }
