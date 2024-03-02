@@ -69,7 +69,7 @@ class AppController
         self::$_Router->get(
             '/Movie/:slug-:id',
             [
-                'controller' => 'movie', 'action' => 'show', 'require' => ['slug' => '[a-z\-0-9]+', 'id' => '[0-9]+']
+                'controller' => 'movie', 'action' => 'show', 'require' => ['slug' => '[a-z\_\-0-9]+', 'id' => '[0-9]+']
             ],
             'movie.show'
         );
@@ -105,13 +105,12 @@ class AppController
 
         try {
             $route = self::$_Router->routeMatched();
-
-            $controller = $this->controller_path.ucfirst($route['controller']);
-            $action = $route['action'];
+            $controller = $this->controller_path.ucfirst($route->controller);
+            $action = $route->action;
 
             $controller = new $controller();
 
-            return $controller->$action();
+            return $controller->$action(...$route->params);
 
         } catch (RouteNotFoundException $exception) {
             // TODO Créer les pages d'erreur

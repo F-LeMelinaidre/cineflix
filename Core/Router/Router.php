@@ -5,10 +5,10 @@ namespace Cineflix\Core\Router;
 use Exception;
 
 /**
- * $url = url courante
+ * $path = url courante
  * $routes = tableau des routes de l'application
  *
- * function add() stock la route dans le tableau routes, suivant la fonction parente utilisé.
+ * function add() stock la route dans le tableau routes, suivant la fonction parente utilisé. get() ou post()
  * function get() pour les méthode $_GET exemple: get('/pages/:id',['params' => ['id' => '[0-9]+']],pages.show)
  * function post() pour les méthode $_POST
  * Schéma du tableau route:
@@ -21,23 +21,30 @@ use Exception;
  *  l'intérêt d'indexer les routes par GET ou POST est de réduire les tests, ou la récupération d'url suivant la méthode
  *  sur un tableau qui pourrait en contenir un grand nombre.
  *
- * Url appelé: url de l'application matchable
- * Nom de l'url: Pour la création des url des liens ( function url())
+ * Url appelé: url matchable de l'application
+ * Nom de l'url: Pour la création des liens ( function getUrl())
  *
- * function run() Vérifie si l'url courante correspond à une url de l'application
+ * function run() Vérifie si l'url courante correspond à une url de l'application,
+ * dans le tableau $routes indexé par le méthode (GET ou POST) puis par l'url'
  *
- * Après avoir instancié la class au niveau de l'entrée de l'application,
+ * Après avoir instancié la class dans AppController,
  * ajouter les routes en utilisant les fonctions get() ou post()
  *
+ * le tableau $routes est utilisé pour router l'url courante
+ * le tableau $routes_name est utilisé pour créer le lien correspondant à une route
  */
 class Router
 {
 
-    private static $instance;
-    private array $routes = [];
-    private array $routes_name = [];
-    private array $route = [];
+    private static $instance; // Stock l'instance de la class Router
+    private array $routes = []; // Stock les routes par Méthode
+    private array $routes_name = []; // Stock les routes par nom
+    private Route $route;
 
+    /**
+     * Récupère l'instance de Router ou en créé une si elle ne l'est pas
+     * @return Router
+     */
     public static function getInstance() {
         if(!self::$instance) self::$instance = new Router();
 
@@ -51,9 +58,9 @@ class Router
      * @param string $name
      * @return Route
      */
-    public function get(string $path, array $params, string $name = null):Route
+    public function get(string $path, array $params, string $name = null):void
     {
-        return $this->add($path, $params, $name, 'GET');
+        $this->add($path, $params, $name, 'GET');
     }
 
     /**
@@ -63,31 +70,37 @@ class Router
      * @param string|null $name
      * @return Route
      */
-    public function post(string $path, array $params, string $name = null):Route
+    public function post(string $path, array $params, string $name = null):void
     {
-        return $this->add($path, $params, $name, 'POST');
+        $this->add($path, $params, $name, 'POST');
     }
 
     /**
-     * Ajout des routes definient par les function get() et post() au tableau $routes
+     * Crée un Objet Route et l'ajout au tableau des routes indéxé par la $methode
      * @param string $path
      * @param string $name
      * @param string $method
      * @return Route
      */
-    private function add(string $path, array $params, string $name, string $method):Route
+    private function add(string $path, array $params, string $name, string $method): void
     {
         $route = new Route($path, $params);
+
+        // On ajoute l'objet route au tableau des routes
         $this->routes[$method][] = $route;
 
+        // Si le nom de la route est null, on lui attribut le path comme nom en remplaçant le / par un point
         if(is_null($name)) $name = str_replace('/', '.',$path);
 
+        // Ajout de l'objet route au tableau $routes_name
         $this->routes_name[$name] = $route;
-
-        return $route;
     }
 
     /**
+     * Génère l'url en fonction de son nom et paramtères
+     * Appel la fonction getUrl de l'objet route stocké dans le tableau $routes_name, indexé par son nom,
+     * $params est facultatif, il contient la paramètre $_Get passé dans l'url
+     *
      * @param string $name
      * @param array $params
      * @return string url
@@ -102,30 +115,36 @@ class Router
      * Vérifie si l'url courante correspond à une url du tableau $routes
      * @return Cineflix\AppController\Controller
      */
-    public function routeMatched():array
+    public function routeMatched():Route
     {
-
+        // Stock tous se qu'il y a après le nom de domaine
         $url = (isset($_GET['uri']))? $_GET['uri'] : '';
+        // Stock la méthode utilisé. Get ou Post
         $req_method = $_SERVER['REQUEST_METHOD'];
 
+        // Récupère et stock tous les routes correspondant à la méthode actuel
         $routes = $this->routes[$req_method];
 
+        // Parcours le tableau routes contenant les objets route
+        // Si la méthode match() trouve une correspondante
+        // On attribute l'objet route a $this->route
         $nb = count($routes) - 1;
         $i = 0;
         while($i <= $nb && empty($this->route)) {
 
             if($routes[$i]->match($url)) {
-                $route = $routes[$i]->call();
+                $this->route = $routes[$i]->call();
             }
 
             $i++;
         }
 
-        if(!isset($route)) {
+        // si aucune route ne correspond on lève une exception
+        if(!isset($this->route)) {
             throw new RouteNotFoundException("Aucune route correspondante n'a été trouvée");
         }
 
-        return $route;
+        return $this->route;
 
     }
 

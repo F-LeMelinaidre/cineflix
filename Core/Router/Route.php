@@ -21,18 +21,24 @@ class Route
 {
 
     private $path;
-
-    private array $params;
     private array $require = [];
-    private array $matches;
+    private array $requireKeys = [];
+
+    public string $controller;
+    public string $action;
+    public array $params;
 
     public function __construct($path, $params)
     {
         $this->path = trim($path, '/');
 
-        $this->params = array_diff_key($params, ['require' => null]);
+        $this->controller = $params['controller'];
+        $this->action = $params['action'];
 
-        if(isset($params['require'])) $this->require = $params['require'];
+        if(isset($params['require'])) {
+            $this->require = $params['require'];
+            $this->requireKeys = array_keys($this->require);
+        }
     }
 
     /**
@@ -51,7 +57,9 @@ class Route
      *
      *  1er paramètre une expression réguilière
      *  :([\w])+ recherche \w n'importe quel caractère alpha numérique + plusieurs fois après :
+     *
      *  2nd paramètre Appel la function paramMatch() lorsqu'il y a match de :([\w])+
+     *
      *  3ème la chaine de caratère dans la quelle le remplacement s'effectue
      *
      * Condition if(preg_match(...)) renvoi true si l'url courante match avec la route, par defaut la méthode renvoi false
@@ -70,8 +78,11 @@ class Route
 
         $return = (preg_match($reg, $url, $matches))? true : false;
 
-        array_shift($matches);
-        $this->matches = $matches;
+        // Si l'url contient des paramètres matché, on réassocie les clés au valeurs matché
+        if(!empty($matches)) {
+            array_shift($matches);
+            $this->params = array_combine($this->requireKeys, $matches);
+        }
 
         //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.'<br>Line: '.__LINE__.'<br>Path: '.$path.'<br>Match = '.var_export($return, TRUE).'<br><br>';
         return $return;
@@ -93,11 +104,16 @@ class Route
     /**
      * @return void
      */
-    public function call():array
+    public function call():self
     {
-        return $this->params;
+        return $this;
     }
 
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
     public function getUrl(array $params):string
     {
         $path = $this->path;
@@ -107,4 +123,5 @@ class Route
         }
         return '/'.$path;
     }
+
 }
