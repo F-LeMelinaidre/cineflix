@@ -35,8 +35,7 @@ class AppController
     {
         // Création de l'ensemble des routes de l'application
 
-
-
+        // ------ Route Public ------ //
         self::$_Router->get(
             '/',
             ['controller' => 'home', 'action' => 'index'],
@@ -74,13 +73,6 @@ class AppController
             'movie.show'
         );
 
-        self::$_Router->get('/Profil',
-            [
-                'controller' => 'profil', 'action' => 'index'
-            ],
-            'profil.index'
-        );
-
         self::$_Router->get('/Streams',
             [
                 'controller' => 'streaming', 'action' => 'index'
@@ -95,6 +87,13 @@ class AppController
             'streaming.show'
         );
 
+        self::$_Router->get('/Profil',
+            [
+                'controller' => 'profil', 'action' => 'index'
+            ],
+            'profil.index'
+        );
+
         self::$_Router->get(
             '/User',
             [
@@ -103,13 +102,128 @@ class AppController
             'user.index'
         );
 
+        // ------ Route Administration du site ------ //
+
+        /* -- Cinema -- */
         self::$_Router->get(
-            'Admin/Movie',
+            '/Admin/Cinema',
+            [
+                'controller' => 'admin\Cinema', 'action' => 'index'
+            ],
+            'cinema.admin.index'
+        );
+        self::$_Router->get(
+            '/Admin/Cinema/Show/:id',
+            [
+                'controller' => 'admin\Cinema', 'action' => 'show', 'require' => ['id' => '[0-9]+']
+            ],
+            'cinema.admin.show'
+        );
+        self::$_Router->get(
+            '/Admin/Cinema/Edit',
+            [
+                'controller' => 'admin\Cinema', 'action' => 'edit'
+            ],
+            'cinema.admin.edit'
+        );
+        self::$_Router->get(
+            '/Admin/Cinema/Edit/:id',
+            [
+                'controller' => 'admin\Cinema', 'action' => 'edit', 'require' => ['id' => '[0-9]+']
+            ],
+            'cinema.admin.edit'
+        );
+
+        /* -- Movie -- */
+        self::$_Router->get(
+            '/Admin/Movie',
             [
                 'controller' => 'admin\Movie', 'action' => 'index'
             ],
             'movie.admin.index'
         );
+        self::$_Router->get(
+            '/Admin/Movie/Show/:id',
+            [
+                'controller' => 'admin\Movie', 'action' => 'show', 'require' => ['id' => '[0-9]+']
+            ],
+            'movie.admin.show'
+        );
+        self::$_Router->get(
+            '/Admin/Movie/Edit',
+            [
+                'controller' => 'admin\Movie', 'action' => 'edit'
+            ],
+            'movie.admin.edit'
+        );
+        self::$_Router->get(
+            '/Admin/Movie/Edit/:id',
+            [
+                'controller' => 'admin\Movie', 'action' => 'edit', 'require' => ['id' => '[0-9]+']
+            ],
+            'movie.admin.edit'
+        );
+
+        /* -- Stream -- */
+        self::$_Router->get(
+            '/Admin/Stream',
+            [
+                'controller' => 'admin\Streaming', 'action' => 'index'
+            ],
+            'streaming.admin.index'
+        );
+        self::$_Router->get(
+            '/Admin/Stream/Show/:id',
+            [
+                'controller' => 'admin\Streaming', 'action' => 'show', 'require' => ['id' => '[0-9]+']
+            ],
+            'streaming.admin.show'
+        );
+        self::$_Router->get(
+            '/Admin/Stream/Edit',
+            [
+                'controller' => 'admin\Streaming', 'action' => 'edit'
+            ],
+            'streaming.admin.edit'
+        );
+        self::$_Router->get(
+            '/Admin/Stream/Edit/:id',
+            [
+                'controller' => 'admin\Streaming', 'action' => 'edit', 'require' => ['id' => '[0-9]+']
+            ],
+            'streaming.admin.edit'
+        );
+
+        /* -- User -- */
+        self::$_Router->get(
+            '/Admin/User',
+            [
+                'controller' => 'admin\User', 'action' => 'index'
+            ],
+            'user.admin.index'
+        );
+        self::$_Router->get(
+            '/Admin/User/Show/:id',
+            [
+                'controller' => 'admin\User', 'action' => 'show', 'require' => ['id' => '[0-9]+']
+            ],
+            'user.admin.show'
+        );
+        self::$_Router->get(
+            '/Admin/User/Edit',
+            [
+                'controller' => 'admin\User', 'action' => 'edit'
+            ],
+            'user.admin.edit'
+        );
+        self::$_Router->get(
+            '/Admin/User/Edit/:id',
+            [
+                'controller' => 'admin\User', 'action' => 'edit', 'require' => ['id' => '[0-9]+']
+            ],
+            'user.admin.edit'
+        );
+
 
         try {
             $route = self::$_Router->routeMatched();

@@ -51,6 +51,46 @@ img.card-img-top {
     cursor: pointer;
 }
 
+/* ------------------ *\
+   CSS ADMINISTRATION
+\* ------------------ */
+#AdminHeader {
+    height: 60px;
+}
+
+#AdminContent {
+    display: grid;
+    grid-template:
+            "aside breadcrumb" 20px
+            "aside section" 1fr / 200px auto;
+    height: calc(100vh - 60px);
+}
+#AdminContent aside {
+    grid-area: aside;
+    width: 100%;
+}
+#AdminContent .breadcrumb {
+    grid-area: breadcrumb;
+}
+
+/* ------------------ *\
+     CSS NAVIGATION
+\* ------------------ */
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.breadcrumb ul {
+    display: flex;
+}
+.breadcrumb li::after {
+    content: ">";
+    margin: 0 0.25rem;
+}
+.breadcrumb li:last-of-type::after {
+    content: "";
+}
 .pagination {
     --bs-pagination-color: var(--bs-gray);
     --bs-pagination-hover-color: var(--bs-yellow);
@@ -63,7 +103,7 @@ img.card-img-top {
     --bs-pagination-hover-bg: unset;
     --bs-pagination-focus-bg: unset;
     --bs-pagination-active-bg: unset;
-    --bs-pagination-disabled-bg: unset;
+    --bs-pagination-disabled-bg: unset
 }
 .pagination .page-link:hover:not(span) {
     text-decoration: underline overline;
