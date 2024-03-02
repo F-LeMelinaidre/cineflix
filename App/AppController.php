@@ -103,6 +103,14 @@ class AppController
             'user.index'
         );
 
+        self::$_Router->get(
+            'Admin/Movie',
+            [
+                'controller' => 'admin\Movie', 'action' => 'index'
+            ],
+            'movie.admin.index'
+        );
+
         try {
             $route = self::$_Router->routeMatched();
             $controller = $this->controller_path.ucfirst($route->controller);

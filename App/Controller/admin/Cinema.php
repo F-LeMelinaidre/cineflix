@@ -1,16 +1,11 @@
 <?php
 
-namespace Cineflix\CineFlix\App\Controller\Admin;
+namespace Cineflix\App\Controller\Admin;
 
 use Cineflix\Core\AbstractController;
 
-class StreamingController extends AbstractController
+class Cinema extends AbstractController
 {
-
-    public function __construct()
-    {
-
-    }
 
     public function index()
     {

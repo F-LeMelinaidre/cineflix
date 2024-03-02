@@ -9,14 +9,14 @@ class Auth extends AbstractController
 
     protected string $layout = 'auth';
     
-    public function signin()
+    public function signin(): string
     {
 
         return $this->render('Auth.signin',[]);
 
     }
 
-    public function signup()
+    public function signup(): string
     {
 
         return $this->render('Account.create',[]);

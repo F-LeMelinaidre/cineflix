@@ -11,14 +11,12 @@ class Streaming extends AbstractController
     {
         parent::__construct();
 
-        $this->title_page .= ' Streaming';
-
     }
 
-    public function index()
+    public function index(): string
     {
 
-        $this->render('Streaming.index',[]);
+        return $this->render('Streaming.index',[]);
 
     }
 
