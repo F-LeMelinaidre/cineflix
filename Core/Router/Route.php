@@ -57,7 +57,9 @@ class Route
      *
      *  1er paramètre une expression réguilière
      *  :([\w])+ recherche \w n'importe quel caractère alpha numérique + plusieurs fois après :
+     *
      *  2nd paramètre Appel la function paramMatch() lorsqu'il y a match de :([\w])+
+     *
      *  3ème la chaine de caratère dans la quelle le remplacement s'effectue
      *
      * Condition if(preg_match(...)) renvoi true si l'url courante match avec la route, par defaut la méthode renvoi false
@@ -107,6 +109,11 @@ class Route
         return $this;
     }
 
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
     public function getUrl(array $params):string
     {
         $path = $this->path;
