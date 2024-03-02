@@ -1,8 +1,8 @@
-<header id="AdminHeader" class="container-xl container-fluid mx-lg-auto p-0">
+<header id="AdminHeader" class="container-fluid p-0">
     <h1>Administration <span>(brouillon)</span></h1>
 
 </header>
-<main id="AdminContent" class="container-xl container-fluid mx-lg-auto p-0">
+<main id="AdminContent" class="container-fluid p-0">
     <nav class="breadcrumb">
         <ul>
             <li>Accueil</li>
@@ -22,5 +22,7 @@
             <span>(brouillon)</span>
         </nav>
     </aside>
+
     {{content}}
+
 </main>

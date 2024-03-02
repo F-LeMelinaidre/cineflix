@@ -55,22 +55,48 @@ img.card-img-top {
    CSS ADMINISTRATION
 \* ------------------ */
 #AdminHeader {
-    height: 60px;
+    height: 4rem;
 }
 
 #AdminContent {
     display: grid;
     grid-template:
-            "aside breadcrumb" 20px
-            "aside section" 1fr / 200px auto;
-    height: calc(100vh - 60px);
+            "aside breadcrumb" 1.6rem
+            "aside header" 10.4rem
+            "aside section"  minmax(calc(100vh - 16rem), 1fr) / 12rem auto;
+}
+#AdminContent header {
+    display: flex;
+    align-items: center;
+    margin: 3.2rem 0;
+    padding-left: 1.6rem;
+}
+#AdminContent table {
+    grid-area: section;
+    width:88%;
+    margin: 0 auto 3.2rem auto;
+}
+#AdminContent .action-menu ul {
+    display: flex;
+    justify-content: space-evenly;
+    column-gap: 0.8rem;
 }
 #AdminContent aside {
     grid-area: aside;
     width: 100%;
+    background-color: rgba( 255, 255, 255, 0.1);
+}
+#AdminContent .main-menu ul {
+    padding: 0.8rem 0;
+}
+#AdminContent .main-menu li {
+    padding: 0 0.8rem;
 }
 #AdminContent .breadcrumb {
     grid-area: breadcrumb;
+    margin: 0;
+    padding: 0;
+    padding-left: 1.6rem;
 }
 
 /* ------------------ *\
@@ -91,6 +117,7 @@ nav ul {
 .breadcrumb li:last-of-type::after {
     content: "";
 }
+
 .pagination {
     --bs-pagination-color: var(--bs-gray);
     --bs-pagination-hover-color: var(--bs-yellow);

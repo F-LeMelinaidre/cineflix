@@ -2,7 +2,7 @@
 
 namespace Cineflix\App\model\table;
 
-class Fiche
+class FicheTable
 {
     public int $id;
     public string $nom;
