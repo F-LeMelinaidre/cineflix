@@ -29,11 +29,11 @@ class AbstractController
         $this->path_view = AppController::$_Root.'/App/View/';
     }
     /**
-     * @param string $view
+     * @param string $contentView
      * @param array $data
-     * @return void
+     * @return string
      */
-    public function render(string $contentView, array $data)
+    public function render(string $contentView, array $data): string
     {
 
         $this->setPageId($contentView);
@@ -46,18 +46,16 @@ class AbstractController
         include_once($this->path_view."Base/index.php");
         $view = ob_get_clean();
 
-
-        $view = str_replace('{{layout}}', $layout, $view);
-        return $view;
+        return str_replace('{{layout}}', $layout, $view);
     }
-    protected function layoutContent()
+    protected function layoutContent(): string
     {
         ob_start();
         include_once $this->path_view."Layout/$this->layout.php";
         return ob_get_clean();
     }
 
-    protected function renderOnlyView($view, $data)
+    protected function renderOnlyView($view, $data): string
     {
         ob_start();
         extract($data);

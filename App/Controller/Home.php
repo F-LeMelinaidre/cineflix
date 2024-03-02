@@ -5,12 +5,11 @@ namespace Cineflix\App\Controller;
 use Cineflix\App\AppController;
 use Cineflix\App\model\table\Fiche;
 use Cineflix\Core\AbstractController;
-use PDO;
 
 class Home extends AbstractController
 {
 
-    public function index()
+    public function index(): string
     {
         $db = AppController::$_Database;
         $query = "SELECT * FROM fiche WHERE date_sortie > :date_sortie";

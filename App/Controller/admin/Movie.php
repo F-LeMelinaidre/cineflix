@@ -4,17 +4,14 @@ namespace Cineflix\App\Controller\Admin;
 
 use Cineflix\Core\AbstractController;
 
-class UserController extends AbstractController
+class Movie extends AbstractController
 {
 
-    public function __construct()
+    protected string $layout = 'admin';
+
+    public function index(): self
     {
-
-    }
-
-    public function index()
-    {
-
+        return $this->render('movie.admin.index',[]);
     }
 
     public function show()

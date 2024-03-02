@@ -14,14 +14,14 @@ class Movie extends AbstractController
         parent::__construct();
     }
 
-    public function index()
+    public function index(): string
     {
 
         return $this->render('Movie.index',[]);
 
     }
 
-    public function show(string $slug, int $id)
+    public function show(string $slug, int $id): string
     {
         $db = AppController::$_Database;
         $query = "SELECT * FROM fiche WHERE id = :id AND slug = :slug";

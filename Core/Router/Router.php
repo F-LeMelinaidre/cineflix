@@ -2,6 +2,8 @@
 
 namespace Cineflix\Core\Router;
 
+use Cineflix\App\AppController;
+use Cineflix\Core\Router\Route;
 use Exception;
 
 /**
@@ -39,7 +41,6 @@ class Router
     private static $instance; // Stock l'instance de la class Router
     private array $routes = []; // Stock les routes par Méthode
     private array $routes_name = []; // Stock les routes par nom
-    private Route $route;
 
     /**
      * Récupère l'instance de Router ou en créé une si elle ne l'est pas
@@ -130,21 +131,21 @@ class Router
         // On attribute l'objet route a $this->route
         $nb = count($routes) - 1;
         $i = 0;
-        while($i <= $nb && empty($this->route)) {
+        while($i <= $nb && !isset($route)) {
 
             if($routes[$i]->match($url)) {
-                $this->route = $routes[$i]->call();
+                $route = $routes[$i]->call();
             }
 
             $i++;
         }
 
         // si aucune route ne correspond on lève une exception
-        if(!isset($this->route)) {
+        if(!isset($route)) {
             throw new RouteNotFoundException("Aucune route correspondante n'a été trouvée");
         }
 
-        return $this->route;
+        return $route;
 
     }
 
