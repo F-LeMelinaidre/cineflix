@@ -21,14 +21,23 @@ class Movie extends AbstractController
         return $this->render('Movie.admin.index',compact("movies"));
     }
 
-    public function show(int $id): string
-    {
-        return $this->render('Movie.admin.show',[]);
-    }
-
     public function edit(int $id = null): string
     {
-        return $this->render('Movie.admin.edit',[]);
+
+        if(!is_null($id)) {
+            $db = AppController::$_Database;
+            $query = "SELECT * FROM film AS f JOIN fiche d ON f.fiche_id = d.id WHERE f.id = :id";
+            $binvalue[] = ['col' => 'id', 'val' => $id];
+            $req = $db->prepare($query, $binvalue);
+            $movie = $req->fetch(MovieTable::class);
+        } else {
+            $movie = new MovieTable();
+        }
+
+
+        $title = (!isset($movie->id))? "Ajouter un film" : "Editer: ".ucwords($movie->nom);
+
+        return $this->render('Movie.admin.edit',compact('title', 'movie'));
     }
 
     public function delete()
