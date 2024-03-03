@@ -3,6 +3,7 @@
 namespace Cineflix\App\Controller\Admin;
 
 use Cineflix\App\AppController;
+use Cineflix\App\Model\Table\CinemaTable;
 use Cineflix\App\model\table\MovieTable;
 use Cineflix\Core\AbstractController;
 
@@ -23,9 +24,13 @@ class Movie extends AbstractController
 
     public function edit(int $id = null): string
     {
+        $db = AppController::$_Database;
+
+        $query = "SELECT * FROM cinema";
+        $req = $db->prepare($query);
+        $cinemas = $req->fetchall(CinemaTable::class);
 
         if(!is_null($id)) {
-            $db = AppController::$_Database;
             $query = "SELECT * FROM film AS f JOIN fiche d ON f.fiche_id = d.id WHERE f.id = :id";
             $binvalue[] = ['col' => 'id', 'val' => $id];
             $req = $db->prepare($query, $binvalue);
@@ -37,7 +42,7 @@ class Movie extends AbstractController
 
         $title = (!isset($movie->id))? "Ajouter un film" : "Editer: ".ucwords($movie->nom);
 
-        return $this->render('Movie.admin.edit',compact('title', 'movie'));
+        return $this->render('Movie.admin.edit',compact('title', 'movie', 'cinemas'));
     }
 
     public function delete()
