@@ -1,6 +1,6 @@
 <header>
     <h1>Liste des films en salles</h1>
-
+    <a href="<?= self::$_Router->getUrl('movie.admin.add') ?>" class="btn btn-sm btn-warning">Ajouter un film</a>
 </header>
 <table class="table table-striped align-middle">
     <thead class="table-light">
@@ -26,7 +26,7 @@
             <td>
                 <nav class="action-menu">
                     <ul>
-                        <li>Editer</li>
+                        <li><a href="<?= self::$_Router->getUrl("movie.admin.edit",['id' => $movie->id]) ?>">Editer</a></li>
                         <li>Supp</li>
                     </ul>
                 </nav>

@@ -67,25 +67,26 @@ img.card-img-top {
 }
 #AdminContent header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     margin: 3.2rem 0;
-    padding-left: 1.6rem;
+    padding: 0 6%;
 }
+
+#AdminContent section,
 #AdminContent table {
     grid-area: section;
     width:88%;
     margin: 0 auto 3.2rem auto;
 }
-#AdminContent .action-menu ul {
-    display: flex;
-    justify-content: space-evenly;
-    column-gap: 0.8rem;
-}
+
 #AdminContent aside {
     grid-area: aside;
     width: 100%;
     background-color: rgba( 255, 255, 255, 0.1);
 }
+
+/* --- navigation --- */
 #AdminContent .main-menu ul {
     padding: 0.8rem 0;
 }
@@ -98,7 +99,164 @@ img.card-img-top {
     padding: 0;
     padding-left: 1.6rem;
 }
+#AdminContent .action-menu ul {
+    display: flex;
+    justify-content: space-evenly;
+    column-gap: 0.8rem;
+}
+/* --- Formulaire --- */
+label {
+    margin: 0!important;
+    padding: 0!important;
+}
+input,
+textarea,
+select,
+button {
+    margin-bottom: 0.8rem;
+}
+button {
+    justify-self: end;
+    width: min-content;
+    min-width: 10rem;
+}
+#AdminContent form.film {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 0.8rem;
+}
+#AdminContent .film label:first-of-type {
+    grid-row: 1;
+}
+#AdminContent .film input:first-of-type {
+    grid-row: 2;
+}
+#AdminContent label[for="SelectSalle"] {
+    grid-row: 3;
+}
+#AdminContent #SelectSalle {
+    grid-row: 4;
+}
+#AdminContent .film h2:first-of-type {
+    grid-row: 5;
+}
+#AdminContent label[for="InputDateDebut"],
+#AdminContent label[for="InputDateFin"] {
+    grid-row: 6;
+}
+#AdminContent #InputDateDebut,
+#AdminContent #InputDateFin {
+    grid-row: 7;
+}
+#AdminContent label[for="InputAffiche"] {
+    grid-row: 8;
+}
+#AdminContent #InputAffiche {
+    grid-row: 9;
+}
+#AdminContent label[for="TextareaCinopsys"] {
+    grid-row: 3;
+}
+#AdminContent #TextareaCinopsys {
+    grid-row: 4/10;
+}
+#AdminContent button {
+    grid-row: 10;
+}
+#AdminContent label[for="InputDateDebut"],
+#AdminContent #InputDateDebut,
+#AdminContent label[for="SelectSalle"],
+#AdminContent #SelectSalle {
+    grid-column: 1;
+}
+#AdminContent label[for="InputDateFin"],
+#AdminContent #InputDateFin {
+    grid-column: 2;
+}
+#AdminContent .film label:first-of-type,
+#AdminContent .film input:first-of-type,
+#AdminContent .film h2,
+#AdminContent #InputAffiche,
+#AdminContent label[for="InputAffiche"] {
+    grid-column: 1/3;
+}
 
+#AdminContent label[for="TextareaCinopsys"],
+#AdminContent #TextareaCinopsys {
+    grid-column: 3/5;
+}
+
+#AdminContent button {
+    grid-column-end: -1;
+}
+@media screen and (max-width: 1198px) {
+    #AdminContent form.film {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    #AdminContent .film label:first-of-type {
+        grid-row: 1;
+    }
+    #AdminContent .film input:first-of-type {
+        grid-row: 2;
+    }
+    #AdminContent .film h2:first-of-type {
+        grid-row: 3;
+    }
+    #AdminContent label[for="SelectSalle"],
+    #AdminContent label[for="InputDateDebut"],
+    #AdminContent label[for="InputDateFin"] {
+        grid-row: 4;
+    }
+    #AdminContent #SelectSalle,
+    #AdminContent #InputDateDebut,
+    #AdminContent #InputDateFin {
+        grid-row: 5;
+    }
+    #AdminContent label[for="TextareaCinopsys"] {
+        grid-row: 6;
+    }
+    #AdminContent #TextareaCinopsys {
+        grid-row: 7;
+    }
+    #AdminContent label[for="InputAffiche"] {
+        grid-row: 8;
+    }
+    #AdminContent #InputAffiche,
+    #AdminContent button {
+        grid-row: 9;
+    }
+
+    #AdminContent label[for="InputDateDebut"],
+    #AdminContent #InputDateDebut {
+        grid-column: 1;
+    }
+    #AdminContent label[for="InputDateFin"],
+    #AdminContent #InputDateFin {
+        grid-column: 2;
+    }
+    #AdminContent label[for="SelectSalle"],
+    #AdminContent #SelectSalle {
+        grid-column: 3;
+    }
+    #AdminContent .film label:first-of-type,
+    #AdminContent .film input:first-of-type,
+    #AdminContent .film h2,
+    #AdminContent #InputAffiche,
+    #AdminContent label[for="InputAffiche"] {
+        grid-column: 1/3;
+    }
+    #AdminContent label[for="TextareaCinopsys"],
+    #AdminContent #TextareaCinopsys {
+        grid-column: 1/4;
+    }
+}
+@media screen and (max-width: 768px) {
+    #AdminContent .film label:first-of-type,
+    #AdminContent .film input:first-of-type {
+        grid-column: 1/4;
+    }
+}
 /* ------------------ *\
      CSS NAVIGATION
 \* ------------------ */

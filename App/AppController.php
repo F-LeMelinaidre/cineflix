@@ -113,13 +113,6 @@ class AppController
             'cinema.admin.index'
         );
         self::$_Router->get(
-            '/Admin/Cinema/Show/:id',
-            [
-                'controller' => 'admin\Cinema', 'action' => 'show', 'require' => ['id' => '[0-9]+']
-            ],
-            'cinema.admin.show'
-        );
-        self::$_Router->get(
             '/Admin/Cinema/Edit',
             [
                 'controller' => 'admin\Cinema', 'action' => 'edit'
@@ -143,21 +136,14 @@ class AppController
             'movie.admin.index'
         );
         self::$_Router->get(
-            '/Admin/Movie/Show/:id',
-            [
-                'controller' => 'admin\Movie', 'action' => 'show', 'require' => ['id' => '[0-9]+']
-            ],
-            'movie.admin.show'
-        );
-        self::$_Router->get(
-            '/Admin/Movie/Edit',
+            '/Admin/Movie/Add',
             [
                 'controller' => 'admin\Movie', 'action' => 'edit'
             ],
-            'movie.admin.edit'
+            'movie.admin.add'
         );
         self::$_Router->get(
-            '/Admin/Movie/Edit/:id',
+            '/Admin/Movie/Edit-:id',
             [
                 'controller' => 'admin\Movie', 'action' => 'edit', 'require' => ['id' => '[0-9]+']
             ],
