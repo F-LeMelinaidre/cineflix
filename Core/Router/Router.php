@@ -22,12 +22,14 @@ use Exception;
  *
  *  l'intérêt d'indexer les routes par GET ou POST est de réduire les tests, ou la récupération d'url suivant la méthode
  *  sur un tableau qui pourrait en contenir un grand nombre.
+ *
+ *  le nom de route est utiliser comme parametre de getUrl() pour créer l'url des liens
  */
 class Router
 {
 
     private static $instance; // Stock l'instance de la class Router
-    private array $routes = []; // Stock les routes par Méthode
+    private array $routes = []; // Stock les routes par Méthode et nom
 
     /**
      * Récupère l'instance de Router ou en créé une si elle ne l'est pas
@@ -86,7 +88,7 @@ class Router
 
     /**
      * Génère l'url en fonction de son nom et paramtères
-     * Appel la fonction getUrl de l'objet route stocké dans $routes, indexé par son nom,
+     * Appel la fonction getUrl de l'objet route stocké dans $routes, indexé par la methode et son nom,
      * $params est facultatif, il contient les paramètres $_Get à passé dans l'url
      *
      * @param string $name
@@ -124,15 +126,15 @@ class Router
         // parcours le tableau des routes et test l'url
         $matched = false;
         while(!empty($routes) && false === $matched ) {
-            echo $i;
             $route = array_shift($routes);
+
             if($route->match($path)) {
-
                 $matched = true;
+            } else {
+                unset($route);
             }
-            $i++;
-        }
 
+        }
         // si aucune route ne correspond on lève une exception
         if(!isset($route)) {
             throw new RouteNotFoundException("Aucune route correspondante n'a été trouvée");

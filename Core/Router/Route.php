@@ -22,7 +22,7 @@ class Route
 
     private string $name;
     private string $path;
-    private array $callback;
+    public array $callback;
     private array $requirement;
     private array $requirementKeys;
     private array $matches;
@@ -72,12 +72,10 @@ class Route
     public function match($url): bool
     {
         $url = trim($url, '/');
-        echo $url;
         $path = preg_replace_callback('#{([\w]+)}#', [$this, 'requiredMatch'], $this->path);
-        echo $path;
         $reg = "#^$path$#i"; //i prend en concidération majuscule et minuscule
 
-        $return = (preg_match($reg, $url, $matches))? true : false;
+        $result = preg_match($reg, $url, $matches);
 
         // Si l'url contient des paramètres matché, on réassocie les clés au valeurs matché
         if(!empty($matches)) {
@@ -85,8 +83,7 @@ class Route
             $this->matches = array_combine($this->requirementKeys, $matches);
         }
 
-        //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.'<br>Line: '.__LINE__.'<br>Path: '.$path.'<br>Match = '.var_export($return, TRUE).'<br><br>';
-        return $return;
+        return $result;
     }
 
     /**
