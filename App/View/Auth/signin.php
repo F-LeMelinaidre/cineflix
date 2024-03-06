@@ -40,7 +40,7 @@
         </header>
         <form action="#" class="d-flex flex-column align-items-center row-gap-2 mb-5">
             <label for="Identifiant" class="w-50">Identifiant</label>
-            <input type="email" id="Identifiant" name="email" class="form-control w-50 mb-2">
+            <input type="email" id="Identifiant" name="email" class="form-control w-50 mb-2" data-val="isEmail">
             <label for="Password" class="w-50">Mot de passe</label>
             <input type="password" id="Password" name="password" class="form-control w-50 mb-2">
             <div class="w-50">
