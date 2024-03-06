@@ -8,10 +8,10 @@ function isEmail($element) {
 $(document).ready(function() {
     $('[data-val]').each(function() {
         const $this = $(this);
-        const method = $this.data('val'); // Ensure method name matches function name
+        const method = $this.data('val');
 
         $this.on('blur', function() {
-            if (!window[method]($this)) { // Ensure function is defined
+            if (!window[method]($this)) {
                 alert('Champ invalide!');
             }
         });
