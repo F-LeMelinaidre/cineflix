@@ -14,5 +14,6 @@ $(document).ready(function() {
                 alert('Champ invalide!');
             }
         });
+
     });
 });
