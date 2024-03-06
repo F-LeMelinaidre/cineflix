@@ -5,6 +5,15 @@ body {
     background-position: top center;
 }
 
+input.invalid {
+    border-color: #ba8b00!important;
+    box-shadow: #ba8b00 0 0 3px 2px;
+}
+
+input.error {
+    border-color: #721c24!important;
+    box-shadow: #721c24 0 0 3px 2px;
+}
 main.main-page {
     padding-bottom: 3em!important;
 }
