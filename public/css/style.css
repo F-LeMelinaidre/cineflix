@@ -5,6 +5,11 @@ body {
     background-position: top center;
 }
 
+input.valid {
+    border-color: #318307 !important;
+    box-shadow: #318307 0 0 3px 2px;
+}
+
 input.invalid {
     border-color: #ba8b00!important;
     box-shadow: #ba8b00 0 0 3px 2px;

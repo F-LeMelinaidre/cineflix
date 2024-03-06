@@ -10,7 +10,8 @@ function validationMail($element) {
 }
 
 function validationPassword($element) {
-    return false;
+    const regex = new RegExp(/^(?=.*[a-zA-Z0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!?:_\-*#&%+]).{8,}$/);
+    return regex.test($element.val());
 }
 
 $(document).ready(function() {
@@ -20,15 +21,20 @@ $(document).ready(function() {
 
         if (describedById && $(`#${describedById}`).length) {
             const validationMethod = $(`#${describedById}`)[0].id;
-            $this.on('blur', function() {
+            $this.on('input blur', function() {
                 let value = $this.val();
 
                 if (!value.length) {
                     $this.addClass('invalid');
-                } else if (!window[validationMethod]($this)) {
+                }
+
+                if (!window[validationMethod]($this) && value.length) {
                     $this.addClass('error');
                     $this.removeClass('invalid');
-                } else {
+                }
+
+                if (window[validationMethod]($this) && value.length) {
+                    $this.addClass('valid');
                     $this.removeClass('invalid error');
                 }
             });
