@@ -3,7 +3,6 @@
 namespace Cineflix\App;
 
 
-use Cineflix\App\Ajax\AjaxRequest;
 use Cineflix\Core\Database\Database;
 use Cineflix\Core\Router\RouteNotFoundException;
 use Cineflix\Core\Router\Router;
@@ -34,204 +33,35 @@ class AppController
 
     public function run()
     {
-        self::$_Router->get('admin_movie_index', '/Admin/Movie', [AdminMovie::class, 'index']);
-        self::$_Router->get('admin_movie_show', '/Admin/Movie/{slug}', [AdminMovie::class, 'show'], ['slug' => '[a-zA-Z_]+']);
-        // Création de l'ensemble des routes de l'application
+        self::$_Router->get('home', '/', [Controller\Home::class, 'index']);
+        self::$_Router->get('signin', '/Signin', [Controller\Auth::class, 'signin']);
+        self::$_Router->get('signup', '/Signup', [Controller\Auth::class, 'signup']);
 
-        // ------ Route Public ------ //
-        //self::$_Router->get(
-            //'/',
-            //['controller' => 'home', 'action' => 'index'],
-            //'home.index'
-        //);
+        self::$_Router->get('movie_index', '/Movie', [ Controller\Movie::class, 'index']);
+        self::$_Router->get('movie_show', '/Movie/{slug}-{id}', [ Controller\Movie::class, 'show'],
+            ['slug' => '[a-zA-Z_]+', 'id' => '[0-9]+']);
 
-        //self::$_Router->get(
-            //'/Signin',
-            //[
-                //'controller' => 'Auth', 'action' => 'signin'
-            //],
-            //'signin'
-        //);
+        self::$_Router->get('streaming_index', '/Streaming', [Controller\Streaming::class, 'index']);
+        self::$_Router->get('streaming_show', '/Streaming/{slug}-{id}', [Controller\Streaming::class, 'show'],
+            ['slug' => '[a-zA-Z_]+', 'id' => '[0-9]+']);
 
-        //self::$_Router->get(
-            //'/Auth/signup',
-            //[
-                //'controller' => 'Auth', 'action' => 'signup'
-            //],
-            //'Account.create'
-        //);
-
-        //self::$_Router->get(
-            //'/Movies',
-            //[
-                //'controller' => 'movie', 'action' => 'index'
-            //],
-            //'movies.index'
-        //);
-        //self::$_Router->get(
-            //'/AdminMovie/:slug-:id',
-            //[
-                //'controller' => 'movie', 'action' => 'show', 'require' => ['slug' => '[a-z\_\-0-9]+', 'id' => '[0-9]+']
-            //],
-            //'movie.show'
-        //);
-
-        //self::$_Router->get('/Streams',
-            //[
-                //'controller' => 'streaming', 'action' => 'index'
-            //],
-            //'streaming.index'
-        //);
-        //self::$_Router->get(
-            //'/Stream/:slug-:id',
-            //[
-                //'controller' => 'streaming', 'action' => 'index', 'require' => ['slug' => '[a-z\-0-9]+', 'id' => '[0-9]+']
-            //],
-            //'streaming.show'
-        //);
-
-        //self::$_Router->get('/Profil',
-            //[
-                //'controller' => 'profil', 'action' => 'index'
-            //],
-            //'profil.index'
-        //);
-
-        //self::$_Router->get(
-            //'/User',
-            //[
-                //'controller' => 'user', 'action' => 'index'
-            //],
-            //'user.index'
-        //);
-
-        // ------ Route Administration du site ------ //
-
-        /* -- Cinema -- */
-        //self::$_Router->get(
-            //'/Admin/Cinema',
-            //[
-                //'controller' => 'admin\Cinema', 'action' => 'index'
-            //],
-            //'cinema.admin.index'
-        //);
-        //self::$_Router->get(
-            //'/Admin/Cinema/Edit',
-            //[
-                //'controller' => 'admin\Cinema', 'action' => 'edit'
-            //],
-            //'cinema.admin.edit'
-        //);
-        //self::$_Router->get(
-            //'/Admin/Cinema/Edit/:id',
-            //[
-                //'controller' => 'admin\Cinema', 'action' => 'edit', 'require' => ['id' => '[0-9]+']
-            //],
-            //'cinema.admin.edit'
-        //);
-
-        /* -- AdminMovie -- */
-        //self::$_Router->get(
-            //'/Admin/AdminMovie',
-            //[
-                //'controller' => 'admin\AdminMovie', 'action' => 'index'
-            //],
-            //'movie.admin.index'
-        //);
-        //self::$_Router->get(
-            //'/Admin/AdminMovie/Add',
-            //[
-                //'controller' => 'admin\AdminMovie', 'action' => 'edit'
-            //],
-            //'movie.admin.add'
-        //);
-        //self::$_Router->get(
-            //'/Admin/AdminMovie/Edit-:id',
-            //[
-                //'controller' => 'admin\AdminMovie', 'action' => 'edit', 'require' => ['id' => '[0-9]+']
-            //],
-            //'movie.admin.edit'
-        //);
-
-        /* -- Stream -- */
-        //self::$_Router->get(
-            //'/Admin/Stream',
-            //[
-                //'controller' => 'admin\Streaming', 'action' => 'index'
-            //],
-            //'streaming.admin.index'
-        //);
-        //self::$_Router->get(
-            //'/Admin/Stream/Show/:id',
-            //[
-                //'controller' => 'admin\Streaming', 'action' => 'show', 'require' => ['id' => '[0-9]+']
-            //],
-            //'streaming.admin.show'
-        //);
-        //self::$_Router->get(
-            //'/Admin/Stream/Edit',
-            //[
-                //'controller' => 'admin\Streaming', 'action' => 'edit'
-            //],
-            //'streaming.admin.edit'
-        //);
-        //self::$_Router->get(
-            //'/Admin/Stream/Edit/:id',
-            //[
-                //'controller' => 'admin\Streaming', 'action' => 'edit', 'require' => ['id' => '[0-9]+']
-            //],
-            //'streaming.admin.edit'
-        //);
-
-        ///* -- User -- */
-        //self::$_Router->get(
-            //'/Admin/User',
-            //[
-                //'controller' => 'admin\User', 'action' => 'index'
-            //],
-            //'user.admin.index'
-        //);
-        //self::$_Router->get(
-            //'/Admin/User/Show/:id',
-            //[
-                //'controller' => 'admin\User', 'action' => 'show', 'require' => ['id' => '[0-9]+']
-            //],
-            //'user.admin.show'
-        //);
-        //self::$_Router->get(
-            //'/Admin/User/Edit',
-            //[
-                //'controller' => 'admin\User', 'action' => 'edit'
-            //],
-            //'user.admin.edit'
-        //);
-        //self::$_Router->get(
-            //'/Admin/User/Edit/:id',
-            //[
-                //'controller' => 'admin\User', 'action' => 'edit', 'require' => ['id' => '[0-9]+']
-            //],
-            //'user.admin.edit'
-        //);
-        //self::$_Router->get(
-            //'/Api/SelectTown', [__NAMESPACE__.'\Ajax\AjaxRequest','cinemaSearch'] );
+        self::$_Router->get('admin_movie_index', '/Admin/Movie', [ Controller\Movie::class, 'index']);
+        self::$_Router->get('admin_movie_show', '/Admin/Movie/{slug}-{id}', [ Controller\Movie::class, 'show'],
+            ['slug' => '[a-zA-Z_]+', 'id' => '[0-9]+']);
 
 
         try {
             $route = self::$_Router->resolve();
+            $callback = $route->callback;
+            $params = $route->matches;
 
-            if (is_array($route->callback)) {
-                var_dump($route->callback);
+            if (is_array($callback)) {
+                $controller = new $callback[0]();
+                $controller->action = $callback[1];
+                $callback[0] = $controller;
             }
-            //if(isset($route->controller)) {
-                //$controller = $this->controller_path.ucfirst($route->controller);
-                //$action = $route->action;
 
-                //$controller = new $controller();
-
-                //return $controller->$action(...$route->params);
-            //} else {
-                //return call_user_func($route->callable);
-            //}
+            return call_user_func_array($callback, $params);
 
 
         } catch (RouteNotFoundException $exception) {

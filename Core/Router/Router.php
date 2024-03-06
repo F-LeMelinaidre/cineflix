@@ -98,12 +98,11 @@ class Router
     public function getUrl(string $name, array $params = []):string
     {
         // TODO Creer une Exception type info bulle
+        if(isset($this->routes['GET'][$name])) {
+            $route = $this->routes['GET'][$name]->getUrl($params);
 
-        if(isset($this->route['GET'][$name])) {
-            $route = $this->route['GET'][$name]->getUrl($params);
-
-        } elseif (isset($this->route['POST'][$name])) {
-            $route = $this->route['POST'][$name]->getUrl($params);
+        } elseif (isset($this->routes['POST'][$name])) {
+            $route = $this->routes['POST'][$name]->getUrl($params);
 
         } else {
             $route = '/';

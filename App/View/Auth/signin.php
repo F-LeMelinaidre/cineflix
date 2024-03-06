@@ -36,7 +36,7 @@
                 </svg>
             </a>
             <h1 class="mx-xl-4 mx-sm-4">Content de vous revoir</h1>
-            <p class="mx-xl-5 mx-sm-4">Nouveau ici? <a href="<?= self::$_Router->getUrl('Account.create') ?>">Créer un compte</a></p>
+            <p class="mx-xl-5 mx-sm-4">Nouveau ici? <a href="<?= self::$_Router->getUrl('signup') ?>">Créer un compte</a></p>
         </header>
         <form action="#" class="d-flex flex-column align-items-center row-gap-2 mb-5">
             <label for="Identifiant" class="w-50">Identifiant</label>

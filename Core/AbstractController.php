@@ -23,6 +23,8 @@ class AbstractController
 
     private string $path_view;
 
+    public string $action = '';
+
     public function __construct()
     {
         self::$_Router = Router::getInstance();

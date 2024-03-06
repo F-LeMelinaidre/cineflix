@@ -125,6 +125,9 @@ select,
 button {
     margin-bottom: 0.8rem;
 }
+.test datalist {
+    background-color: #0a3622;
+}
 textarea {
     resize: none;
 }
@@ -144,6 +147,8 @@ button {
     grid-row-gap: 0.2rem;
     grid-column-gap: 0.8rem;
 }
+
+/* --- ADMIN MOVIE --- */
 #AdminContent .film label:first-of-type {
     grid-row: 1;
 }
@@ -304,6 +309,7 @@ button {
 @media screen and (max-width: 768px) {
     #AdminContent form.film {
         grid-template-columns: repeat(2, 1fr) 140px;
+        grid-column-gap: 1.2rem;
     }
     #AdminContent .film h2:nth-of-type(2) {
         grid-row: 3;

@@ -2,11 +2,11 @@
 
 namespace Cineflix\Core\Database;
 
+use Cineflix\App\Model\Table\CinemaTable;
 use Cineflix\Core\Util\MessageFlash;
 use Exception;
 use PDO;
-use PhpParser\Builder\Class_;
-use PhpParser\Node\Expr\Cast\Object_;
+use PDOStatement;
 
 class Database
 {
@@ -90,10 +90,9 @@ class Database
         return $this->request->fetch();
     }
 
-    public function fetchall(string $class_name = null) {
+    public function fetchall($class_name = null) {
         $mode = (is_null($class_name))? [PDO::FETCH_ASSOC] : [PDO::FETCH_CLASS, $class_name];
         $this->request->setFetchMode(...$mode);
-
         $data = $this->request->fetchAll();
         return $data;
     }
