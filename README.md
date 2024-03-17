@@ -20,6 +20,7 @@ composer.phar dump-autoload
 
 TODO
 
+
    - Validation des champs
         - Ajouter au script js le message adéquate dans la div .invalid-message
         - Ajouter à la div la class approprié au type d'erreur relevé
