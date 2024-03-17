@@ -19,6 +19,17 @@ input.error {
     border-color: #721c24!important;
     box-shadow: #721c24 0 0 3px 2px;
 }
+
+.invalid-message {
+    visibility: visible;
+}
+.invalid-message.error {
+    color: #b01919;
+}
+.invalid-message.hide {
+    visibility: hidden;
+}
+
 main.main-page {
     padding-bottom: 3em!important;
 }

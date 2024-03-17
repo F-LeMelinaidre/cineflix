@@ -1,43 +1,51 @@
-
 // Validation Email en utilisant la norme RFC2822
+const inputs = [];
 
-function isRequired($element) {
-    return $element.val().length();
+const rules = {
+    minLength: {
+        callback: (value, min) => {
+            return (min <= value.length);
+        },
+        message: (min) => `Doit comporter au minimum ${min} caratères`,
+    },
+    require: {
+        callback: (value) => {
+            return (0 < value.length);
+        },
+        message: 'Champs requis !',
+    },
+    password: {
+        callback: (value) => {
+            const regex = new RegExp(/^(?=.*[a-zA-Z0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!?:_\-*#&%+]).{8,}$/);
+            return regex.test(value);
+        },
+        message: '8 caratères minimum, comprenant au minimum une majascule, une minusclule, un chiffre, et un caratère !?:_-*#&%+',
+    },
+    email: {
+        callback: (value) => {
+            const regex = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+            return regex.test(value);
+        },
+        message: 'Votre email ne respete pas la norme RFC2822',
+    }
 }
-function validationMail($element) {
-    const regex = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-    return regex.test($element.val());
-}
 
-function validationPassword($element) {
-    const regex = new RegExp(/^(?=.*[a-zA-Z0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!?:_\-*#&%+]).{8,}$/);
-    return regex.test($element.val());
-}
+document.addEventListener('DOMContentLoaded', function () {
 
-$(document).ready(function() {
-    $('[aria-describedby]').each(function() {
-        const $this = $(this);
-        const describedById = $this.attr('aria-describedby');
+    const items = document.querySelectorAll('input');
+    let position = 0;
+    items.forEach(function (item, i) {
 
-        if (describedById && $(`#${describedById}`).length) {
-            const validationMethod = $(`#${describedById}`)[0].id;
-            $this.on('input blur', function() {
-                let value = $this.val();
+        inputs[item.name] = inputs[item.name] || {};
 
-                if (!value.length) {
-                    $this.addClass('invalid');
-                }
+        inputs[item.name] = {
+            position: position++,
+            require: ('true' === item.getAttribute('aria-required')) ?  rules.require : null,
+            validation: ('password' === item.type || 'email' === item.type) ? rules[item.type] : null,
+            minLength: (item.getAttribute('min')) ? rules.minLength : null,
 
-                if (!window[validationMethod]($this) && value.length) {
-                    $this.addClass('error');
-                    $this.removeClass('invalid');
-                }
-
-                if (window[validationMethod]($this) && value.length) {
-                    $this.addClass('valid');
-                    $this.removeClass('invalid error');
-                }
-            });
-        }
+        };
     });
+
+    console.dir(inputs);
 });

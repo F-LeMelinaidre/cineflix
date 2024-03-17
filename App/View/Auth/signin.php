@@ -41,14 +41,14 @@
         <form action="#" class="d-flex flex-column align-items-center row-gap-2 mb-5">
             <label for="Identifiant" class="w-50">Identifiant</label>
             <input type="email" id="Identifiant" name="email" class="form-control w-50 mb-2" aria-required="true" aria-describedby="validationMail">
-            <div id="validationMail" class="invalid-message"></div>
+            <div id="validationMail" class="invalid-message hide"></div>
             <label for="Password" class="w-50">Mot de passe</label>
-            <input type="password" id="Password" name="password" class="form-control w-50 mb-2" aria-required="true"
+            <input type="password" id="Password" name="password" class="form-control w-50 mb-2" min="8" aria-required="true"
                    aria-describedby="validationPassword">
-            <div id="validationPassword" class="invalid-message"></div>
+            <div id="validationPassword" class="invalid-message hide"></div>
             <div class="w-50">
-                <input type="checkbox" id="RememberCheck" class="form-check-input">
-                <label for="RememberCheck" class="form-check-label">Se souvenir de moi?</label>
+                <input type="checkbox" id="RememberCheck" name="remember" class="form-check-input">
+                <label for="RememberCheck" class="form-check-label">Se souvenir de moi ?</label>
             </div>
             <a href="#" class="w-50 mb-2">Mot de passe oublié?</a>
             <button type="submit" class="btn btn-warning w-50">Connexion</button>
