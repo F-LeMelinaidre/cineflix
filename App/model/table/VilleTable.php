@@ -2,12 +2,8 @@
 
 namespace Cineflix\App\Model\Table;
 
-class CinemaTable
+class VilleTable
 {
     public int $id;
-    public int $ville_id;
     public string $nom;
-    public string $ville;
-
-
 }

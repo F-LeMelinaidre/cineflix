@@ -33,92 +33,36 @@ class AppController
 
     public function run()
     {
-        // Création de l'ensemble des routes de l'application
+        self::$_Router->get('home', '/', [Controller\Home::class, 'index']);
+        self::$_Router->get('signin', '/Signin', [Controller\Auth::class, 'signin']);
+        self::$_Router->get('signup', '/Signup', [Controller\Auth::class, 'signup']);
 
+        self::$_Router->get('movie_index', '/Movie', [ Controller\Movie::class, 'index']);
+        self::$_Router->get('movie_show', '/Movie/{slug}-{id}', [ Controller\Movie::class, 'show'],
+            ['slug' => '[a-zA-Z_]+', 'id' => '[0-9]+']);
 
+        self::$_Router->get('streaming_index', '/Streaming', [Controller\Streaming::class, 'index']);
+        self::$_Router->get('streaming_show', '/Streaming/{slug}-{id}', [Controller\Streaming::class, 'show'],
+            ['slug' => '[a-zA-Z_]+', 'id' => '[0-9]+']);
 
-        self::$_Router->get(
-            '/',
-            ['controller' => 'home', 'action' => 'index'],
-            'home.index'
-        );
+        self::$_Router->get('admin_movie_index', '/Admin/Movie', [ Controller\Movie::class, 'index']);
+        self::$_Router->get('admin_movie_show', '/Admin/Movie/{slug}-{id}', [ Controller\Movie::class, 'show'],
+            ['slug' => '[a-zA-Z_]+', 'id' => '[0-9]+']);
 
-        self::$_Router->get(
-            '/Signin',
-            [
-                'controller' => 'Auth', 'action' => 'signin'
-            ],
-            'signin'
-        );
-
-        self::$_Router->get(
-            '/Auth/signup',
-            [
-                'controller' => 'Auth', 'action' => 'signup'
-            ],
-            'Account.create'
-        );
-
-        self::$_Router->get(
-            '/Movies',
-            [
-                'controller' => 'movie', 'action' => 'index'
-            ],
-            'movies.index'
-        );
-        self::$_Router->get(
-            '/Movie/:slug-:id',
-            [
-                'controller' => 'movie', 'action' => 'show', 'require' => ['slug' => '[a-z\_\-0-9]+', 'id' => '[0-9]+']
-            ],
-            'movie.show'
-        );
-
-        self::$_Router->get('/Profil',
-            [
-                'controller' => 'profil', 'action' => 'index'
-            ],
-            'profil.index'
-        );
-
-        self::$_Router->get('/Streams',
-            [
-                'controller' => 'streaming', 'action' => 'index'
-            ],
-            'streaming.index'
-        );
-        self::$_Router->get(
-            '/Stream/:slug-:id',
-            [
-                'controller' => 'streaming', 'action' => 'index', 'require' => ['slug' => '[a-z\-0-9]+', 'id' => '[0-9]+']
-            ],
-            'streaming.show'
-        );
-
-        self::$_Router->get(
-            '/User',
-            [
-                'controller' => 'user', 'action' => 'index'
-            ],
-            'user.index'
-        );
-
-        self::$_Router->get(
-            'Admin/Movie',
-            [
-                'controller' => 'admin\Movie', 'action' => 'index'
-            ],
-            'movie.admin.index'
-        );
 
         try {
-            $route = self::$_Router->routeMatched();
-            $controller = $this->controller_path.ucfirst($route->controller);
-            $action = $route->action;
+            $route = self::$_Router->resolve();
+            $callback = $route->callback;
+            $params = $route->matches;
 
-            $controller = new $controller();
+            if (is_array($callback)) {
+                $controller = new $callback[0]();
+                $controller->action = $callback[1];
+                $callback[0] = $controller;
+            }
 
-            return $controller->$action(...$route->params);
+            return call_user_func_array($callback, $params);
+
 
         } catch (RouteNotFoundException $exception) {
             // TODO Créer les pages d'erreur

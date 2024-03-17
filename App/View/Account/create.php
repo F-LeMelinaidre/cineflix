@@ -50,11 +50,14 @@
             </div>
             <div class="col-12">
                 <label for="Email">Email</label>
-                <input type="email" id="Email" name="email" class="form-control mb-2">
+                <input type="email" id="Email" name="email" class="form-control mb-2" aria-required="true" aria-describedby="validationMail">
+                <div id="validationMail" class="invalid-message"></div>
             </div>
             <div class="flex-grow-1">
                 <label for="Password">Mot de passe</label>
-                <input type="password" id="Password" name="password" class="form-control mb-2">
+                <input type="password" id="Password" name="password" class="form-control mb-2" aria-required="true"
+                       aria-describedby="validationPassword">
+                <div id="validationPassword" class="invalid-message"></div>
             </div>
             <div class="flex-grow-1">
                 <label for="PasswordConfirm">Confirmer le mot de passe</label>

@@ -2,11 +2,11 @@
 
 namespace Cineflix\Core\Database;
 
+use Cineflix\App\Model\Table\CinemaTable;
 use Cineflix\Core\Util\MessageFlash;
 use Exception;
 use PDO;
-use PhpParser\Builder\Class_;
-use PhpParser\Node\Expr\Cast\Object_;
+use PDOStatement;
 
 class Database
 {
@@ -51,7 +51,7 @@ class Database
 
             $this->connexion = new PDO($dsn, $db_user, $db_pwd, $this->options);
         } catch (Exception $e) {
-            echo 'erreur';
+            echo 'erreur getPDO()';
             //MessageFlash::create("Exception capturée: Connexion au SGBDR impossible! <br>" . $e->getMessage(), 'erreur');
             //header('Location: erreur/500');
         }
@@ -78,7 +78,7 @@ class Database
 
             return $this;
         } catch (Exception $e) {
-            echo 'erreur';
+            echo 'erreur prepare()';
             //MessageFlash::create("Impossible de récupérer les données sur la table! <br>" . $e->getMessage(), 'erreur');
             return false;
         }
@@ -90,9 +90,10 @@ class Database
         return $this->request->fetch();
     }
 
-    public function fetchall(string $model = null) {
-        $this->request->setFetchMode(PDO::FETCH_CLASS, $model);
-
-        return $this->request->fetchAll();
+    public function fetchall($class_name = null) {
+        $mode = (is_null($class_name))? [PDO::FETCH_ASSOC] : [PDO::FETCH_CLASS, $class_name];
+        $this->request->setFetchMode(...$mode);
+        $data = $this->request->fetchAll();
+        return $data;
     }
 }

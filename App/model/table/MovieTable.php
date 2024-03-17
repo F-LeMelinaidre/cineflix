@@ -2,12 +2,9 @@
 
 namespace Cineflix\App\Model\Table;
 
-class MovieTable
+class MovieTable extends FicheTable
 {
+    private int $fiche_id;
 
-    public function __construct()
-    {
-
-    }
 
 }

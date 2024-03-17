@@ -3,7 +3,7 @@
 namespace Cineflix\App\Controller;
 
 use Cineflix\App\AppController;
-use Cineflix\App\model\table\Fiche;
+use Cineflix\App\model\table\FicheTable;
 use Cineflix\Core\AbstractController;
 
 class Home extends AbstractController
@@ -15,7 +15,7 @@ class Home extends AbstractController
         $query = "SELECT * FROM fiche WHERE date_sortie > :date_sortie";
         $binvalue[] = ['col' => 'date_sortie', 'val' => '1999-09-21 22:00:00'];
         $req = $db->prepare($query, $binvalue);
-        $movies= $req->fetchAll(Fiche::class);
+        $movies= $req->fetchAll(FicheTable::class);
 
         return $this->render('Home.index',compact('movies'));
     }

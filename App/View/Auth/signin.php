@@ -36,13 +36,16 @@
                 </svg>
             </a>
             <h1 class="mx-xl-4 mx-sm-4">Content de vous revoir</h1>
-            <p class="mx-xl-5 mx-sm-4">Nouveau ici? <a href="<?= self::$_Router->getUrl('Account.create') ?>">Créer un compte</a></p>
+            <p class="mx-xl-5 mx-sm-4">Nouveau ici? <a href="<?= self::$_Router->getUrl('signup') ?>">Créer un compte</a></p>
         </header>
         <form action="#" class="d-flex flex-column align-items-center row-gap-2 mb-5">
             <label for="Identifiant" class="w-50">Identifiant</label>
-            <input type="email" id="Identifiant" name="email" class="form-control w-50 mb-2">
+            <input type="email" id="Identifiant" name="email" class="form-control w-50 mb-2" aria-required="true" aria-describedby="validationMail">
+            <div id="validationMail" class="invalid-message"></div>
             <label for="Password" class="w-50">Mot de passe</label>
-            <input type="password" id="Password" name="password" class="form-control w-50 mb-2">
+            <input type="password" id="Password" name="password" class="form-control w-50 mb-2" aria-required="true"
+                   aria-describedby="validationPassword">
+            <div id="validationPassword" class="invalid-message"></div>
             <div class="w-50">
                 <input type="checkbox" id="RememberCheck" class="form-check-input">
                 <label for="RememberCheck" class="form-check-label">Se souvenir de moi?</label>
