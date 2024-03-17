@@ -20,17 +20,15 @@ composer.phar dump-autoload
 
 TODO
 
-    - Refonte du router au standard PSR-7: HTTP message interfaces
 
-    - Voir L'injection de dépendance, Container Dependancy injection
-        - PSR-11
-        - API de reflexivité PHP
+   - Validation des champs
+        - Ajouter au script js le message adéquate dans la div .invalid-message
+        - Ajouter à la div la class approprié au type d'erreur relevé
+        - Ajouter la fonction required et ne pas faire la validation d'input vide avec la vérification du format
     
     - Creer une interface d'Exception
         - Trouver une solution pour gerer les messages d'erreurs, et les pages d'erreurs
         - Voir les problème d'interdépendance
         - Voir pour la journalisation de erreur
     
-    - Renommer Les Constantes ROOT et WEBROOT
-
-    - Deplacer le dossier Element dans View
+    
