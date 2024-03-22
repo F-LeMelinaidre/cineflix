@@ -1,8 +1,8 @@
 <?php
 
-namespace Cineflix\App\Model\Table;
+namespace Cineflix\App\Model\DAO;
 
-class ProfilTable
+class StreamingDao
 {
 
     public function __construct()

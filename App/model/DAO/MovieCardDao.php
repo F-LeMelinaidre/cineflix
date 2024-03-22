@@ -1,8 +1,8 @@
 <?php
 
-namespace Cineflix\App\Model\Table;
+namespace Cineflix\App\Model\DAO;
 //Modifier le nom de la table fiche en movie_card
-class MovieCardTable
+class MovieCardDao
 {
 
 }

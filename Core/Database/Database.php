@@ -2,11 +2,8 @@
 
 namespace Cineflix\Core\Database;
 
-use Cineflix\App\Model\Table\CinemaTable;
-use Cineflix\Core\Util\MessageFlash;
 use Exception;
 use PDO;
-use PDOStatement;
 
 class Database
 {

@@ -3,10 +3,9 @@
 namespace Cineflix\App\Controller\Admin;
 
 use Cineflix\App\AppController;
-use Cineflix\App\Controller\FicheTable;
-use Cineflix\App\Model\Table\CinemaTable;
-use Cineflix\App\model\Table\MovieTable;
-use Cineflix\App\Model\Table\VilleTable;
+use Cineflix\App\Model\CinemaModel;
+use Cineflix\App\Model\MovieModel;
+use Cineflix\App\Model\VilleModel;
 use Cineflix\Core\AbstractController;
 
 class AdminMovie extends AbstractController
@@ -19,7 +18,7 @@ class AdminMovie extends AbstractController
         $db = AppController::$_Database;
         $query = "SELECT * FROM film AS f JOIN fiche d ON f.fiche_id = d.id";
         $req = $db->prepare($query);
-        $movies= $req->fetchAll(MovieTable::class);
+        $movies= $req->fetchAll(MovieModel::class);
 
         return $this->render('Movie.admin.index',compact("movies"));
     }
@@ -30,19 +29,19 @@ class AdminMovie extends AbstractController
 
         $query = "SELECT c.id, c.ville_id, c.nom, v.id AS ville_id, v.nom AS ville  FROM cinema AS c JOIN ville AS v on c.ville_id = v.id ORDER BY v.nom";
         $req = $db->prepare($query);
-        $cinemas = $req->fetchAll(CinemaTable::class);
+        $cinemas = $req->fetchAll(CinemaModel::class);
 
         $query = "SELECT * FROM ville";
         $req = $db->prepare($query);
-        $villes = $req->fetchall(VilleTable::class);
+        $villes = $req->fetchall(VilleModel::class);
 
         if(!is_null($id)) {
             $query = "SELECT * FROM film AS f JOIN fiche d ON f.fiche_id = d.id WHERE f.id = :id";
             $binvalue[] = ['col' => 'id', 'val' => $id];
             $req = $db->prepare($query, $binvalue);
-            $movie = $req->fetch(MovieTable::class);
+            $movie = $req->fetch(MovieModel::class);
         } else {
-            $movie = new MovieTable();
+            $movie = new MovieModel();
         }
         if(!empty($_POST)) var_dump($_POST);
         $ville = 'Carnac';
@@ -62,7 +61,7 @@ class AdminMovie extends AbstractController
         $query = "SELECT * FROM ville WHERE id = :id";
         $binvalue[] = ['col' => 'id', 'val' => $id];
         $req = $db->prepare($query, $binvalue);
-        $ville = $req->fetch(VilleTable::class);
+        $ville = $req->fetch(VilleModel::class);
         return $ville->nom;
     }
 
