@@ -85,6 +85,7 @@ class AppController
                 $callback[0] = $controller;
             }
             // retourne une fonction defini par $callback en lui passant un tableau de paramètre $params
+            // return vers public/index.php
             return call_user_func_array($callback, $params);
 
 
