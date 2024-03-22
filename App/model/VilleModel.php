@@ -1,8 +1,8 @@
 <?php
 
-namespace Cineflix\App\Model\Table;
+namespace Cineflix\App\Model;
 
-class VilleTable
+class VilleModel
 {
     public int $id;
     public string $nom;

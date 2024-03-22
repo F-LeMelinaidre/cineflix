@@ -2,8 +2,9 @@
 
 namespace Cineflix\App\Model;
 
-class MovieModel
+class MovieModel extends FicheModel
 {
+    private int $fiche_id;
 
 
 }

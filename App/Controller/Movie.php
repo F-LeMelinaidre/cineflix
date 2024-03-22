@@ -3,9 +3,8 @@
 namespace Cineflix\App\Controller;
 
 use Cineflix\App\AppController;
-use Cineflix\App\model\table\FicheTable;
+use Cineflix\App\Model\FicheModel;
 use Cineflix\Core\AbstractController;
-use const Cineflix\App\Controller\Admin\retunr;
 
 class Movie extends AbstractController
 {
@@ -33,7 +32,7 @@ class Movie extends AbstractController
         ];
 
         $req = $db->prepare($query, $binvalue);
-        $movie = $req->fetch(FicheTable::class);
+        $movie = $req->fetch(FicheModel::class);
         if(!empty($movie)) {
 
             $this->title_page .= ' | '.ucfirst($movie->nom);

@@ -1,6 +1,6 @@
 <?php
 
-namespace Cineflix\App\Table;
+namespace Cineflix\App\Model;
 //Modifier le nom de la table fiche en movie_card
 class MovieCardModel
 {
