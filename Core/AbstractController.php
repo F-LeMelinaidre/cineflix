@@ -9,7 +9,6 @@ class AbstractController
 
 {
 
-
     protected static Router $_Router;
 
     protected string $layout = 'main';
