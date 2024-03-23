@@ -101,12 +101,16 @@ class AppController
             $callback = $route->callback;
             $params = $route->matches;
 
-            if (is_array($callback)) {
-                $controller = new $callback[0]();
-                $controller->action = $callback[1];
-                $callback[0] = $controller;
-            }
-            // retourne une fonction defini par $callback en lui passant un tableau de paramètre $params
+
+            $controller = new $callback[0]();
+            $callback[0] = $controller;
+            var_dump($callback);
+
+            // call_user_func_array Retourne une methode de Class instancié
+            // Le parametre $callback doit etre une methode d'objet instancié sous forme de tableau
+            // index 0: la Class
+            // index 1: la methode
+            // $params est un tableau des paramètres passés à la méthode de la Class $callback
             // return vers public/index.php
             return call_user_func_array($callback, $params);
 
