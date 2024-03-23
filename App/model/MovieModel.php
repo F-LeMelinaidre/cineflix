@@ -6,5 +6,4 @@ class MovieModel extends FicheModel
 {
     private int $fiche_id;
 
-
 }

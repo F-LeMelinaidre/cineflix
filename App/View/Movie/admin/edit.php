@@ -3,7 +3,7 @@
     <p>Ville <span id="txtShow"></span></p>
 </header>
 <section>
-    <form class="film" action="<?= self::$_Router->getUrl('movie.admin.add') ?>" method="post">
+    <form class="film" action="<?= self::$_Router->getUrl('admin_movie_edit') ?>" method="post">
         <label class="form-label" for="InputNom">Nom</label>
         <input id="InputNom" class="form-control" type="text" value="<?= $movie->nom ?>">
         <h2>Salle de cinéma</h2>

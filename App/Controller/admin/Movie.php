@@ -8,7 +8,7 @@ use Cineflix\App\Model\MovieModel;
 use Cineflix\App\Model\VilleModel;
 use Cineflix\Core\AbstractController;
 
-class AdminMovie extends AbstractController
+class Movie extends AbstractController
 {
 
     protected string $layout = 'admin';
@@ -22,6 +22,8 @@ class AdminMovie extends AbstractController
 
         return $this->render('Movie.admin.index',compact("movies"));
     }
+
+    public function show(int $id){}
 
     public function edit(int $id = null): string
     {

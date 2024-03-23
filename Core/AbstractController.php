@@ -27,6 +27,8 @@ class AbstractController
         self::$_Router = Router::getInstance();
         $this->path_view = AppController::$_Root.'/App/View/';
     }
+
+
     /**
      * Cette methode est appelé dans la methode du controller fille dans un return
      * @param string $contentView Nom du dossier et nom du fichier ex: Home.index
@@ -37,8 +39,7 @@ class AbstractController
     {
 
         // On recupère le layout
-        $layout = $this->layoutContent();
-
+        $layout = $this->layoutContent($data);
         // On recupère la vue à la quelle on lui passe les datas à afficher
         $contentView = $this->renderOnlyView($contentView, $data);
 
@@ -57,13 +58,14 @@ class AbstractController
         return str_replace('{{layout}}', $layout, $view);
     }
 
+
     /**
      * Enclenche la temporisation de sortie
      * Stock en memoire le code du fichier appeler par include_once
      * ob_get_clean renvoi le contenu du tampon en cas de succès (renvoi le code du fichier inclus)
      * @return string retourne le html contenu que l'on inserera entre les Tags <body> </body> du fichier Base/index.php
      */
-    protected function layoutContent(): string
+    protected function layoutContent($data): string
     {
         ob_start();
         include_once $this->path_view."Layout/$this->layout.php";

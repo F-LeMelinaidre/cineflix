@@ -1,24 +1,26 @@
 <header>
-    <h1>Liste des films en streaming</h1>
-    <a href="<?= self::$_Router->getUrl('admin_streaming_add') ?>" class="btn btn-sm btn-warning">Ajouter un film</a>
+    <h1>Liste des cinémas</h1>
+    <a href="<?= self::$_Router->getUrl('admin_cinema_add') ?>" class="btn btn-sm btn-warning">Ajouter un cinema</a>
 </header>
 <table class="table table-striped align-middle">
     <thead class="table-light">
     <tr>
         <th>Nom</th>
+        <th>Ville</th>
         <th>Action</th>
     </tr>
     </thead>
     <tbody >
 
-    <?php foreach($movies as $movie): ?>
+    <?php foreach($cinemas as $cinema): ?>
 
         <tr>
-            <td><?= $movie->nom ?></td>
+            <td><?= $cinema->nom ?></td>
+            <td><?= $cinema->ville ?></td>
             <td>
                 <nav class="action-menu">
                     <ul>
-                        <li><a href="<?= self::$_Router->getUrl("admin_streaming_edit",['id' => $movie->id]) ?>">Editer</a></li>
+                        <li><a href="<?= self::$_Router->getUrl("admin_cinema_edit",['id' => $cinema->id]) ?>">Editer</a></li>
                         <li>Supp</li>
                     </ul>
                 </nav>

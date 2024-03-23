@@ -41,6 +41,7 @@
             </svg>
         </a>
     </div>
+    <p>accès à <a href="<?= self::$_Router->getUrl("admin_home_index") ?>">Admin</a> en attendant la page de connexion</p>
     <a href="<?= self::$_Router->getUrl("signin") ?>" class="btn btn-sm btn-outline-warning me-lg-5">
         Connexion
     </a>
