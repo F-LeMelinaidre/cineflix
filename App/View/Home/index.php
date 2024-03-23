@@ -24,9 +24,10 @@
                     <?= $movie->nom ?>
                 </a>
             </h5>
-            <p class="card-text">
-
-            </p>
+            <ul class="card-text">
+                <li><?= $movie->cinema ?></li>
+                <li><?= $movie->ville ?></li>
+            </ul>
         </div>
     </div>
 
