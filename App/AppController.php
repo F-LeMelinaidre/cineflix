@@ -104,7 +104,6 @@ class AppController
 
             $controller = new $callback[0]();
             $callback[0] = $controller;
-            var_dump($callback);
 
             // call_user_func_array Retourne une methode de Class instancié
             // Le parametre $callback doit etre une methode d'objet instancié sous forme de tableau
