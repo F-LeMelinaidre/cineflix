@@ -114,6 +114,7 @@ class AppController
             // return vers public/index.php
             return call_user_func_array($callback, $params);
 
+
         } catch (RouteNotFoundException $exception) {
             // TODO Créer les pages d'erreur
             return "Erreur : " . $exception->getMessage();
