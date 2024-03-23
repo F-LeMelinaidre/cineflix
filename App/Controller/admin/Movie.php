@@ -4,6 +4,7 @@ namespace Cineflix\App\Controller\Admin;
 
 use Cineflix\App\AppController;
 use Cineflix\App\Model\CinemaModel;
+use Cineflix\App\Model\DAO\MovieDao;
 use Cineflix\App\Model\MovieModel;
 use Cineflix\App\Model\VilleModel;
 use Cineflix\Core\AbstractController;
@@ -15,14 +16,8 @@ class Movie extends AbstractController
 
     public function index(): string
     {
-        $db = AppController::$_Database;
-        $query = "SELECT f.id AS id, d.nom AS nom, d.cinopsys AS cinopsys,
-                  d.affiche AS affiche, d.date_sortie AS date_sortie, d.slug AS slug, c.nom AS cinema,
-                  v.nom AS ville
-                  FROM film AS f JOIN fiche d ON f.fiche_id = d.id JOIN cinema c ON f.cinema_id = c.id JOIN ville v ON c.ville_id = v.id";
-
-        $req = $db->prepare($query);
-        $movies= $req->fetchAll(MovieModel::class);
+        $movieDao = new MovieDao();
+        $movies = $movieDao->findAll();
 
         return $this->render('Movie.admin.index',compact("movies"));
     }
@@ -42,10 +37,10 @@ class Movie extends AbstractController
         $villes = $req->fetchall(VilleModel::class);
 
         if(!is_null($id)) {
-            $query = "SELECT * FROM film AS f JOIN fiche d ON f.fiche_id = d.id WHERE f.id = :id";
-            $binvalue[] = ['col' => 'id', 'val' => $id];
-            $req = $db->prepare($query, $binvalue);
-            $movie = $req->fetch(MovieModel::class);
+
+            $movieDao = new MovieDao();
+            $movie = $movieDao->findBy('id', $id);
+
         } else {
             $movie = new MovieModel();
         }
