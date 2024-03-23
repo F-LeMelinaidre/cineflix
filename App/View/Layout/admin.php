@@ -12,14 +12,20 @@
         <span>(brouillon)</span>
     </nav>
     <aside>
+
         <nav class="main-menu">
             <ul>
-                <li>Films</li>
-                <li>Streamings</li>
-                <li>Cinémas</li>
-                <li>Membres</li>
+
+               <?php if(isset($menu)) echo $menu ?>
+                <li><a href="<?= self::$_Router->getUrl("admin_movie_index") ?>">Films</a></li>
+
+                <li><a href="<?= self::$_Router->getUrl("admin_streaming_index") ?>">Streamings</a></li>
+
+                <li><a href="<?= self::$_Router->getUrl("admin_cinema_index") ?>">Cinémas</a></li>
+
+                <li><a href="<?= self::$_Router->getUrl("admin_user_index") ?>">Membres</a></li>
+
             </ul>
-            <span>(brouillon)</span>
         </nav>
     </aside>
 

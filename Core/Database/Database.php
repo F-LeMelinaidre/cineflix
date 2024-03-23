@@ -60,7 +60,7 @@ class Database
      *
      * @return Database
      */
-    public function prepare(string $query, array $bindvalues = []): self
+    public function prepare(string $query, array $bindvalues = [])
     {
         try {
             $this->request = $this->connexion->prepare($query);
@@ -77,7 +77,7 @@ class Database
         } catch (Exception $e) {
             echo 'erreur prepare()';
             //MessageFlash::create("Impossible de récupérer les données sur la table! <br>" . $e->getMessage(), 'erreur');
-            return false;
+            return null;
         }
     }
 

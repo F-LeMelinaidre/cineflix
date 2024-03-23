@@ -65,12 +65,34 @@ class AppController
         self::$_Router->get('streaming_show', '/Streaming/{slug}-{id}', [Controller\Streaming::class, 'show'],
             ['slug' => '[a-zA-Z_]+', 'id' => '[0-9]+']);
 
-        self::$_Router->get('admin_movie_index', '/Admin/Movie', [ Controller\Admin\AdminMovie::class, 'index']);
-        self::$_Router->get('admin_movie_show', '/Admin/Movie/{slug}-{id}', [ Controller\Movie::class, 'show'],
-            ['slug' => '[a-zA-Z_]+', 'id' => '[0-9]+']);
-        self::$_Router->get('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\AdminMovie::class, 'edit'],
+        //Route partie Admin
+        //Admin Home
+        self::$_Router->get('admin_home_index', '/Admin/Home', [ Controller\Admin\Home::class, 'index']);
+
+        //Admin Cinema
+        self::$_Router->get('admin_cinema_index', '/Admin/Cinema', [ Controller\Admin\Cinema::class, 'index']);
+        self::$_Router->get('admin_cinema_add', '/Admin/Cinema/Add', [ Controller\Admin\Cinema::class, 'edit']);
+        self::$_Router->get('admin_cinema_edit', '/Admin/Cinema/Edit/{id}', [ Controller\Admin\Cinema::class, 'edit'],
             ['id' => '[0-9]+']);
 
+        //Admin Film
+        self::$_Router->get('admin_movie_index', '/Admin/Movie', [ Controller\Admin\Movie::class, 'index']);
+        self::$_Router->get('admin_movie_add', '/Admin/Movie/Add', [ Controller\Admin\Movie::class, 'edit']);
+        self::$_Router->get('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\Movie::class, 'edit'],
+            ['id' => '[0-9]+']);
+
+        //Admin Streaming
+        self::$_Router->get('admin_streaming_index', '/Admin/Streaming', [ Controller\Admin\Streaming::class, 'index']);
+        self::$_Router->get('admin_streaming_add', '/Admin/Streaming/Add', [ Controller\Admin\Streaming::class, 'edit']);
+        self::$_Router->get('admin_streaming_edit', '/Admin/Streaming/Edit/{id}', [ Controller\Admin\Streaming::class, 'edit'],
+            ['id' => '[0-9]+']);
+
+        //Admin Membre
+        self::$_Router->get('admin_user_index', '/Admin/User', [ Controller\Admin\User::class, 'index']);
+        self::$_Router->get('admin_user_show', '/Admin/User/{id}', [ Controller\Admin\User::class, 'show'],
+            ['id' => '[0-9]+']);
+        self::$_Router->get('admin_user_edit', '/Admin/User/Edit/{id}', [ Controller\Admin\User::class, 'edit'],
+            ['id' => '[0-9]+']);
 
         try {
             // Controlle l'url et dirige vers le bon controller et methode si l'url match avec une route précédement créé

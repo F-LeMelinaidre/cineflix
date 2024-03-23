@@ -2,12 +2,8 @@
 
 namespace Cineflix\App\Model;
 
-class StreamingModel
+class StreamingModel extends FicheModel
 {
-
-    public function __construct()
-    {
-
-    }
+    private int $fiche_id;
 
 }
