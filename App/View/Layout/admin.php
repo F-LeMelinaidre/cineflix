@@ -15,7 +15,7 @@
 
         <nav class="main-menu">
             <ul>
-               <?php if ($page == 'movie_index'){  ?>
+               <?php if (isset($page) && $page == 'movie_index'){  ?>
 
                 <li>Film</li>
               
