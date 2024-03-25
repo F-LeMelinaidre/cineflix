@@ -2,9 +2,7 @@
 
 namespace Cineflix\App\Controller;
 
-use Cineflix\App\AppController;
 use Cineflix\App\Model\DAO\MovieDao;
-use Cineflix\App\Model\FicheModel;
 use Cineflix\Core\AbstractController;
 
 class Movie extends AbstractController
