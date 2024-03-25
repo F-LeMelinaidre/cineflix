@@ -37,7 +37,6 @@ class AbstractController
      */
     public function render(string $contentView, array $data): string
     {
-
         // On recupère le layout
         $layout = $this->layoutContent($data);
         // On recupère la vue à la quelle on lui passe les datas à afficher

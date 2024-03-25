@@ -53,14 +53,9 @@ class MovieDao
     }
   
     public function add(MovieModel $movie){
-        foreach($movie as $col => $val) {
 
-            echo $col .' - '. $val;
+        var_dump($movie);
 
-            $bindValues[] = ['col' => $col,'val' => $val];
-        }
-
-        $this->db->prepare("INSERT INTO fiche (col, val) VALUES (:col, :val)",$bindValues);
 
 
     }

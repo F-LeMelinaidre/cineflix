@@ -14,4 +14,11 @@ class AjaxRequest
     {
         return $value;
     }
+
+    static function filmSearch(string $value)
+    {
+        $fiche = new FicheDao();
+
+        return $value;
+    }
 }

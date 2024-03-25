@@ -3,16 +3,20 @@
 namespace Cineflix\App\Controller;
 
 use Cineflix\App\Model\DAO\MovieDao;
+use Cineflix\App\Model\MovieModel;
 use Cineflix\Core\AbstractController;
 
 class Movie extends AbstractController
 {
 
+    protected array $movies;
     public function index(): string
     {
         $movieDao = new MovieDao();
-        $movies = $movieDao->findAll();
-        return $this->render('Movie.index',compact('movies'));
+        $this->movies = $movieDao->findAll();
+
+
+        return $this->render('Movie.index',['movies' => $this->movies]);
 
     }
 
