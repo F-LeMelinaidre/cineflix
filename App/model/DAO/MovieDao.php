@@ -28,6 +28,7 @@ class MovieDao
 
     public function findBy(string $item, mixed $value)
     {
+      
         switch($item) {
             case 'slug':
                 $clause = 'slug LIKE :slug';
@@ -50,5 +51,22 @@ class MovieDao
         return $req->fetch(MovieModel::class);
 
     }
+  
+    public function add(MovieModel $movie){
+        foreach($movie as $col => $val) {
 
+            echo $col .' - '. $val;
+
+            $bindValues[] = ['col' => $col,'val' => $val];
+        }
+
+        $this->db->prepare("INSERT INTO fiche (col, val) VALUES (:col, :val)",$bindValues);
+
+
+    }
+
+    public function update(){}
+
+    public function delete(){}
+  
 }

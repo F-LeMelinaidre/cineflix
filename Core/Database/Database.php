@@ -75,7 +75,7 @@ class Database
 
             return $this;
         } catch (Exception $e) {
-            echo 'erreur prepare()';
+            echo 'erreur prepare()'.$e->getMessage();
             //MessageFlash::create("Impossible de récupérer les données sur la table! <br>" . $e->getMessage(), 'erreur');
             return null;
         }

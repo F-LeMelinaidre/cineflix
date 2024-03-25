@@ -2,37 +2,31 @@
 
 namespace Cineflix\App\Controller;
 
+use Cineflix\App\Model\DAO\MovieDao;
 use Cineflix\App\AppController;
-use Cineflix\App\Model\FicheModel;
+use Cineflix\App\Model\MovieModel;
+
 use Cineflix\Core\AbstractController;
 
 class Movie extends AbstractController
 {
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function index(): string
     {
-
-        return $this->render('Movie.index',[]);
+        $movieDao = new MovieDao();
+        $movies = $movieDao->findAll();
+        return $this->render('Movie.index',compact('movies'));
 
     }
 
     public function show(string $slug, int $id): string
     {
-        $db = AppController::$_Database;
-        $query = "SELECT * FROM fiche WHERE id = :id AND slug = :slug";
-
-        $binvalue = [
-            ['col' => 'id', 'val' => $id],
-            ['col' => 'slug', 'val' => $slug]
-        ];
+        $movieDao = new MovieDao();
+        $movie = $movieDao->findBy('slug',$slug);
 
         $req = $db->prepare($query, $binvalue);
-        $movie = $req->fetch(FicheModel::class);
+        $movie = $req->fetch(MovieModel::class);
+
         if(!empty($movie)) {
 
             $this->title_page .= ' | '.ucfirst($movie->nom);

@@ -115,6 +115,7 @@ class Route
      */
     public function getUrl(array $params):string
     {
+
         $path = $this->path;
         foreach ($params as $key => $val) {
             $path = str_replace('{'.$key.'}', $val, $path);
