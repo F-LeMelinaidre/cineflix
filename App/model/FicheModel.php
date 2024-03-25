@@ -4,12 +4,11 @@ namespace Cineflix\App\Model;
 
 class FicheModel
 {
-    public int $id;
+    public $id;
     public string $nom = '';
     public string $cinopsys = '';
-    public string $affiche;
-    public string $date_sortie;
-    public string $slug;
-
+    public string $affiche = '';
+    public $date_sortie = 0;
+    public string $slug = '';
 
 }

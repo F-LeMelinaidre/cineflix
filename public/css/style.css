@@ -178,15 +178,7 @@ button {
 }
 #AdminContent form.film {
     display: grid;
-    grid-template-columns: repeat(4, 1fr) repeat(2, 138px);
-    grid-auto-rows: minmax(min-content, auto);
-    grid-row-gap: 0.2rem;
-    grid-column-gap: 0.8rem;
-}
-
-#AdminContent form.streaming {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: 138px repeat(3, 1fr) repeat(2, 138px);
     grid-auto-rows: minmax(min-content, auto);
     grid-row-gap: 0.2rem;
     grid-column-gap: 0.8rem;
@@ -194,22 +186,27 @@ button {
 
 /* --- ADMIN MOVIE --- */
 #AdminContent .film label:first-of-type {
-    grid-row: 1;
-}
-#AdminContent .film input:first-of-type {
     grid-row: 2;
 }
-#AdminContent .film h2:first-of-type,
-#AdminContent .film h2:nth-of-type(2) {
+#AdminContent .film input:first-of-type {
     grid-row: 3;
 }
-#AdminContent label[for="TextareaCinopsys"]
-#AdminContent label[for="SelectSalle"],
+#AdminContent .film .titre,
+#AdminContent .film .exploitation {
+    grid-row: 1;
+}
+#AdminContent label[for="SelectCinema"] {
+    grid-row: 2;
+}
+#AdminContent #SelectCinema {
+    grid-row: 3;
+}
+#AdminContent label[for="InputDateSortie"],
 #AdminContent label[for="InputDateDebut"],
 #AdminContent label[for="InputDateFin"] {
     grid-row: 4;
 }
-#AdminContent #SelectSalle,
+#AdminContent #InputDateSortie,
 #AdminContent #InputDateDebut,
 #AdminContent #InputDateFin {
     grid-row: 5;
@@ -218,28 +215,31 @@ button {
     grid-row: 6;
 }
 #AdminContent #TextareaCinopsys {
-    grid-row: 7;
+    grid-row: 7/9;
 }
 #AdminContent label[for="InputAffiche"] {
-    grid-row: 8;
-}
-#AdminContent #InputAffiche {
-    grid-row: 9;
-}
-#AdminContent button {
     grid-row: 10;
 }
+#AdminContent #InputAffiche {
+    grid-row: 11;
+}
+#AdminContent button {
+    grid-row: 12;
+}
 
+#AdminContent .film .titre,
 #AdminContent .film label:first-of-type,
 #AdminContent .film input:first-of-type {
     grid-column: 1/5;
 }
-#AdminContent label[for="SelectS<label class="form-label" for="InputNom">Nom</label>alle"],
-#AdminContent #SelectSalle {
-    grid-column: 1/4;
-}
-#AdminContent .film .date-exploitation {
+#AdminContent .film .exploitation,
+#AdminContent label[for="SelectCinema"],
+#AdminContent #SelectCinema {
     grid-column: 5/7;
+}
+#AdminContent label[for="InputDateSortie"],
+#AdminContent #InputDateSortie {
+    grid-column: 1;
 }
 #AdminContent label[for="InputDateDebut"],
 #AdminContent #InputDateDebut {
@@ -252,7 +252,7 @@ button {
 
 #AdminContent label[for="TextareaCinopsys"],
 #AdminContent #TextareaCinopsys {
-    grid-column: 1/7;
+    grid-column: 1/5;
 }
 #AdminContent #InputAffiche,
 #AdminContent label[for="InputAffiche"] {
