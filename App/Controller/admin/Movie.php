@@ -41,7 +41,7 @@ class Movie extends AbstractController
 
             $movieDao->add($movie);
 
-           $url = '';
+            $url = '';
         } else {
             if(!is_null($id)) {
 
