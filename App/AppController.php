@@ -3,6 +3,7 @@
 namespace Cineflix\App;
 
 
+use Cineflix\App\Controller\Movie;
 use Cineflix\Core\Database\Database;
 use Cineflix\Core\Router\RouteNotFoundException;
 use Cineflix\Core\Router\Router;
@@ -94,6 +95,9 @@ class AppController
         self::$_Router->get('admin_user_edit', '/Admin/User/Edit/{id}', [ Controller\Admin\User::class, 'edit'],
             ['id' => '[0-9]+']);
 
+        self::$_Router->get('ajax', '/Ajax/{value}', [ Ajax\AjaxRequest::class, 'cinemaSearch'],
+            ['value' => '[a-zA-Z%0-9]+']);
+
         try {
             // Controlle l'url et dirige vers le bon controller et methode si l'url match avec une route précédement créé
             // Sinon lève une exception
@@ -112,7 +116,6 @@ class AppController
             // $params est un tableau des paramètres passés à la méthode de la Class $callback
             // return vers public/index.php
             return call_user_func_array($callback, $params);
-
 
         } catch (RouteNotFoundException $exception) {
             // TODO Créer les pages d'erreur

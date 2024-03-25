@@ -56,5 +56,5 @@
                fixed-bottom
                border-top border-light-subtle
                bg-dark-subtle">
-    footer
+    <?= $footer ?>
 </footer>

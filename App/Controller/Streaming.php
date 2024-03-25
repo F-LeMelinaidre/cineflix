@@ -7,11 +7,6 @@ use Cineflix\Core\AbstractController;
 class Streaming extends AbstractController
 {
 
-    public function __construct()
-    {
-        parent::__construct();
-
-    }
 
     public function index(): string
     {

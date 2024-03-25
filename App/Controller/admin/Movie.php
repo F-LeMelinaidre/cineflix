@@ -2,11 +2,8 @@
 
 namespace Cineflix\App\Controller\Admin;
 
-use Cineflix\App\AppController;
-use Cineflix\App\Model\CinemaModel;
 use Cineflix\App\Model\DAO\MovieDao;
 use Cineflix\App\Model\MovieModel;
-use Cineflix\App\Model\VilleModel;
 use Cineflix\Core\AbstractController;
 
 class Movie extends AbstractController
@@ -16,9 +13,9 @@ class Movie extends AbstractController
 
     public function index(): string
     {
+
         $movieDao = new MovieDao();
         $movies = $movieDao->findAll();
-
         return $this->render('Movie.admin.index',compact("movies"));
     }
 
@@ -26,15 +23,6 @@ class Movie extends AbstractController
 
     public function edit(int $id = null): string
     {
-        $db = AppController::$_Database;
-
-        $query = "SELECT c.id, c.ville_id, c.nom, v.id AS ville_id, v.nom AS ville  FROM cinema AS c JOIN ville AS v on c.ville_id = v.id ORDER BY v.nom";
-        $req = $db->prepare($query);
-        $cinemas = $req->fetchAll(CinemaModel::class);
-
-        $query = "SELECT * FROM ville";
-        $req = $db->prepare($query);
-        $villes = $req->fetchall(VilleModel::class);
 
         if(!is_null($id)) {
 
@@ -42,28 +30,21 @@ class Movie extends AbstractController
             $movie = $movieDao->findBy('id', $id);
 
         } else {
+
             $movie = new MovieModel();
+
         }
+
         if(!empty($_POST)) var_dump($_POST);
-        $ville = 'Carnac';
 
         $title = (!isset($movie->id))? "Ajouter un film" : "Editer: ".ucwords($movie->nom);
 
-        return $this->render('Movie.admin.edit',compact('title', 'movie', 'cinemas', 'villes', 'ville'));
+        return $this->render('Movie.admin.edit',compact('title', 'movie'));
     }
 
     public function delete()
     {
 
-    }
-
-    public function selectTown(int $id) {
-        $db = AppController::$_Database;
-        $query = "SELECT * FROM ville WHERE id = :id";
-        $binvalue[] = ['col' => 'id', 'val' => $id];
-        $req = $db->prepare($query, $binvalue);
-        $ville = $req->fetch(VilleModel::class);
-        return $ville->nom;
     }
 
 }

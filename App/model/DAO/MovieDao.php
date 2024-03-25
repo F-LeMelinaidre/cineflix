@@ -28,6 +28,7 @@ class MovieDao
 
     public function findBy(string $item, mixed $value)
     {
+
         switch($item) {
             case 'slug':
                 $clause = 'slug LIKE :slug';

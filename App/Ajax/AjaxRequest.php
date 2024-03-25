@@ -10,8 +10,8 @@ class AjaxRequest
     /**
      * @return
      */
-    static function cinemaSearch()
+    static function cinemaSearch(string $value)
     {
-        return 'cinema';
+        return $value;
     }
 }

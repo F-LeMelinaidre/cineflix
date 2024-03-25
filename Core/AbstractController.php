@@ -68,6 +68,11 @@ class AbstractController
     protected function layoutContent($data): string
     {
         ob_start();
+        if(isset($data['footer'])) {
+            $footer = $data['footer'];
+        } else {
+            $footer = '';
+        }
         include_once $this->path_view."Layout/$this->layout.php";
         return ob_get_clean();
     }
