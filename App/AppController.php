@@ -59,8 +59,8 @@ class AppController
         self::$_Router->get('signup', '/Signup', [Controller\Auth::class, 'signup']);
 
         self::$_Router->get('movie_index', '/Movie', [ Controller\Movie::class, 'index']);
-        self::$_Router->get('movie_show', '/Movie/{slug}-{id}', [ Controller\Movie::class, 'show'],
-            ['slug' => '[a-zA-Z_]+', 'id' => '[0-9]+']);
+        self::$_Router->get('movie_show', '/Movie/{slug}', [ Controller\Movie::class, 'show'],
+            ['slug' => '[a-zA-Z_]+']);
 
         self::$_Router->get('streaming_index', '/Streaming', [Controller\Streaming::class, 'index']);
         self::$_Router->get('streaming_show', '/Streaming/{slug}-{id}', [Controller\Streaming::class, 'show'],
@@ -80,6 +80,7 @@ class AppController
         self::$_Router->get('admin_movie_index', '/Admin/Movie', [ Controller\Admin\Movie::class, 'index']);
         self::$_Router->get('admin_movie_add', '/Admin/Movie/Add', [ Controller\Admin\Movie::class, 'edit']);
         self::$_Router->get('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\Movie::class, 'edit'],
+            ['id' => '[0-9]+']);
 
         self::$_Router->post('admin_movie_add', '/Admin/Movie/Add', [ Controller\Admin\Movie::class, 'edit']);
         self::$_Router->post('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\Movie::class, 'edit'],
