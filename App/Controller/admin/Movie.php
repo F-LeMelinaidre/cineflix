@@ -26,30 +26,51 @@ class Movie extends AbstractController
 
     public function edit(int $id = null): string
     {
-        $db = AppController::$_Database;
 
-        $query = "SELECT c.id, c.ville_id, c.nom, v.id AS ville_id, v.nom AS ville  FROM cinema AS c JOIN ville AS v on c.ville_id = v.id ORDER BY v.nom";
-        $req = $db->prepare($query);
-        $cinemas = $req->fetchAll(CinemaModel::class);
+        $movieDao = new MovieDao();
 
-        $query = "SELECT * FROM ville";
-        $req = $db->prepare($query);
-        $villes = $req->fetchall(VilleModel::class);
+        if(!empty($_POST)) {
 
-        if(!is_null($id)) {
-
-            $movieDao = new MovieDao();
-            $movie = $movieDao->findBy('id', $id);
-
-        } else {
             $movie = new MovieModel();
+
+            $movie->nom = $_POST['nom'];
+            $movie->cinopsys = $_POST['cinopsys'];
+            $movie->cinema = $_POST['cinema'];
+            $movie->date_sortie = strtotime($_POST['date_sortie']);
+            $movie->affiche = $_POST['affiche'];
+
+            $movieDao->add($movie);
+
+           $url = '';
+        } else {
+            if(!is_null($id)) {
+
+                $movie = $movieDao->findBy('id', $id);
+
+                $url = self::$_Router->getUrl('admin_movie_edit', ['id' => $id]);
+                // sinon ajout
+            } else {
+                $movie = new MovieModel();
+
+                $url = self::$_Router->getUrl('admin_movie_add');
+            }
         }
-        if(!empty($_POST)) var_dump($_POST);
-        $ville = 'Carnac';
+            // si id n est pas null update
+
+
+
+
+
 
         $title = (!isset($movie->id))? "Ajouter un film" : "Editer: ".ucwords($movie->nom);
 
-        return $this->render('Movie.admin.edit',compact('title', 'movie', 'cinemas', 'villes', 'ville'));
+        return $this->render('Movie.admin.edit',compact('title', 'movie', 'url'));
+    }
+
+    public function add() {
+        $title = "Ajouter un film";
+        $movie = [];
+        return $this->render('Movie.admin.edit',compact('title', 'movie'));
     }
 
     public function delete()

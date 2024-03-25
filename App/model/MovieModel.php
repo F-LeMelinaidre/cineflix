@@ -4,7 +4,8 @@ namespace Cineflix\App\Model;
 
 class MovieModel extends FicheModel
 {
-    public string $cinema;
-    public string $ville;
+    public $id = null;
+    public string $cinema = '';
+    public string $ville = '';
 
 }

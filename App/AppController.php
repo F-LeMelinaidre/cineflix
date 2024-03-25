@@ -81,6 +81,10 @@ class AppController
         self::$_Router->get('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\Movie::class, 'edit'],
             ['id' => '[0-9]+']);
 
+        self::$_Router->post('admin_movie_add', '/Admin/Movie/Add', [ Controller\Admin\Movie::class, 'edit']);
+        self::$_Router->post('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\Movie::class, 'edit'],
+        ['id' => '[0-9]+']);
+
         //Admin Streaming
         self::$_Router->get('admin_streaming_index', '/Admin/Streaming', [ Controller\Admin\Streaming::class, 'index']);
         self::$_Router->get('admin_streaming_add', '/Admin/Streaming/Add', [ Controller\Admin\Streaming::class, 'edit']);
