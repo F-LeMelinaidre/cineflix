@@ -13,7 +13,6 @@ class Movie extends AbstractController
 
     public function index(): string
     {
-
         $movieDao = new MovieDao();
         $movies = $movieDao->findAll();
         return $this->render('Movie.admin.index',compact("movies"));
@@ -63,6 +62,15 @@ class Movie extends AbstractController
     public function delete()
     {
 
+    }
+
+    public function selectTown(int $id) {
+        $db = AppController::$_Database;
+        $query = "SELECT * FROM ville WHERE id = :id";
+        $binvalue[] = ['col' => 'id', 'val' => $id];
+        $req = $db->prepare($query, $binvalue);
+        $ville = $req->fetch(VilleModel::class);
+        return $ville->nom;
     }
 
 }

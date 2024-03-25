@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mer. 06 mars 2024 à 17:46
+-- Généré le : lun. 25 mars 2024 à 10:39
 -- Version du serveur : 8.2.0
--- Version de PHP : 8.2.13
+-- Version de PHP : 8.3.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -245,25 +245,27 @@ DROP TABLE IF EXISTS `film`;
 CREATE TABLE IF NOT EXISTS `film` (
   `id` int NOT NULL AUTO_INCREMENT,
   `fiche_id` int NOT NULL,
+  `cinema_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_film_fiche1_idx` (`fiche_id`)
+  KEY `fk_film_fiche1_idx` (`fiche_id`),
+  KEY `film_cinema__fk` (`cinema_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
 
 --
 -- Déchargement des données de la table `film`
 --
 
-INSERT INTO `film` (`id`, `fiche_id`) VALUES
-(1, 1),
-(2, 2),
-(3, 3),
-(4, 4),
-(5, 5),
-(6, 6),
-(7, 7),
-(8, 8),
-(9, 9),
-(10, 10);
+INSERT INTO `film` (`id`, `fiche_id`, `cinema_id`) VALUES
+(1, 1, 22),
+(2, 2, 17),
+(3, 3, 15),
+(4, 4, 18),
+(5, 5, 22),
+(6, 6, 13),
+(7, 7, 14),
+(8, 8, 12),
+(9, 9, 20),
+(10, 10, 21);
 
 -- --------------------------------------------------------
 
@@ -745,6 +747,7 @@ ALTER TABLE `cinema`
 -- Contraintes pour la table `film`
 --
 ALTER TABLE `film`
+  ADD CONSTRAINT `film_cinema__fk` FOREIGN KEY (`cinema_id`) REFERENCES `cinema` (`id`),
   ADD CONSTRAINT `fk_film_fiche1` FOREIGN KEY (`fiche_id`) REFERENCES `fiche` (`id`);
 
 --

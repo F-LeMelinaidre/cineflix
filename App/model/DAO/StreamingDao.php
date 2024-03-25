@@ -2,6 +2,7 @@
 
 namespace Cineflix\App\Model\DAO;
 
+
 use Cineflix\App\AppController;
 use Cineflix\App\Model\StreamingModel;
 use Cineflix\Core\Database\Database;
@@ -27,4 +28,5 @@ class StreamingDao
         return $req->fetchAll(StreamingModel::class);
 
     }
+  
 }

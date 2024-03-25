@@ -15,13 +15,16 @@
 
         <nav class="main-menu">
             <ul>
-
                <?php if ($page == 'movie_index'){  ?>
 
                 <li>Film</li>
+              
                 <?php } else { ?>
+              
                 <li><a href="<?= self::$_Router->getUrl("admin_movie_index") ?>">Films</a></li>
-<?php } ?>
+              
+                <?php } ?>
+              
                 <li><a href="<?= self::$_Router->getUrl("admin_streaming_index") ?>">Streamings</a></li>
 
                 <li><a href="<?= self::$_Router->getUrl("admin_cinema_index") ?>">Cinémas</a></li>

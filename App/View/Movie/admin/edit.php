@@ -2,8 +2,10 @@
     <h1><?= $title ?></h1>
 </header>
 <section>
+  
     <form class="film" action="<?= $url ?>" method="post">
         <h2 class="titre">Information du film</h2>
+  
         <label class="form-label" for="InputNom">Nom</label>
         <input id="InputNom" class="form-control" type="text" name="nom" value="<?= $movie->nom ?>">
 

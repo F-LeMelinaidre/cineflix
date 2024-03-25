@@ -80,7 +80,6 @@ class AppController
         self::$_Router->get('admin_movie_index', '/Admin/Movie', [ Controller\Admin\Movie::class, 'index']);
         self::$_Router->get('admin_movie_add', '/Admin/Movie/Add', [ Controller\Admin\Movie::class, 'edit']);
         self::$_Router->get('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\Movie::class, 'edit'],
-            ['id' => '[0-9]+']);
 
         self::$_Router->post('admin_movie_add', '/Admin/Movie/Add', [ Controller\Admin\Movie::class, 'edit']);
         self::$_Router->post('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\Movie::class, 'edit'],
@@ -99,8 +98,10 @@ class AppController
         self::$_Router->get('admin_user_edit', '/Admin/User/Edit/{id}', [ Controller\Admin\User::class, 'edit'],
             ['id' => '[0-9]+']);
 
+
         self::$_Router->get('ajax', '/Ajax/{value}', [ Ajax\AjaxRequest::class, 'cinemaSearch'],
             ['value' => '[a-zA-Z%0-9]+']);
+
 
         try {
             // Controlle l'url et dirige vers le bon controller et methode si l'url match avec une route précédement créé
@@ -112,6 +113,16 @@ class AppController
 
             $controller = new $callback[0]();
             $callback[0] = $controller;
+
+
+            // call_user_func_array Retourne une methode de Class instancié
+            // Le parametre $callback doit etre une methode d'objet instancié sous forme de tableau
+            // index 0: la Class
+            // index 1: la methode
+            // $params est un tableau des paramètres passés à la méthode de la Class $callback
+            // return vers public/index.php
+            return call_user_func_array($callback, $params);
+
 
             // call_user_func_array Retourne une methode de Class instancié
             // Le parametre $callback doit etre une methode d'objet instancié sous forme de tableau

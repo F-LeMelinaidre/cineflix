@@ -3,6 +3,9 @@
 namespace Cineflix\App\Controller;
 
 use Cineflix\App\Model\DAO\MovieDao;
+use Cineflix\App\AppController;
+use Cineflix\App\Model\MovieModel;
+
 use Cineflix\Core\AbstractController;
 
 class Movie extends AbstractController
@@ -20,6 +23,9 @@ class Movie extends AbstractController
     {
         $movieDao = new MovieDao();
         $movie = $movieDao->findBy('slug',$slug);
+
+        $req = $db->prepare($query, $binvalue);
+        $movie = $req->fetch(MovieModel::class);
 
         if(!empty($movie)) {
 
