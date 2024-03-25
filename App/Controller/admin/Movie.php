@@ -24,22 +24,40 @@ class Movie extends AbstractController
     public function edit(int $id = null): string
     {
 
-        if(!is_null($id)) {
+        $movieDao = new MovieDao();
 
-            $movieDao = new MovieDao();
-            $movie = $movieDao->findBy('id', $id);
-
-        } else {
+        if(!empty($_POST)) {
 
             $movie = new MovieModel();
 
-        }
+            $movie->nom = $_POST['nom'];
+            $movie->cinopsys = $_POST['cinopsys'];
+            $movie->cinema = $_POST['cinema'];
+            $movie->date_sortie = strtotime($_POST['date_sortie']);
+            $movie->affiche = $_POST['affiche'];
 
-        if(!empty($_POST)) var_dump($_POST);
+            $movieDao->add($movie);
+
+            $url = '';
+        } else {
+            // si id n est pas null update
+            if (!is_null($id)) {
+
+                $movie = $movieDao->findBy('id', $id);
+
+                $url = self::$_Router->getUrl('admin_movie_edit', [ 'id' => $id ]);
+
+                // sinon ajout
+            } else {
+                $movie = new MovieModel();
+
+                $url = self::$_Router->getUrl('admin_movie_add');
+            }
+        }
 
         $title = (!isset($movie->id))? "Ajouter un film" : "Editer: ".ucwords($movie->nom);
 
-        return $this->render('Movie.admin.edit',compact('title', 'movie'));
+        return $this->render('Movie.admin.edit',compact('title', 'movie', 'url'));
     }
 
     public function delete()
