@@ -19,7 +19,7 @@ class Movie extends AbstractController
 
     }
 
-    public function show(string $slug, int $id): string
+    public function show(string $slug): string
     {
         $movieDao = new MovieDao();
         $movie = $movieDao->findBy('slug',$slug);
