@@ -100,11 +100,9 @@ class AppController
             ['id' => '[0-9]+']);
 
 
-        self::$_Router->get('ajax_cinemaSearch', '/Ajax/{value}', [ Ajax\AjaxRequest::class, 'cinemaSearch'],
-            ['value' => '[a-zA-Z%0-9]+']);
+        self::$_Router->get('ajax_cinemaSearch', '/Ajax/{value}', [ Ajax\AjaxRequest::class, 'cinemaSearch']);
 
-        self::$_Router->post('ajax_filmSearch', '/Ajax/filmSearch', [ Ajax\AjaxRequest::class, 'filmSearch'],
-            ['value' => '[a-zA-Z%0-9]+']);
+        self::$_Router->post('ajax_filmSearch', '/Ajax/filmSearch', [ Ajax\AjaxRequest::class, 'filmSearch']);
 
 
         try {

@@ -38,28 +38,37 @@
 </section>
 <script src="/public/js/jquery-3.7.1.min.js"></script>
 <script>
-    $('#InputNom').keyup(function() {
-        // Définir un délai de 500 millisecondes avant l'envoi de la requête Ajax
-        var delay = 500;
-        var timer = setTimeout(function() {
-            // Envoyer la requête Ajax si la longueur du texte est supérieure ou égale à 3
-            if ($('#InputNom').val().length >= 3) {
-                $.ajax({
-                    url: '/Ajax/filmSearch',
-                    method: 'POST',
-                    data: {
-                        nom: $('#InputNom').val(),
-                    },
-                    success: function(response) {
-                        console.log('ok');
-                    }
-                });
-            }
-        }, delay);
+    $(document).ready(function() {
 
-        // Annuler le délai si l'utilisateur continue de taper
-        $(this).on('keydown', function() {
-            clearTimeout(timer);
+        $('#InputNom').keyup(function() {
+
+            var delay = 500;
+            var timer = setTimeout(function() {
+
+                if ($('#InputNom').val().length >= 3) {
+                    $.ajax({
+                        url: '/Ajax/filmSearch',
+                        method: 'POST',
+                        data: {
+                            nom: $('#InputNom').val(),
+                        },
+                        success: function(response) {
+
+                            if (response != false) {
+
+
+                                console.log(response.nom);
+                            }
+                        }
+                    });
+                }
+            }, delay);
+
+
+            $(this).on('keydown', function() {
+                clearTimeout(timer);
+            });
         });
+
     });
 </script>

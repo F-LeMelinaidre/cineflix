@@ -3,6 +3,7 @@
 namespace Cineflix\App\Ajax;
 
 use Cineflix\App\AppController;
+use Cineflix\App\Model\DAO\FicheDao;
 
 class AjaxRequest
 {
@@ -15,10 +16,16 @@ class AjaxRequest
         return $value;
     }
 
-    static function filmSearch(string $value)
+    static function filmSearch()
     {
-        $fiche = new FicheDao();
+        $result = false;
 
-        return $value;
+        $value = $_POST['nom'];
+        $ficheDao = new FicheDao();
+        $fiche = $ficheDao->findBy('nom', $value);
+
+        if(!empty($fiche)) $result = json_encode($fiche);
+
+        echo $result;
     }
 }
