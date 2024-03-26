@@ -67,7 +67,7 @@ class Database
 
             if (!empty($bindvalues)) {
                 foreach ($bindvalues as $val) {
-                    $this->request->bindValue($val['col'], $val['val'], PDO::PARAM_STR);
+                    $this->request->bindValue(':'.$val['col'], $val['val'], PDO::PARAM_STR);
                 }
             }
 
@@ -82,13 +82,16 @@ class Database
     }
 
     public function fetch(string $model = null) {
-        $this->request->setFetchMode(PDO::FETCH_CLASS, $model);
+        $mode = (!$model)? [PDO::FETCH_ASSOC] : [PDO::FETCH_CLASS, $model];
+
+        $this->request->setFetchMode(...$mode);
 
         return $this->request->fetch();
     }
 
-    public function fetchall($class_name = null) {
-        $mode = (is_null($class_name))? [PDO::FETCH_ASSOC] : [PDO::FETCH_CLASS, $class_name];
+    public function fetchall($model) {
+        $mode = (is_null($model))? [PDO::FETCH_ASSOC] : [PDO::FETCH_CLASS, $model];
+
         $this->request->setFetchMode(...$mode);
         $data = $this->request->fetchAll();
         return $data;

@@ -1,1 +1,1 @@
-<p>Require: App/View/Movie/index.php</p>
+<?= var_dump($movies) ?>
