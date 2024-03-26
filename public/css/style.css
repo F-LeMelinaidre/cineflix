@@ -180,7 +180,9 @@ button {
     min-width: 10rem;
 }
 
-/* --- ui autocomplete --- */
+/* ---     ui autocomplete      --- */
+/* --- liste de selection input --- */
+/* TODO restyliser si on a le temps */
 .ui-autocomplete {
     position: absolute;
     top: 100%;
@@ -225,6 +227,7 @@ button {
 .ui-helper-hidden-accessible {
     display: none;
 }
+
 #AdminContent form {
     max-width: 888px;
     margin: 0 auto;

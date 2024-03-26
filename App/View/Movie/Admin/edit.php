@@ -9,9 +9,7 @@
   
         <label class="form-label" for="InputNom">Nom</label>
         <input id="InputNom" class="form-control" type="text" list="datalistMovies" name="nom" value="<?= $movie->nom ?>">
-        <div id="MoviesList">
-
-        </div>
+        <div id="MoviesList"></div>
         <label class="form-label" for="InputDateSortie">Date de sortie</label>
         <input id="InputDateSortie" class="form-control" name="date_sortie" type="date">
 
@@ -19,10 +17,7 @@
 
         <input id="SelectCinema" class="form-select" name="cinema" type="text" list="CinemaList" value="<?= $movie->cinema. ' ' .$movie->ville ?? '' ?>"
                placeholder="Saisissez un cinéma" autocomplete="on">
-
-            <datalist id="CinemaList">
-
-            </datalist>
+        <div id="CinemasList"></div>
 
         <h2 class="exploitation">Information d'exploitation</h2>
         <label class="form-label" for="InputDateDebut">Début</label>
