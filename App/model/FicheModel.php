@@ -9,8 +9,10 @@ class FicheModel
     public string $nom = '';
     public string $cinopsys = '';
     public string $affiche = '';
-    public $date_sortie = 0;
+    public $date_sortie = null;
     public string $slug = '';
-  
+
+    public $film_id;
+
 
 }
