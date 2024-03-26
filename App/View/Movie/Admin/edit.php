@@ -41,4 +41,4 @@
 </section>
 <script src="/public/js/jquery-3.7.1.min.js"></script>
 <script src="/public/js/jquery-ui.min.js"></script>
-<script src="/public/js/ajaxRequest.js"></script>
+<script src="/public/js/ajaxRequest.js" data-function="MovieSearch"></script>

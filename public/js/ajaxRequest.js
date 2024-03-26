@@ -1,4 +1,30 @@
 $(document).ready(function () {
+
+    $('#SubmitButton').attr('disabled','disabled');
+
+    // Récupérer toutes les balises <script> avec l'attribut data-function
+    $('script[data-function]').each(function() {
+       let functionName = $(this).attr('data-function');
+       // Active les differentes fonctions appelées
+        switch (functionName) {
+            case 'MovieSearch':
+                MovieSearch();
+                break;
+            case 'CinemaSearch':
+
+                break;
+
+            default:
+                console.error('Fonction inconnu');
+        }
+    });
+});
+
+function CinemaSearch() {
+
+}
+function MovieSearch() {
+
     let rep = []; // Définir le tableau rep en dehors de la fonction pour qu'il soit accessible dans tout le code
 
     $('#InputNom').on('input', function () {
@@ -12,6 +38,7 @@ $(document).ready(function () {
             $('#InputDateSortie').val('');
             $('#TextareaCinopsys').text('');
             $('.thumb').attr('src', '').addClass('hidden');
+            $('.form-message').addClass('hidden');
         }
     });
 
@@ -50,21 +77,29 @@ $(document).ready(function () {
                             $('#TextareaCinopsys').text(selectedMovieInfo.cinopsys);
                             $('.thumb img').attr('src', '../../' + selectedMovieInfo.affiche);
                             $('.thumb').removeClass('hidden');
+
+                            if (null != selectedMovieInfo.film_id) {
+                                $('.form-message').text('Ce film est déjà proposé en salle!').removeClass('hidden');
+                            }
                         }
                     });
                 } else {
                     $('#InputDateSortie').val('');
                     $('#TextareaCinopsys').text('');
                     $('.thumb').attr('src', '').addClass('hidden');
+                    $('.form-message').addClass('hidden');
                 }
 
 
             }
         });
 
-
     }, 200));
-});
+}
+
+function getMovieName(movie) {
+    return movie.nom;
+}
 
 // reinitialise le timer
 function debounce(callback, delay) {
@@ -78,8 +113,4 @@ function debounce(callback, delay) {
             callback.apply(item, args);
         }, delay)
     }
-}
-
-function getMovieName(movie) {
-    return movie.nom;
 }
