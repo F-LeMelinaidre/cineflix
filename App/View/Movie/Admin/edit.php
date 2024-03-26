@@ -58,6 +58,7 @@
                                 let rep = JSON.parse(response);
                                 $('#InputNom').val(rep.nom);
                                 $('#TextareaCinopsys').text(rep.cinopsys);
+
                                 $('#InputDateSortie').val(rep.date_sortie);
                                 $('.file-name').text(getFileName(rep.affiche));
                             }

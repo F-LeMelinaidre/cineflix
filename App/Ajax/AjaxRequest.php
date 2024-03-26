@@ -25,6 +25,7 @@ class AjaxRequest
         $fiche = $ficheDao->findBy('nom', $value);
         $timeToDate = strtotime($fiche->date_sortie);
         $fiche->date_sortie = date("Y-m-d", $timeToDate);
+
         if(!empty($fiche)) $result = json_encode($fiche);
 
         echo $result;
