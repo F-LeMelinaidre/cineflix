@@ -2,6 +2,7 @@
 
 namespace Cineflix\App\Controller\Admin;
 
+use Cineflix\App\Model\DAO\FicheDao;
 use Cineflix\App\Model\DAO\MovieDao;
 use Cineflix\App\Model\MovieModel;
 use Cineflix\Core\AbstractController;
@@ -24,7 +25,7 @@ class Movie extends AbstractController
     {
 
         $movieDao = new MovieDao();
-
+        // ajouter si c'est un ajout dans une salle une verification si il n'est pas deja en salle
         if(!empty($_POST)) {
 
             $movie = new MovieModel();
@@ -44,6 +45,8 @@ class Movie extends AbstractController
 
                 $movie = $movieDao->findBy('id', $id);
 
+                $timeToDate = strtotime($movie->date_sortie);
+                $movie->date_sortie = date("Y-m-d", $timeToDate);
                 $url = self::$_Router->getUrl('admin_movie_edit', [ 'id' => $id ]);
 
                 // sinon ajout

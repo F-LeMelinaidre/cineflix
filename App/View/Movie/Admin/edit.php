@@ -31,7 +31,7 @@
         <textarea id="TextareaCinopsys" class="form-control" name="cinopsys" cols="30" rows="5"><?= $movie->cinopsys ?></textarea>
 
         <label class="form-label" for="InputAffiche">Affiche</label>
-        <input id="InputAffiche" class="form-control" name="affiche" type="file">
+        <input id="InputAffiche" class="form-control" name="affiche" type="file" accept=".png, .jpg, .jpeg">
 
         <button type="submit" class="btn btn-warning">Ajouter</button>
     </form>
@@ -44,7 +44,7 @@
 
             var delay = 500;
             var timer = setTimeout(function() {
-
+// stocker le select dans une const
                 if ($('#InputNom').val().length >= 3) {
                     $.ajax({
                         url: '/Ajax/filmSearch',
@@ -55,19 +55,27 @@
                         success: function(response) {
 
                             if (response != false) {
-
-
-                                console.log(response.nom);
+                                let rep = JSON.parse(response);
+                                $('#InputNom').val(rep.nom);
+                                $('#TextareaCinopsys').text(rep.cinopsys);
+                                $('#InputDateSortie').val(rep.date_sortie);
+                                $('#InputAffiche').attr('src', rep.affiche);
                             }
                         }
                     });
                 }
             }, delay);
 
-
             $(this).on('keydown', function() {
                 clearTimeout(timer);
             });
+
+            function getFileName(path) {
+                const segments = path.split("/");
+                const fileName = segments[segments.length - 1];
+
+                return fileName;
+            }
         });
 
     });
