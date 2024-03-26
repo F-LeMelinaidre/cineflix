@@ -23,7 +23,9 @@ class Movie extends AbstractController
 
     public function edit(int $id = null): string
     {
-
+        $test = new FicheDao();
+        $fiche = $test->ajaxEstEnSalle('nom', 'les affranchis');
+        var_dump($fiche);
         $movieDao = new MovieDao();
         // ajouter si c'est un ajout dans une salle une verification si il n'est pas deja en salle
         if(!empty($_POST)) {

@@ -4,6 +4,7 @@
 <section>
   
     <form class="film" action="<?= $url ?>" method="post">
+        <div class="form-message hidden"></div>
         <h2 class="titre">Information du film</h2>
   
         <label class="form-label" for="InputNom">Nom</label>
@@ -32,44 +33,72 @@
 
         <label class="form-label" for="InputAffiche">Affiche</label>
         <input id="InputAffiche" class="form-control" name="affiche" type="file" accept=".png, .jpg, .jpeg">
-        <div class="file-name"></div>
-        <button type="submit" class="btn btn-warning">Ajouter</button>
+        <div class="thumb hidden"><img src="" alt="" width="120px"></div>
+        <button id="SubmitButton" class="btn btn-warning" type="submit">Ajouter</button>
     </form>
 </section>
 <script src="/public/js/jquery-3.7.1.min.js"></script>
 <script>
     $(document).ready(function() {
+        $('#SubmitButton').attr('disabled','disabled');
+
+        $("#InputNom").autocomplete({
+            source: [], // Initially empty source
+            minLength: 2
+        });
+        let timer;
+        const delay = 500;
 
         $('#InputNom').keyup(function() {
 
-            var delay = 500;
-            var timer = setTimeout(function() {
-// stocker le select dans une const
-                if ($('#InputNom').val().length >= 3) {
+            clearTimeout(timer);
+            timer = setTimeout(function() {
+                if ($('#InputNom').val().length >= 2) {
                     $.ajax({
                         url: '/Ajax/filmSearch',
                         method: 'POST',
                         data: {
                             nom: $('#InputNom').val(),
                         },
-                        success: function(response) {
-
+                        success: function (response) {
                             if (response != false) {
                                 let rep = JSON.parse(response);
-                                $('#InputNom').val(rep.nom);
+                                if (null != rep.film_id) {
+                                    $('.form-message').text('Ce film est déjà proposé en salle!');
+                                    $('.form-message').removeClass('hidden');
+                                }
+                                let movieNames = rep.map(getMovieName);
+                                $("#InputNom").autocomplete("option", "source", movieNames);
+
                                 $('#TextareaCinopsys').text(rep.cinopsys);
 
                                 $('#InputDateSortie').val(rep.date_sortie);
-                                $('.file-name').text(getFileName(rep.affiche));
+                                $('.thumb img').attr('src', '../../' + rep.affiche);
+                                $('.thumb').removeClass('hidden');
                             }
                         }
                     });
+
+            }else {
+                    //if($('#InputDateSortie').val().length > 0) $('#InputDateSortie').val("");
+                    //if($('#TextareaCinopsys').text().length > 0) $('#TextareaCinopsys').text("");
+
+                    //if (!$('.form-message').hasClass("hidden")) $('.form-message').addClass('hidden');
+                    //if (!$('.thumb').hasClass("hidden")) $('.thumb').addClass('hidden');
+
+                    //if($('#InputDateSortie').val().length > 0) $('#InputDateSortie').val("");
+                    //if($('#InputDateSortie').val().length > 0) $('#InputDateSortie').val("");
                 }
             }, delay);
+
 
             $(this).on('keydown', function() {
                 clearTimeout(timer);
             });
+
+            function getMovieName(movie) {
+                return movie.nom;
+            }
 
             function getFileName(path) {
                 const segments = path.split("/");
