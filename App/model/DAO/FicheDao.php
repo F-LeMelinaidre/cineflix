@@ -13,9 +13,9 @@
         public function __construct() {
             $this->db = AppController::$_Database;
         }
-        public function findBy(string $item, mixed $value, bool $model = false)
+        public function findBy(string $item, mixed $value, bool $model = true)
         {
-            $model = (true === $model) ? MovieModel::class : $model;
+            $model = (true === $model) ? FicheModel::class : $model;
 
             switch($item) {
                 case 'nom':
@@ -38,4 +38,5 @@
             return $req->fetch($model);
 
         }
+        // function find Ajax pour l'input modifier la precedante et ajouter un innert join de film
     }

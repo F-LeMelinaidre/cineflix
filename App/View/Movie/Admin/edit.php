@@ -32,7 +32,7 @@
 
         <label class="form-label" for="InputAffiche">Affiche</label>
         <input id="InputAffiche" class="form-control" name="affiche" type="file" accept=".png, .jpg, .jpeg">
-
+        <div class="file-name"></div>
         <button type="submit" class="btn btn-warning">Ajouter</button>
     </form>
 </section>
@@ -59,7 +59,7 @@
                                 $('#InputNom').val(rep.nom);
                                 $('#TextareaCinopsys').text(rep.cinopsys);
                                 $('#InputDateSortie').val(rep.date_sortie);
-                                $('#InputAffiche').attr('src', rep.affiche);
+                                $('.file-name').text(getFileName(rep.affiche));
                             }
                         }
                     });
