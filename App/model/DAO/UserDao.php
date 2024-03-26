@@ -10,4 +10,7 @@ class UserDao
 
     }
 
+    public function connect($username,$password)
+    {
+    }
 }

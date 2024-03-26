@@ -18,14 +18,12 @@ class AjaxRequest
 
     static function filmSearch()
     {
-        $result = false;
 
         $value = $_POST['nom'];
         $ficheDao = new FicheDao();
-        $fiche = $ficheDao->findBy('nom', $value);
-        $timeToDate = strtotime($fiche->date_sortie);
-        $fiche->date_sortie = date("Y-m-d", $timeToDate);
-        if(!empty($fiche)) $result = json_encode($fiche);
-        echo $result;
+        $fiche = $ficheDao->ajaxFilm('nom', $value);
+
+
+        echo json_encode($fiche);
     }
 }

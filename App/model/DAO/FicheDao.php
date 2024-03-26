@@ -35,8 +35,50 @@
             $binvalue[] = ['col' => $item, 'val' => $value];
             $req = $this->db->prepare($query, $binvalue);
 
-            return $req->fetch($model);
 
+
+        }
+
+        public function ajaxEstEnSalle($item, $value) {
+
+            switch($item) {
+                case 'nom':
+                    $clause = 'nom LIKE :nom';
+                    break;
+                case 'id':
+                default:
+                    $item = 'id';
+                    $clause = 'id LIKE :id';
+            }
+
+            $query = "SELECT f.id, f.nom FROM fiche AS f JOIN film f2 on f.id = f2.fiche_id WHERE $clause";
+            $binvalue[] = ['col' => $item, 'val' => $value];
+            $req = $this->db->prepare($query, $binvalue);
+
+            return $req->fetch(FicheModel::class);
+        }
+        public function ajaxFilm($item, $value) {
+
+            switch($item) {
+                case 'nom':
+                    $clause = 'nom LIKE :nom';
+                    break;
+                case 'id':
+                default:
+                    $item = 'id';
+                    $clause = 'id LIKE :id';
+            }
+
+            $query = "SELECT
+                        fiche.*,
+                        film.fiche_id AS film_id
+                        FROM fiche
+                        LEFT JOIN film ON fiche.id = film.fiche_id WHERE $clause";
+
+            $binvalue[] = ['col' => $item, 'val' => $value.'%'];
+            $req = $this->db->prepare($query, $binvalue);
+
+            return $req->fetchAll(FicheModel::class);
         }
         // function find Ajax pour l'input modifier la precedante et ajouter un innert join de film
     }

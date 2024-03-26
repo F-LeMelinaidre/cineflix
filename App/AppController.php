@@ -57,6 +57,7 @@ class AppController
         self::$_Router->get('home', '/', [Controller\Home::class, 'index']);
         self::$_Router->get('signin', '/Signin', [Controller\Auth::class, 'signin']);
         self::$_Router->get('signup', '/Signup', [Controller\Auth::class, 'signup']);
+        self::$_Router->post('signin', '/Signin', [Controller\Auth::class, 'signin']);
 
         self::$_Router->get('movie_index', '/Movie', [ Controller\Movie::class, 'index']);
         self::$_Router->get('movie_show', '/Movie/{slug}', [ Controller\Movie::class, 'show'],

@@ -4,11 +4,14 @@
 <section>
   
     <form class="film" action="<?= $url ?>" method="post">
+        <div class="form-message hidden"></div>
         <h2 class="titre">Information du film</h2>
   
         <label class="form-label" for="InputNom">Nom</label>
-        <input id="InputNom" class="form-control" type="text" name="nom" value="<?= $movie->nom ?>">
+        <input id="InputNom" class="form-control" type="text" list="datalistMovies" name="nom" value="<?= $movie->nom ?>">
+        <div id="MoviesList">
 
+        </div>
         <label class="form-label" for="InputDateSortie">Date de sortie</label>
         <input id="InputDateSortie" class="form-control" name="date_sortie" type="date">
 
@@ -32,52 +35,10 @@
 
         <label class="form-label" for="InputAffiche">Affiche</label>
         <input id="InputAffiche" class="form-control" name="affiche" type="file" accept=".png, .jpg, .jpeg">
-        <div class="file-name"></div>
-        <button type="submit" class="btn btn-warning">Ajouter</button>
+        <div class="thumb"><img src="" alt="" width="120px"></div>
+        <button id="SubmitButton" class="btn btn-warning" type="submit">Ajouter</button>
     </form>
 </section>
 <script src="/public/js/jquery-3.7.1.min.js"></script>
-<script>
-    $(document).ready(function() {
-
-        $('#InputNom').keyup(function() {
-
-            var delay = 500;
-            var timer = setTimeout(function() {
-// stocker le select dans une const
-                if ($('#InputNom').val().length >= 3) {
-                    $.ajax({
-                        url: '/Ajax/filmSearch',
-                        method: 'POST',
-                        data: {
-                            nom: $('#InputNom').val(),
-                        },
-                        success: function(response) {
-
-                            if (response != false) {
-                                let rep = JSON.parse(response);
-                                $('#InputNom').val(rep.nom);
-                                $('#TextareaCinopsys').text(rep.cinopsys);
-
-                                $('#InputDateSortie').val(rep.date_sortie);
-                                $('.file-name').text(getFileName(rep.affiche));
-                            }
-                        }
-                    });
-                }
-            }, delay);
-
-            $(this).on('keydown', function() {
-                clearTimeout(timer);
-            });
-
-            function getFileName(path) {
-                const segments = path.split("/");
-                const fileName = segments[segments.length - 1];
-
-                return fileName;
-            }
-        });
-
-    });
-</script>
+<script src="/public/js/jquery-ui.min.js"></script>
+<script src="/public/js/ajaxRequest.js"></script>
