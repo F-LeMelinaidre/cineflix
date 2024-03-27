@@ -32,9 +32,24 @@ const rules = {
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    const items = document.querySelectorAll('input');
+    const items = document.querySelectorAll('input, textarea');
+
+    let invalidInputs = [];
+
     let position = 0;
     items.forEach(function (item, i) {
+
+
+        if('true' === item.getAttribute('aria-required')) {
+
+            item.focusout(function() {
+                console.dir(item);
+            });
+
+        }
+
+
+
 
         inputs[item.name] = inputs[item.name] || {};
 

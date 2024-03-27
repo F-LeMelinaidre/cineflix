@@ -15,20 +15,27 @@ class MovieDao
 
     public function findAll(): array
     {
-        $query = "SELECT f.id AS id, d.nom AS nom, d.cinopsys AS cinopsys,
+        $query = "SELECT f.id AS movie_id, d.id AS fiche_id, d.nom AS nom, d.synopsis AS synopsis,
                   d.affiche AS affiche, d.date_sortie AS date_sortie, d.slug AS slug, c.nom AS cinema,
                   v.nom AS ville
                   FROM film AS f JOIN fiche d ON f.fiche_id = d.id JOIN cinema c ON f.cinema_id = c.id JOIN ville v ON c.ville_id = v.id";
 
         $req = $this->db->prepare($query);
-
-        return $req->fetchAll(MovieModel::class);
+        $result = [];
+        while ($row = $req->fetch()) {
+            $result[] = new MovieModel(...$row);
+        }
+        var_dump($result);
+        return [];
 
     }
 
-    public function findBy(string $item, mixed $value)
+
+
+    public function findBy(string $item, mixed $value, bool $model = true)
     {
-      
+        $model = (true === $model) ? MovieModel::class : $model;
+
         switch($item) {
             case 'slug':
                 $clause = 'slug LIKE :slug';
@@ -39,7 +46,7 @@ class MovieDao
                 $clause = 'id LIKE :id';
         }
 
-        $query = "SELECT f.id AS id, d.nom AS nom, d.cinopsys AS cinopsys,
+        $query = "SELECT f.id AS id, d.nom AS nom, d.synopsis AS synopsis,
                     d.affiche AS affiche, d.date_sortie AS date_sortie, d.slug AS slug, c.nom AS cinema,
                     v.nom AS ville
                     FROM film AS f JOIN fiche d ON f.fiche_id = d.id JOIN cinema c ON f.cinema_id = c.id JOIN ville v ON c.ville_id = v.id
@@ -48,19 +55,14 @@ class MovieDao
         $binvalue[] = ['col' => $item, 'val' => $value];
         $req = $this->db->prepare($query, $binvalue);
 
-        return $req->fetch(MovieModel::class);
+        return $req->fetch($model);
 
     }
   
     public function add(MovieModel $movie){
-        foreach($movie as $col => $val) {
 
-            echo $col .' - '. $val;
+        var_dump($movie);
 
-            $bindValues[] = ['col' => $col,'val' => $val];
-        }
-
-        $this->db->prepare("INSERT INTO fiche (col, val) VALUES (:col, :val)",$bindValues);
 
 
     }

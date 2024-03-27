@@ -19,8 +19,8 @@
 
         <tr>
             <td><?= $movie->nom ?></td>
-            <td><?= $movie->cinema ?></td>
-            <td><?= $movie->ville ?></td>
+            <td><?= '$movie->cinema->nom' ?></td>
+            <td><?= '$movie->ville->nom' ?></td>
             <td>début d'exploitation</td>
             <td>fin d'exploitation</td>
             <td>
