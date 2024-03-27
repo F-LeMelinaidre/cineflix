@@ -1,16 +1,17 @@
 <?php
 
-namespace Cineflix\App\Controller;
+namespace Cineflix\App\Controller\Admin;
 
 use Cineflix\Core\AbstractController;
 
-class Membre extends AbstractController
+class User extends AbstractController
 {
 
+    protected string $layout = 'admin';
     public function index()
     {
-        echo 'Function: '.__FUNCTION__.'<br>Line: '.__LINE__.'<br><br>';
-
+        $users = [];
+        return $this->render('User.admin.index',compact("users"));
     }
 
     public function show()

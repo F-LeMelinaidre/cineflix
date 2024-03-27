@@ -39,18 +39,19 @@
             <p class="mx-xl-5 mx-sm-4 mb-1">Explorez les films près de chez vous!</p>
             <p class="mx-xl-5 mx-sm-4">Vous avez déjà un compte? <a href="<?= self::$_Router->getUrl("signin") ?>">Connexion!</a></p>
         </header>
-        <form action="#" id="Signout" class="d-flex justify-content-center flex-wrap row-gap-2 column-gap-4 mx-auto mb-5">
+        <form action="<?= self::$_Router->getUrl('signup') ?>" method="post" id="Signout" class="d-flex justify-content-center flex-wrap row-gap-2
+        column-gap-4 mx-auto mb-5">
             <div class="flex-grow-1">
                 <label for="Name">Nom</label>
-                <input type="text" id="Name" name="name" class="form-control mb-2">
+                <input type="text" id="Name" name="nom" class="form-control mb-2">
             </div>
             <div class="flex-grow-1">
                 <label for="Firstname">Prénom</label>
-                <input type="text" id="Firstname" name="firstname" class="form-control mb-2">
+                <input type="text" id="Firstname" name="prenom" class="form-control mb-2">
             </div>
             <div class="col-12">
                 <label for="Email">Email</label>
-                <input type="email" id="Email" name="email" class="form-control mb-2" aria-required="true" aria-describedby="validationMail">
+                <input type="email" id="Email" name="mail" class="form-control mb-2" aria-required="true" aria-describedby="validationMail">
                 <div id="validationMail" class="invalid-message hide"></div>
             </div>
             <div class="flex-grow-1">
@@ -61,9 +62,9 @@
             </div>
             <div class="flex-grow-1">
                 <label for="PasswordConfirm">Confirmer le mot de passe</label>
-                <input type="password" id="PasswordConfirm" name="password_confirm" class="form-control mb-2">
+                <input type="text" id="PasswordConfirm" name="password_confirm" class="form-control mb-2">
             </div>
-            <button type="submit" class="btn btn-warning w-50 mt-4">Connexion</button>
+            <button type="submit" class="btn btn-warning w-50 mt-4">S'enregistrer</button>
         </form>
     </div>
     <div class="col-6 order-0 d-flex justify-content-center my-auto">

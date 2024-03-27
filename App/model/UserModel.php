@@ -2,7 +2,7 @@
 
 namespace Cineflix\App\Model;
 
-class MembreModel
+class UserModel
 {
 
     public int $id;

@@ -2,7 +2,7 @@
 
 namespace Cineflix\App\Model;
 
-class StreamingModel extends FicheModel
+class StreamingModel extends DetailModel
 {
     private int $fiche_id;
 

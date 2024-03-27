@@ -7,10 +7,10 @@ use Cineflix\Core\AbstractController;
 class Profil extends AbstractController
 {
 
-    public function index()
+    public function show()
     {
-        echo 'Function: '.__FUNCTION__.'<br>Line: '.__LINE__.'<br><br>';
-
+        $profil = [];
+        return $this->render('profil.show',compact('profil'));
     }
 
 }

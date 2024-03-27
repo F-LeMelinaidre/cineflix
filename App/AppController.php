@@ -55,9 +55,12 @@
             // 3eme tableau de paramètre contenant la class controller et le nom de la méthode
             // 4eme optionnel tableau [nom du paramètre => format de la valeur (expression régulière)]
             self::$_Router->get('home', '/', [Controller\Home::class, 'index']);
+
             self::$_Router->get('signin', '/Signin', [Controller\Auth::class, 'signin']);
-            self::$_Router->get('signup', '/Signup', [Controller\Auth::class, 'signup']);
             self::$_Router->post('signin', '/Signin', [Controller\Auth::class, 'signin']);
+
+            self::$_Router->get('signup', '/Signup', [Controller\Auth::class, 'signup']);
+            self::$_Router->post('signup', '/Signup', [Controller\Auth::class, 'signup']);
 
             self::$_Router->get('movie_index', '/Movie', [ Controller\Movie::class, 'index']);
             self::$_Router->get('movie_show', '/Movie/{slug}', [ Controller\Movie::class, 'show'],
@@ -66,6 +69,8 @@
             self::$_Router->get('streaming_index', '/Streaming', [Controller\Streaming::class, 'index']);
             self::$_Router->get('streaming_show', '/Streaming/{slug}-{id}', [Controller\Streaming::class, 'show'],
                 ['slug' => '[a-zA-Z_]+', 'id' => '[0-9]+']);
+
+            self::$_Router->get('account_show', '/Account', [ Controller\Account::class, 'show']);
 
             //Route partie Admin
             //Admin Home
@@ -93,7 +98,7 @@
             self::$_Router->get('admin_streaming_edit', '/Admin/Streaming/Edit/{id}', [ Controller\Admin\Streaming::class, 'edit'],
                 ['id' => '[0-9]+']);
 
-            //Admin Membre
+            //Admin User
             self::$_Router->get('admin_user_index', '/Admin/User', [ Controller\Admin\User::class, 'index']);
             self::$_Router->get('admin_user_show', '/Admin/User/{id}', [ Controller\Admin\User::class, 'show'],
                 ['id' => '[0-9]+']);
