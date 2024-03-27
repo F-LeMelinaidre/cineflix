@@ -18,9 +18,6 @@ class UserModel
         $this->mail = $data['mail'];
     }
 
-    public function setPassword($password)
-    {
-        //TODO HASH
-    }
+
 
 }
