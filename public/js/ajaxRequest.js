@@ -97,6 +97,8 @@ function MovieSearch() {
         source: function(request, response) {
             let value = request.term;
 
+
+
             $.ajax({
                 url: '/Ajax/filmSearch',
                 method: 'POST',
