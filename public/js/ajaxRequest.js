@@ -80,7 +80,7 @@ function MovieSearch() {
 
             //$('#InputDateSortie').val('');
 
-            //$('#TextareaCinopsys').text('');
+            //$('#TextareaSynopsis').text('');
 
             //$('.thumb').attr('src', '').addClass('hidden');
 
@@ -106,7 +106,7 @@ function MovieSearch() {
                 success: function (data) {
                     if (data.trim() !== "") {
                         list = JSON.parse(data);
-                        let noms = list.map(getName);
+                        let noms = list.map(list.nom);
                         response(noms);
                     }
                 }
@@ -119,7 +119,7 @@ function MovieSearch() {
 
             $('#InputDateSortie').val(props.date_sortie);
 
-            $('#TextareaCinopsys').text(props.cinopsys);
+            $('#TextareaSynopsis').text(props.synopsis);
 
             $('.thumb img').attr('src', '../../' + props.affiche);
 
@@ -132,11 +132,4 @@ function MovieSearch() {
             }
         }
     });
-}
-
-function getName(item) {
-    return item.nom;
-}
-function getNameWithTown(item) {
-    return item.nom + ' - ' + item.ville;
 }

@@ -203,7 +203,7 @@ DROP TABLE IF EXISTS `fiche`;
 CREATE TABLE IF NOT EXISTS `fiche` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nom` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
-  `cinopsys` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
+  `synopsis` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
   `affiche` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `date_sortie` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `slug` varchar(255) NOT NULL,
@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `fiche` (
 -- Déchargement des données de la table `fiche`
 --
 
-INSERT INTO `fiche` (`id`, `nom`, `cinopsys`, `affiche`, `date_sortie`, `slug`) VALUES
+INSERT INTO `fiche` (`id`, `nom`, synopsis, `affiche`, `date_sortie`, `slug`) VALUES
 (1, 'inception', 'Un voleur d\'élite est capable d\'entrer dans les rêves des gens pour voler leurs secrets les plus précieux. Mais lorsqu\'il reçoit une offre pour une tâche impossible, il doit faire face à son plus grand défi.', 'public/img/movies/inception.jpg', '2010-07-15 20:00:00', 'inception'),
 (2, 'interstellar', 'Dans un futur où la Terre est devenue inhabitable, un groupe d\'explorateurs entreprend un voyage interstellaire pour trouver une nouvelle planète habitable pour l\'humanité.', 'public/img/movies/interstellar.jpg', '2014-11-06 22:00:00', 'interstellar'),
 (3, 'les evadés', 'Un homme est condamné à tort pour le meurtre de sa femme et est envoyé dans une prison où il se lie d\'amitié avec un détenu plus âgé et commence à planifier son évasion.', 'public/img/movies/shawshank_redemption.jpg', '1994-10-13 20:00:00', 'les_evades'),

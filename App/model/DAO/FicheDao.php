@@ -27,7 +27,7 @@
                     $clause = 'id LIKE :id';
             }
 
-            $query = "SELECT f.id AS id, f.nom AS nom, f.cinopsys AS cinopsys,
+            $query = "SELECT f.id AS id, f.nom AS nom, f.synopsis AS synopsis,
                     f.affiche AS affiche, f.date_sortie AS date_sortie, f.slug AS slug
                     FROM fiche AS f
                     WHERE f.$clause";
@@ -35,7 +35,7 @@
             $binvalue[] = ['col' => $item, 'val' => $value];
             $req = $this->db->prepare($query, $binvalue);
 
-
+            return $req->fetch(FicheModel::class);
 
         }
 

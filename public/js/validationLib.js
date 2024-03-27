@@ -36,6 +36,10 @@ document.addEventListener('DOMContentLoaded', function () {
     let position = 0;
     items.forEach(function (item, i) {
 
+
+
+
+
         inputs[item.name] = inputs[item.name] || {};
 
         inputs[item.name] = {
