@@ -180,7 +180,9 @@ button {
     min-width: 10rem;
 }
 
-/* --- ui autocomplete --- */
+/* ---     ui autocomplete      --- */
+/* --- liste de selection input --- */
+/* TODO restyliser si on a le temps */
 .ui-autocomplete {
     position: absolute;
     top: 100%;
@@ -225,6 +227,7 @@ button {
 .ui-helper-hidden-accessible {
     display: none;
 }
+
 #AdminContent form {
     max-width: 888px;
     margin: 0 auto;
@@ -250,7 +253,7 @@ button {
     grid-row: 3;
 }
 #AdminContent .film input:first-of-type,
-#AdminContent #SelectCinema {
+#AdminContent #InputCinema {
     grid-row: 4;
 }
 #AdminContent label[for="InputDateSortie"],
@@ -263,10 +266,10 @@ button {
 #AdminContent #InputDateFin {
     grid-row: 6;
 }
-#AdminContent label[for="TextareaCinopsys"] {
+#AdminContent label[for="TextareaSynopsis"] {
     grid-row: 7;
 }
-#AdminContent #TextareaCinopsys {
+#AdminContent #TextareaSynopsis {
     grid-row: 8/10;
 }
 #AdminContent .thumb {
@@ -302,7 +305,7 @@ button {
 }
 #AdminContent .film .exploitation,
 #AdminContent label[for="SelectCinema"],
-#AdminContent #SelectCinema,
+#AdminContent #InputCinema,
 #AdminContent .thumb {
     grid-column: 5/7;
 }
@@ -315,8 +318,8 @@ button {
     grid-column: 6/7;
 }
 
-#AdminContent label[for="TextareaCinopsys"],
-#AdminContent #TextareaCinopsys {
+#AdminContent label[for="TextareaSynopsis"],
+#AdminContent #TextareaSynopsis {
     grid-column: 1/5;
 }
 #AdminContent #InputAffiche,
@@ -354,10 +357,10 @@ button {
     #AdminContent #InputDateFin {
         grid-row: 8;
     }
-    #AdminContent label[for="TextareaCinopsys"] {
+    #AdminContent label[for="TextareaSynopsis"] {
         grid-row: 9;
     }
-    #AdminContent #TextareaCinopsys {
+    #AdminContent #TextareaSynopsis {
         grid-row: 10;
     }
     #AdminContent label[for="InputAffiche"] {
@@ -395,8 +398,8 @@ button {
     #AdminContent #InputDateFin {
         grid-column: 2;
     }
-    #AdminContent label[for="TextareaCinopsys"],
-    #AdminContent #TextareaCinopsys {
+    #AdminContent label[for="TextareaSynopsis"],
+    #AdminContent #TextareaSynopsis {
         grid-column: 1/5;
     }
 
@@ -425,10 +428,10 @@ button {
     #AdminContent #InputDateFin {
         grid-row: 7;
     }
-    #AdminContent label[for="TextareaCinopsys"] {
+    #AdminContent label[for="TextareaSynopsis"] {
         grid-row: 8;
     }
-    #AdminContent #TextareaCinopsys {
+    #AdminContent #TextareaSynopsis {
         grid-row: 9;
     }
     #AdminContent label[for="InputAffiche"] {
@@ -454,8 +457,8 @@ button {
     #AdminContent #InputDateFin {
         grid-column: 3;
     }
-    #AdminContent label[for="TextareaCinopsys"],
-    #AdminContent #TextareaCinopsys {
+    #AdminContent label[for="TextareaSynopsis"],
+    #AdminContent #TextareaSynopsis {
         grid-column: 1/4;
     }
     #AdminContent #InputAffiche,

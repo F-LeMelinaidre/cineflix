@@ -8,7 +8,7 @@
     <span>Sortie le <date class="me-5"><?= $movie->date_sortie ?></date></span>
 </header>
 <section class="container justify-content-center row-gap-4 column-gap-4 flex-wrap mt-4">
-    <h1>Cinopsys</h1>
+    <h1>Synopsis</h1>
     <img src="<?= '../'.$movie->affiche ?>" height="440">
-    <p><?= $movie->cinopsys ?></p>
+    <p><?= $movie->synopsis ?></p>
 </section>

@@ -15,7 +15,7 @@ class MovieDao
 
     public function findAll(): array
     {
-        $query = "SELECT f.id AS id, d.nom AS nom, d.cinopsys AS cinopsys,
+        $query = "SELECT f.id AS id, d.nom AS nom, d.synopsis AS synopsis,
                   d.affiche AS affiche, d.date_sortie AS date_sortie, d.slug AS slug, c.nom AS cinema,
                   v.nom AS ville
                   FROM film AS f JOIN fiche d ON f.fiche_id = d.id JOIN cinema c ON f.cinema_id = c.id JOIN ville v ON c.ville_id = v.id";
@@ -40,7 +40,7 @@ class MovieDao
                 $clause = 'id LIKE :id';
         }
 
-        $query = "SELECT f.id AS id, d.nom AS nom, d.cinopsys AS cinopsys,
+        $query = "SELECT f.id AS id, d.nom AS nom, d.synopsis AS synopsis,
                     d.affiche AS affiche, d.date_sortie AS date_sortie, d.slug AS slug, c.nom AS cinema,
                     v.nom AS ville
                     FROM film AS f JOIN fiche d ON f.fiche_id = d.id JOIN cinema c ON f.cinema_id = c.id JOIN ville v ON c.ville_id = v.id

@@ -100,9 +100,8 @@ class AppController
         self::$_Router->get('admin_user_edit', '/Admin/User/Edit/{id}', [ Controller\Admin\User::class, 'edit'],
             ['id' => '[0-9]+']);
 
-
-        self::$_Router->get('ajax_cinemaSearch', '/Ajax/{value}', [ Ajax\AjaxRequest::class, 'cinemaSearch']);
-
+        //Requete Ajax
+        self::$_Router->post('ajax_cinemaSearch', '/Ajax/cinemaSearch', [ Ajax\AjaxRequest::class, 'cinemaSearch']);
         self::$_Router->post('ajax_filmSearch', '/Ajax/filmSearch', [ Ajax\AjaxRequest::class, 'filmSearch']);
 
 
