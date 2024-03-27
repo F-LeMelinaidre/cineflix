@@ -4,6 +4,7 @@
 
     use Cineflix\App\Model\AccountModel;
     use Cineflix\App\Model\DAO\UserDao;
+    use Cineflix\App\Model\UserModel;
     use Cineflix\Core\AbstractController;
     use Cineflix\Core\Util\Regex;
     use Cineflix\Core\Util\Security;
@@ -39,27 +40,34 @@
             $errors = [];
             if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
 
-                $nom = Security::sanitize($_POST['nom']);
-                $prenom = Security::sanitize($_POST['prenom']);
-                $mail = Security::sanitize($_POST['mail']);
-                $password = Security::sanitize($_POST['password']);
+                $data['nom'] = Security::sanitize($_POST['nom']);
+                $data['prenom'] = Security::sanitize($_POST['prenom']);
+                $data['mail'] = Security::sanitize($_POST['mail']);
+                $data['password'] = Security::sanitize($_POST['password']);
                 $password_confirm = Security::sanitize($_POST['password_confirm']);
 
-                foreach($_POST as $key => $val) {
+                foreach($data as $key => $val) {
                     if (empty($val)) $errors[$key] = $this->msg_errors['empty'];
-                }
 
-                if (!preg_match(Regex::getPattern('carateres'), $nom))     $errors['nom'] = $this->msg_errors['carateres'];
-                if (!preg_match(Regex::getPattern('carateres'), $prenom))  $errors['prenom'] = $this->msg_errors['carateres'];
-                if (!preg_match(Regex::getPattern('mail'), $mail))         $errors['mail'] = $this->msg_errors['mail'];
-                if (!preg_match(Regex::getPattern('password'), $password)) $errors['password'] = $this->msg_errors['password'];
+                    if ('nom' === $key || 'prenom' === $key) {
+
+                        if (!preg_match(Regex::getPattern('carateres'), $val)) $errors[$key] = $this->msg_errors['carateres'];
+
+                    } elseif(!preg_match(Regex::getPattern($key), $val)) {
+                        $errors[$key] = $this->msg_errors[$key];
+                    }
+                }
 
 
                 $userDao = new UserDao();
-                if ($userDao->isExist($mail)) $errors['mail'] = $this->msg_errors['exist'];
+                if ($userDao->isExist($data['mail'])) $errors['mail'] = $this->msg_errors['exist'];
 
-                if ($password !== $password_confirm && !isset($errors['password'])) $errors['password'] = $this->msg_errors['not_equal'];
+                if ($data['password'] !== $password_confirm && !isset($errors['password'])) $errors['password'] = $this->msg_errors['not_equal'];
 
+                $user = new UserModel($data);
+                $user->setPassword($data['password']);
+
+                var_dump($user);
                 if (!isset($errors) ) {
                     echo 'ok';
                 } else {
