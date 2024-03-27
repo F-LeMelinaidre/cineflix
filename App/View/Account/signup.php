@@ -62,7 +62,7 @@
             </div>
             <div class="flex-grow-1">
                 <label for="PasswordConfirm">Confirmer le mot de passe</label>
-                <input type="password" id="PasswordConfirm" name="password_confirm" class="form-control mb-2">
+                <input type="text" id="PasswordConfirm" name="password_confirm" class="form-control mb-2">
             </div>
             <button type="submit" class="btn btn-warning w-50 mt-4">S'enregistrer</button>
         </form>

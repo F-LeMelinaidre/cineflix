@@ -30,7 +30,9 @@
                 $user->setMail($_POST['mail']);
                 $user->setPassword($_POST['password'], $_POST['password_confirm']);
 
-
+                if($user->isValid()) {
+                    echo 'rec';
+                }
             }
             return $this->render('Account.signup', []);
 
