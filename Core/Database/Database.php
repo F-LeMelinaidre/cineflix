@@ -75,22 +75,27 @@ class Database
 
             return $this;
         } catch (Exception $e) {
-            echo 'erreur prepare()'.$e->getMessage();
+            echo 'erreur prepare() '.$e->getMessage();
             //MessageFlash::create("Impossible de récupérer les données sur la table! <br>" . $e->getMessage(), 'erreur');
             return null;
         }
     }
 
-    public function fetch(string $model = null) {
-        $this->request->setFetchMode(PDO::FETCH_CLASS, $model);
+    public function fetch(string $class_name = null) {
+        $this->request->setFetchMode(PDO::FETCH_CLASS, $class_name);
 
         return $this->request->fetch();
     }
 
-    public function fetchall($class_name = null) {
+    public function fetchall(string $class_name = null) {
         $mode = (is_null($class_name))? [PDO::FETCH_ASSOC] : [PDO::FETCH_CLASS, $class_name];
         $this->request->setFetchMode(...$mode);
         $data = $this->request->fetchAll();
         return $data;
+    }
+
+    public function count()
+    {
+        return $this->request->fetchColumn();
     }
 }
