@@ -9,7 +9,6 @@ class UserModel
     public string $nom = '';
     public string $prenom;
     public string $mail;
-    private string $password;
 
     public function __construct($data)
     {
