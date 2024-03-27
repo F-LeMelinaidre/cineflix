@@ -60,6 +60,7 @@
             self::$_Router->post('signin', '/Signin', [Controller\Auth::class, 'signin']);
 
             self::$_Router->get('signup', '/Signup', [Controller\Auth::class, 'signup']);
+            self::$_Router->post('signup', '/Signup', [Controller\Auth::class, 'signup']);
 
             self::$_Router->get('movie_index', '/Movie', [ Controller\Movie::class, 'index']);
             self::$_Router->get('movie_show', '/Movie/{slug}', [ Controller\Movie::class, 'show'],
@@ -69,7 +70,7 @@
             self::$_Router->get('streaming_show', '/Streaming/{slug}-{id}', [Controller\Streaming::class, 'show'],
                 ['slug' => '[a-zA-Z_]+', 'id' => '[0-9]+']);
 
-            self::$_Router->get('profil_show', '/Profil', [ Controller\Profil::class, 'show']);
+            self::$_Router->get('account_show', '/Account', [ Controller\Account::class, 'show']);
 
             //Route partie Admin
             //Admin Home
