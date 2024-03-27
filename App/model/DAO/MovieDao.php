@@ -21,12 +21,8 @@ class MovieDao
                   FROM film AS f JOIN fiche d ON f.fiche_id = d.id JOIN cinema c ON f.cinema_id = c.id JOIN ville v ON c.ville_id = v.id";
 
         $req = $this->db->prepare($query);
-        $result = [];
-        while ($row = $req->fetch()) {
-            $result[] = new MovieModel(...$row);
-        }
-        var_dump($result);
-        return [];
+
+        return $req->fetchall(MovieModel::class);
 
     }
 
