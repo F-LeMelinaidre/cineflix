@@ -34,7 +34,7 @@ class AccountModel
         $nom = $this->clean($nom);
         if(empty($nom)) {
             $this->errors['nom'] = self::ERRORS_MSG['empty'];
-        } elseif(preg_match($this->regexNomPrenom, $nom)) {
+        } elseif(preg_match(self::REGEX_NOM_PRENOM, $nom)) {
             $this->errors['nom'] = self::ERRORS_MSG['carateres'];
         } else {
             $this->nom = $nom;
@@ -47,7 +47,7 @@ class AccountModel
         $prenom = $this->clean($prenom);
         if(empty($prenom)) {
             $this->errors['prenom'] = self::ERRORS_MSG['empty'];
-        } elseif(preg_match($this->regexNomPrenom, $prenom)) {
+        } elseif(preg_match(self::REGEX_NOM_PRENOM, $prenom)) {
             $this->errors['prenom'] = self::ERRORS_MSG['carateres'];
         } else {
             $this->prenom = $prenom;
@@ -59,7 +59,7 @@ class AccountModel
         $mail = $this->clean($mail);
         if(empty($mail)) {
             $this->errors['mail'] = self::ERRORS_MSG['empty'];
-        } elseif(preg_match($this->regexMail, $mail)) {
+        } elseif(preg_match(self::REGEX_MAIL, $mail)) {
             $this->errors['mail'] = self::ERRORS_MSG['mail'];
         } else {
             $this->mail = $mail;
