@@ -2,7 +2,7 @@
 
 namespace Cineflix\App\Model\DAO;
 
-class ProfilDao
+class DetailDao
 {
 
     public function __construct()
