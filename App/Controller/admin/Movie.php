@@ -2,7 +2,6 @@
 
 namespace Cineflix\App\Controller\Admin;
 
-use Cineflix\App\AppController;
 use Cineflix\App\Model\DAO\MovieDao;
 use Cineflix\App\Model\MovieModel;
 use Cineflix\Core\AbstractController;
@@ -23,14 +22,15 @@ class Movie extends AbstractController
 
     public function edit(int $id = null): string
     {
+
         $movieDao = new MovieDao();
-        // ajouter si c'est un ajout dans une salle une verification si il n'est pas deja en salle
+
         if(!empty($_POST)) {
 
             $movie = new MovieModel();
 
             $movie->nom = $_POST['nom'];
-            $movie->synopsis = $_POST['synopsis'];
+            $movie->cinopsys = $_POST['cinopsys'];
             $movie->cinema = $_POST['cinema'];
             $movie->date_sortie = strtotime($_POST['date_sortie']);
             $movie->affiche = $_POST['affiche'];
@@ -44,8 +44,6 @@ class Movie extends AbstractController
 
                 $movie = $movieDao->findBy('id', $id);
 
-                $timeToDate = strtotime($movie->date_sortie);
-                $movie->date_sortie = date("Y-m-d", $timeToDate);
                 $url = self::$_Router->getUrl('admin_movie_edit', [ 'id' => $id ]);
 
                 // sinon ajout
@@ -66,5 +64,13 @@ class Movie extends AbstractController
 
     }
 
+    public function selectTown(int $id) {
+        $db = AppController::$_Database;
+        $query = "SELECT * FROM ville WHERE id = :id";
+        $binvalue[] = ['col' => 'id', 'val' => $id];
+        $req = $db->prepare($query, $binvalue);
+        $ville = $req->fetch(VilleModel::class);
+        return $ville->nom;
+    }
 
 }

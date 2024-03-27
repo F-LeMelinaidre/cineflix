@@ -57,7 +57,6 @@ class AppController
         self::$_Router->get('home', '/', [Controller\Home::class, 'index']);
         self::$_Router->get('signin', '/Signin', [Controller\Auth::class, 'signin']);
         self::$_Router->get('signup', '/Signup', [Controller\Auth::class, 'signup']);
-        self::$_Router->post('signin', '/Signin', [Controller\Auth::class, 'signin']);
 
         self::$_Router->get('movie_index', '/Movie', [ Controller\Movie::class, 'index']);
         self::$_Router->get('movie_show', '/Movie/{slug}', [ Controller\Movie::class, 'show'],
@@ -94,15 +93,15 @@ class AppController
             ['id' => '[0-9]+']);
 
         //Admin Membre
-        self::$_Router->get('admin_user_index', '/Admin/User', [ Controller\Admin\User::class, 'index']);
-        self::$_Router->get('admin_user_show', '/Admin/User/{id}', [ Controller\Admin\User::class, 'show'],
+        self::$_Router->get('admin_user_index', '/Admin/Membre', [ Controller\Admin\Membre::class, 'index']);
+        self::$_Router->get('admin_user_show', '/Admin/Membre/{id}', [ Controller\Admin\Membre::class, 'show'],
             ['id' => '[0-9]+']);
-        self::$_Router->get('admin_user_edit', '/Admin/User/Edit/{id}', [ Controller\Admin\User::class, 'edit'],
+        self::$_Router->get('admin_user_edit', '/Admin/Membre/Edit/{id}', [ Controller\Admin\Membre::class, 'edit'],
             ['id' => '[0-9]+']);
 
-        //Requete Ajax
-        self::$_Router->post('ajax_cinemaSearch', '/Ajax/cinemaSearch', [ Ajax\AjaxRequest::class, 'cinemaSearch']);
-        self::$_Router->post('ajax_filmSearch', '/Ajax/filmSearch', [ Ajax\AjaxRequest::class, 'filmSearch']);
+
+        self::$_Router->get('ajax', '/Ajax/{value}', [ Ajax\AjaxRequest::class, 'cinemaSearch'],
+            ['value' => '[a-zA-Z%0-9]+']);
 
 
         try {

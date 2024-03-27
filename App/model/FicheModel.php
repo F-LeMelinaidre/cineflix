@@ -7,11 +7,10 @@ class FicheModel
   
     public $id;
     public string $nom = '';
-    public string $synopsis = '';
+    public string $cinopsys = '';
     public string $affiche = '';
-    public $date_sortie = null;
+    public $date_sortie = 0;
     public string $slug = '';
-    public $film_id;
-
+  
 
 }

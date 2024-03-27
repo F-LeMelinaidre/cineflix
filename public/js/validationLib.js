@@ -32,18 +32,9 @@ const rules = {
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    const items = document.querySelectorAll('input, textarea');
-
-    let invalidInputs = [];
-
+    const items = document.querySelectorAll('input');
     let position = 0;
     items.forEach(function (item, i) {
-
-
-
-
-
-
 
         inputs[item.name] = inputs[item.name] || {};
 

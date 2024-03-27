@@ -38,7 +38,7 @@
             <h1 class="mx-xl-4 mx-sm-4">Content de vous revoir</h1>
             <p class="mx-xl-5 mx-sm-4">Nouveau ici? <a href="<?= self::$_Router->getUrl('signup') ?>">Créer un compte</a></p>
         </header>
-        <form action="<?= self::$_Router->getUrl('signin') ?>" method="post" class="d-flex flex-column align-items-center row-gap-2 mb-5">
+        <form action="#" class="d-flex flex-column align-items-center row-gap-2 mb-5">
             <label for="Identifiant" class="w-50">Identifiant</label>
             <input type="email" id="Identifiant" name="email" class="form-control w-50 mb-2" aria-required="true" aria-describedby="validationMail">
             <div id="validationMail" class="invalid-message hide"></div>

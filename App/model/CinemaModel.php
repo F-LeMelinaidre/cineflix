@@ -4,11 +4,10 @@ namespace Cineflix\App\Model;
 
 class CinemaModel
 {
-    public $id;
-    public $nom;
-    public $ville_id;
-    public $ville;
-
+    public int $id;
+    public int $ville_id;
+    public string $nom;
+    public string $ville;
 
 
 }

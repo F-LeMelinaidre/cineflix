@@ -11,9 +11,7 @@ class Auth extends AbstractController
     
     public function signin(): string
     {
-        if(!empty($_POST)) {
-            echo 'ok';
-        }
+
         return $this->render('Auth.signin',[]);
 
     }

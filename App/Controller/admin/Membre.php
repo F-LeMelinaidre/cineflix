@@ -4,7 +4,7 @@ namespace Cineflix\App\Controller\Admin;
 
 use Cineflix\Core\AbstractController;
 
-class User extends AbstractController
+class Membre extends AbstractController
 {
     protected string $layout = 'admin';
 

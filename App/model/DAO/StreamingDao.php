@@ -18,7 +18,7 @@ class StreamingDao
 
     public function findAll(): array
     {
-        $query = "SELECT s.id AS id, f.nom AS nom, f.synopsis AS synopsis, f.affiche AS affiche, 
+        $query = "SELECT s.id AS id, f.nom AS nom, f.cinopsys AS cinopsys, f.affiche AS affiche, 
                     f.date_sortie AS date_sortie, f.slug AS slug 
                     FROM streaming AS s 
                     JOIN fiche AS f ON s.fiche_id = f.id";
