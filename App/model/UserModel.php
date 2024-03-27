@@ -10,13 +10,9 @@ class UserModel
     public string $prenom;
     public string $mail;
 
-    public function __construct($data)
+    public function __construct()
     {
-        $this->nom = $data['nom'];
-        $this->prenom = $data['prenom'];
-        $this->mail = $data['mail'];
+        
     }
-
-
 
 }
