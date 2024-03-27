@@ -64,11 +64,8 @@
 
                 if ($data['password'] !== $password_confirm && !isset($errors['password'])) $errors['password'] = $this->msg_errors['not_equal'];
 
-                $user = new UserModel($data);
-                $user->setPassword($data['password']);
 
-                var_dump($user);
-                if (!isset($errors) ) {
+                if (!isset($errors) && $userDao->save($data)) {
                     echo 'ok';
                 } else {
                     var_dump($errors);

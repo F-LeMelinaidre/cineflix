@@ -3,6 +3,7 @@
 namespace Cineflix\App\Model\DAO;
 
 use Cineflix\App\AppController;
+use Cineflix\App\Model\UserModel;
 use Cineflix\Core\Database\Database;
 
 class UserDao
@@ -20,6 +21,10 @@ class UserDao
         $bindValue[] = ['col' => 'mail', 'val' => $mail];
         $req = $this->db->prepare($query, $bindValue);
         return $req->count();
+    }
+
+    public function save(UserModel $user) {
+
     }
 
 }

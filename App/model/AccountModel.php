@@ -6,9 +6,6 @@
 
     class AccountModel
     {
-        public function __construct()
-        {
-
-        }
+        public function __construct() {}
 
     }
