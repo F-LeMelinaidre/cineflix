@@ -253,7 +253,7 @@ button {
     grid-row: 3;
 }
 #AdminContent .film input:first-of-type,
-#AdminContent #SelectCinema {
+#AdminContent #InputCinema {
     grid-row: 4;
 }
 #AdminContent label[for="InputDateSortie"],
@@ -305,7 +305,7 @@ button {
 }
 #AdminContent .film .exploitation,
 #AdminContent label[for="SelectCinema"],
-#AdminContent #SelectCinema,
+#AdminContent #InputCinema,
 #AdminContent .thumb {
     grid-column: 5/7;
 }

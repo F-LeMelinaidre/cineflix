@@ -89,7 +89,7 @@ class Database
         return $this->request->fetch();
     }
 
-    public function fetchall($model) {
+    public function fetchall(string $model = null) {
         $mode = (is_null($model))? [PDO::FETCH_ASSOC] : [PDO::FETCH_CLASS, $model];
 
         $this->request->setFetchMode(...$mode);

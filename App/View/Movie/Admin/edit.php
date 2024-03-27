@@ -8,16 +8,17 @@
         <h2 class="titre">Information du film</h2>
   
         <label class="form-label" for="InputNom">Nom</label>
-        <input id="InputNom" class="form-control" type="text" list="datalistMovies" name="nom" value="<?= $movie->nom ?>">
+        <input id="InputNom" class="form-control" type="text" name="nom" value="<?= $movie->nom ?>">
         <div id="MoviesList"></div>
+
         <label class="form-label" for="InputDateSortie">Date de sortie</label>
-        <input id="InputDateSortie" class="form-control" name="date_sortie" type="date">
+        <input id="InputDateSortie" class="form-control" type="date" name="date_sortie">
 
-        <label class="form-label" for="SelectCinema">Cinema</label>
-
-        <input id="SelectCinema" class="form-select" name="cinema" type="text" list="CinemaList" value="<?= $movie->cinema. ' ' .$movie->ville ?? '' ?>"
-               placeholder="Saisissez un cinéma" autocomplete="on">
+        <label class="form-label" for="InputCinema">Cinema</label>
+        <input id="InputCinema" class="form-select" type="text" name="cinema" value="<?= $movie->cinema. ' ' .$movie->ville ?? '' ?>"
+               placeholder="Saisissez un cinéma ou une ville">
         <div id="CinemasList"></div>
+        <input type="hidden" id="cinema_id" name="cinema_id" value="">
 
         <h2 class="exploitation">Information d'exploitation</h2>
         <label class="form-label" for="InputDateDebut">Début</label>
@@ -31,9 +32,12 @@
         <label class="form-label" for="InputAffiche">Affiche</label>
         <input id="InputAffiche" class="form-control" name="affiche" type="file" accept=".png, .jpg, .jpeg">
         <div class="thumb"><img src="" alt="" width="120px"></div>
+
+        <input type="hidden" id="fiche_id" name="fiche_id" value="">
         <button id="SubmitButton" class="btn btn-warning" type="submit">Ajouter</button>
     </form>
 </section>
 <script src="/public/js/jquery-3.7.1.min.js"></script>
 <script src="/public/js/jquery-ui.min.js"></script>
 <script src="/public/js/ajaxRequest.js" data-function="MovieSearch"></script>
+<script src="/public/js/ajaxRequest.js" data-function="CinemaSearch"></script>
