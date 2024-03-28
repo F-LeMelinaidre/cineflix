@@ -86,14 +86,14 @@
                 if ($password !== $password_confirm && !isset($errors['password'])) $errors['password'] = $this->msg_errors['not_equal'];
 
                 $user = new UserModel($nom,$prenom, $mail);
-                $user->setPassword($password);
+                $user->hashPassword($password);
 
                 if (empty($errors) && $userDao->save($user)) {
 
                     AuthConnect::connect([ 'email' => $user->mail, 'username' => $user->nom, /*'last_connect' =>
                         $user->getLastConnectFr()*/]);
                     /*MessageFlash::create('Connecté',$type = 'valide');*/
-
+die();
                     header('Location: /');
                     exit;
                 } else {

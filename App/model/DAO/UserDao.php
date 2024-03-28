@@ -33,6 +33,12 @@ class UserDao
 
     public function save(UserModel $user) {
 
+        $columns[] = 'password';
+        $values[]  = ':password';
+        $bindValues[] = [
+            'col' => 'password',
+            'val' => $user->getPassword()
+        ];
         foreach ($user as $key => $value) {
             $columns[] = $key;
             $values[] = ':' . $key;

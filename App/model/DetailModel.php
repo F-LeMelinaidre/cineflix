@@ -16,7 +16,7 @@ class DetailModel
 
     public function __construct()
     {
-        $this->setDateFr($this->date_sortie);
+        //$this->setDateFr($this->date_sortie);
     }
     //TODO
     private function setSlug(){}

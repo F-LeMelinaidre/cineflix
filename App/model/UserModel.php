@@ -12,7 +12,6 @@ class UserModel
 
     private string $password;
 
-
     public function __construct(string $nom, string $prenom, string $mail)
     {
         $this->nom = $nom;
@@ -20,11 +19,13 @@ class UserModel
         $this->mail = $mail;
     }
 
-    public function setPassword(string $password) {
-        $this->password = $password;
+    public function getPassword()
+    {
+        return $this->password;
     }
 
-    public function hashPassword(string $password) {
+    public function hashPassword(string $password)
+    {
         $this->password = password_hash($password, PASSWORD_BCRYPT);
     }
 
