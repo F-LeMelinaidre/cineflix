@@ -5,7 +5,7 @@ namespace Cineflix\Core;
 use Cineflix\App\AppController;
 use Cineflix\Core\Router\Router;
 
-class AbstractController
+abstract class AbstractController
 
 {
 

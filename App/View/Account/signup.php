@@ -51,7 +51,7 @@
             </div>
             <div class="col-12">
                 <label for="Email">Email</label>
-                <input type="email" id="Email" name="mail" class="form-control mb-2" aria-required="true" aria-describedby="validationMail">
+                <input type="email" id="Email" name="email" class="form-control mb-2" aria-required="true" aria-describedby="validationMail">
                 <div id="validationMail" class="invalid-message hide"></div>
             </div>
             <div class="flex-grow-1">

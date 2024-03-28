@@ -42,12 +42,17 @@
         {
             $errors = [];
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $nom = (isset($_POST['nom'])) ? Security::sanitize($_POST['nom']) : '';
-                $prenom = (isset($_POST['prenom'])) ? Security::sanitize($_POST['prenom']) : '';
-                $mail = (isset($_POST['mail'])) ? Security::sanitize($_POST['mail']) : '';
-                $password = (isset($_POST['password'])) ? Security::sanitize($_POST['password']) : '';
-                $password_confirm = (isset($_POST['password_confirm'])) ? Security::sanitize($_POST['password_confirm']) : '';
 
+
+                $user = new UserModel();
+                $user->setNom($_POST['nom'])
+                     ->setPrenom($_POST['prenom'])
+                     ->setMail($_POST['email'])
+                     ->hashPassword($_POST['password']);
+
+                $password_confirm = Security::sanitize($_POST['password_confirm']);
+
+                var_dump($user);
                 if (empty($nom)) {
                     $errors['nom'] = $this->msg_errors['empty'];
 
@@ -82,7 +87,7 @@
                     $errors['password'] = $this->msg_errors['password'];
 
                 }
-
+die();
                 if ($password !== $password_confirm && !isset($errors['password'])) $errors['password'] = $this->msg_errors['not_equal'];
 
                 $user = new UserModel($nom,$prenom, $mail);
