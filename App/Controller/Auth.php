@@ -2,7 +2,6 @@
 
     namespace Cineflix\App\Controller;
 
-    use Cineflix\App\Model\AccountModel;
     use Cineflix\App\Model\DAO\UserDao;
     use Cineflix\App\Model\UserModel;
     use Cineflix\Core\AbstractController;
@@ -26,9 +25,11 @@
         public function signin(): string
         {
 
-            $user = new AccountModel();
-            $user->mail = Security::sanitize($_POST['mail']);
-            $user->password = Security::sanitize($_POST['password']);
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $user = new UserModel();
+                $user->mail = Security::sanitize($_POST['mail']);
+                $password = Security::sanitize($_POST['password']);
+            }
 
 
             return $this->render('Auth.signin', []);
@@ -38,34 +39,57 @@
         public function signup(): string
         {
             $errors = [];
-            if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $nom = (isset($_POST['nom'])) ? Security::sanitize($_POST['nom']) : '';
+                $prenom = (isset($_POST['prenom'])) ? Security::sanitize($_POST['prenom']) : '';
+                $mail = (isset($_POST['mail'])) ? Security::sanitize($_POST['mail']) : '';
+                $password = (isset($_POST['password'])) ? Security::sanitize($_POST['password']) : '';
+                $password_confirm = (isset($_POST['password_confirm'])) ? Security::sanitize($_POST['password_confirm']) : '';
 
-                $data['nom'] = Security::sanitize($_POST['nom']);
-                $data['prenom'] = Security::sanitize($_POST['prenom']);
-                $data['mail'] = Security::sanitize($_POST['mail']);
-                $data['password'] = Security::sanitize($_POST['password']);
-                $password_confirm = Security::sanitize($_POST['password_confirm']);
+                if (empty($nom)) {
+                    $errors['nom'] = $this->msg_errors['empty'];
 
-                foreach($data as $key => $val) {
-                    if (empty($val)) $errors[$key] = $this->msg_errors['empty'];
-
-                    if ('nom' === $key || 'prenom' === $key) {
-
-                        if (!preg_match(Regex::getPattern('carateres'), $val)) $errors[$key] = $this->msg_errors['carateres'];
-
-                    } elseif(!preg_match(Regex::getPattern($key), $val)) {
-                        $errors[$key] = $this->msg_errors[$key];
-                    }
+                } elseif(!preg_match(Regex::getPattern('carateres'), $nom)) {
+                    $errors['nom'] = $this->msg_errors['carateres'];
                 }
 
+                if (empty($prenom)) {
+                    $errors['prenom'] = $this->msg_errors['empty'];
 
-                $userDao = new UserDao();
-                if ($userDao->isExist($data['mail'])) $errors['mail'] = $this->msg_errors['exist'];
+                } elseif(!preg_match(Regex::getPattern('carateres'), $prenom)) {
+                        $errors['prenom'] = $this->msg_errors['carateres'];
+                }
 
-                if ($data['password'] !== $password_confirm && !isset($errors['password'])) $errors['password'] = $this->msg_errors['not_equal'];
+                if (empty($mail)) {
+                    $errors['mail'] = $this->msg_errors['empty'];
 
+                } elseif (!preg_match(Regex::getPattern('mail'), $mail)) {
+                    $errors['email'] = $this->msg_errors['mail'];
 
-                if (!isset($errors) && $userDao->save($data)) {
+                } else {
+
+                    $userDao = new UserDao();
+                    if ($userDao->isExist($mail))
+                        $errors['mail'] = $this->msg_errors['exist'];
+                }
+
+                if (empty($password)) {
+                    $errors['password'] = $this->msg_errors['empty'];
+
+                } elseif (!preg_match(Regex::getPattern('password'), $password)) {
+                    $errors['password'] = $this->msg_errors['password'];
+
+                }
+
+                if ($password !== $password_confirm && !isset($errors['password'])) $errors['password'] = $this->msg_errors['not_equal'];
+
+                $user = new UserModel();
+                $user->nom = $nom;
+                $user->prenom = $prenom;
+                $user->mail = $mail;
+                $user->setPassword($password);
+
+                if (empty($errors) && $userDao->save($user)) {
                     echo 'ok';
                 } else {
                     var_dump($errors);
@@ -73,7 +97,7 @@
 
 
             }
-            return $this->render('Account.signup', []);
+            return $this->render('Account.signup', [$errors]);
 
         }
 
