@@ -21,6 +21,10 @@ class UserModel
     }
 
     public function setPassword(string $password) {
+        $this->password = $password;
+    }
+
+    public function hashPassword(string $password) {
         $this->password = password_hash($password, PASSWORD_BCRYPT);
     }
 

@@ -15,6 +15,14 @@ class UserDao
         $this->db = AppController::$_Database;
     }
 
+    public function findUserByNameAndMail($mail)
+    {
+        $query ='SELECT mail, password FROM membre WHERE mail LIKE :mail';
+        $bindValues[] = ['col' => 'mail', 'val' => $mail];
+        $req = $this->db->prepare($query, $bindValues);
+        return $req->fetch();
+    }
+
     public function isExist($mail)
     {
         $query = 'SELECT EXISTS ( SELECT mail FROM membre WHERE mail LIKE :mail )';
