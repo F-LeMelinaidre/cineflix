@@ -15,8 +15,8 @@
 
         private $msg_errors = [
             'empty'     => 'Champ obligatoire !',
-            'carateres' => 'Seul les majuscules, minuscules et caratères accentués acceptés !',
-            'mail'      => 'Format invalide (norme RFC2822) !',
+            'alpha' => 'Seul les majuscules, minuscules et caratères accentués acceptés !',
+            'email'      => 'Format invalide (norme RFC2822) !',
             'password'  => 'Doit contenir au minimum 8 caratères, un caratères majuscule et minuscule, un chiffre, et un caratères spéciaux !?:_\-*#&%+',
             'exist'     => 'Email déja utilisé !',
             'not_equal'     => 'Les mots de passes ne sont pas identique !'
@@ -28,11 +28,12 @@
         {
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $user = new UserModel();
-                $user->mail = Security::sanitize($_POST['mail']);
-                $password = Security::sanitize($_POST['password']);
-            }
 
+                $user = new UserModel();
+                $user->setEmail($_POST['email']);
+                $password = Security::sanitize($_POST['password']);
+
+            }
 
             return $this->render('Auth.signin', []);
 
@@ -43,28 +44,24 @@
             $errors = [];
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+                $nom = (isset($_POST['nom'])) ? Security::sanitize($_POST['nom']) : '';
+                $prenom = (isset($_POST['prenom'])) ? Security::sanitize($_POST['prenom']) : '';
+                $email = (isset($_POST['mail'])) ? Security::sanitize($_POST['mail']) : '';
+                $password = (isset($_POST['password'])) ? Security::sanitize($_POST['password']) : '';
+                $password_confirm = (isset($_POST['password_confirm'])) ? Security::sanitize($_POST['password_confirm']) : '';
 
-                $user = new UserModel();
-                $user->setNom($_POST['nom'])
-                     ->setPrenom($_POST['prenom'])
-                     ->setMail($_POST['email'])
-                     ->hashPassword($_POST['password']);
-
-                $password_confirm = Security::sanitize($_POST['password_confirm']);
-
-                var_dump($user);
                 if (empty($nom)) {
                     $errors['nom'] = $this->msg_errors['empty'];
 
-                } elseif(!preg_match(Regex::getPattern('carateres'), $nom)) {
-                    $errors['nom'] = $this->msg_errors['carateres'];
+                } elseif(!preg_match(Regex::getPattern('alpha'), $nom)) {
+                    $errors['nom'] = $this->msg_errors['alpha'];
                 }
 
                 if (empty($prenom)) {
                     $errors['prenom'] = $this->msg_errors['empty'];
 
-                } elseif(!preg_match(Regex::getPattern('carateres'), $prenom)) {
-                        $errors['prenom'] = $this->msg_errors['carateres'];
+                } elseif(!preg_match(Regex::getPattern('alpha'), $prenom)) {
+                        $errors['prenom'] = $this->msg_errors['alpha'];
                 }
 
                 if (empty($mail)) {
@@ -87,22 +84,24 @@
                     $errors['password'] = $this->msg_errors['password'];
 
                 }
-die();
+
                 if ($password !== $password_confirm && !isset($errors['password'])) $errors['password'] = $this->msg_errors['not_equal'];
 
-                $user = new UserModel($nom,$prenom, $mail);
-                $user->hashPassword($password);
+                $user = new UserModel();
+                $user->setNom($nom)
+                    ->setPrenom($prenom)
+                    ->setEmail($email)
+                    ->hashPassword($password);
+                $password_confirm = Security::sanitize($_POST['password_confirm']);
 
                 if (empty($errors) && $userDao->save($user)) {
 
                     AuthConnect::connect([ 'email' => $user->mail, 'username' => $user->nom, /*'last_connect' =>
                         $user->getLastConnectFr()*/]);
                     /*MessageFlash::create('Connecté',$type = 'valide');*/
-die();
+
                     header('Location: /');
                     exit;
-                } else {
-                    var_dump($errors);
                 }
 
 

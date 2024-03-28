@@ -15,11 +15,11 @@ class AuthConnect
      * @param string $table
      * @param string $name_session
      */
-    public static function init($userDao, $nameSession = 'Auth')
+    public static function init($user_dao, $name_session = 'Auth')
     {
-        self::$_UserDao = $userDao;
+        self::$_UserDao = $user_dao;
 
-        self::$_NameSession = $nameSession;
+        self::$_NameSession = $name_session;
 
         if (isset($_SESSION[self::$_NameSession]))
             self::$_Connect = true;
