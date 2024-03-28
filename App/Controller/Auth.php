@@ -7,7 +7,6 @@
     use Cineflix\Core\AbstractController;
     use Cineflix\Core\Util\AuthConnect;
     use Cineflix\Core\Util\MessageFlash;
-    use Cineflix\Core\Util\Regex;
     use Cineflix\Core\Util\Security;
 
     class Auth extends AbstractController
@@ -24,14 +23,19 @@
 
         protected string $layout = 'auth';
 
+        /**
+         * @return string
+         */
         public function signin(): string
         {
+            $email = (isset($_POST['mail'])) ? $_POST['mail'] : '';
+            $password = (isset($_POST['password'])) ? $_POST['password'] : '';
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $user = new UserModel();
-                $user->setEmail($_POST['email']);
-                $password = Security::sanitize($_POST['password']);
+                $user->setEmail($email);
+                $password = Security::sanitize($password);
 
             }
 
@@ -39,64 +43,32 @@
 
         }
 
+        /**
+         * @return string
+         */
         public function signup(): string
         {
-            $errors = [];
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-                $nom = (isset($_POST['nom'])) ? Security::sanitize($_POST['nom']) : '';
-                $prenom = (isset($_POST['prenom'])) ? Security::sanitize($_POST['prenom']) : '';
-                $email = (isset($_POST['mail'])) ? Security::sanitize($_POST['mail']) : '';
-                $password = (isset($_POST['password'])) ? Security::sanitize($_POST['password']) : '';
-                $password_confirm = (isset($_POST['password_confirm'])) ? Security::sanitize($_POST['password_confirm']) : '';
+                $nom = (isset($_POST['nom'])) ? $_POST['nom'] : '';
+                $prenom = (isset($_POST['prenom'])) ? $_POST['prenom'] : '';
+                $email = (isset($_POST['mail'])) ? $_POST['mail'] : '';
+                $password = (isset($_POST['password'])) ? $_POST['password'] : '';
+                $pwd_confirm = (isset($_POST['password_confirm'])) ? $_POST['password_confirm'] : '';
 
-                if (empty($nom)) {
-                    $errors['nom'] = $this->msg_errors['empty'];
-
-                } elseif(!preg_match(Regex::getPattern('alpha'), $nom)) {
-                    $errors['nom'] = $this->msg_errors['alpha'];
-                }
-
-                if (empty($prenom)) {
-                    $errors['prenom'] = $this->msg_errors['empty'];
-
-                } elseif(!preg_match(Regex::getPattern('alpha'), $prenom)) {
-                        $errors['prenom'] = $this->msg_errors['alpha'];
-                }
-
-                if (empty($mail)) {
-                    $errors['mail'] = $this->msg_errors['empty'];
-
-                } elseif (!preg_match(Regex::getPattern('mail'), $mail)) {
-                    $errors['email'] = $this->msg_errors['mail'];
-
-                } else {
-
-                    $userDao = new UserDao();
-                    if ($userDao->isExist($mail))
-                        $errors['mail'] = $this->msg_errors['exist'];
-                }
-
-                if (empty($password)) {
-                    $errors['password'] = $this->msg_errors['empty'];
-
-                } elseif (!preg_match(Regex::getPattern('password'), $password)) {
-                    $errors['password'] = $this->msg_errors['password'];
-
-                }
-
-                if ($password !== $password_confirm && !isset($errors['password'])) $errors['password'] = $this->msg_errors['not_equal'];
+                if ($password !== $pwd_confirm && !isset($errors['password'])) $errors['password'] = $this->msg_errors['not_equal'];
 
                 $user = new UserModel();
                 $user->setNom($nom)
                     ->setPrenom($prenom)
                     ->setEmail($email)
                     ->hashPassword($password);
-                $password_confirm = Security::sanitize($_POST['password_confirm']);
+                $pwd_confirm = Security::sanitize($_POST['password_confirm']);
 
+                $userDao = new UserDao();
                 if (empty($errors) && $userDao->save($user)) {
 
-                    AuthConnect::connect([ 'email' => $user->mail, 'username' => $user->nom, /*'last_connect' =>
+                    AuthConnect::connect([ 'email' => $user->email, 'username' => $user->nom, /*'last_connect' =>
                         $user->getLastConnectFr()*/]);
                     /*MessageFlash::create('Connecté',$type = 'valide');*/
 
@@ -110,6 +82,9 @@
 
         }
 
+        /**
+         * @return void
+         */
         public function signout()
         {
 
