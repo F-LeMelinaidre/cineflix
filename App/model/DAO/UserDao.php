@@ -18,12 +18,26 @@ class UserDao
     public function isExist($mail)
     {
         $query = 'SELECT EXISTS ( SELECT mail FROM membre WHERE mail LIKE :mail )';
-        $bindValue[] = ['col' => 'mail', 'val' => $mail];
-        $req = $this->db->prepare($query, $bindValue);
+        $bindValues[] = ['col' => 'mail', 'val' => $mail];
+        $req = $this->db->prepare($query, $bindValues);
         return $req->count();
     }
 
     public function save(UserModel $user) {
+
+        foreach ($user as $key => $value) {
+            $columns[] = $key;
+            $values[] = ':' . $key;
+            $bindValues[] = ['col' => $key, 'val' => $value];
+
+        }
+
+        $columns = implode(', ', $columns);
+        $values = implode(', ', $values);
+
+        $sql = "INSERT INTO membre ($columns) VALUES ($values)";
+
+        return $this->db->insert($sql, $bindValues);
 
     }
 

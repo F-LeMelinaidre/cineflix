@@ -5,6 +5,8 @@
     use Cineflix\App\Model\DAO\UserDao;
     use Cineflix\App\Model\UserModel;
     use Cineflix\Core\AbstractController;
+    use Cineflix\Core\Util\Auth;
+    use Cineflix\Core\Util\MessageFlash;
     use Cineflix\Core\Util\Regex;
     use Cineflix\Core\Util\Security;
 
@@ -83,14 +85,18 @@
 
                 if ($password !== $password_confirm && !isset($errors['password'])) $errors['password'] = $this->msg_errors['not_equal'];
 
-                $user = new UserModel();
-                $user->nom = $nom;
-                $user->prenom = $prenom;
-                $user->mail = $mail;
+                $user = new UserModel($nom,$prenom, $mail);
                 $user->setPassword($password);
 
                 if (empty($errors) && $userDao->save($user)) {
-                    echo 'ok';
+                    //TODO COPIE COLLE DU PROJET MVC A MODIFIER
+
+                    \Cineflix\Core\Util\Auth::connect(['email' => $user->email, 'username' => $user->username, 'last_connect' =>
+                        $user->getLastConnectFr()]);
+                    MessageFlash::create('Connecté',$type = 'valide');
+
+                    header('Location: /');
+                    exit;
                 } else {
                     var_dump($errors);
                 }
