@@ -5,7 +5,6 @@
     use Cineflix\App\Model\DAO\UserDao;
     use Cineflix\App\Model\UserModel;
     use Cineflix\Core\AbstractController;
-    use Cineflix\Core\Util\Auth;
     use Cineflix\Core\Util\MessageFlash;
     use Cineflix\Core\Util\Regex;
     use Cineflix\Core\Util\Security;
@@ -91,7 +90,7 @@
                 if (empty($errors) && $userDao->save($user)) {
                     //TODO COPIE COLLE DU PROJET MVC A MODIFIER
 
-                    \Cineflix\Core\Util\Auth::connect(['email' => $user->email, 'username' => $user->username, 'last_connect' =>
+                    Auth::connect([ 'email' => $user->email, 'username' => $user->username, 'last_connect' =>
                         $user->getLastConnectFr()]);
                     MessageFlash::create('Connecté',$type = 'valide');
 

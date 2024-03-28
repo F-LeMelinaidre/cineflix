@@ -1,8 +1,10 @@
 <?php
 
-    namespace Cineflix\Core\Util;
-//TODO COPIE COLLE DU PROJET MVC A MODIFIER
-    class Auth
+    namespace Cineflix\Core\Util\Auth;
+//TODO COPIE COLLE DU PROJET MVC A MODIFIER ET METTRE DANS LE CONTROLLER
+use Cineflix\Core\Util\SqlDao;
+
+class Auth
     {
         private static $_table;
         private static $_model;
