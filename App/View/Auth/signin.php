@@ -1,7 +1,8 @@
-<section class="sign row col-xl-10 col-lg-10 col-md-6 col-sm-8 col-12 m-auto p-0 rounded-2 bg-dark-subtle">
+<section class="container rounded-2 bg-dark-subtle">
+    <div class="row justify-content-md-center">
 
-        <div class="col-lg-6 col-md-12 order-0 order-lg-1 py-4 mx-auto">
-            <header class="mb-4 mx-4">
+        <div class="col col-lg-6 order-1 py-4 border-start border-dark-subtle">
+            <header class="mb-4">
                 <a href="/" class="d-block mt-4 mb-5 text-center">
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0"
                          width="260" height="50" viewBox="0 0 260 50"
@@ -40,37 +41,25 @@
                 <h1 class="mx-xl-4 mx-sm-4">Content de vous revoir</h1>
                 <p class="mx-xl-5 mx-sm-4">Nouveau ici? <a href="<?= self::$_Router->getUrl('signup') ?>">Créer un compte</a></p>
             </header>
-            <form action="<?= self::$_Router->getUrl('signin') ?>" method="post" class="row flex-column row-gap-2 mx-auto ">
-
-                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-7 col-9 row mx-auto">
-                    <label for="Identifiant">Identifiant</label>
-                    <input type="email" id="Identifiant" name="email" class="form-control mb-2 w-100" aria-required="true"
-                           aria-describedby="validationMail">
-                    <div id="validationMail" class="invalid-message hide"></div>
-                </div>
-
-                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-7 col-9 row mx-auto">
-                    <label for="Password">Mot de passe</label>
-                    <input type="password" id="Password" name="password" class="form-control mb-2 w-100" min="8" aria-required="true"
-                           aria-describedby="validationPassword">
-                    <div id="validationPassword" class="invalid-message hide"></div>
-                </div>
-                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-7 col-9 mx-auto">
+            <form action="<?= self::$_Router->getUrl('signin') ?>" method="post" class="d-flex flex-column align-items-center row-gap-2 mb-5">
+                <label for="Identifiant" class="w-50">Identifiant</label>
+                <input type="email" id="Identifiant" name="email" class="form-control w-50 mb-2" aria-required="true"
+                       aria-describedby="validationMail">
+                <div id="validationMail" class="invalid-message hide"></div>
+                <label for="Password" class="w-50">Mot de passe</label>
+                <input type="password" id="Password" name="password" class="form-control w-50 mb-2" min="8" aria-required="true"
+                       aria-describedby="validationPassword">
+                <div id="validationPassword" class="invalid-message hide"></div>
+                <div class="w-50">
                     <input type="checkbox" id="RememberCheck" name="remember" class="form-check-input">
                     <label for="RememberCheck" class="form-check-label">Se souvenir de moi ?</label>
                 </div>
-                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-7 col-9 row mx-auto">
-                    <button type="submit" class="btn btn-warning">Connexion</button>
-                    <a href="#" class="mb-2">Mot de passe oublié?</a>
-                </div>
+                <a href="#" class="w-50 mb-2">Mot de passe oublié?</a>
+                <button type="submit" class="btn btn-warning w-50">Connexion</button>
             </form>
         </div>
-        <div class="col-lg-6 col-md-12 order-1 order-lg-0 flex-column align-content-center border-end border-dark-subtle">
-            <ul class="row mx-3 mx-lg-5 mx-sm-3 mt-3 list-unstyled">
-                <li class="my-3">Consultez les films à l'affiche dans les salles près de chez vous</li>
-                <li class="my-3">Acheter vos billets</li>
-                <li class="my-3">Accumulez des point et accédez à une selection de films en streaming</li>
-                <li class="my-3">Notez les films</li>
-            </ul>
+        <div class="col col-sm-auto col-lg-6 order-0 w-50">
+            images
         </div>
+    </div>
 </section>
