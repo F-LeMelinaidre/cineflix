@@ -2,21 +2,21 @@
 
 namespace Cineflix\App\Model;
 
-class DetailModel
+abstract class DetailModel
 {
   
     public int $detail_id;
-    public string $nom;
-    public string $synopsis;
-    public string $affiche;
-    public string $date_sortie;
-    public string $date_sortie_fr;
-    public string $slug;
+    public string $nom = '';
+    public string $synopsis = '';
+    public string $date_sortie = '';
+    public string $affiche = '';
+    public string $date_sortie_fr = '';
+    public string $slug = '';
 
 
     public function __construct()
     {
-        $this->setDateFr($this->date_sortie);
+        //$this->setDateFr($this->date_sortie);
     }
     //TODO
     private function setSlug(){}

@@ -51,7 +51,7 @@
             </div>
             <div class="col-12">
                 <label for="Email">Email</label>
-                <input type="test" id="Email" name="mail" class="form-control mb-2" aria-required="true" aria-describedby="validationMail">
+                <input type="email" id="Email" name="email" class="form-control mb-2" aria-required="true" aria-describedby="validationMail">
                 <div id="validationMail" class="invalid-message hide"></div>
             </div>
             <div class="flex-grow-1">
@@ -62,7 +62,7 @@
             </div>
             <div class="flex-grow-1">
                 <label for="PasswordConfirm">Confirmer le mot de passe</label>
-                <input type="text" id="PasswordConfirm" name="password_confirm" class="form-control mb-2">
+                <input type="text" id="PasswordConfirm" name="pwd_confirm" class="form-control mb-2">
             </div>
             <button type="submit" class="btn btn-warning w-50 mt-4">S'enregistrer</button>
         </form>

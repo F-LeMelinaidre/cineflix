@@ -4,9 +4,12 @@
 
 
     use Cineflix\App\Controller\Movie;
+    use Cineflix\App\Model\DAO\UserDao;
+    use Cineflix\App\Model\UserModel;
     use Cineflix\Core\Database\Database;
     use Cineflix\Core\Router\RouteNotFoundException;
     use Cineflix\Core\Router\Router;
+    use Cineflix\Core\Util\AuthConnect;
 
     // Charge la class autoload (package de composer)
     require '../vendor/autoload.php';
@@ -46,6 +49,8 @@
 
             self::$_Router = Router::getInstance();
             self::$_Database = Database::getInstance(self::$_Root);
+
+            AuthConnect::init(self::$_Database, UserModel::class, 'membre', self::APP_NAME, UserDao::class);
         }
 
         public function run()
