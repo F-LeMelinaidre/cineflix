@@ -1,6 +1,6 @@
 <section class="sign row col-xl-10 col-lg-10 col-md-6 col-sm-8 col-12 m-auto p-0 rounded-2 bg-dark-subtle">
 
-        <div class="col-lg-6 col-md-12 order-1 py-4 mx-auto">
+        <div class="col-lg-6 col-md-12 order-0 order-lg-1 py-4 mx-auto">
             <header class="mb-4 mx-4">
                 <a href="/" class="d-block mt-4 mb-5 text-center">
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0"
@@ -42,30 +42,30 @@
             </header>
             <form action="<?= self::$_Router->getUrl('signin') ?>" method="post" class="row flex-column row-gap-2 mx-auto ">
 
-                <div class="col-lg-8 col-md-8 col-sm-7 col-9 row mx-auto">
+                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-7 col-9 row mx-auto">
                     <label for="Identifiant">Identifiant</label>
                     <input type="email" id="Identifiant" name="email" class="form-control mb-2 w-100" aria-required="true"
                            aria-describedby="validationMail">
                     <div id="validationMail" class="invalid-message hide"></div>
                 </div>
 
-                <div class="col-lg-8 col-md-8 col-sm-7 col-9 row mx-auto">
+                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-7 col-9 row mx-auto">
                     <label for="Password">Mot de passe</label>
                     <input type="password" id="Password" name="password" class="form-control mb-2 w-100" min="8" aria-required="true"
                            aria-describedby="validationPassword">
                     <div id="validationPassword" class="invalid-message hide"></div>
                 </div>
-                <div class="col-lg-8 col-md-8 col-sm-7 col-9 mx-auto">
+                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-7 col-9 mx-auto">
                     <input type="checkbox" id="RememberCheck" name="remember" class="form-check-input">
                     <label for="RememberCheck" class="form-check-label">Se souvenir de moi ?</label>
                 </div>
-                <div class="col-lg-8 col-md-8 col-sm-7 col-9 row mx-auto">
+                <div class="col-xl-6 col-lg-8 col-md-8 col-sm-7 col-9 row mx-auto">
                     <button type="submit" class="btn btn-warning">Connexion</button>
                     <a href="#" class="mb-2">Mot de passe oublié?</a>
                 </div>
             </form>
         </div>
-        <div class="col-lg-6 col-md-12 order-0 flex-column align-content-center border-end border-dark-subtle">
+        <div class="col-lg-6 col-md-12 order-1 order-lg-0 flex-column align-content-center border-end border-dark-subtle">
             <ul class="row mx-3 mx-lg-5 mx-sm-3 mt-3 list-unstyled">
                 <li class="my-3">Consultez les films à l'affiche dans les salles près de chez vous</li>
                 <li class="my-3">Acheter vos billets</li>
