@@ -9,7 +9,7 @@ class Security
     {
         $value = trim($value);
         $value = stripslashes($value);
-        $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+        $value = htmlspecialchars($value);
         return $value;
     }
 

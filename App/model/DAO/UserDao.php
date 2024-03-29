@@ -21,20 +21,12 @@ class UserDao
     /**
      * @param $mail
      *
-     * @return mixed
+     * @return null
      */
-    public function findMailAndPwdByMail($mail)
-    {
-        $query ='SELECT mail, password FROM membre WHERE mail LIKE :mail';
-        $bindValues[] = ['col' => 'mail', 'val' => $mail];
-        $req = $this->db->prepare($query, $bindValues);
-        return $req->fetch();
-    }
-
     public function isExist($mail)
     {
-        $query = 'SELECT EXISTS ( SELECT mail FROM membre WHERE mail LIKE :mail )';
-        $bindValues[] = ['col' => 'mail', 'val' => $mail];
+        $query = 'SELECT EXISTS ( SELECT email FROM membre WHERE email LIKE :email )';
+        $bindValues[] = ['col' => 'email', 'val' => $mail];
         $req = $this->db->prepare($query, $bindValues);
         return $req->count();
     }
@@ -46,12 +38,12 @@ class UserDao
      */
     public function save(UserModel $user) {
 
-        $columns[] = 'password';
-        $values[]  = ':password';
-        $bindValues[] = [
-            'col' => 'password',
-            'val' => $user->getPassword()
-        ];
+        //$columns[] = 'password';
+        //$values[]  = ':password';
+        //$bindValues[] = [
+        //    'col' => 'password',
+        //    'val' => $user->getPassword()
+        //];
         foreach ($user as $key => $value) {
             $columns[] = $key;
             $values[] = ':' . $key;

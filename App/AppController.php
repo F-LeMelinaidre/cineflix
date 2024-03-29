@@ -50,7 +50,7 @@
             self::$_Router = Router::getInstance();
             self::$_Database = Database::getInstance(self::$_Root);
 
-            AuthConnect::init(self::$_Database, UserModel::class, 'membre', self::APP_NAME, UserDao::class);
+            AuthConnect::init(self::$_Database, UserModel::class, 'membre', self::APP_NAME);
         }
 
         public function run()
@@ -66,6 +66,8 @@
 
             self::$_Router->get('signup', '/Signup', [Controller\Auth::class, 'signup']);
             self::$_Router->post('signup', '/Signup', [Controller\Auth::class, 'signup']);
+
+            self::$_Router->get('signout', '/Signout', [Controller\Auth::class, 'signout']);
 
             self::$_Router->get('movie_index', '/Movie', [ Controller\Movie::class, 'index']);
             self::$_Router->get('movie_show', '/Movie/{slug}', [ Controller\Movie::class, 'show'],

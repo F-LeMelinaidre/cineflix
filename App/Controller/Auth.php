@@ -38,8 +38,6 @@
         public function signin(): string
         {
             echo 'signin <br>';
-            $email = (isset($_POST['mail'])) ? $_POST['mail'] : '';
-            $password = (isset($_POST['password'])) ? $_POST['password'] : '';
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo 'post <br>';
@@ -72,11 +70,11 @@
                 }
 
                 if (empty($errors)) {
-                    echo 'valid <br>';
 
-                    $user = $this->userDao->findMailAndPwdByMail($email);
-
-                    var_dump($user);
+                    if (AuthConnect::logon('email', $email, $password)) {
+                        header('Location: /');
+                        exit;
+                    }
                 }
 
 
@@ -155,7 +153,6 @@
                         ->setEmail($email)
                         ->hashPassword($password);
 
-
                     $userDao = new UserDao();
                     if ($userDao->save($user)) {
 
@@ -169,7 +166,7 @@
 
                 }
             }
-            return $this->render('Account.signup', [$errors]);
+            return $this->render('Auth.signup', [$errors]);
 
         }
 
@@ -178,6 +175,8 @@
          */
         public function signout()
         {
-
+            AuthConnect::deconnect();
+            header('Location: /');
+            exit;
         }
     }
