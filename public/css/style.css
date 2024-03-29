@@ -7,34 +7,6 @@ body {
     background-repeat: no-repeat;
     background-position: top center;
 }
-dl,
-dt,
-dd {
-    padding: 0!important;
-    margin: 0!important;
-}
-/* --- ICON --- */
-
-.icon {
-    width: 32px;
-    height: 32px;
-    transition: transform 0.3s;
-}
-.icon:hover {
-    transform: rotate(180deg); /* Rotation de 90 degrés au survol */
-}
-.profil-icon {
-    width: 100%;
-    height: 100%;
-    display: block;
-    background-color: var(--bs-yellow);;
-    mask: url("../img/icon/account_circle.svg") no-repeat center;
-    mask-size: cover;
-    mask-repeat: no-repeat;
-    mask-position: center;
-}
-
-/* --- INPUT --- */
 input.valid {
     border-color: #318307 !important;
     box-shadow: #318307 0 0 3px 2px;
@@ -56,7 +28,6 @@ input.error {
 .invalid-message.error {
     color: #b01919;
 }
-
 .invalid-message.hide {
     visibility: hidden;
 }
@@ -70,65 +41,14 @@ main header h1 {
     font-weight: bold;
 }
 
-
-/* ---------------------- *\
-          Profil
-\* ---------------------- */
-
-/* Menu */
-.nav-profil {
-    display: flex;
-    column-gap: 1rem;
-
-    padding: 0;
-    margin: 0;
-}
-.nav-profil li {
-    display: block;
-    list-style: none;
+#Signout {
+    max-width: 450px;
 }
 
-.profil-view {
-}
-/* --- Formulaire --- */
-section .edit-profil {
-    max-width: 640px;
-}
-
-/* ---------------------- *\
-  FORMULAIRE D'INSCRIPTION
-\* ---------------------- */
-
-section.sign {
-    max-width: 1280px;
-}
-section.sign div:first-of-type {
-    max-width: 550px;
-}
-@media screen and (max-width: 990px) {
-    section.sign div:last-of-type {
-        border: none!important;
-    }
-}
-@media screen and (max-width: 576px) {
-    section.sign {
-        max-width: 385px;
-    }
-    section.sign div:first-of-type form {
-        max-width: 300px;
-    }
-
-}
-/* ------------------ *\
-      MAIN HEADER
-\* ------------------ */
 main header .dropdown-menu {
     width: max-content;
     height: 250px;
 }
-/* ------------------ *\
-     VIGNETTE FILM
-\* ------------------ */
 .bill-container {
     width: 180px;
     height: 240px;
@@ -183,7 +103,7 @@ img.card-img-top {
     border-left: none;
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
-    background-color: rgba(27, 32, 37,  80);
+    background-color: rgba(35, 35, 35, 0.8);
 }
 img.affiche {
     display: block;
