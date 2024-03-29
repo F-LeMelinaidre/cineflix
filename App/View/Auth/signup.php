@@ -1,6 +1,6 @@
 <section class="container rounded-2 bg-dark-subtle">
     <div class="row justify-content-md-center">
-        <div class="col col-lg-6 order-1 py-4 border-start border-dark-subtle">
+        <div class="col col-xl-6 order-1 py-4 border-start border-dark-subtle">
             <header class="mb-4">
                 <a href="/" class="d-block mt-4 mb-5 text-center">
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0"
@@ -69,7 +69,7 @@
                 <button type="submit" class="btn btn-warning w-50 mt-4">S'enregistrer</button>
             </form>
         </div>
-        <div class="col-auto col-lg-6 order-0 flex-column align-content-center w-50">
+        <div class="col-auto col-xl-6 order-0 flex-column align-content-center w-50">
             <ul class="row m-0 mx-5 list-unstyled">
                 <li class="my-3">Consultez les films à l'affiche dans les salles près de chez vous</li>
                 <li class="my-3">Acheter vos billets</li>

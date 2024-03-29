@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="dark" class="h-100">
 <head>
     <meta charset="UTF-8">
     <title><?= $this->title_page; ?></title>
@@ -9,7 +9,7 @@
     <script src="/public/js/jquery-3.7.1.min.js"></script>
     <script src="/public/js/jquery-ui.min.js"></script>
 </head>
-<body class="bg-black">
+<body class="bg-black h-100 justify-content-between m-0 p-0">
 
         {{layout}}
 
