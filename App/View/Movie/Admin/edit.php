@@ -37,8 +37,6 @@
         <button id="SubmitButton" class="btn btn-warning" type="submit">Ajouter</button>
     </form>
 </section>
-<script src="/public/js/jquery-3.7.1.min.js"></script>
-<script src="/public/js/jquery-ui.min.js"></script>
 <script src="/public/js/ajaxRequest.js" data-function="MovieSearch"></script>
 <script src="/public/js/ajaxRequest.js" data-function="CinemaSearch"></script>
 <script src="/public/js/validationLib.js"></script>

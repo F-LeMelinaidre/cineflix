@@ -1,11 +1,13 @@
-<section class="d-flex col-12 rounded-2 bg-dark-subtle">
-    <div class="col-6 order-1 py-4 border-start border-dark-subtle">
-        <header class="mb-4">
-            <a href="/" class="d-block mt-4 mb-5 text-center">
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0"
-                     width="260" height="50" viewBox="0 0 260 50" style="scale: 130%; fill: #ffc107; filter:drop-shadow(4px 3px 2px rgba(0, 0, 0, 1))">
-                    <g>
-                        <path d="M250.04,40.99c-3.7-5.75-7.41-11.37-11.11-16.87c3.91-5.65,7.82-11.42,11.74-17.32c-2.56,0-5.13-0.01-7.69-0.01
+<section class="container rounded-2 bg-dark-subtle">
+    <div class="row justify-content-md-center">
+        <div class="col col-lg-6 order-1 py-4 border-start border-dark-subtle">
+            <header class="mb-4">
+                <a href="/" class="d-block mt-4 mb-5 text-center">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0"
+                         width="260" height="50" viewBox="0 0 260 50"
+                         style="scale: 130%; fill: #ffc107; filter:drop-shadow(4px 3px 2px rgba(0, 0, 0, 1))">
+                        <g>
+                            <path d="M250.04,40.99c-3.7-5.75-7.41-11.37-11.11-16.87c3.91-5.65,7.82-11.42,11.74-17.32c-2.56,0-5.13-0.01-7.69-0.01
 		                            c-2.74,4.04-5.47,8.01-8.21,11.93c-0.09,0-0.18,0-0.26-0.01c-2.74-4.04-5.48-8.03-8.23-11.95c-2.56,0-5.13-0.01-7.69-0.01
 		                            c3.92,5.59,7.84,11.28,11.76,17.09c-3.72,5.17-7.43,10.25-11.15,15.25c-0.75-0.04-1.51-0.08-2.26-0.12
 		                            c-0.93-0.05-1.86-0.09-2.79-0.14c-0.77-0.04-1.54-0.08-2.32-0.11c-0.01-10.66-0.02-21.32-0.03-31.98c-2.07,0-4.14,0-6.22-0.01
@@ -32,47 +34,48 @@
                                     c9.94,0.25,19.89,0.6,29.82,1.04c1.14,0.05,2.28,0.1,3.42,0.16c3.41,0.16,6.81,0.33,10.22,0.51c0.93,0.05,1.86,0.1,2.79,0.15
 		                            c2.84,0.16,5.69,0.32,8.53,0.49c3.01-4.19,6.03-8.43,9.04-12.74c0.09,0,0.18,0.01,0.26,0.01c3.02,4.56,6.04,9.21,9.06,13.94
 		                            c3.77,0.27,7.54,0.55,11.31,0.85c0-0.76,0-1.51,0-2.27C253.44,41.24,251.74,41.11,250.04,40.99z"/>
-                    </g>
-                </svg>
-            </a>
-            <h1 class="mx-xl-4 mx-sm-4">Votre cinéma à portée de main</h1>
-            <p class="mx-xl-5 mx-sm-4 mb-1">Explorez les films près de chez vous!</p>
-            <p class="mx-xl-5 mx-sm-4">Vous avez déjà un compte? <a href="<?= self::$_Router->getUrl("signin") ?>">Connexion!</a></p>
-        </header>
-        <form action="<?= self::$_Router->getUrl('signup') ?>" method="post" id="Signout" class="d-flex justify-content-center flex-wrap row-gap-2
+                        </g>
+                    </svg>
+                </a>
+                <h1 class="mx-xl-4 mx-sm-4">Votre cinéma à portée de main</h1>
+                <p class="mx-xl-5 mx-sm-4 mb-1">Explorez les films près de chez vous!</p>
+                <p class="mx-xl-5 mx-sm-4">Vous avez déjà un compte? <a href="<?= self::$_Router->getUrl("signin") ?>">Connexion!</a></p>
+            </header>
+            <form action="<?= self::$_Router->getUrl('signup') ?>" method="post" id="Signout" class="d-flex justify-content-center flex-wrap row-gap-2
         column-gap-4 mx-auto mb-5">
-            <div class="flex-grow-1">
-                <label for="Name">Nom</label>
-                <input type="text" id="Name" name="nom" class="form-control mb-2">
-            </div>
-            <div class="flex-grow-1">
-                <label for="Firstname">Prénom</label>
-                <input type="text" id="Firstname" name="prenom" class="form-control mb-2">
-            </div>
-            <div class="col-12">
-                <label for="Email">Email</label>
-                <input type="email" id="Email" name="email" class="form-control mb-2" aria-required="true" aria-describedby="validationMail">
-                <div id="validationMail" class="invalid-message hide"></div>
-            </div>
-            <div class="flex-grow-1">
-                <label for="Password">Mot de passe</label>
-                <input type="password" id="Password" name="password" class="form-control mb-2" aria-required="true"
-                       aria-describedby="validationPassword">
-                <div id="validationPassword" class="invalid-message hide"></div>
-            </div>
-            <div class="flex-grow-1">
-                <label for="PasswordConfirm">Confirmer le mot de passe</label>
-                <input type="password" id="PasswordConfirm" name="pwd_confirm" class="form-control mb-2">
-            </div>
-            <button type="submit" class="btn btn-warning w-50 mt-4">S'enregistrer</button>
-        </form>
-    </div>
-    <div class="col-6 order-0 d-flex justify-content-center my-auto">
-        <ul class="m-0 list-unstyled">
-            <li class="my-3">Consultez les films à l'affiche dans les salles près de chez vous</li>
-            <li class="my-3">Acheter vos billets</li>
-            <li class="my-3">Accumulez des point et accédez à une selection de films en streaming</li>
-            <li class="my-3">Notez les films</li>
-        </ul>
+                <div class="flex-grow-1">
+                    <label for="Name">Nom</label>
+                    <input type="text" id="Name" name="nom" class="form-control mb-2">
+                </div>
+                <div class="flex-grow-1">
+                    <label for="Firstname">Prénom</label>
+                    <input type="text" id="Firstname" name="prenom" class="form-control mb-2">
+                </div>
+                <div class="col-12">
+                    <label for="Email">Email</label>
+                    <input type="email" id="Email" name="email" class="form-control mb-2" aria-required="true" aria-describedby="validationMail">
+                    <div id="validationMail" class="invalid-message hide"></div>
+                </div>
+                <div class="flex-grow-1">
+                    <label for="Password">Mot de passe</label>
+                    <input type="password" id="Password" name="password" class="form-control mb-2" aria-required="true"
+                           aria-describedby="validationPassword">
+                    <div id="validationPassword" class="invalid-message hide"></div>
+                </div>
+                <div class="flex-grow-1">
+                    <label for="PasswordConfirm">Confirmer le mot de passe</label>
+                    <input type="password" id="PasswordConfirm" name="pwd_confirm" class="form-control mb-2">
+                </div>
+                <button type="submit" class="btn btn-warning w-50 mt-4">S'enregistrer</button>
+            </form>
+        </div>
+        <div class="col-auto col-lg-6 order-0 flex-column align-content-center w-50">
+            <ul class="row m-0 mx-5 list-unstyled">
+                <li class="my-3">Consultez les films à l'affiche dans les salles près de chez vous</li>
+                <li class="my-3">Acheter vos billets</li>
+                <li class="my-3">Accumulez des point et accédez à une selection de films en streaming</li>
+                <li class="my-3">Notez les films</li>
+            </ul>
+        </div>
     </div>
 </section>
