@@ -1,7 +1,7 @@
 <section class="container rounded-2 bg-dark-subtle">
     <div class="row justify-content-md-center">
 
-        <div class="col col-lg-6 order-1 py-4 border-start border-dark-subtle">
+        <div class="col col-xl-6 order-1 py-4 border-start border-dark-subtle">
             <header class="mb-4">
                 <a href="/" class="d-block mt-4 mb-5 text-center">
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0"
@@ -42,24 +42,38 @@
                 <p class="mx-xl-5 mx-sm-4">Nouveau ici? <a href="<?= self::$_Router->getUrl('signup') ?>">Créer un compte</a></p>
             </header>
             <form action="<?= self::$_Router->getUrl('signin') ?>" method="post" class="d-flex flex-column align-items-center row-gap-2 mb-5">
-                <label for="Identifiant" class="w-50">Identifiant</label>
-                <input type="email" id="Identifiant" name="email" class="form-control w-50 mb-2" aria-required="true"
-                       aria-describedby="validationMail">
-                <div id="validationMail" class="invalid-message hide"></div>
-                <label for="Password" class="w-50">Mot de passe</label>
-                <input type="password" id="Password" name="password" class="form-control w-50 mb-2" min="8" aria-required="true"
-                       aria-describedby="validationPassword">
-                <div id="validationPassword" class="invalid-message hide"></div>
-                <div class="w-50">
+
+                <div class="col-10 col-sm-8 col-lg-6">
+                    <label for="Identifiant">Identifiant</label>
+                    <input type="email" id="Identifiant" name="email" class="form-control mb-2" aria-required="true"
+                           aria-describedby="validationMail">
+                    <div id="validationMail" class="invalid-message hide"></div>
+                </div>
+
+                <div class="col-10 col-sm-8 col-lg-6">
+                    <label for="Password">Mot de passe</label>
+                    <input type="password" id="Password" name="password" class="form-control mb-2" min="8" aria-required="true"
+                           aria-describedby="validationPassword">
+                    <div id="validationPassword" class="invalid-message hide"></div>
+                </div>
+                <div class="col-10 col-sm-8 col-lg-6">
                     <input type="checkbox" id="RememberCheck" name="remember" class="form-check-input">
                     <label for="RememberCheck" class="form-check-label">Se souvenir de moi ?</label>
+                    <a href="#" class="mb-2">Mot de passe oublié?</a>
                 </div>
-                <a href="#" class="w-50 mb-2">Mot de passe oublié?</a>
-                <button type="submit" class="btn btn-warning w-50">Connexion</button>
+                <a href="#" class="mb-2">Mot de passe oublié?</a>
+                <div class="col-10 col-sm-8 col-lg-6">
+                    <button type="submit" class="btn btn-warning w-100">Connexion</button>
+                </div>
             </form>
         </div>
-        <div class="col col-sm-auto col-lg-6 order-0 w-50">
-            images
+        <div class="col-auto col-xl-6 order-0 flex-column align-content-center w-50">
+            <ul class="row m-0 mx-5 list-unstyled">
+                <li class="my-3">Consultez les films à l'affiche dans les salles près de chez vous</li>
+                <li class="my-3">Acheter vos billets</li>
+                <li class="my-3">Accumulez des point et accédez à une selection de films en streaming</li>
+                <li class="my-3">Notez les films</li>
+            </ul>
         </div>
     </div>
 </section>
