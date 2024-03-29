@@ -43,6 +43,9 @@ main header h1 {
 /* ---------------------- *\
   FORMULAIRE D'INSCRIPTION
 \* ---------------------- */
+section.sign {
+    max-width: 1280px;
+}
 section.sign div:first-of-type {
     max-width: 550px;
 }
@@ -52,6 +55,9 @@ section.sign div:first-of-type {
     }
 }
 @media screen and (max-width: 576px) {
+    section.sign {
+        max-width: 385px;
+    }
     section.sign div:first-of-type form {
         max-width: 300px;
     }
