@@ -4,23 +4,19 @@ namespace Cineflix\App\Model;
 
 class MovieModel extends DetailModel
 {
-    public $id;
     public $movie_id;
     public int $exploitation_id;
     public string $exploitation_debut = '';
     public string $exploitation_fin = '';
+
     public int $fiche_id;
     public int $cinema_id;
     public $cinema;
+
     public $ville;
+
     public $seance_id;
-    public $date;
     public $horaire;
-
-    public function __construct()
-    {
-
-
-
-    }
+    public $date;
+    public $date_seance;
 }

@@ -18,5 +18,13 @@
             <h1><?= $movie->cinema ?></h1>
             <h2><?= $movie->ville ?></h2>
         </header>
+        <h3>Séance</h3>
+        <ul>
+            <?php foreach($seances as $seance) { ?>
+
+                <li><?= $seance['date']. ' - ' .$seance['horaire'] ?></li>
+
+            <?php } ?>
+        </ul>
     </section>
 
