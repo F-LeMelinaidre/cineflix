@@ -97,9 +97,17 @@ class Database
      */
     public function fetch(string $class_name = null)
     {
-        $this->request->setFetchMode(PDO::FETCH_CLASS, $class_name);
+        $mode = (is_null($class_name))? [PDO::FETCH_ASSOC] : [PDO::FETCH_CLASS, $class_name];
 
-        return $this->request->fetch();
+        try {
+            $this->request->setFetchMode(...$mode);
+
+            return $this->request->fetch();
+        } catch (Exception $e) {
+            echo 'erreur fetch() '.$e->getMessage();
+            //MessageFlash::create("Impossible de récupérer les données sur la table! <br>" . $e->getMessage(), 'erreur');
+            return null;
+        }
     }
 
     /**

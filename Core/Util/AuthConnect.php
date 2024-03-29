@@ -4,6 +4,9 @@ namespace Cineflix\Core\Util;
 
 use Cineflix\Core\Database\Database;
 
+/**
+ *
+ */
 class AuthConnect
 {
 

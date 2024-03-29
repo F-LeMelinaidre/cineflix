@@ -10,12 +10,20 @@ class UserDao
 {
     private Database $db;
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->db = AppController::$_Database;
     }
 
-    public function findUserByNameAndMail($mail)
+    /**
+     * @param $mail
+     *
+     * @return mixed
+     */
+    public function findMailAndPwdByMail($mail)
     {
         $query ='SELECT mail, password FROM membre WHERE mail LIKE :mail';
         $bindValues[] = ['col' => 'mail', 'val' => $mail];
@@ -31,6 +39,11 @@ class UserDao
         return $req->count();
     }
 
+    /**
+     * @param UserModel $user
+     *
+     * @return bool
+     */
     public function save(UserModel $user) {
 
         $columns[] = 'password';
