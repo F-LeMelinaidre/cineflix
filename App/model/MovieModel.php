@@ -15,4 +15,8 @@ class MovieModel extends DetailModel
 
     public $ville;
 
+    public $seance_id;
+    public $horaire;
+    public $date;
+    public $date_seance;
 }
