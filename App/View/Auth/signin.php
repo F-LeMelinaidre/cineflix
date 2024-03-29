@@ -1,6 +1,6 @@
 <section class="sign row col-xl-10 col-lg-10 col-md-6 col-sm-8 col-12 m-auto p-0 rounded-2 bg-dark-subtle">
 
-        <div class="col-lg-6 col-md-12 order-1 py-4 border-start border-dark-subtle">
+        <div class="col-lg-6 col-md-12 order-1 py-4 mx-auto">
             <header class="mb-4 mx-4">
                 <a href="/" class="d-block mt-4 mb-5 text-center">
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0"
@@ -65,7 +65,7 @@
                 </div>
             </form>
         </div>
-        <div class="col-lg-6 col-md-12 order-0 flex-column align-content-center">
+        <div class="col-lg-6 col-md-12 order-0 flex-column align-content-center border-end border-dark-subtle">
             <ul class="row mx-3 mx-lg-5 mx-sm-3 mt-3 list-unstyled">
                 <li class="my-3">Consultez les films à l'affiche dans les salles près de chez vous</li>
                 <li class="my-3">Acheter vos billets</li>
