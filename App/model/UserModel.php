@@ -16,12 +16,6 @@ class UserModel
     public array $errors;
     private string $password;
 
-    private array $rules = [
-        'notEmpty'  => ['nom', 'prenom', 'email', 'password'],
-        'alpha'     => ['nom', 'prenom'],
-        'email'     => ['email'],
-        'password'  => ['password']
-    ];
 
     /**
      * @param string $nom
@@ -83,22 +77,6 @@ class UserModel
         $this->password = password_hash($password, PASSWORD_BCRYPT);
 
         return $this;
-    }
-
-    /**
-     * @return void
-     */
-    public function Validate()
-    {
-
-    }
-
-    /**
-     * @return array
-     */
-    public function getErrors(): array
-    {
-        return [];
     }
 
 }

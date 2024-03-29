@@ -103,6 +103,7 @@ class Database
             $this->request->setFetchMode(...$mode);
 
             return $this->request->fetch();
+
         } catch (Exception $e) {
             echo 'erreur fetch() '.$e->getMessage();
             //MessageFlash::create("Impossible de récupérer les données sur la table! <br>" . $e->getMessage(), 'erreur');
@@ -118,14 +119,31 @@ class Database
     public function fetchall(string $class_name = null)
     {
         $mode = (is_null($class_name))? [PDO::FETCH_ASSOC] : [PDO::FETCH_CLASS, $class_name];
-        $this->request->setFetchMode(...$mode);
-        $data = $this->request->fetchAll();
-        return $data;
+
+        try {
+            $this->request->setFetchMode(...$mode);
+            $data = $this->request->fetchAll();
+
+            return $data;
+
+        }catch (Exception $e) {
+            echo 'erreur fetch() '.$e->getMessage();
+            //MessageFlash::create("Impossible de récupérer les données sur la table! <br>" . $e->getMessage(), 'erreur');
+            return null;
+        }
     }
 
     public function count()
     {
-        return $this->request->fetchColumn();
+        try {
+
+            return $this->request->fetchColumn();
+
+        }catch (Exception $e) {
+            echo 'erreur fetch() '.$e->getMessage();
+            //MessageFlash::create("Impossible de récupérer les données sur la table! <br>" . $e->getMessage(), 'erreur');
+            return null;
+        }
     }
 
     /**
