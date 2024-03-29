@@ -23,8 +23,6 @@ class ComposerStaticInitd965ab136057a46e75a3e6187d52e84a
         ),
         'C' => 
         array (
-            'Cineflix\\DependencyInjection\\Tests\\' => 35,
-            'Cineflix\\DependencyInjection\\' => 29,
             'Cineflix\\Core\\' => 14,
             'Cineflix\\App\\' => 13,
         ),
@@ -42,14 +40,6 @@ class ComposerStaticInitd965ab136057a46e75a3e6187d52e84a
         'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
-        ),
-        'Cineflix\\DependencyInjection\\Tests\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/tests/DependencyInjection',
-        ),
-        'Cineflix\\DependencyInjection\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/Core/DependencyInjection',
         ),
         'Cineflix\\Core\\' => 
         array (
