@@ -1,4 +1,6 @@
-<header class=" navbar
+<header class=" d-flex
+                justify-content-between
+                align-items-center
                 px-3 py-1
                 border-bottom border-light-subtle
                 bg-dark-subtle "
@@ -39,21 +41,12 @@
             </svg>
         </a>
     </div>
-
+    <p>accès à <a href="<?= self::$_Router->getUrl("admin_home_index") ?>">Admin</a> en attendant la page de connexion</p>
 
     <?php if (\Cineflix\Core\Util\AuthConnect::isConnected()): ?>
-        <ul class="nav-profil">
-            <li class="icon">
-                <a href="<?= self::$_Router->getUrl("profil_show") ?>">
-                    <span class="profil-icon"></span>
-                </a>
-            </li>
-            <li>
-                <a href="<?= self::$_Router->getUrl("signout") ?>" class="btn btn-sm btn-outline-warning me-lg-5">
-                    Deconnexion
-                </a>
-            </li>
-        </ul>
+        <a href="<?= self::$_Router->getUrl("signout") ?>" class="btn btn-sm btn-outline-warning me-lg-5">
+            Deconnexion
+        </a>
     <?php else: ?>
         <a href="<?= self::$_Router->getUrl("signin") ?>" class="btn btn-sm btn-outline-warning me-lg-5">
             Connexion
@@ -64,10 +57,13 @@
 
 <?= \Cineflix\Core\Util\MessageFlash::helper(); ?>
 
-<main class="row justify-content-center m-0 p-0">
+<main class="container-fluid m-0 p-0">
     {{content}}
 </main>
 
-<footer class="m-0 mt-auto p-0 border-top border-light-subtle bg-dark-subtle">
-    <?= $footer ?><p>accès à <a href="<?= self::$_Router->getUrl("admin_home_index") ?>">Admin</a> en attendant la page de connexion</p>
+<footer class="container-fluid
+               fixed-bottom
+               border-top border-light-subtle
+               bg-dark-subtle">
+    <?= $footer ?>
 </footer>
