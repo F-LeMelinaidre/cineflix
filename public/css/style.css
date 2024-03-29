@@ -46,6 +46,11 @@ main header h1 {
 section.sign div:first-of-type {
     max-width: 550px;
 }
+@media screen and (max-width: 990px) {
+    section.sign div:last-of-type {
+        border: none!important;
+    }
+}
 @media screen and (max-width: 576px) {
     section.sign div:first-of-type form {
         max-width: 300px;
