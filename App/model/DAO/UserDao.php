@@ -18,15 +18,25 @@ class UserDao
         $this->db = AppController::$_Database;
     }
 
+    public function findByMail($email)
+    {
+        $model = UserModel::class;
+        $query = "SELECT nom, prenom, email FROM membre WHERE email LIKE :email";
+
+        $bindValues[] = ['col' => 'email', 'val' => $email];
+        $req = $this->db->prepare($query, $bindValues);
+
+        return $req->fetch($model);
+    }
     /**
      * @param $mail
      *
      * @return null
      */
-    public function isExist($mail)
+    public function isExist($email)
     {
         $query = 'SELECT EXISTS ( SELECT email FROM membre WHERE email LIKE :email )';
-        $bindValues[] = ['col' => 'email', 'val' => $mail];
+        $bindValues[] = ['col' => 'email', 'val' => $email];
         $req = $this->db->prepare($query, $bindValues);
         return $req->count();
     }
