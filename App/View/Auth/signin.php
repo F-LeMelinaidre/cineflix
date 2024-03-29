@@ -1,7 +1,7 @@
 <section class="sign row col-xl-10 col-lg-10 col-md-6 col-sm-8 col-12 m-auto p-0 rounded-2 bg-dark-subtle">
 
         <div class="col-lg-6 col-md-12 order-1 py-4 border-start border-dark-subtle">
-            <header class="mb-4">
+            <header class="mb-4 mx-4">
                 <a href="/" class="d-block mt-4 mb-5 text-center">
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0"
                          width="260" height="50" viewBox="0 0 260 50"
