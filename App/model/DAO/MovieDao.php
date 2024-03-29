@@ -28,9 +28,9 @@ class MovieDao
 
 
 
-    public function findBy(string $item, mixed $value, bool $model = true)
+    public function findBy(string $item, mixed $value)
     {
-        $model = (true === $model) ? MovieModel::class : $model;
+        $model = MovieModel::class;
 
         switch($item) {
             case 'slug':

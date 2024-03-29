@@ -37,21 +37,18 @@
          */
         public function signin(): string
         {
-            echo 'signin <br>';
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            echo 'post <br>';
+
                 if (isset($_POST['email']) && !empty($_POST['email'])) {
                     $email = Security::sanitize($_POST['email']);
 
                     if (!preg_match(Regex::getPattern('email'), $email)) {
-                        echo 'erreur format email <br>';
                         $errors['email'] = $this->msg_errors['email'];
 
                     }
 
                 } else {
-                    echo 'empty email <br>';
                     $errors['email'] = $this->msg_errors['empty'];
                     $email = '';
                 }
@@ -60,20 +57,40 @@
                     $password = Security::sanitize($_POST['password']);
 
                     if(!preg_match(Regex::getPattern('password'), $password)) {
-                        echo 'erreur format password <br>';
                         $errors['password'] = $this->msg_errors['password'];
                     }
                 } else {
-                    echo 'empty password <br>';
+
                     $errors['password'] = $this->msg_errors['password'];
                     $password = '';
                 }
 
+                // Si les champs sont valide
                 if (empty($errors)) {
 
+                    // Utilise la class AuthConnect, qui à été paramétré en amont dans AppController
+                    // Pour vérifier l'existance du compte et la validité du mot de passe
                     if (AuthConnect::logon('email', $email, $password)) {
+
+                        // On recupère les données données de l'utilisateur
+                        $user = $this->userDao->findByMail($email);
+                        $params = [
+                            'email'  => $user->email,
+                            'prenom' => $user->prenom,
+                            'nom'    => $user->nom
+                        ];
+                        // On le connect en lui passant les paramètre que l on désire mettre en session
+                        AuthConnect::connect($params);
+
+                        // Utilise la class Core\Util\MessageFlash.php
+                        // la class est appelé au niveau de la vue dans \App\View\Layout\main.php
+                        MessageFlash::create('Connecté',$type = 'valide');
+
                         header('Location: /');
                         exit;
+                    } else {
+                        //TODO Message d'erreur de connection
+                        // Identifiant mot de passe invalide
                     }
                 }
 
@@ -153,12 +170,11 @@
                         ->setEmail($email)
                         ->hashPassword($password);
 
-                    $userDao = new UserDao();
-                    if ($userDao->save($user)) {
+                    if ($this->userDao->save($user)) {
 
                         AuthConnect::connect([ 'email' => $user->email, 'username' => $user->nom, /*'last_connect' =>
                         $user->getLastConnectFr()*/]);
-                        /*MessageFlash::create('Connecté',$type = 'valide');*/
+                        MessageFlash::create('Connecté',$type = 'valide');
 
                         header('Location: /');
                         exit;
@@ -176,6 +192,7 @@
         public function signout()
         {
             AuthConnect::deconnect();
+            MessageFlash::create('Deconnecté',$type = 'erreur');
             header('Location: /');
             exit;
         }

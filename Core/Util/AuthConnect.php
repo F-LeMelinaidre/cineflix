@@ -53,7 +53,6 @@ class AuthConnect
 
         if ($result && password_verify($pwd, $result->password)) {
             self::$_Connect = true;
-
         }
 
         return self::$_Connect;

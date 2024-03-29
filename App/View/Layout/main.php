@@ -55,6 +55,8 @@
 
 </header>
 
+<?= \Cineflix\Core\Util\MessageFlash::helper(); ?>
+
 <main class="container-fluid m-0 p-0">
     {{content}}
 </main>
