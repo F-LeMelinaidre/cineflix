@@ -45,7 +45,8 @@ class MovieDao
         $query = "SELECT film.id AS movie_id, fiche.id AS detail_id, fiche.nom AS nom, fiche.synopsis AS synopsis,
                   fiche.affiche AS affiche, fiche.date_sortie AS date_sortie, fiche.slug AS slug, cinema.nom AS cinema,
                   ville.nom AS ville
-                  FROM film AS film JOIN fiche ON film.fiche_id = fiche.id JOIN cinema ON film.cinema_id = cinema.id JOIN ville ON cinema.ville_id = ville.id
+                  FROM film AS film JOIN fiche ON film.fiche_id = fiche.id 
+                  JOIN cinema ON film.cinema_id = cinema.id JOIN ville ON cinema.ville_id = ville.id
                   WHERE fiche.$clause";
 
         $binvalue[] = ['col' => $item, 'val' => $value];
