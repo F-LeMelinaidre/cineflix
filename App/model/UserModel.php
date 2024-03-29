@@ -13,8 +13,7 @@ class UserModel
     public string $prenom;
     public string $email;
 
-    public array $errors;
-    private string $password;
+    public string $password;
 
 
     /**
@@ -65,6 +64,11 @@ class UserModel
         return $this;
     }
 
+    public function getPassword(): string
+    {
+
+        return $this->password;
+    }
     /**
      * @param string $password
      *
@@ -72,7 +76,6 @@ class UserModel
      */
     public function hashPassword(string $password): self
     {
-        $password = Security::sanitize($password);
 
         $this->password = password_hash($password, PASSWORD_BCRYPT);
 
