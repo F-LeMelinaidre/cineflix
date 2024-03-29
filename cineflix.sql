@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 25 mars 2024 à 10:39
+-- Généré le : ven. 29 mars 2024 à 22:54
 -- Version du serveur : 8.2.0
--- Version de PHP : 8.3.0
+-- Version de PHP : 8.2.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -203,7 +203,7 @@ DROP TABLE IF EXISTS `fiche`;
 CREATE TABLE IF NOT EXISTS `fiche` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nom` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
-  `cinopsys` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
+  `synopsis` longtext,
   `affiche` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `date_sortie` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `slug` varchar(255) NOT NULL,
@@ -214,26 +214,26 @@ CREATE TABLE IF NOT EXISTS `fiche` (
 -- Déchargement des données de la table `fiche`
 --
 
-INSERT INTO `fiche` (`id`, `nom`, `cinopsys`, `affiche`, `date_sortie`, `slug`) VALUES
-(1, 'inception', 'Un voleur d\'élite est capable d\'entrer dans les rêves des gens pour voler leurs secrets les plus précieux. Mais lorsqu\'il reçoit une offre pour une tâche impossible, il doit faire face à son plus grand défi.', 'public/img/movies/inception.jpg', '2010-07-15 20:00:00', 'inception'),
-(2, 'interstellar', 'Dans un futur où la Terre est devenue inhabitable, un groupe d\'explorateurs entreprend un voyage interstellaire pour trouver une nouvelle planète habitable pour l\'humanité.', 'public/img/movies/interstellar.jpg', '2014-11-06 22:00:00', 'interstellar'),
-(3, 'les evadés', 'Un homme est condamné à tort pour le meurtre de sa femme et est envoyé dans une prison où il se lie d\'amitié avec un détenu plus âgé et commence à planifier son évasion.', 'public/img/movies/shawshank_redemption.jpg', '1994-10-13 20:00:00', 'les_evades'),
-(4, 'le parrain', 'La saga de la famille Corleone, dirigée par le patriarche Vito Corleone, qui lutte pour maintenir son empire criminel tout en naviguant dans la politique et la violence.', 'public/img/movies/godfather.jpg', '1972-03-23 22:00:00', 'le_parrain'),
-(5, 'pulp fiction', 'Ce film présente plusieurs histoires entrelacées impliquant des criminels, des boxeurs, des danseurs, des tueurs à gages et des propriétaires de restaurants.', 'public/img/movies/pulp_fiction.jpg', '1994-10-13 20:00:00', 'pulp_fiction'),
-(6, 'forrest gump', 'L\'histoire d\'un homme simple d\'esprit nommé Forrest Gump, qui se retrouve impliqué dans certains des moments les plus mémorables de l\'histoire américaine.', 'public/img/movies/forrest_gump.jpg', '1994-07-05 20:00:00', 'forrest_gump'),
-(7, 'the dark knight, le chevalier noir', 'Batman se bat contre le Joker, un criminel sadique qui cherche à semer le chaos à Gotham City.', 'public/img/movies/dark_knight.jpg', '2008-07-17 20:00:00', 'the_dark_knight'),
-(8, 'fight club', 'Un homme sans nom rencontre un vendeur de savon charismatique et tous deux créent un club de combats clandestins qui prend rapidement une tournure sombre.', 'public/img/movies/fight_club.jpg', '1999-10-14 20:00:00', 'fight_club'),
-(9, 'the matrix', 'Un programmeur informatique découvre que le monde dans lequel il vit est une simulation contrôlée par des machines, et il se joint à une rébellion pour combattre ces machines.', 'public/img/movies/matrix.jpg', '1999-03-30 20:00:00', 'the_matrix'),
-(10, 'le seigneur des anneaux : la communauté de l\'anneau', 'Un jeune hobbit nommé Frodo Baggins se lance dans une quête périlleuse pour détruire un anneau magique maléfique et sauver la Terre du Milieu de la tyrannie du Seigneur des Ténèbres Sauron.', 'public/img/movies/lord_fellowship.jpg', '2001-12-18 22:00:00', 'le_seigneur_des_anneaux'),
-(11, 'le silence des agneaux', 'Une jeune stagiaire du FBI est chargée de solliciter l\'aide du célèbre psychiatre cannibale Hannibal Lecter pour attraper un tueur en série surnommé \"Buffalo Bill\".', 'public/img/movies/silence_lambs.jpg', '1991-02-13 22:00:00', 'le_silence_des_agneaux'),
-(12, 'inglourious basterds', 'Dans la France occupée par les nazis, un groupe de soldats américains juifs est chargé de terroriser l\'armée allemande en massacrant des soldats nazis et en planifiant un assassinat de masse des hauts responsables nazis.', 'public/img/movies/inglourious_basterds.jpg', '2009-08-20 20:00:00', 'inglourious_basterds'),
-(13, 'les affranchis', 'L\'ascension et la chute de Henry Hill, un gangster italo-américain, alors qu\'il gravit les échelons de la mafia.', 'public/img/movies/goodfellas.jpg', '1990-09-18 20:00:00', 'les_affranchis'),
-(14, 'les infiltrés', 'Un policier infiltré dans la mafia et un membre de la mafia infiltré dans la police tentent de découvrir l\'identité de l\'autre tout en naviguant dans les intrigues et les trahisons.', 'public/img/movies/departed.jpg', '2006-10-05 20:00:00', 'les_infiltres'),
-(15, 'gladiator', 'Après avoir été trahi et laissé pour mort par l\'empereur corrompu de Rome, un ancien général romain se lance dans une quête de vengeance.', 'public/img/movies/gladiator.jpg', '2000-05-04 20:00:00', 'gladiator'),
-(16, 'la ligne verte', 'Dans une prison de Louisiane pendant les années 1930, un gardien de prison bienveillant découvre que l\'un de ses prisonniers a des pouvoirs surnaturels.', 'public/img/movies/green_mile.jpg', '1999-12-09 22:00:00', 'la_ligne_verte'),
-(17, 'la liste de schindler', 'L\'histoire vraie d\'Oskar Schindler, un homme d\'affaires allemand qui a sauvé plus de 1 000 juifs pendant l\'Holocauste en les employant dans ses usines.', 'public/img/movies/schindlers_list.jpg', '1993-12-14 22:00:00', 'la_liste_de_schindler'),
-(18, 'le prestige', 'Deux magiciens rivaux se lancent dans une compétition pour créer le meilleur numéro de magie, mais leurs tentatives pour se surpasser les uns les autres les conduisent à des extrémités dangereuses.', 'public/img/movies/prestige.jpg', '2006-10-19 20:00:00', 'le_prestige'),
-(19, 'seven', 'Deux détectives de police enquêtent sur une série de meurtres inspirés par les sept péchés capitaux, et ils se retrouvent entraînés dans un jeu mortel avec le tueur.', 'public/img/movies/seven.jpg', '1995-09-21 20:00:00', 'seven');
+INSERT INTO `fiche` (`id`, `nom`, `synopsis`, `affiche`, `date_sortie`, `slug`) VALUES
+(1, 'inception', 'Un voleur d\'élite est capable d\'entrer dans les rêves des gens pour voler leurs secrets les plus précieux. Mais lorsqu\'il reçoit une offre pour une tâche impossible, il doit faire face à son plus grand défi.', 'public/img/movies/inception.jpg', '2010-07-15 18:00:00', 'inception'),
+(2, 'interstellar', 'Dans un futur où la Terre est devenue inhabitable, un groupe d\'explorateurs entreprend un voyage interstellaire pour trouver une nouvelle planète habitable pour l\'humanité.', 'public/img/movies/interstellar.jpg', '2014-11-06 21:00:00', 'interstellar'),
+(3, 'les evadés', 'Un homme est condamné à tort pour le meurtre de sa femme et est envoyé dans une prison où il se lie d\'amitié avec un détenu plus âgé et commence à planifier son évasion.', 'public/img/movies/shawshank_redemption.jpg', '1994-10-13 18:00:00', 'les_evades'),
+(4, 'le parrain', 'La saga de la famille Corleone, dirigée par le patriarche Vito Corleone, qui lutte pour maintenir son empire criminel tout en naviguant dans la politique et la violence.', 'public/img/movies/godfather.jpg', '1972-03-23 21:00:00', 'le_parrain'),
+(5, 'pulp fiction', 'Ce film présente plusieurs histoires entrelacées impliquant des criminels, des boxeurs, des danseurs, des tueurs à gages et des propriétaires de restaurants.', 'public/img/movies/pulp_fiction.jpg', '1994-10-13 18:00:00', 'pulp_fiction'),
+(6, 'forrest gump', 'L\'histoire d\'un homme simple d\'esprit nommé Forrest Gump, qui se retrouve impliqué dans certains des moments les plus mémorables de l\'histoire américaine.', 'public/img/movies/forrest_gump.jpg', '1994-07-05 18:00:00', 'forrest_gump'),
+(7, 'the dark knight, le chevalier noir', 'Batman se bat contre le Joker, un criminel sadique qui cherche à semer le chaos à Gotham City.', 'public/img/movies/dark_knight.jpg', '2008-07-17 18:00:00', 'the_dark_knight'),
+(8, 'fight club', 'Un homme sans nom rencontre un vendeur de savon charismatique et tous deux créent un club de combats clandestins qui prend rapidement une tournure sombre.', 'public/img/movies/fight_club.jpg', '1999-10-14 18:00:00', 'fight_club'),
+(9, 'the matrix', 'Un programmeur informatique découvre que le monde dans lequel il vit est une simulation contrôlée par des machines, et il se joint à une rébellion pour combattre ces machines.', 'public/img/movies/matrix.jpg', '1999-03-30 18:00:00', 'the_matrix'),
+(10, 'le seigneur des anneaux : la communauté de l\'anneau', 'Un jeune hobbit nommé Frodo Baggins se lance dans une quête périlleuse pour détruire un anneau magique maléfique et sauver la Terre du Milieu de la tyrannie du Seigneur des Ténèbres Sauron.', 'public/img/movies/lord_fellowship.jpg', '2001-12-18 21:00:00', 'le_seigneur_des_anneaux'),
+(11, 'le silence des agneaux', 'Une jeune stagiaire du FBI est chargée de solliciter l\'aide du célèbre psychiatre cannibale Hannibal Lecter pour attraper un tueur en série surnommé \"Buffalo Bill\".', 'public/img/movies/silence_lambs.jpg', '1991-02-13 21:00:00', 'le_silence_des_agneaux'),
+(12, 'inglourious basterds', 'Dans la France occupée par les nazis, un groupe de soldats américains juifs est chargé de terroriser l\'armée allemande en massacrant des soldats nazis et en planifiant un assassinat de masse des hauts responsables nazis.', 'public/img/movies/inglourious_basterds.jpg', '2009-08-20 18:00:00', 'inglourious_basterds'),
+(13, 'les affranchis', 'L\'ascension et la chute de Henry Hill, un gangster italo-américain, alors qu\'il gravit les échelons de la mafia.', 'public/img/movies/goodfellas.jpg', '1990-09-18 18:00:00', 'les_affranchis'),
+(14, 'les infiltrés', 'Un policier infiltré dans la mafia et un membre de la mafia infiltré dans la police tentent de découvrir l\'identité de l\'autre tout en naviguant dans les intrigues et les trahisons.', 'public/img/movies/departed.jpg', '2006-10-05 18:00:00', 'les_infiltres'),
+(15, 'gladiator', 'Après avoir été trahi et laissé pour mort par l\'empereur corrompu de Rome, un ancien général romain se lance dans une quête de vengeance.', 'public/img/movies/gladiator.jpg', '2000-05-04 18:00:00', 'gladiator'),
+(16, 'la ligne verte', 'Dans une prison de Louisiane pendant les années 1930, un gardien de prison bienveillant découvre que l\'un de ses prisonniers a des pouvoirs surnaturels.', 'public/img/movies/green_mile.jpg', '1999-12-09 21:00:00', 'la_ligne_verte'),
+(17, 'la liste de schindler', 'L\'histoire vraie d\'Oskar Schindler, un homme d\'affaires allemand qui a sauvé plus de 1 000 juifs pendant l\'Holocauste en les employant dans ses usines.', 'public/img/movies/schindlers_list.jpg', '1993-12-14 21:00:00', 'la_liste_de_schindler'),
+(18, 'le prestige', 'Deux magiciens rivaux se lancent dans une compétition pour créer le meilleur numéro de magie, mais leurs tentatives pour se surpasser les uns les autres les conduisent à des extrémités dangereuses.', 'public/img/movies/prestige.jpg', '2006-10-19 18:00:00', 'le_prestige'),
+(19, 'seven', 'Deux détectives de police enquêtent sur une série de meurtres inspirés par les sept péchés capitaux, et ils se retrouvent entraînés dans un jeu mortel avec le tueur.', 'public/img/movies/seven.jpg', '1995-09-21 18:00:00', 'seven');
 
 -- --------------------------------------------------------
 
@@ -245,10 +245,10 @@ DROP TABLE IF EXISTS `film`;
 CREATE TABLE IF NOT EXISTS `film` (
   `id` int NOT NULL AUTO_INCREMENT,
   `fiche_id` int NOT NULL,
-  `cinema_id` int DEFAULT NULL,
+  `cinema_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_film_fiche1_idx` (`fiche_id`),
-  KEY `film_cinema__fk` (`cinema_id`)
+  KEY `fk_film_cinema1_idx` (`cinema_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
 
 --
@@ -256,29 +256,16 @@ CREATE TABLE IF NOT EXISTS `film` (
 --
 
 INSERT INTO `film` (`id`, `fiche_id`, `cinema_id`) VALUES
-(1, 1, 22),
-(2, 2, 17),
-(3, 3, 15),
-(4, 4, 18),
-(5, 5, 22),
-(6, 6, 13),
-(7, 7, 14),
-(8, 8, 12),
-(9, 9, 20),
-(10, 10, 21);
-
--- --------------------------------------------------------
-
---
--- Structure de la table `horaire`
---
-
-DROP TABLE IF EXISTS `horaire`;
-CREATE TABLE IF NOT EXISTS `horaire` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `horaire` time DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+(1, 1, 15),
+(2, 2, 14),
+(3, 3, 22),
+(4, 4, 17),
+(5, 5, 19),
+(6, 6, 21),
+(7, 7, 13),
+(8, 8, 16),
+(9, 9, 18),
+(10, 10, 20);
 
 -- --------------------------------------------------------
 
@@ -286,386 +273,146 @@ CREATE TABLE IF NOT EXISTS `horaire` (
 -- Structure de la table `membre`
 --
 
-DROP TABLE IF EXISTS membre;
+DROP TABLE IF EXISTS `membre`;
 CREATE TABLE IF NOT EXISTS `membre` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nom` varchar(45) DEFAULT NULL,
   `prenom` varchar(45) DEFAULT NULL,
-  `mail` varchar(45) DEFAULT NULL,
-  `password` varchar(45) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `point` int DEFAULT NULL,
   `admin` tinyint DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Déchargement des données de la table `membre`
+--
+
+INSERT INTO `membre` (`id`, `nom`, `prenom`, `email`, `password`, `point`, `admin`) VALUES
+(9, 'Le Mélinaidre', 'Frédéric', 'lemelinaidre@gmail.com', '$2y$10$09UioC.iQjBi/bKHoTkOK.w9KaYhAKPrP3YIfaYNQ/OGRLp/fjN9C', NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `metier`
+-- Structure de la table `seance`
 --
 
-DROP TABLE IF EXISTS `metier`;
-CREATE TABLE IF NOT EXISTS `metier` (
+DROP TABLE IF EXISTS `seance`;
+CREATE TABLE IF NOT EXISTS `seance` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `nom` varchar(255) DEFAULT NULL,
+  `horaire` time NOT NULL,
+  `date` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb3;
+
+--
+-- Déchargement des données de la table `seance`
+--
+
+INSERT INTO `seance` (`id`, `horaire`, `date`) VALUES
+(1, '18:35:00', '2024-07-08'),
+(2, '23:30:00', '2024-07-06'),
+(3, '19:55:00', '2024-07-13'),
+(4, '21:35:00', '2024-07-08'),
+(5, '21:40:00', '2024-07-12'),
+(6, '17:20:00', '2024-07-02'),
+(7, '21:35:00', '2024-07-03'),
+(8, '12:55:00', '2024-07-10'),
+(9, '22:15:00', '2024-07-06'),
+(10, '11:30:00', '2024-07-01'),
+(11, '14:05:00', '2024-07-03'),
+(12, '14:55:00', '2024-07-08'),
+(13, '16:35:00', '2024-07-13'),
+(14, '18:50:00', '2024-07-11'),
+(15, '12:35:00', '2024-07-12'),
+(16, '18:25:00', '2024-07-08'),
+(17, '21:10:00', '2024-07-10'),
+(18, '18:50:00', '2024-07-07'),
+(19, '23:45:00', '2024-07-05'),
+(20, '21:15:00', '2024-07-04'),
+(21, '20:00:00', '2024-07-14'),
+(22, '15:10:00', '2024-07-14'),
+(23, '17:10:00', '2024-07-13'),
+(24, '22:45:00', '2024-07-08'),
+(25, '16:15:00', '2024-07-06'),
+(26, '21:25:00', '2024-07-15'),
+(27, '12:50:00', '2024-07-11'),
+(28, '19:45:00', '2024-07-14'),
+(29, '16:25:00', '2024-07-15'),
+(30, '15:40:00', '2024-07-12'),
+(31, '18:55:00', '2024-07-06'),
+(32, '11:30:00', '2024-07-15'),
+(33, '16:00:00', '2024-07-07'),
+(34, '16:35:00', '2024-07-15'),
+(35, '17:35:00', '2024-07-11'),
+(36, '14:20:00', '2024-07-07'),
+(37, '10:40:00', '2024-07-13'),
+(38, '11:10:00', '2024-07-07'),
+(39, '16:20:00', '2024-07-09'),
+(40, '19:45:00', '2024-07-09');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `personnalite`
+-- Structure de la table `seance_film`
 --
 
-DROP TABLE IF EXISTS `personnalite`;
-CREATE TABLE IF NOT EXISTS `personnalite` (
+DROP TABLE IF EXISTS `seance_film`;
+CREATE TABLE IF NOT EXISTS `seance_film` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `prenom` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
-  `nom` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=305 DEFAULT CHARSET=utf8mb3;
-
---
--- Déchargement des données de la table `personnalite`
---
-
-INSERT INTO `personnalite` (`id`, `prenom`, `nom`) VALUES
-(1, 'Brad', 'Pitt'),
-(2, 'Morgan', 'Freeman'),
-(3, 'Gwyneth', 'Paltrow'),
-(4, 'Kevin', 'Spacey'),
-(5, 'John C.', 'McGinley'),
-(6, 'Endre', 'Hules'),
-(7, 'Andrew Kevin', 'Walker'),
-(8, 'Daniel', 'Zacapa'),
-(9, 'John', 'Cassini'),
-(10, 'Richard', 'Portnow'),
-(11, 'Emily', 'Wagner'),
-(12, 'Alfonso', 'Freeman'),
-(13, 'R. Lee', 'Ermey'),
-(14, 'Richard', 'Roundtree'),
-(15, 'Richard', 'Schiff'),
-(16, 'Mark', 'Boone Junior'),
-(17, 'Peter', 'Crombie'),
-(18, 'Dominique', 'Jennings'),
-(19, 'Andy', 'Walker'),
-(20, 'Bob', 'Mack'),
-(21, 'Beverly', 'Burke'),
-(22, 'Gene', 'Borkan'),
-(23, 'Julie', 'Araskog'),
-(24, 'Mario', 'Di Donato'),
-(25, 'Bob', 'Stephenson'),
-(26, 'Harrison', 'White'),
-(27, 'Michael Reid', 'MacKay'),
-(28, 'Michael', 'Massee'),
-(29, 'Hugh', 'Jackman'),
-(30, 'Christian', 'Bale'),
-(31, 'Michael', 'Caine'),
-(32, 'Scarlett', 'Johansson'),
-(33, 'Piper', 'Perabo'),
-(34, 'Rebecca', 'Hall'),
-(35, 'Samantha', 'Mahurin'),
-(36, 'David', 'Bowie'),
-(37, 'Andy', 'Serkis'),
-(38, 'Daniel', 'Davis'),
-(39, 'Jim', 'Piddock'),
-(40, 'Christopher', 'Neame'),
-(41, 'Mark', 'Ryan'),
-(42, 'Roger', 'Rees'),
-(43, 'Jamie', 'Harris'),
-(44, 'Monty', 'Stuart'),
-(45, 'Ron', 'Perkins'),
-(46, 'Ricky', 'Jay'),
-(47, 'Chao Li', 'Chi'),
-(48, 'William Morgan', 'Sheppard'),
-(49, 'J. Paul', 'Moore'),
-(50, 'Zoe', 'Merg'),
-(51, 'Johnny', 'Liska'),
-(52, 'Russ', 'Fega'),
-(53, 'Kevin', 'Will'),
-(54, 'Edward', 'Hibbert'),
-(55, 'Nikki', 'Glick'),
-(56, 'James', 'Otis'),
-(57, 'Sam', 'Menning'),
-(58, 'Christopher', 'Judges'),
-(59, 'Brian', 'Tahash'),
-(60, 'Scott', 'Davis'),
-(61, 'Jodi Bianca', 'Wise'),
-(62, 'Enn', 'Reitel'),
-(63, 'Clive', 'Kennedy'),
-(64, 'Rob', 'Arbogast'),
-(65, 'John B.', 'Crye'),
-(66, 'Chris', 'Cleveland'),
-(67, 'Anthony', 'De Marco'),
-(68, 'Gregory', 'Humphreys'),
-(69, 'Sean', 'Howse'),
-(70, 'James', 'Lancaster'),
-(71, 'Julie', 'Sanfordla'),
-(72, 'Ezra', 'Buzzington'),
-(73, 'Olivia', 'Merg'),
-(74, 'Liam', 'Neeson'),
-(75, 'Ben', 'Kingsley'),
-(76, 'Ralph', 'Fiennes'),
-(77, 'Caroline', 'Goodall'),
-(78, 'Jonathan', 'Sagall'),
-(79, 'Embeth', 'Davidtz'),
-(80, 'Malgoscha', 'Gebel'),
-(81, 'Mark', 'Ivanir'),
-(82, 'Béatrice', 'Macola'),
-(83, 'Andrzej', 'Seweryn'),
-(84, 'Norbert', 'Weisser'),
-(85, 'Elina', 'Löwensohn'),
-(86, 'Friedrich von', 'Thun'),
-(87, 'Tadeusz', 'Huk'),
-(88, 'Erwin', 'Leder'),
-(89, 'Geno', 'Lechner'),
-(90, 'Jerzy', 'Nowak'),
-(91, 'Tadeusz', 'Bradecki'),
-(92, 'Olaf', 'Lubaszenko'),
-(93, 'Wojciech', 'Klata'),
-(94, 'Henryk', 'Bista'),
-(95, 'Götz', 'Otto'),
-(96, 'Hans-Michael', 'Rehberg'),
-(97, 'Agnieszka', 'Wagner'),
-(98, 'Pawel', 'Delag'),
-(99, 'Martin', 'Semmelrogge'),
-(100, 'Vili', 'Matula'),
-(101, 'Branko', 'Lustig'),
-(102, 'Alexander', 'Strobele'),
-(103, 'Jochen', 'Nickel'),
-(104, 'Jeremy', 'Flynn'),
-(105, 'Slawomir', 'Holland'),
-(106, 'Joachim Paul', 'Assböck'),
-(107, 'Ludger', 'Pistor'),
-(108, 'Grzegorz', 'Damiecki'),
-(109, 'Michael', 'Schneider'),
-(110, 'Wilhelm', 'Manske'),
-(111, 'Peter', 'Appiano'),
-(112, 'Alexander', 'Held'),
-(113, 'Artus', 'Matthiessen'),
-(114, 'Miri', 'Fabian'),
-(115, 'Rami', 'Heuberger'),
-(116, 'Michael', 'Schiller'),
-(117, 'Anna', 'Mucha'),
-(118, 'Maja', 'Ostaszewska'),
-(119, 'Haymon Maria', 'Buttinger'),
-(120, 'August', 'Schmölzer'),
-(121, 'Wolfgang', 'Seidenberg'),
-(122, 'Georges', 'Kern'),
-(123, 'Peter', 'Flechtner'),
-(124, 'Jan', 'Jurewicz'),
-(125, 'Maciej', 'Kozlowski'),
-(126, 'Agnieszka', 'Krukówna'),
-(127, 'Hans-Jörg', 'Assmann'),
-(128, 'Thomas', 'Morris'),
-(129, 'Maciej', 'Orlos'),
-(130, 'Dorit', 'Seadia'),
-(131, 'Lidia', 'Wyrobiec-Bank'),
-(132, 'Jacek', 'Pulanecki'),
-(133, 'Stanislaw', 'Brejdygant'),
-(134, 'Beata', 'Rybotycka'),
-(135, 'Ewa', 'Kolasinska'),
-(136, 'Shabtai', 'Konorti'),
-(137, 'Alicja', 'Kubaszewska'),
-(138, 'Ryszard', 'Radwanski'),
-(139, 'Wieslaw', 'Komasa'),
-(140, 'Marcin', 'Grzymowicz'),
-(141, 'Marek', 'Wrona'),
-(142, 'Daniel', 'Del Ponte'),
-(143, 'Eugeniusz', 'Priwieziencew'),
-(144, 'Stanislaw', 'Koczanowicz'),
-(145, 'Oliwia', 'Dabrowska'),
-(146, 'Maciej', 'Winkler'),
-(147, 'Adi', 'Nitzan'),
-(148, 'Adam', 'Siemion'),
-(149, 'Agnieszka', 'Korzeniowska'),
-(150, 'Aldona', 'Grochal'),
-(151, 'Alexander', 'Buczolich'),
-(152, 'Andrzej', 'Welminski'),
-(153, 'Anemona', 'KnutFille'),
-(154, 'Tom', 'Hanks'),
-(155, 'Michael Clarke', 'Duncan'),
-(156, 'David', 'Morse'),
-(157, 'Bonnie', 'Hunt'),
-(158, 'Gary', 'Sinise'),
-(159, 'James', 'Cromwell'),
-(160, 'Michael', 'Jeter'),
-(161, 'Doug', 'Hutchison'),
-(162, 'Sam', 'Rockwell'),
-(163, 'Harry Dean', 'Stanton'),
-(164, 'Graham', 'Greene'),
-(165, 'Barry', 'Pepper'),
-(166, 'Jeffrey', 'DeMunn'),
-(167, 'Patricia', 'Clarkson'),
-(168, 'Eve', 'Brent'),
-(169, 'William', 'Sadler'),
-(170, 'Paula', 'Malcomson'),
-(171, 'Rachel', 'Singer'),
-(172, 'Dabbs', 'Gree'),
-(173, 'Brent', 'Briscoe'),
-(174, 'Bill', 'McKinney'),
-(175, 'Brian', 'Libby'),
-(176, 'Scotty', 'Leavenworth'),
-(177, 'Bill', 'Gratton'),
-(178, 'Van', 'Epperson'),
-(179, 'Gary', 'Imhoff'),
-(180, 'Mack', 'Miles'),
-(181, 'Dee', 'Croxton'),
-(182, 'Edrie', 'Warner'),
-(183, 'Katelyn', 'Leavenworth'),
-(184, 'Bailey', 'Drucker'),
-(185, 'Evanne', 'Drucker'),
-(186, 'David E.', 'Browning'),
-(187, 'Rai', 'Tasco'),
-(188, 'Rebecca', 'Klingler'),
-(189, 'Russell', 'Crowe'),
-(190, 'Joaquin', 'Phoenix'),
-(191, 'Connie', 'Nielsen'),
-(192, 'Oliver', 'Reed'),
-(193, 'Richard', 'Harris'),
-(194, 'Derek', 'Jacobi'),
-(195, 'David', 'Hemmings'),
-(196, 'David', 'Nicholls'),
-(197, 'Djimon', 'Hounsou'),
-(198, 'David', 'Schofield'),
-(199, 'John', 'Shrapnel'),
-(200, 'Tomas', 'Arana'),
-(201, 'Ralf', 'Moeller'),
-(202, 'Spencer Treat', 'Clark'),
-(203, 'Tommy', 'Flanagan'),
-(204, 'Giorgio', 'Cantarini'),
-(205, 'Giannina', 'Scott'),
-(206, 'Sven-Ole', 'Thorsen'),
-(207, 'Nicholas', 'McGaughey'),
-(208, 'Omid', 'Djalili'),
-(209, 'Chris', 'Kelly'),
-(210, 'John', 'Quinn'),
-(211, 'Chick', 'Allen'),
-(212, 'Billy', 'Dowd'),
-(213, 'Allan', 'Corduner'),
-(214, 'Mark', 'Lewis'),
-(215, 'Al', 'Ashton'),
-(216, 'Tony', 'Curran'),
-(217, 'David', 'Bailie'),
-(218, 'Gilly', 'Gilchrist'),
-(219, 'Adam', 'Levy'),
-(220, 'Alun', 'Raglan'),
-(221, 'Said', 'Amel'),
-(222, 'Michael', 'Mellinger'),
-(223, 'Chris', 'Kell'),
-(224, 'Ray', 'Calleja'),
-(225, 'Leonardo', 'DiCaprio'),
-(226, 'Matt', 'Damon'),
-(227, 'Jack', 'Nicholson'),
-(228, 'Ray', 'Winstone'),
-(229, 'Mark', 'Wahlberg'),
-(230, 'Martin', 'Sheen'),
-(231, 'Anthony', 'Anderson'),
-(232, 'Vera', 'Farmiga'),
-(233, 'Alec', 'Baldwin'),
-(234, 'Conor', 'Donovan'),
-(235, 'Douglas J.', 'Aguirre'),
-(236, 'Andrew', 'Aninsman'),
-(237, 'Michael', 'Byron'),
-(238, 'Elizabeth', 'Dings'),
-(239, 'Steve', 'Flynn'),
-(240, 'Steve', 'Lord'),
-(241, 'Robert N.', 'Anderson'),
-(242, 'Vincent', 'Bivona'),
-(243, 'Kevin W.', 'Burns'),
-(244, 'Robert Kar Yun', 'Chan'),
-(245, 'David', 'Conley'),
-(246, 'Greg', 'Connolly'),
-(247, 'Derrick', 'Costa'),
-(248, 'Peter', 'Crafts'),
-(249, 'Zachary', 'Pauliks'),
-(250, 'Robert', 'Wahlberg'),
-(251, 'Lyman', 'Chen'),
-(252, 'Kevin', 'Corrigan'),
-(253, 'Kristen', 'Dalton'),
-(254, 'Shay', 'Duffin'),
-(255, 'Tom', 'Kemp'),
-(256, 'Amanda', 'Lynch'),
-(257, 'Tracey', 'Paleo'),
-(258, 'James Badge', 'Dale'),
-(259, 'David', 'O\'Hara'),
-(260, 'Mark', 'Rolston'),
-(261, 'Thomas B.', 'Duffy'),
-(262, 'Dick', 'Hughes'),
-(263, 'J.C.', 'MacKenzie'),
-(264, 'Mary', 'Klug'),
-(265, 'Peg', 'Saurman Holzemer'),
-(266, 'Gurdeep', 'Singh'),
-(267, 'William', 'Severs'),
-(268, 'Douglas', 'Crosby'),
-(269, 'Joseph P.', 'Reidy'),
-(270, 'Terry', 'Serpico'),
-(271, 'Mick', 'O\'Rourke'),
-(272, 'Brian', 'Smyj'),
-(273, 'Jill', 'Brown'),
-(274, 'John', 'Cenatiempo'),
-(275, 'Brian', 'Haley'),
-(276, 'Audrie J.', 'Neenan'),
-(277, 'Dorothy', 'Lyman'),
-(278, 'David', 'Fischer'),
-(279, 'Alex', 'Morris'),
-(280, 'Chance', 'Kelly'),
-(281, 'Larry', 'Mitchell'),
-(282, 'Henry', 'Yuk'),
-(283, 'John', 'Rue'),
-(284, 'Nellie', 'Sciutto'),
-(285, 'Victor', 'Chan'),
-(286, 'Joseph', 'Riccobene'),
-(287, 'John', 'McConnell'),
-(288, 'Patrick', 'Coppola'),
-(289, 'Jay', 'Giannone'),
-(290, 'Ricky', 'Chan'),
-(291, 'Emma Tillinger', 'Koskoff'),
-(292, 'William', 'Lee'),
-(293, 'John', 'Farrer'),
-(294, 'Armen', 'Garo'),
-(295, 'Walter', 'Wong'),
-(296, 'John', 'Polce'),
-(297, 'Billy', 'Smith'),
-(298, 'Deborah', 'Carlson'),
-(299, 'Denece', 'Ryland'),
-(300, 'Dennis', 'Lynch'),
-(301, 'Kenneth', 'Stoddard'),
-(302, 'Daniel F.', 'Risteen Jr'),
-(303, 'Andrew', 'Breving'),
-(304, 'Anthony', 'Estrella');
-
--- --------------------------------------------------------
-
---
--- Structure de la table `personnalite_metier`
---
-
-DROP TABLE IF EXISTS `personnalite_metier`;
-CREATE TABLE IF NOT EXISTS `personnalite_metier` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `personnalite_id` int NOT NULL,
-  `metier_id` int NOT NULL,
+  `seance_id` int NOT NULL,
+  `film_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `personnaliteMetier_metierId` (`metier_id`),
-  KEY `personnaliteMetier_personnaliteId` (`personnalite_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
+  KEY `fk_film_has_cinema_seance1_idx` (`seance_id`),
+  KEY `fk_film_has_cinema_film1_idx` (`film_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb3;
 
 --
--- Structure de la table `personnalite_metier_fiche`
+-- Déchargement des données de la table `seance_film`
 --
 
-DROP TABLE IF EXISTS `personnalite_metier_fiche`;
-CREATE TABLE IF NOT EXISTS `personnalite_metier_fiche` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `personnalite_metier_id` int NOT NULL,
-  `fiche_id` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `personnaliteMetier_ficheId` (`fiche_id`),
-  KEY `personnaliteMetier_metierId` (`personnalite_metier_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+INSERT INTO `seance_film` (`id`, `seance_id`, `film_id`) VALUES
+(1, 1, 7),
+(2, 2, 5),
+(3, 3, 2),
+(4, 4, 8),
+(5, 5, 3),
+(6, 6, 1),
+(7, 7, 6),
+(8, 8, 2),
+(9, 9, 9),
+(10, 10, 4),
+(11, 11, 10),
+(12, 12, 7),
+(13, 13, 8),
+(14, 14, 5),
+(15, 15, 9),
+(16, 16, 4),
+(17, 17, 1),
+(18, 18, 3),
+(19, 19, 10),
+(20, 20, 6),
+(21, 21, 9),
+(22, 22, 2),
+(23, 23, 8),
+(24, 24, 4),
+(25, 25, 5),
+(26, 26, 6),
+(27, 27, 3),
+(28, 28, 10),
+(29, 29, 7),
+(30, 30, 1),
+(31, 31, 9),
+(32, 32, 8),
+(33, 33, 2),
+(34, 34, 10),
+(35, 35, 5),
+(36, 36, 1),
+(37, 37, 6),
+(38, 38, 3),
+(39, 39, 7),
+(40, 40, 4);
 
 -- --------------------------------------------------------
 
@@ -747,22 +494,14 @@ ALTER TABLE `cinema`
 -- Contraintes pour la table `film`
 --
 ALTER TABLE `film`
-  ADD CONSTRAINT `film_cinema__fk` FOREIGN KEY (`cinema_id`) REFERENCES `cinema` (`id`),
   ADD CONSTRAINT `fk_film_fiche1` FOREIGN KEY (`fiche_id`) REFERENCES `fiche` (`id`);
 
 --
--- Contraintes pour la table `personnalite_metier`
+-- Contraintes pour la table `seance_film`
 --
-ALTER TABLE `personnalite_metier`
-  ADD CONSTRAINT `personnaliteMetier_Metier` FOREIGN KEY (`metier_id`) REFERENCES `metier` (`id`),
-  ADD CONSTRAINT `personnaliteMetier_personnalite` FOREIGN KEY (`personnalite_id`) REFERENCES `personnalite` (`id`);
-
---
--- Contraintes pour la table `personnalite_metier_fiche`
---
-ALTER TABLE `personnalite_metier_fiche`
-  ADD CONSTRAINT `personnaliteMetierFiche_FicheId` FOREIGN KEY (`fiche_id`) REFERENCES `fiche` (`id`),
-  ADD CONSTRAINT `personnaliteMetierFiche_personnaliteMetierId` FOREIGN KEY (`personnalite_metier_id`) REFERENCES `personnalite_metier` (`id`);
+ALTER TABLE `seance_film`
+  ADD CONSTRAINT `fk_film_has_cinema_film1` FOREIGN KEY (`film_id`) REFERENCES `film` (`id`),
+  ADD CONSTRAINT `fk_film_has_cinema_seance1` FOREIGN KEY (`seance_id`) REFERENCES `seance` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `streaming`
