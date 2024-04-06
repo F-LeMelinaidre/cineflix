@@ -1,5 +1,5 @@
 
-    <section id="Film" class="row col-xl-6 col-lg-7 col-md-10 col-sm-12 mt-md-4 my-lg-0 my-sm-0 p-0 m-0">
+    <section id="Film" class="row col-xl-6 col-lg-7 col-md-10 col-sm-12">
         <div class="col-sm-6">
             <header>
                 <h1><?= ucfirst($movie->nom) ?></h1>
@@ -13,18 +13,21 @@
         </div>
 
     </section>
-    <section id="Cinema" class="row col col-lg-3 col-md-10 col-sm-12 mb-md-4 my-lg-0 my-sm-0 p-0 m-0">
+    <section id="Cinema" class="row col-xl-3 col-lg-3 col-md-10 col-sm-12">
         <header>
             <h1><?= $movie->cinema ?></h1>
             <h2><?= $movie->ville ?></h2>
         </header>
-        <h3>Séance</h3>
-        <ul>
-            <?php foreach($seances as $seance) { ?>
+        <div id="Seance">
+            <h3>Séance</h3>
+            <ul class="seance-list row gap-3 justify-content-between align-content-center align-items-end">
+                <?php foreach($seances as $seance) { ?>
 
-                <li><?= $seance['date']. ' - ' .$seance['horaire'] ?></li>
+                    <li class="card col"><?= $seance['date']. ' - ' .$seance['horaire'] ?></li>
 
-            <?php } ?>
-        </ul>
+                <?php } ?>
+            </ul>
+        </div>
+
     </section>
 
