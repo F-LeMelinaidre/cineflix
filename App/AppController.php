@@ -74,10 +74,11 @@
                 ['slug' => '[a-zA-Z_]+']);
 
             self::$_Router->get('streaming_index', '/Streaming', [Controller\Streaming::class, 'index']);
-            self::$_Router->get('streaming_show', '/Streaming/{slug}-{id}', [Controller\Streaming::class, 'show'],
-                ['slug' => '[a-zA-Z_]+', 'id' => '[0-9]+']);
+            self::$_Router->get('streaming_show', '/Streaming/{slug}', [Controller\Streaming::class, 'show'],
+                ['slug' => '[a-zA-Z_]+']);
 
-            self::$_Router->get('account_show', '/Account', [ Controller\Account::class, 'show']);
+            self::$_Router->get('profil_show', '/Profil', [ Controller\Profil::class, 'show']);
+            self::$_Router->get('profil_edit', '/Profil/edit', [ Controller\Profil::class, 'edit']);
 
             //Route partie Admin
             //Admin Home
@@ -135,6 +136,7 @@
                 // index 1: la methode
                 // $params est un tableau des paramètres passés à la méthode de la Class $callback
                 // return vers public/index.php
+
                 return call_user_func_array($callback, $params);
 
 
