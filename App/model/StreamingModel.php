@@ -10,4 +10,5 @@ class StreamingModel extends DetailModel
     public int $fiche_id;
     public $date;
 
+
 }

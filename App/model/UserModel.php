@@ -35,7 +35,7 @@ class UserModel
      */
     public function setPrenom(string $prenom): self
     {
-        $this->prenom = Security::sanitize($prenom);
+        $this->prenom = ucfirst($prenom);
 
         return $this;
     }

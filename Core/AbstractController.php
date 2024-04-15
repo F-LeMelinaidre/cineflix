@@ -86,6 +86,8 @@ abstract class AbstractController
     protected function renderOnlyView($view, $data): string
     {
         ob_start();
+        // Transforme les clés en nom de variable et attribut a cette variable la valeur associé a la clé
+        // Ce qui permet de de les appeler dans les vues
         extract($data);
         include_once $this->path_view.str_replace('.', '/', $view).".php";
         return ob_get_clean();

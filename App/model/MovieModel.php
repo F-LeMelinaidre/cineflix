@@ -16,4 +16,11 @@ class MovieModel extends DetailModel
     public $seance_id;
     public $date;
     public $horaire;
+
+    public function __construct()
+    {
+
+
+
+    }
 }

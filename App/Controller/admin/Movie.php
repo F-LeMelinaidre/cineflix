@@ -43,7 +43,6 @@ class Movie extends AbstractController
             if (!is_null($id)) {
 
                 $movie = $movieDao->findBy('id', $id);
-
                 $timeToDate = strtotime($movie->date_sortie);
                 //$movie->cinema->nom = $movie->cinema->nom. ' - ' .$movie->ville->nom;
                 $url = self::$_Router->getUrl('admin_movie_edit', [ 'id' => $id ]);

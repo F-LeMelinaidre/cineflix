@@ -68,6 +68,6 @@
     {{content}}
 </main>
 
-<footer class="m-0 p-0 border-top border-light-subtle bg-dark-subtle">
+<footer class="m-0 mt-auto p-0 border-top border-light-subtle bg-dark-subtle">
     <?= $footer ?><p>accès à <a href="<?= self::$_Router->getUrl("admin_home_index") ?>">Admin</a> en attendant la page de connexion</p>
 </footer>
