@@ -27,6 +27,7 @@ class Cinema extends AbstractController
 
     public function edit(int $id = null): string
     {
+
         return $this->render('cinema.admin.edit',[]);
     }
 
@@ -34,5 +35,7 @@ class Cinema extends AbstractController
     {
 
     }
+
+
 
 }

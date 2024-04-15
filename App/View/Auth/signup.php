@@ -44,7 +44,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-6 col-sm-6 col-12">
                     <label for="Name">Nom</label>
-                    <input type="text" id="Name" name="nom" class="form-control mb-2">
+                    <input id="Name" class="form-control mb-2" type="text" name="nom" value="<?= $form['nom'] ?>">
                 </div>
                 <div class="col-md-6 col-sm-6 col-12">
                     <label for="Firstname">Prénom</label>
@@ -53,7 +53,11 @@
                 <div class="col-md-12 col-sm-12 col-12">
                     <label for="Email">Email</label>
                     <input type="email" id="Email" name="email" class="form-control mb-2" aria-required="true" aria-describedby="validationMail">
-                    <div id="validationMail" class="invalid-message hide"></div>
+
+                    <div id="validationMail" class="invalid-message <?php if (empty($errors['email'])) echo 'hide'; ?> ">
+                        <?php if (!empty($errors['email'])) echo $errors['email']; ?>
+                    </div>
+
                 </div>
                 <div class="col-md-6 col-sm-6 col-12">
                     <label for="Password">Mot de passe</label>

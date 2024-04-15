@@ -42,7 +42,6 @@
          */
         public static Database $_Database;
 
-
         public function __construct() {
             self::$_Root = dirname(__DIR__);
             self::$_Webroot = self::$_Root.'/public/';
