@@ -1,16 +1,13 @@
 <header class="d-flex
                justify-content-around
                align-items-center
-               p-0
+               position-relative
                mt-4
                border-top border-bottom border-dark">
     <h1 class="flex-grow-1 ms-5 mb-0">Films en salles</h1>
 </header>
 <section class="container d-flex justify-content-center row-gap-4 column-gap-4 flex-wrap mt-4">
-    <nav class="container-fluid d-flex ms-4 mb-4 align-items-center">
-        <input type="text" class="form-control w-25 m-0">
-        <a href="#" class="btn btn-sm btn-outline-warning ms-4">Rechercher</a>
-    </nav>
+
     <?php foreach($movies as $movie): ?>
 
     <div class="card card-info">

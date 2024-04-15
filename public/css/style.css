@@ -7,13 +7,28 @@ body {
     background-repeat: no-repeat;
     background-position: top center;
 }
+/* --- ICON --- */
 
-main,
-ul, li {
-    padding: 0!important;
-    margin: 0!important;
+.icon {
+    width: 32px;
+    height: 32px;
+    transition: transform 0.3s;
+}
+.icon:hover {
+    transform: rotate(180deg); /* Rotation de 90 degrés au survol */
+}
+.profil-icon {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-color: var(--bs-yellow);;
+    mask: url("../img/icon/account_circle.svg") no-repeat center;
+    mask-size: cover;
+    mask-repeat: no-repeat;
+    mask-position: center;
 }
 
+/* --- INPUT --- */
 input.valid {
     border-color: #318307 !important;
     box-shadow: #318307 0 0 3px 2px;
@@ -35,6 +50,7 @@ input.error {
 .invalid-message.error {
     color: #b01919;
 }
+
 .invalid-message.hide {
     visibility: hidden;
 }
@@ -47,9 +63,37 @@ main header h1 {
     font-size: 2em;
     font-weight: bold;
 }
+
+
+/* ---------------------- *\
+          Profil
+\* ---------------------- */
+
+/* Menu */
+.nav-profil {
+    display: flex;
+    column-gap: 1rem;
+
+    padding: 0;
+    margin: 0;
+}
+.nav-profil li {
+    display: block;
+    list-style: none;
+}
+
+/* --- Formulaire --- */
+#Profil form {
+    padding: 24px 32px 16px 32px;
+    border: #ffffff solid 1px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
 /* ---------------------- *\
   FORMULAIRE D'INSCRIPTION
 \* ---------------------- */
+
 section.sign {
     max-width: 1280px;
 }
@@ -124,17 +168,6 @@ img.card-img-top {
     text-transform: capitalize;
 }
 
-#Film,
-#Cinema {
-    padding: 16px;
-}
-
-#Film div,
-#Cinema div {
-    margin: 0;
-    padding: 0;
-}
-
 #Film {
     border-right: none;
     border-top-left-radius: 12px;
@@ -147,21 +180,12 @@ img.card-img-top {
     border-bottom-right-radius: 12px;
     background-color: rgba(27, 32, 37,  80);
 }
-
 img.affiche {
     display: block;
     max-width: 360px;
     width: 100%;
     margin: 2rem auto;
-    padding: 0;
 }
-
-/* ---- Séance ---- */
-
-#Seance  {
-
-}
-
 @media screen and (max-width: 990px) {
     #Film {
         border-top-left-radius: 12px;

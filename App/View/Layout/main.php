@@ -42,9 +42,18 @@
 
 
     <?php if (\Cineflix\Core\Util\AuthConnect::isConnected()): ?>
-        <a href="<?= self::$_Router->getUrl("signout") ?>" class="btn btn-sm btn-outline-warning me-lg-5">
-            Deconnexion
-        </a>
+        <ul class="nav-profil">
+            <li class="icon">
+                <a href="<?= self::$_Router->getUrl("profil_show") ?>">
+                    <span class="profil-icon"></span>
+                </a>
+            </li>
+            <li>
+                <a href="<?= self::$_Router->getUrl("signout") ?>" class="btn btn-sm btn-outline-warning me-lg-5">
+                    Deconnexion
+                </a>
+            </li>
+        </ul>
     <?php else: ?>
         <a href="<?= self::$_Router->getUrl("signin") ?>" class="btn btn-sm btn-outline-warning me-lg-5">
             Connexion
