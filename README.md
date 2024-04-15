@@ -22,13 +22,24 @@ TODO
 
 
    - Validation des champs
-        - Ajouter au script js le message adéquate dans la div .invalid-message
+        - Ajouter script js + message adéquate dans la div .invalid-message (format et vide)
         - Ajouter à la div la class approprié au type d'erreur relevé
-        - Ajouter la fonction required et ne pas faire la validation d'input vide avec la vérification du format
     
-    - Creer une interface d'Exception
-        - Trouver une solution pour gerer les messages d'erreurs, et les pages d'erreurs
-        - Voir les problème d'interdépendance
-        - Voir pour la journalisation de erreur
+   - Creer un controller d'Exception
+      - Trouver une solution pour gerer les messages d'erreurs, et les pages d'erreurs
+
+   - Test Unitaire
+      - Au minimum
+         - des routes
+         - et un CRUD
+
+   - Securiser
+      - l'acces membre
+      - Admin
+
+   - Achat billet - Impression
+   
+   - Visualisation Streaming
+     
     
     
