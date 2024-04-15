@@ -7,6 +7,12 @@ body {
     background-repeat: no-repeat;
     background-position: top center;
 }
+dl,
+dt,
+dd {
+    padding: 0!important;
+    margin: 0!important;
+}
 /* --- ICON --- */
 
 .icon {
@@ -82,12 +88,11 @@ main header h1 {
     list-style: none;
 }
 
+.profil-view {
+}
 /* --- Formulaire --- */
-#Profil form {
-    padding: 24px 32px 16px 32px;
-    border: #ffffff solid 1px;
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.1);
+section .edit-profil {
+    max-width: 640px;
 }
 
 /* ---------------------- *\

@@ -61,7 +61,7 @@
                     }
                 } else {
 
-                    $errors['password'] = $this->msg_errors['password'];
+                    $errors['password'] = $this->msg_errors['empty'];
                     $password = '';
                 }
 
@@ -165,6 +165,7 @@
                 if (empty($errors)) {
 
                     $user = new UserModel();
+
                     $user->setNom($nom)
                         ->setPrenom($prenom)
                         ->setEmail($email)
@@ -172,17 +173,28 @@
 
                     if ($this->userDao->save($user)) {
 
-                        AuthConnect::connect([ 'email' => $user->email, 'username' => $user->nom, /*'last_connect' =>
-                        $user->getLastConnectFr()*/]);
+                        AuthConnect::connect( [
+                            'email' => $user->email,
+                            'username' => $user->nom, /*'last_connect' =>
+                        $user->getLastConnectFr()*/]
+                        );
                         MessageFlash::create('Connecté',$type = 'valide');
 
                         header('Location: /');
                         exit;
                     }
 
+                } else {
+                    $form = [
+                        'nom' => $nom,
+                        'prenom' => $prenom,
+                        'email' => $email,
+                        'password'=> $password,
+                        'pwd_confirm' => $pwd_confirm,
+                    ];
                 }
             }
-            return $this->render('Auth.signup', [$errors]);
+            return $this->render('Auth.signup', [ 'form' => $form, 'errors' => $errors ]);
 
         }
 

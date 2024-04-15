@@ -47,12 +47,13 @@ class MovieDao
                   ville.nom AS ville
                   FROM film AS film JOIN fiche ON film.fiche_id = fiche.id 
                   JOIN cinema ON film.cinema_id = cinema.id JOIN ville ON cinema.ville_id = ville.id
+                  
                   WHERE fiche.$clause";
 
         $binvalue[] = ['col' => $item, 'val' => $value];
         $req = $this->db->prepare($query, $binvalue);
 
-        return $req->fetch($model);
+        return $req->fetch(MovieModel::class);
 
     }
   
