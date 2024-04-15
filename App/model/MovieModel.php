@@ -4,6 +4,7 @@ namespace Cineflix\App\Model;
 
 class MovieModel extends DetailModel
 {
+    public $id;
     public $movie_id;
     public int $exploitation_id;
     public string $exploitation_debut = '';
