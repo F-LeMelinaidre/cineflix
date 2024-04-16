@@ -168,4 +168,9 @@ class Database
             return false;
         }
     }
+
+    public function getLastInsertId()
+    {
+        return $this->connexion->lastInsertId();
+    }
 }

@@ -9,47 +9,18 @@ class UserModel
 {
 
     public int $id;
-    public string $nom;
-    public string $prenom;
     public string $email;
-
     public string $password;
 
-
-    /**
-     * @param string $nom
-     *
-     * @return $this
-     */
-    public function setNom(string $nom): self
-    {
-        $this->nom = Security::sanitize($nom);
-
-        return $this;
-    }
-
-    /**
-     * @param string $prenom
-     *
-     * @return $this
-     */
-    public function setPrenom(string $prenom): self
-    {
-        $this->prenom = ucfirst($prenom);
-
-        return $this;
-    }
 
     /**
      * @param string $email
      *
      * @return $this
      */
-    public function setEmail(string $email): self
+    public function setEmail(string $email): void
     {
         $this->email = Security::sanitize($email);
-
-        return $this;
     }
 
     /**
@@ -57,11 +28,9 @@ class UserModel
      *
      * @return $this
      */
-    public function setPassword($password): self
+    public function setPassword($password): void
     {
         $this->password = $password;
-
-        return $this;
     }
 
     public function getPassword(): string
@@ -74,12 +43,8 @@ class UserModel
      *
      * @return $this
      */
-    public function hashPassword(string $password): self
+    public function hashPassword(string $password): void
     {
-
         $this->password = password_hash($password, PASSWORD_BCRYPT);
-
-        return $this;
     }
-
 }

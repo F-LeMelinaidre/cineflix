@@ -17,10 +17,5 @@ class MovieModel extends DetailModel
     public $date;
     public $horaire;
 
-    public function __construct()
-    {
 
-
-
-    }
 }

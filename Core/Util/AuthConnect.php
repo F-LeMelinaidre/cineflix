@@ -85,4 +85,9 @@ class AuthConnect
     {
         return self::$_NameSession;
     }
+
+    public static function getSession(): array
+    {
+        return $_SESSION[self::$_NameSession];
+    }
 }

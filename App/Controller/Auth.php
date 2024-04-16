@@ -1,8 +1,10 @@
 <?php
     //mp A5FWNS2ekaejTqt?!
+    // mp major rRTxrTTMhLkQf4W!?
     namespace Cineflix\App\Controller;
 
     use Cineflix\App\Model\DAO\UserDao;
+    use Cineflix\App\model\ProfilModel;
     use Cineflix\App\Model\UserModel;
     use Cineflix\Core\AbstractController;
     use Cineflix\Core\Util\AuthConnect;
@@ -106,7 +108,12 @@
          */
         public function signup(): string
         {
-
+            $form = [
+                'nom'      => '',
+                'prenom'   => '',
+                'email'    => '',
+                'password' => ''
+            ];
             $errors = [];
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -166,13 +173,15 @@
                 if (empty($errors)) {
 
                     $user = new UserModel();
+                    $user->setEmail($email);
+                    $user->hashPassword($password);
 
-                    $user->setNom($nom)
-                        ->setPrenom($prenom)
-                        ->setEmail($email)
-                        ->hashPassword($password);
+                    $profil = new ProfilModel();
+                    $profil->setNom($nom);
+                    $profil->setPrenom($prenom);
 
                     if ($this->userDao->save($user)) {
+
 
                         AuthConnect::connect( [
                             'email' => $user->email,
@@ -195,6 +204,7 @@
                     ];
                 }
             }
+
             return $this->render('Auth.signup', [ 'form' => $form, 'errors' => $errors ]);
 
         }

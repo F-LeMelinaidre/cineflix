@@ -9,7 +9,7 @@
         // Regex Email norme RFC2822
         // Validation mot de passe 8 caratères minimum et au moins un caratères majuscule, minuscule, un chiffre, et un caratères spéciaux !?:_\-*#&%+
         private const PATTERNS = [
-            'alpha' => '/[a-zA-Zàâçéèêëïîôùûüÿ\-\s]+/',
+            'alpha' => '/^[a-zA-Zàâçéèêëïîôùûüÿ\-\s]+$/',
             'email'       => '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/',
             'password'   => '/^(?=.*[a-zA-Z0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!?:_\-*#&%+]).{8,}$/'
         ];
