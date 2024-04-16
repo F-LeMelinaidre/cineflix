@@ -1,5 +1,5 @@
 <?php
-
+    //mp A5FWNS2ekaejTqt?!
     namespace Cineflix\App\Controller;
 
     use Cineflix\App\Model\DAO\UserDao;
@@ -106,6 +106,7 @@
          */
         public function signup(): string
         {
+
             $errors = [];
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -8,11 +8,11 @@
         <h2 class="titre">Information du film</h2>
   
         <label class="form-label" for="InputNom">Nom</label>
-        <input id="InputNom" class="form-control" type="text" name="nom" value="<?= $movie->nom ?>" aria-required="true">
+        <input id="InputNom" class="form-control" type="text" name="nom" value="<?= $stream->nom ?>" aria-required="true">
         <div id="MoviesList"></div>
 
         <label class="form-label" for="InputDateSortie">Date de sortie</label>
-        <input id="InputDateSortie" class="form-control" type="date" name="date_sortie" value="<?= $movie->date_sortie ?>" aria-required="true">
+        <input id="InputDateSortie" class="form-control" type="date" name="date_sortie" value="<?= $stream->date_sortie ?>" aria-required="true">
 
         <label class="form-label" for="InputCinema">Cinema</label>
         <input id="InputCinema" class="form-select" type="text" name="cinema" value="<?= '$movie->cinema->nom $movie->ville->nom' ?>"
@@ -27,7 +27,7 @@
         <input id="InputDateFin" class="form-control" type="date" name="exploitation_fin" value="<?= '$movie->exploitation_fin' ?>" aria-required="true">
 
         <label class="form-label" for="TextareaSynopsis">Synopsis</label>
-        <textarea id="TextareaSynopsis" class="form-control" name="synopsis" cols="30" rows="5" aria-required="true"><?= $movie->synopsis ?></textarea>
+        <textarea id="TextareaSynopsis" class="form-control" name="synopsis" cols="30" rows="5" aria-required="true"><?= $stream->synopsis ?></textarea>
 
         <label class="form-label" for="InputAffiche">Affiche</label>
         <input id="InputAffiche" class="form-control" name="affiche" type="file" accept=".png, .jpg, .jpeg" aria-required="true">
