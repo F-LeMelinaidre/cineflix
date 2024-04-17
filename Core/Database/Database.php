@@ -9,7 +9,7 @@ class Database
 {
     public static $_Instance;
 
-    private PDO $connexion;
+    public PDO $connexion;
     private $options = [
         PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -72,7 +72,7 @@ class Database
      * Debut de transaction
      * @return void
      */
-    public function beginTransaction(): void
+    public function beginTransaction()
     {
         $this->connexion->beginTransaction();
     }
@@ -82,7 +82,7 @@ class Database
      * Validation de la transaction
      * @return void
      */
-    public function commit(): void
+    public function commit()
     {
         $this->connexion->commit();
     }
@@ -91,7 +91,7 @@ class Database
      * En cas d'erreur, annule la transaction
      * @return void
      */
-    public function rollback(): void
+    public function rollback()
     {
         $this->connexion->rollBack();
     }
@@ -231,6 +231,8 @@ class Database
      */
     public function insert(string $table, array $data): bool
     {
+        $result = false;
+
         try {
 
             $columns = implode(', ', array_keys($data));
@@ -248,12 +250,16 @@ class Database
                 $pre->bindValue(':'.$key, $val);
             }
 
-            return $pre->execute();
+            $result = $pre->execute();
 
-        } catch (Exception $e) {
-            echo 'erreur insert() '.$e->getMessage();
-            return false;
+        } catch (\PDOException $e) {
+
+            $result = false;
+
+            throw $e;
         }
+
+        return $result;
     }
 
     public function getLastInsertId()

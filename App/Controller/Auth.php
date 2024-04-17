@@ -173,24 +173,17 @@
                     $user->setPassword($password);
                     $user->setProfil($nom, $prenom);
 
-                    $this->userDao->create($user);
+                    if($this->userDao->create($user)) {
 
-//                    if ($this->userDao->save($user)) {
-//
-//                        $profil->setUserId($this->userDao->getLastInsertId());
-//
-//                        if ($this->profilDao->save($profil)) {
-//                            AuthConnect::connect([
-//                                'email' => $profil->email, 'username' => $profil->nom, /*'last_connect' =>
-//                            $user->getLastConnectFr()*/
-//                            ]);
-//                            MessageFlash::create('Connecté', $type = 'valide');
-//
-//                            header('Location: /');
-//                            exit;
-//                        }
-//
-//                    }
+                        AuthConnect::connect([
+                            'email' => $user->email, 'username' => $user->getProfil()->nom, /*'last_connect' =>
+                            $user->getLastConnectFr()*/
+                        ]);
+                        MessageFlash::create('Connecté', $type = 'valide');
+
+                        header('Location: /Profil/Edit');
+                        exit;
+                    }
 
                 } else {
                     $form = [
@@ -202,7 +195,6 @@
                     ];
                 }
             }
-var_dump($errors);
             return $this->render('Auth.signup', [ 'form' => $form, 'errors' => $errors ]);
 
         }

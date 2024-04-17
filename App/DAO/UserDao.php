@@ -11,10 +11,11 @@ class UserDao extends AbstractDAO
 {
     private int $lastInsertId;
 
-    public function create(object $user) {
-        $return = false;
+    public function create(object $user)
+    {
 
         try {
+
             $this->db->beginTransaction();
 
             $user_data = [
@@ -22,27 +23,33 @@ class UserDao extends AbstractDAO
                 'password'  => $user->getPassword()
             ];
 
+
             $this->db->insert($user->table,$user_data);
 
             $profil = $user->getProfil();
+
             $profil_data = [
                 'membre_id' => $this->db->getLastInsertId(),
                 'nom'       => $profil->nom,
                 'prenom'    => $profil->prenom
             ];
 
-            $this->db->insert($profil->table,$profil_data);
+            $this->db->insert($profil->table ,$profil_data);
 
             $this->db->commit();
 
-            $return = true;
+            $result = true;
 
         } catch (\PDOException $e) {
+            $result = false;
 
             $this->db->rollback();
+
+            echo "PDOException: " . $e->getMessage();
         }
 
-        return $return;
+        return $result;
+
     }
 
     public function getLastInsertId()
