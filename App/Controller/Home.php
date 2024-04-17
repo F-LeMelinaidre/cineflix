@@ -2,7 +2,7 @@
 
 namespace Cineflix\App\Controller;
 
-use Cineflix\App\Model\DAO\MovieDao;
+use Cineflix\App\DAO\MovieDao;
 use Cineflix\Core\AbstractController;
 
 class Home extends AbstractController

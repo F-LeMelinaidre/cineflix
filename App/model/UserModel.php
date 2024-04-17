@@ -2,26 +2,15 @@
 
 namespace Cineflix\App\Model;
 
-use Cineflix\Core\Util\Regex;
-use Cineflix\Core\Util\Security;
-
 class UserModel
 {
 
+    public string $table = 'membre';
+
     public int $id;
-    public string $email;
-    public string $password;
-
-
-    /**
-     * @param string $email
-     *
-     * @return $this
-     */
-    public function setEmail(string $email): void
-    {
-        $this->email = Security::sanitize($email);
-    }
+    public string $email = '';
+    private string $password;
+    private ProfilModel $profil;
 
     /**
      * @param $password
@@ -30,21 +19,26 @@ class UserModel
      */
     public function setPassword($password): void
     {
-        $this->password = $password;
-    }
-
-    public function getPassword(): string
-    {
-
-        return $this->password;
-    }
-    /**
-     * @param string $password
-     *
-     * @return $this
-     */
-    public function hashPassword(string $password): void
-    {
         $this->password = password_hash($password, PASSWORD_BCRYPT);
     }
+
+    /**
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setProfil($nom, $prenom)
+    {
+        $this->profil = new ProfilModel();
+        $this->profil->setNom($nom);
+        $this->profil->setPrenom($prenom);
+    }
+    public function getProfil()
+    {
+        return $this->profil;
+    }
+
 }

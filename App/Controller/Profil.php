@@ -4,6 +4,7 @@ namespace Cineflix\App\Controller;
 
 use Cineflix\App\AppController;
 use Cineflix\App\Model\DAO\UserDao;
+use Cineflix\App\model\ProfilModel;
 use Cineflix\Core\AbstractController;
 use Cineflix\Core\Util\AuthConnect;
 use PHPUnit\Util\PHP\AbstractPhpProcess;
@@ -24,9 +25,7 @@ class Profil extends AbstractController
         // Et créer l'objet Profil dans le constructeur
         $session = AuthConnect::getSession();
         $email = $session['email'];
-
-        $userDao = new UserDao();
-        $profil = $userDao->findUserWithProfilByEmail($email);
+        $profil = new ProfilModel();
         return $this->render('profil.show',compact('profil'));
     }
 
@@ -34,10 +33,7 @@ class Profil extends AbstractController
     {
         $session = AuthConnect::getSession();
         $email = $session['email'];
-
-        $userDao = new UserDao();
-        $profil = $userDao->findUserWithProfilByEmail($email);
-        
+        $profil = new ProfilModel();
         return $this->render('profil.edit',compact('profil'));
     }
 }

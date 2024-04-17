@@ -3,7 +3,7 @@
     // mp major rRTxrTTMhLkQf4W!?
     namespace Cineflix\App\Controller;
 
-    use Cineflix\App\Model\DAO\UserDao;
+    use Cineflix\App\DAO\UserDao;
     use Cineflix\App\model\ProfilModel;
     use Cineflix\App\Model\UserModel;
     use Cineflix\Core\AbstractController;
@@ -76,13 +76,9 @@
 
                         // On recupère les données données de l'utilisateur
                         $user = $this->userDao->findByMail($email);
-                        $params = [
-                            'email'  => $user->email,
-                            'prenom' => $user->prenom,
-                            'nom'    => $user->nom
-                        ];
+
                         // On le connect en lui passant les paramètre que l on désire mettre en session
-                        AuthConnect::connect($params);
+                        AuthConnect::connect($user);
 
                         // Utilise la class Core\Util\MessageFlash.php
                         // la class est appelé au niveau de la vue dans \App\View\Layout\main.php
@@ -173,26 +169,28 @@
                 if (empty($errors)) {
 
                     $user = new UserModel();
-                    $user->setEmail($email);
-                    $user->hashPassword($password);
+                    $user->email = $email;
+                    $user->setPassword($password);
+                    $user->setProfil($nom, $prenom);
 
-                    $profil = new ProfilModel();
-                    $profil->setNom($nom);
-                    $profil->setPrenom($prenom);
+                    $this->userDao->create($user);
 
-                    if ($this->userDao->save($user)) {
-
-
-                        AuthConnect::connect( [
-                            'email' => $user->email,
-                            'username' => $user->nom, /*'last_connect' =>
-                        $user->getLastConnectFr()*/]
-                        );
-                        MessageFlash::create('Connecté',$type = 'valide');
-
-                        header('Location: /');
-                        exit;
-                    }
+//                    if ($this->userDao->save($user)) {
+//
+//                        $profil->setUserId($this->userDao->getLastInsertId());
+//
+//                        if ($this->profilDao->save($profil)) {
+//                            AuthConnect::connect([
+//                                'email' => $profil->email, 'username' => $profil->nom, /*'last_connect' =>
+//                            $user->getLastConnectFr()*/
+//                            ]);
+//                            MessageFlash::create('Connecté', $type = 'valide');
+//
+//                            header('Location: /');
+//                            exit;
+//                        }
+//
+//                    }
 
                 } else {
                     $form = [
@@ -204,7 +202,7 @@
                     ];
                 }
             }
-
+var_dump($errors);
             return $this->render('Auth.signup', [ 'form' => $form, 'errors' => $errors ]);
 
         }

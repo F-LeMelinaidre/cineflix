@@ -15,6 +15,13 @@ class Database
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_EMULATE_PREPARES => false
     ];
+
+    private string $select = '*';
+    private string $table;
+    private string $where;
+    private string $orderBy;
+
+
     private $request;
 
     /**
@@ -59,6 +66,76 @@ class Database
             //MessageFlash::create("Exception capturée: Connexion au SGBDR impossible! <br>" . $e->getMessage(), 'erreur');
             //header('Location: erreur/500');
         }
+    }
+
+    /**
+     * Debut de transaction
+     * @return void
+     */
+    public function beginTransaction(): void
+    {
+        $this->connexion->beginTransaction();
+    }
+
+
+    /**
+     * Validation de la transaction
+     * @return void
+     */
+    public function commit(): void
+    {
+        $this->connexion->commit();
+    }
+
+    /**
+     * En cas d'erreur, annule la transaction
+     * @return void
+     */
+    public function rollback(): void
+    {
+        $this->connexion->rollBack();
+    }
+
+    /**
+     * @param string|null $select
+     *
+     * @return $this
+     */
+    public function select(string $select = null): self
+    {
+        if(!is_null($select)) $this->select = $select;
+
+        return $this;
+    }
+
+    /**
+     * @param string $table
+     *
+     * @return $this
+     */
+    public function from(string $table): self
+    {
+        $this->table = " $table";
+
+        return $this;
+    }
+
+    public function where(string $where): self
+    {
+        $this->where = " WHERE $where";
+
+        return $this;
+    }
+
+    //TODO
+    public function andWhere(string $where) {}
+    public function orWhere(string $where) {}
+
+    public function orderBy(string $orderBy)
+    {
+        $this->orderBy = " $orderBy";
+
+        return $this;
     }
 
     /**
@@ -152,16 +229,26 @@ class Database
      *
      * @return bool
      */
-    public function insert(string $sql, array $bindValues): bool
+    public function insert(string $table, array $data): bool
     {
         try {
+
+            $columns = implode(', ', array_keys($data));
+            $values = implode(', :', array_keys($data));
+            $values = ':' . $values;
+
+
+            $sql = "INSERT INTO $table ($columns) VALUE ($values)";
+
+
             $pre = $this->connexion->prepare($sql);
 
-            foreach ($bindValues as $val) {
-                $pre->bindValue(':'.$val['col'], $val['val']);
+
+            foreach ($data as $key => $val) {
+                $pre->bindValue(':'.$key, $val);
             }
 
-        return $pre->execute();
+            return $pre->execute();
 
         } catch (Exception $e) {
             echo 'erreur insert() '.$e->getMessage();

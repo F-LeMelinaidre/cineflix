@@ -3,8 +3,6 @@
     namespace Cineflix\App;
 
 
-    use Cineflix\App\Controller\Movie;
-    use Cineflix\App\Model\DAO\UserDao;
     use Cineflix\App\Model\UserModel;
     use Cineflix\Core\Database\Database;
     use Cineflix\Core\Router\RouteNotFoundException;
