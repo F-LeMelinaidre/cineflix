@@ -6,7 +6,7 @@ namespace Cineflix\Core\Router;
  * Class Route représente une route
  * Exemple de route sans le nom de domaine: /pages
  *
- * Route avec paramètre exemple: /pages/show.php?id=1
+ * Route avec paramètre exemple: /pages/show.view?id=1
  *
  * On représente le paramètre ainsi: /pages/:id
  *

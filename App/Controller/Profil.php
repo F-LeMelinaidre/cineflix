@@ -49,9 +49,10 @@ class Profil extends AbstractController
 
         return $this->render('profil.show',['profil' => $profil]);
     }
-
     public function edit($slug = null)
     {
+        $view = strtolower($slug);
+
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = [];
             if (isset($_POST['nom']) && !empty($_POST['nom'])) {
@@ -176,8 +177,7 @@ class Profil extends AbstractController
 
             $profil = new ProfilModel($data);
         }
-
         //TODO reflechir a mettre les champ nom prenom email en readOnly lors de l'edition du profil en fin d'inscription
-        return $this->render('profil.edit',['profil' => $profil]);
+        return $this->render("profil.edit-$view",['profil' => $profil]);
     }
 }

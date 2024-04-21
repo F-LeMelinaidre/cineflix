@@ -75,8 +75,8 @@
                 ['slug' => '[a-zA-Z_]+']);
 
             self::$_Router->get('profil_show', '/Profil', [ Controller\Profil::class, 'show']);
-            self::$_Router->get('profil_edit', '/Profil/Edit', [ Controller\Profil::class, 'edit']);
-            self::$_Router->post('profil_edit', '/Profil/Edit', [ Controller\Profil::class, 'edit']);
+            self::$_Router->get('profil_edit', '/Profil/Edit/{slug}', [ Controller\Profil::class, 'edit'],
+                ['slug' => 'Identity|Address|Connexion']);
 
             //Route partie Admin
             //Admin Home
@@ -133,7 +133,7 @@
                 // index 0: la Class
                 // index 1: la methode
                 // $params est un tableau des paramètres passés à la méthode de la Class $callback
-                // return vers public/index.php
+                // return vers public/index.view
 
                 return call_user_func_array($callback, $params);
 
@@ -143,7 +143,7 @@
                 // index 0: la Class
                 // index 1: la methode
                 // $params est un tableau des paramètres passés à la méthode de la Class $callback
-                // return vers public/index.php
+                // return vers public/index.view
                 return call_user_func_array($callback, $params);
 
             } catch (RouteNotFoundException $exception) {

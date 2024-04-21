@@ -2,8 +2,8 @@
 
     namespace Cineflix\App\Controller;
 
-    use Cineflix\App\Model\DAO\MovieDao;
-    use Cineflix\App\Model\DAO\SeanceDao;
+    use Cineflix\App\DAO\MovieDao;
+    use Cineflix\App\DAO\SeanceDao;
     use Cineflix\Core\AbstractController;
 
     class Movie extends AbstractController
@@ -35,8 +35,6 @@
             $movieDao = new MovieDao();
             $movie = $movieDao->findBy('slug', $slug);
             //$this->title_page .= ' | ' . ucfirst($movie->nom);
-            var_dump($movie);
-            die();
             $seanceDao = new SeanceDao();
             $seances = $seanceDao->findAllFromMovie($movie->movie_id);
 

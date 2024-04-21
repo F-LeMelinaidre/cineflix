@@ -51,7 +51,7 @@ abstract class AbstractController
         // Stock en memoire le code du fichier appeler par include_once
         // Ce fichier est la base de la page, du code HTML
         ob_start();
-        include_once($this->path_view."Base/index.php");
+        include_once($this->path_view."Base/index.view");
         $view = ob_get_clean();
 
         // Comme pour $layout on remplace {{layout}} dans le fichier de base de la page par $layout
@@ -63,7 +63,7 @@ abstract class AbstractController
      * Enclenche la temporisation de sortie
      * Stock en memoire le code du fichier appeler par include_once
      * ob_get_clean renvoi le contenu du tampon en cas de succès (renvoi le code du fichier inclus)
-     * @return string retourne le html contenu que l'on inserera entre les Tags <body> </body> du fichier Base/index.php
+     * @return string retourne le html contenu que l'on inserera entre les Tags <body> </body> du fichier Base/index.view
      */
     protected function layoutContent($data): string
     {
@@ -73,7 +73,7 @@ abstract class AbstractController
         } else {
             $footer = '';
         }
-        include_once $this->path_view."Layout/$this->layout.php";
+        include_once $this->path_view."Layout/$this->layout.view";
         return ob_get_clean();
     }
 
@@ -81,7 +81,7 @@ abstract class AbstractController
      * Enclenche la temporisation de sortie
      * Stock en memoire le code du fichier appeler par include_once
      * ob_get_clean renvoi le contenu du tampon en cas de succès (renvoi le code du fichier inclus)
-     * @return string retourne le html contenu que l'on inserera entre les Tags <main> </main> du fichier Layout/main.php ou Layout/auth.php ou Layout/admin.php
+     * @return string retourne le html contenu que l'on inserera entre les Tags <main> </main> du fichier Layout/main.view ou Layout/auth.view ou Layout/admin.view
      */
     protected function renderOnlyView($view, $data): string
     {
@@ -89,7 +89,7 @@ abstract class AbstractController
         // Transforme les clés en nom de variable et attribut a cette variable la valeur associé a la clé
         // Ce qui permet de de les appeler dans les vues
         extract($data);
-        include_once $this->path_view.str_replace('.', '/', $view).".php";
+        include_once $this->path_view.str_replace('.', '/', $view).".view";
         return ob_get_clean();
     }
 }

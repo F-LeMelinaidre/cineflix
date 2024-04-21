@@ -92,7 +92,7 @@
 
 
                         // Utilise la class Core\Util\MessageFlash.php
-                        // la class est appelé au niveau de la vue dans \App\View\Layout\main.php
+                        // la class est appelé au niveau de la vue dans \App\View\Layout\main.view
                         MessageFlash::create('Connecté',$type = 'valide');
 
                         header('Location: /');
