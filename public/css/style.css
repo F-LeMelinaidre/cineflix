@@ -92,6 +92,7 @@ section .edit-profil {
 
 section.sign {
     max-width: 1280px;
+    min-height: 578px;
 }
 section.sign div:first-of-type {
     max-width: 550px;

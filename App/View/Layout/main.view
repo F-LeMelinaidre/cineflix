@@ -40,6 +40,12 @@
         </a>
     </div>
 
+    <?php if (\Cineflix\Core\Util\AuthConnect::isConnected()): ?>
+    <div>
+        <?= $_SESSION[\Cineflix\App\AppController::APP_NAME]['point'] ?> point<?= (0 != $_SESSION[\Cineflix\App\AppController::APP_NAME]['point'])?
+            's' : '' ?>
+    </div>
+    <?php endif ?>
 
     <div class="navbar navbar-expand-lg">
         <div class="collapse navbar-collapse">
@@ -50,17 +56,15 @@
                             Streaming
                         </a>
                     </li>
-                    <li class="ms-2">
+                    <li class="nav-item">
                         <a href="<?= self::$_Router->getUrl("profil_show") ?>" class="nav-link">
                             Mon compte
                         </a>
                     </li>
-                    <li class="ms-2">
-                        <a href="<?= self::$_Router->getUrl("signout") ?>" class="btn btn-sm btn-outline-warning me-lg-5">
-                            Deconnexion
-                        </a>
-                    </li>
                 </ul>
+                <a href="<?= self::$_Router->getUrl("signout") ?>" class="btn btn-sm btn-outline-warning me-lg-5">
+                    Deconnexion
+                </a>
             <?php else: ?>
                 <a href="<?= self::$_Router->getUrl("signin") ?>" class="btn btn-sm btn-outline-warning me-lg-5">
                     Connexion

@@ -4,7 +4,7 @@ namespace Cineflix\App\Model;
 
 class ProfilModel
 {
-    public string $table = 'profil';
+    private string $table = 'profil';
     public int $user_id;
 
     public string $nom;
@@ -16,6 +16,9 @@ class ProfilModel
     public int $code_postale;
     public string $ville;
     public int $point;
+    public string $modified;
+    public string $created;
+
     public UserModel $user;
 
     public function __construct(array $data = null)
@@ -31,9 +34,13 @@ class ProfilModel
         if(isset($data['code_postale'])) $this->code_postale = $data['code_postale'];
         if(isset($data['ville'])) $this->ville = $data['ville'];
         if(isset($data['point'])) $this->point = $data['point'];
+        if(isset($data['created'])) $this->created = $data['created'];
+        if(isset($data['modified'])) $this->modified = $data['modified'];
 
         $this->user = new UserModel();
         if(isset($data['email'])) $this->user->email = $data['email'];
+        if(isset($data['connect'])) $this->user->connect = $data['connect'];
+        if(isset($data['last_connect'])) $this->user->last_connect = $data['last_connect'];
 
     }
 

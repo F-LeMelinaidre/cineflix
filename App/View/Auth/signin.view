@@ -1,7 +1,6 @@
 <section class="sign row col-xl-10 col-lg-10 col-md-6 col-sm-8 col-12 m-auto p-0 rounded-2 bg-dark-subtle">
-
         <div class="col-lg-6 col-md-12 order-0 order-lg-1 py-4 mx-auto">
-            <header class="mb-4 mx-4">
+            <header class="mb-4">
                 <a href="/" class="d-block mt-4 mb-5 text-center">
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0"
                          width="260" height="50" viewBox="0 0 260 50"
@@ -37,10 +36,10 @@
                         </g>
                     </svg>
                 </a>
-                <h1 class="mx-xl-4 mx-sm-4">Content de vous revoir</h1>
-                <p class="mx-xl-5 mx-sm-4">Nouveau ici? <a href="<?= self::$_Router->getUrl('signup') ?>">Créer un compte</a></p>
+                <h1>Content de vous revoir</h1>
+                <p class="mx-3 mb-0">Nouveau ici? <a href="<?= self::$_Router->getUrl('signup') ?>">Créer un compte</a></p>
             </header>
-            <form action="<?= self::$_Router->getUrl('signin') ?>" method="post" class="row flex-column row-gap-2 mx-auto ">
+            <form action="<?= self::$_Router->getUrl('signin') ?>" method="post" class="row flex-column row-gap-2 mx-auto mt-5">
 
                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-7 col-9 row mx-auto">
                     <label for="Identifiant">Identifiant</label>

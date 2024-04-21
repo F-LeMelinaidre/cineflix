@@ -79,15 +79,17 @@
                             'select' => ['email'],
                             'hasOne' => [
                                 'profil' => [
-                                    'select' => ['nom', 'prenom']
+                                    'select' => ['nom', 'prenom', 'point']
                                 ]
                             ]
                         ]);
 
                         // On le connect en lui passant les paramètre que l on désire mettre en session
                         AuthConnect::connect($email, [
-                            'nom'           => $user->getProfil()->nom,
-                            'prenom'        => $user->getProfil()->prenom
+                            'nom'    => $user->getProfil()->nom,
+                            'prenom' => $user->getProfil()->prenom,
+                            'point'  => $user->getProfil()->point
+
                         ]);
 
 
