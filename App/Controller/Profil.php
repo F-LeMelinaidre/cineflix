@@ -108,7 +108,7 @@ class Profil extends AbstractController
             $profil = new ProfilModel($data);
         }
 
-
+        //TODO reflechir a mettre les champ nom prenom email en readOnly lors de l'edition du profil en fin d'inscription
         return $this->render('profil.edit',['profil' => $profil]);
     }
 }
