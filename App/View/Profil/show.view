@@ -30,7 +30,8 @@
             <dt class="col-1 text-end pe-2">Ville :</dt>
             <dd class="col-8"><?= $profil->ville ?></dd>
         </dl>
-        <a href="<?= self::$_Router->getUrl("profil_edit_address") ?>" class="col-auto ms-auto btn btn-sm btn-outline-warning mt-3">Modifier</a>
+        <a href="<?= self::$_Router->getUrl("profil_edit",['slug' => 'Address']) ?>" class="col-auto ms-auto btn btn-sm btn-outline-warning
+        mt-3">Modifier</a>
         <h2 class="p-0 mb-2">Paramètres de connexion</h2>
         <dl class="contact-view row row-gap-2 align-items-center">
             <dt class="col-2 text-end pe-2">Email :</dt>
@@ -38,7 +39,8 @@
             <dt class="col-2 text-end pe-2">Mot de passe :</dt>
             <dd class="col-4">******</dd>
         </dl>
-        <a href="<?= self::$_Router->getUrl("profil_edit_connexion") ?>" class="col-auto ms-auto btn btn-sm btn-outline-warning mt-3">Modifier</a>
+        <a href="<?= self::$_Router->getUrl("profil_edit",['slug' => 'Connexion']) ?>" class="col-auto ms-auto btn btn-sm btn-outline-warning
+        mt-3">Modifier</a>
     </div>
 
 </section>
