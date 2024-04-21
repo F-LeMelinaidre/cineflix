@@ -15,10 +15,9 @@
 
         public function findByUserToken(string $token, array $options = null)
         {
-            $test = ['connect', 'modified'];
             $options['hasOne'] =  [
                     'user' => [
-                        'select' => (isset($options['user']['select'])) ? array_merge($options['user']['select'],$test) : ['*']
+                        'select' => (isset($options['user']['select'])) ? $options['user']['select'] : ['*']
                     ]
             ];
 

@@ -1,6 +1,11 @@
 <section  id="Profil" class="p-0">
-    <header class="d-flex justify-content-around align-items-center mt-4 border-top border-bottom border-dark">
-        <h1>Éditer mon Profil</h1>
+    <header class="d-flex
+               justify-content-between
+               align-items-center
+               position-relative
+               mt-4
+               border-top border-bottom border-dark">
+        <h1 class="ms-5">Éditer</h1>
         <p>Dernière modification</p>
         <a href="<?= self::$_Router->getUrl("profil_show") ?>" class="btn btn-sm btn-outline-warning me-lg-5">Retour</a>
     </header>

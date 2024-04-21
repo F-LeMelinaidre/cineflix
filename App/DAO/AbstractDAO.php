@@ -102,7 +102,6 @@
         protected function setSelect(string $alias, array $columns): string
         {
             $selectColumns = array_map(function($column) use ($alias) {
-
                 return ($alias == $this->table || $column == '*')? "$alias.$column" : "$alias.$column AS ". $alias. "_" .$column;
             }, $columns);
 

@@ -41,24 +41,37 @@
     </div>
 
 
-    <?php if (\Cineflix\Core\Util\AuthConnect::isConnected()): ?>
-        <ul class="nav-profil">
-            <li class="icon">
-                <a href="<?= self::$_Router->getUrl("profil_show") ?>">
-                    <span class="profil-icon"></span>
+    <div class="navbar navbar-expand-lg">
+        <div class="collapse navbar-collapse">
+            <?php if (\Cineflix\Core\Util\AuthConnect::isConnected()): ?>
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item">
+                        <a href="<?= self::$_Router->getUrl("streaming_index") ?>" class="nav-link">
+                            Streaming
+                        </a>
+                    </li>
+                    <li class="ms-2">
+                        <a href="<?= self::$_Router->getUrl("profil_show") ?>" class="nav-link">
+                            Mon compte
+                        </a>
+                    </li>
+                    <li class="ms-2">
+                        <a href="<?= self::$_Router->getUrl("signout") ?>" class="btn btn-sm btn-outline-warning me-lg-5">
+                            Deconnexion
+                        </a>
+                    </li>
+                </ul>
+            <?php else: ?>
+                <a href="<?= self::$_Router->getUrl("signin") ?>" class="btn btn-sm btn-outline-warning me-lg-5">
+                    Connexion
                 </a>
-            </li>
-            <li>
-                <a href="<?= self::$_Router->getUrl("signout") ?>" class="btn btn-sm btn-outline-warning me-lg-5">
-                    Deconnexion
-                </a>
-            </li>
-        </ul>
-    <?php else: ?>
-        <a href="<?= self::$_Router->getUrl("signin") ?>" class="btn btn-sm btn-outline-warning me-lg-5">
-            Connexion
-        </a>
-    <?php endif ?>
+            <?php endif ?>
+        </div>
+
+
+
+    </div>
+
 
 </header>
 
