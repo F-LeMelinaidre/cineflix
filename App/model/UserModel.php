@@ -13,7 +13,7 @@ class UserModel
     public string $token;
     public string $password;
     public int $admin;
-    public ProfilModel $profil;
+    private ProfilModel $profil;
 
     public function __construct(array $data = null)
     {

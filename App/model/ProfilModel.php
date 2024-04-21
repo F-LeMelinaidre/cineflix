@@ -2,7 +2,7 @@
 
 namespace Cineflix\App\Model;
 
-class ProfilModel extends UserModel
+class ProfilModel
 {
     public string $table = 'profil';
     public int $user_id;
@@ -16,10 +16,10 @@ class ProfilModel extends UserModel
     public int $code_postale;
     public string $ville;
     public int $point;
+    public UserModel $user;
 
     public function __construct(array $data = null)
     {
-        parent::__construct($data);
 
         if(isset($data['user_id'])) $this->user_id = $data['user_id'];
         if(isset($data['nom'])) $this->setNom($data['nom']);
@@ -31,6 +31,9 @@ class ProfilModel extends UserModel
         if(isset($data['code_postale'])) $this->code_postale = $data['code_postale'];
         if(isset($data['ville'])) $this->ville = $data['ville'];
         if(isset($data['point'])) $this->point = $data['point'];
+
+        $this->user = new UserModel();
+        if(isset($data['email'])) $this->user->email = $data['email'];
 
     }
 

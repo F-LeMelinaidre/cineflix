@@ -22,7 +22,7 @@
         <h2 class="p-0 mb-2">Coordonnées</h2>
         <dl class="contact-view row row-gap-2 align-items-center">
             <dt class="col-2 text-end pe-2">Email :</dt>
-            <dd class="col-10"><?= $profil->email ?></dd>
+            <dd class="col-10"><?= $profil->user->email ?></dd>
             <dt class="col-2 text-end pe-2">Adresse postale :</dt>
             <dd class="col-10"><?= $profil->getAddress() ?></dd>
             <dt class="col-2 text-end pe-2">Code postale :</dt>

@@ -43,10 +43,7 @@ class Profil extends AbstractController
     {
         //TODO valider les infos de la session
         // Et créer l'objet Profil dans le constructeur
-        $data = $this->profilDao->findByUserToken($this->session['token'],[
-            'user' => ['select' => ['token']]
-        ]);
-
+        $data = $this->profilDao->findByUserToken($this->session['token']);
 
         $profil = new ProfilModel($data);
 
