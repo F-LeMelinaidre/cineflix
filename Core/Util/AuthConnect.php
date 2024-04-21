@@ -5,16 +5,23 @@ namespace Cineflix\Core\Util;
 use Cineflix\Core\Database\Database;
 
 /**
+ *  5BVMeCVmcdGy!?2pd
+ *  La table utilisateur doit avoir au minimum les colonnes suivantes :
+ *  id | (identifiant) | password | token | created | modified | time_connect | last_time_connect
+ *
+ *  Le nom de la colonne pour l'identifiant est defini lors de l'appel de la methode logon()
  *
  */
 class AuthConnect
 {
 
     private static $_Database;
-    private static $_Model;
     private static $_Table;
     private static $_Connect = false;
     private static $_NameSession;
+
+    private static $_IdColonne;
+    private static $_Token;
 
     /**
      * @param Database $database Instance de Database
@@ -22,11 +29,11 @@ class AuthConnect
      *
      * @return void
      */
-    public static function init($database, $model, $table, $name_session = 'Auth')
+    public static function init($database, $table, $id_colonne = 'username', $name_session = 'Auth')
     {
         self::$_Database = $database;
-        self::$_Model = $model;
         self::$_Table = $table;
+        self::$_IdColonne = $id_colonne;
 
         self::$_NameSession = $name_session;
 
@@ -39,31 +46,44 @@ class AuthConnect
      * @param string $value Valeur de la colonne
      * @param string $pwd Mot de passe
      */
-    public static function logon(string $col_name, string $value, string $pwd): bool
+    public static function verify(string $id_value, string $pwd): bool
     {
 
         $table = self::$_Table;
+        $id_colonne = self::$_IdColonne;
 
-        $query ="SELECT $col_name, password FROM $table WHERE $col_name LIKE :$col_name";
-        $bindValues[] = ['col' => $col_name, 'val' => $value];
+        $query ="SELECT $id_colonne, password FROM $table WHERE $id_colonne = :$id_colonne";
+        $bindValues[] = ['col' => $id_colonne, 'val' => $id_value];
 
         $req = self::$_Database->prepare($query, $bindValues);
-        $result = $req->fetch(self::$_Model);
 
+        $result = $req->fetch();
 
-        if ($result && password_verify($pwd, $result->password)) {
-            self::$_Connect = true;
-        }
-
-        return self::$_Connect;
+        return $result && password_verify($pwd, $result['password']);
     }
 
     /**
      * $_NameSession nom de la session
      * @param array $params tableau des valeurs enregistré en session cles => valeurs
      */
-    public static function connect(array $params): void
+    public static function connect(string $id_value, array $params): void
     {
+
+        if(!isset(self::$_Token)) self::setToken();
+
+        $params['token'] = self::getToken();
+
+        $table = self::$_Table;
+        $id_colonne = self::$_IdColonne;
+
+        $update = "UPDATE $table SET last_connect = connect, connect = CURRENT_TIMESTAMP, token = :token WHERE $id_colonne = :$id_colonne";
+        $bindValues = [
+            ['col' => $id_colonne, 'val' => $id_value],
+            ['col' => 'token', 'val' => self::$_Token]
+        ];
+
+        $req = self::$_Database->prepare($update, $bindValues);
+
         $_SESSION = [self::$_NameSession => $params];
     }
 
@@ -89,5 +109,15 @@ class AuthConnect
     public static function getSession(): array
     {
         return $_SESSION[self::$_NameSession];
+    }
+
+    private static function setToken() {
+        $randomBytes = random_bytes(16);
+        self::$_Token = bin2hex($randomBytes);
+    }
+    public static function getToken() {
+        if(!isset(self::$_Token)) self::setToken();
+
+        return self::$_Token;
     }
 }

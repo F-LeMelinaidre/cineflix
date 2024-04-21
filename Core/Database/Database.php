@@ -16,12 +16,7 @@ class Database
         PDO::ATTR_EMULATE_PREPARES => false
     ];
 
-    private string $select = '*';
-    private string $table;
-    private string $where;
-    private string $orderBy;
-
-
+    private array $bind_values;
     private $request;
 
     /**
@@ -97,48 +92,6 @@ class Database
     }
 
     /**
-     * @param string|null $select
-     *
-     * @return $this
-     */
-    public function select(string $select = null): self
-    {
-        if(!is_null($select)) $this->select = $select;
-
-        return $this;
-    }
-
-    /**
-     * @param string $table
-     *
-     * @return $this
-     */
-    public function from(string $table): self
-    {
-        $this->table = " $table";
-
-        return $this;
-    }
-
-    public function where(string $where): self
-    {
-        $this->where = " WHERE $where";
-
-        return $this;
-    }
-
-    //TODO
-    public function andWhere(string $where) {}
-    public function orWhere(string $where) {}
-
-    public function orderBy(string $orderBy)
-    {
-        $this->orderBy = " $orderBy";
-
-        return $this;
-    }
-
-    /**
      * @param string $query
      * @param array  $bindvalues
      *
@@ -160,11 +113,26 @@ class Database
             $this->request->execute();
 
             return $this;
+
         } catch (Exception $e) {
             echo 'erreur prepare() '.$e->getMessage();
             //MessageFlash::create("Impossible de récupérer les données sur la table! <br>" . $e->getMessage(), 'erreur');
             return null;
         }
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return $this
+     */
+    public function setBindValues(array $data) {
+
+        foreach ($data as $col => $val) {
+            $this->bind_values[] = ['col' => $col,'val' => $val];
+        }
+
+        return $this;
     }
 
     /**
@@ -237,7 +205,7 @@ class Database
 
             $columns = implode(', ', array_keys($data));
             $values = implode(', :', array_keys($data));
-            $values = ':' . $values;
+            $values = ":$values";
 
 
             $sql = "INSERT INTO $table ($columns) VALUE ($values)";

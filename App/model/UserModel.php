@@ -5,12 +5,22 @@ namespace Cineflix\App\Model;
 class UserModel
 {
 
-    public string $table = 'membre';
+    public string $table = 'user';
 
     public int $id;
-    public string $email = '';
-    private string $password;
-    private ProfilModel $profil;
+    public string $email;
+
+    public string $token;
+    public string $password;
+    public int $admin;
+    public ProfilModel $profil;
+
+    public function __construct(array $data = null)
+    {
+        if(isset($data['id'])) $this->id = $data['id'];
+        if(isset($data['email'])) $this->email = $data['email'];
+        if(isset($data['profil'])) $this->setProfil($data['profil']);
+    }
 
     /**
      * @param $password
@@ -30,11 +40,9 @@ class UserModel
         return $this->password;
     }
 
-    public function setProfil($nom, $prenom)
+    public function setProfil(array $data)
     {
-        $this->profil = new ProfilModel();
-        $this->profil->setNom($nom);
-        $this->profil->setPrenom($prenom);
+        $this->profil = new ProfilModel($data);
     }
     public function getProfil()
     {

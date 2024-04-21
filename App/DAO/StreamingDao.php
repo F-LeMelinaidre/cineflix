@@ -1,6 +1,6 @@
 <?php
 
-namespace Cineflix\App\Model\DAO;
+namespace Cineflix\App\DAO;
 
 
 use Cineflix\App\AppController;

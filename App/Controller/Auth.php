@@ -72,13 +72,24 @@
 
                     // Utilise la class AuthConnect, qui à été paramétré en amont dans AppController
                     // Pour vérifier l'existance du compte et la validité du mot de passe
-                    if (AuthConnect::logon('email', $email, $password)) {
+                    if (AuthConnect::verify($email, $password)) {
 
-                        // On recupère les données données de l'utilisateur
-                        $user = $this->userDao->findByMail($email);
+
+                        $user = $this->userDao->findOne(['email' => $email ], [
+                            'select' => ['email'],
+                            'hasOne' => [
+                                'profil' => [
+                                    'select' => ['nom', 'prenom']
+                                ]
+                            ]
+                        ]);
 
                         // On le connect en lui passant les paramètre que l on désire mettre en session
-                        AuthConnect::connect($user);
+                        AuthConnect::connect($email, [
+                            'nom'           => $user->profil->nom,
+                            'prenom'        => $user->profil->prenom
+                        ]);
+
 
                         // Utilise la class Core\Util\MessageFlash.php
                         // la class est appelé au niveau de la vue dans \App\View\Layout\main.php
@@ -87,8 +98,7 @@
                         header('Location: /');
                         exit;
                     } else {
-                        //TODO Message d'erreur de connection
-                        // Identifiant mot de passe invalide
+                        MessageFlash::create('Identifiant / Mot de passe invalide !!!',$type = 'invalide');
                     }
                 }
 
@@ -104,13 +114,9 @@
          */
         public function signup(): string
         {
-            $form = [
-                'nom'      => '',
-                'prenom'   => '',
-                'email'    => '',
-                'password' => ''
-            ];
+            $form = [];
             $errors = [];
+
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -162,38 +168,42 @@
                     $password = '';
                 }
 
-                $pwd_confirm = Security::sanitize($_POST['pwd_confirm']);
+                $pwd_confirm = Security::sanitize($_POST['password_confirm']);
 
                 if ($password !== $pwd_confirm && !isset($errors['password'])) $errors['password'] = $this->msg_errors['not_equal'];
+
+
 
                 if (empty($errors)) {
 
                     $user = new UserModel();
                     $user->email = $email;
                     $user->setPassword($password);
-                    $user->setProfil($nom, $prenom);
+                    $user->setProfil(['nom' => $nom, 'prenom' => $prenom]);
 
                     if($this->userDao->create($user)) {
-
-                        AuthConnect::connect([
-                            'email' => $user->email, 'username' => $user->getProfil()->nom, /*'last_connect' =>
-                            $user->getLastConnectFr()*/
+                        //TODO CAPTCHA
+                        //TODO prevoir la validation du compte par envoi de mail
+                        AuthConnect::connect($email,[
+                            'nom'    => $user->profil->nom,
+                            'prenom' => $user->profil->prenom,
                         ]);
+
                         MessageFlash::create('Connecté', $type = 'valide');
 
                         header('Location: /Profil/Edit');
                         exit;
                     }
 
-                } else {
-                    $form = [
-                        'nom' => $nom,
-                        'prenom' => $prenom,
-                        'email' => $email,
-                        'password'=> $password,
-                        'pwd_confirm' => $pwd_confirm,
-                    ];
                 }
+
+                $form = [
+                    'nom' => $nom,
+                    'prenom' => $prenom,
+                    'email' => $email,
+                    'password'=> $password,
+                    'password_confirm' => $pwd_confirm,
+                ];
             }
             return $this->render('Auth.signup', [ 'form' => $form, 'errors' => $errors ]);
 

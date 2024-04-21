@@ -47,7 +47,7 @@
             self::$_Router = Router::getInstance();
             self::$_Database = Database::getInstance(self::$_Root);
 
-            AuthConnect::init(self::$_Database, UserModel::class, 'membre', self::APP_NAME);
+            AuthConnect::init(self::$_Database, 'user', 'email', self::APP_NAME);
         }
 
         public function run()
@@ -75,7 +75,8 @@
                 ['slug' => '[a-zA-Z_]+']);
 
             self::$_Router->get('profil_show', '/Profil', [ Controller\Profil::class, 'show']);
-            self::$_Router->get('profil_edit', '/Profil/edit', [ Controller\Profil::class, 'edit']);
+            self::$_Router->get('profil_edit', '/Profil/Edit', [ Controller\Profil::class, 'edit']);
+            self::$_Router->post('profil_edit', '/Profil/Edit', [ Controller\Profil::class, 'edit']);
 
             //Route partie Admin
             //Admin Home

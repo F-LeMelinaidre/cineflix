@@ -7,12 +7,10 @@
 
         public function create(object $model);
 
-        public function read();
+        public function findOneBy(array $params, array $options = null);
 
         public function update();
 
         public function delete();
-
-        public function getLastInsert();
 
     }

@@ -2,7 +2,7 @@
 
 namespace Cineflix\App\Controller;
 
-use Cineflix\App\Model\DAO\StreamingDao;
+use Cineflix\App\DAO\StreamingDao;
 use Cineflix\Core\AbstractController;
 use Cineflix\Core\Util\AuthConnect;
 
