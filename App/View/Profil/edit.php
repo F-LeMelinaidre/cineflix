@@ -22,7 +22,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-8 col-sm-8 col-12">
                     <label class="email" for="Email">Email :</label>
-                    <input id="Email" type="email" name="email" value="<?= $profil->email ?>" class="form-control
+                    <input id="Email" type="email" name="email" value="<?= $profil->user->email ?>" class="form-control
                     mb-3">
                 </div>
                 <div class="col-md-4 col-sm-4 col-12">
@@ -69,6 +69,7 @@
             </div>
         </div>
         <div class="col-auto mt-2">
+            <input type="hidden" name="user_id" value="<?= $profil->user_id ?>">
             <button type="submit" class="btn btn-warning m-0">Modifier</button>
         </div>
     </form>

@@ -9,7 +9,7 @@
 
         public function findOneBy(array $params, array $options = null);
 
-        public function update();
+        public function update(object $model);
 
         public function delete();
 

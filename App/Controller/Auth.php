@@ -75,7 +75,7 @@
                     if (AuthConnect::verify($email, $password)) {
 
 
-                        $user = $this->userDao->findOne(['email' => $email ], [
+                        $user = $this->userDao->findOneBy(['email' => $email ], [
                             'select' => ['email'],
                             'hasOne' => [
                                 'profil' => [
@@ -86,8 +86,8 @@
 
                         // On le connect en lui passant les paramètre que l on désire mettre en session
                         AuthConnect::connect($email, [
-                            'nom'           => $user->profil->nom,
-                            'prenom'        => $user->profil->prenom
+                            'nom'           => $user->getProfil()->nom,
+                            'prenom'        => $user->getProfil()->prenom
                         ]);
 
 
@@ -184,12 +184,13 @@
                     if($this->userDao->create($user)) {
                         //TODO CAPTCHA
                         //TODO prevoir la validation du compte par envoi de mail
+
                         AuthConnect::connect($email,[
-                            'nom'    => $user->profil->nom,
-                            'prenom' => $user->profil->prenom,
+                            'nom'    => $user->getProfil()->nom,
+                            'prenom' => $user->getProfil()->prenom,
                         ]);
 
-                        MessageFlash::create('Connecté', $type = 'valide');
+                        MessageFlash::create('Connecté, merci de compléter votre profil', $type = 'valide');
 
                         header('Location: /Profil/Edit');
                         exit;

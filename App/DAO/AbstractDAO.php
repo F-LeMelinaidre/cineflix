@@ -13,7 +13,7 @@
         protected string $query;
 
         protected string $table;
-        protected array $foreign_keys;
+        protected array $relations;
         protected string $model;
 
         protected int $last_insert_id;
@@ -32,24 +32,20 @@
         public function create(object $model) {}
 
         public function findOneBy(array $params, array $options = null) {
+            $columns = (isset($options['select']))? $options['select'] : ['*'];
+            $select = $this->setSelect($this->table, $columns);
 
-            $select = '*';
+            if(isset($options['hasOne'])) {
+                $hasOne = $this->relations['hasOne'];
+                foreach ($options['hasOne'] as $table => $opt) {
+                    $join[] = "JOIN $table ON {$hasOne[$table]}";
 
-            if(isset($options['select'])) {
-
-                $select = $this->setSelect($this->table,$options['select']);
-
-            }
-
-            if(isset($options['contains'])) {
-                foreach ($options['contains'] as $key => $column) {
-
-                    $select .= ', ' .$this->setSelect($key,$column);
-                    $join[] = "JOIN $key ON {$this->foreign_keys[$key]}";
+                    if(isset($opt['select'])) {
+                        $select .= ', '.$this->setSelect($table, $opt['select']);
+                    }
 
                 }
             }
-
             $join = (isset($join))? implode($join) : '';
 
             $where = [];
@@ -60,41 +56,38 @@
             }
 
             $where = implode(' AND ',$where);
+            $query = "SELECT $select FROM $this->table $join WHERE $where";
 
-            $this->query = "SELECT $select FROM $this->table $join WHERE $where";
+            $req = $this->db->prepare($query, $bindValues);
+            $result = $req->fetch();
 
-            $req = $this->db->prepare($this->query, $bindValues);
+            if(isset($options['hasOne'])) {
+                $data = [];
 
-
-            if(!isset($options['contains'])) {
-
-                $result = $req->fetch($this->model);
-
-            } else {
-
-                $result = $req->fetch();
                 foreach ($result as $key => $val) {
 
                     $pos = strpos($key, '_');
-
                     if ($pos !== false) {
 
                         $prefix = substr($key, 0, $pos);
-                        $column = substr($key, $pos + 1);
 
-                        $result[$prefix][$column] = $val;
+                        if (isset($hasOne[$prefix]) && $key !== $prefix . '_id') {
 
-                        unset($result[$key]);
+                            $unprefixed_kry = substr($key, $pos + 1);
+
+                            $data[$prefix][$unprefixed_kry] = $val;
+
+                            unset($result[$key]);
+                        }
                     }
                 }
-
+                $result = array_merge($result, $data);
             }
 
             return $result;
-
         }
 
-        public function update() {}
+        public function update(object $model) {}
 
         public function delete() {}
 
@@ -110,7 +103,7 @@
         {
             $selectColumns = array_map(function($column) use ($alias) {
 
-                return ($alias == $this->table)? "$alias.$column" : "$alias.$column AS ". $alias. "_" .$column;
+                return ($alias == $this->table || $column == '*')? "$alias.$column" : "$alias.$column AS ". $alias. "_" .$column;
             }, $columns);
 
             return implode(", ", $selectColumns);

@@ -20,59 +20,13 @@ class UserDao extends AbstractDAO
             ]
     ];
 
-    public function findOne(array $params, array $options = null)
+    public function findOneBy(array $params, array $options = null)
     {
-        $columns = (isset($options['select']))? $options['select'] : ['*'];
-        $select = $this->setSelect($this->table, $columns);
+        $result = parent::findOneBy($params, $options);
 
-        if(isset($options['hasOne'])) {
-            $hasOne = $this->relations['hasOne'];
-
-            foreach ($options['hasOne'] as $table => $opt) {
-
-                $join[] = "JOIN $table ON {$hasOne[$table]}";
-
-                if(isset($opt['select'])) {
-                    $select .= ', '.$this->setSelect($table, $opt['select']);
-                }
-
-            }
-        }
-
-        $join = (isset($join))? implode($join) : '';
-
-        $where = [];
-        $bindValues = [];
-        foreach ($params as $key => $val) {
-            $where [] = "$key = :$key";
-            $bindValues[] = ['col' => "$key", 'val' => $val];
-        }
-
-        $where = implode(' AND ',$where);
-        $query = "SELECT $select FROM $this->table $join WHERE $where";
-
-        $req = $this->db->prepare($query, $bindValues);
-        $result = $req->fetch();
-
-        foreach($result as $key => $val ) {
-
-            $hasOne = array_keys($hasOne);
-
-            foreach($hasOne as $prefix) {
-                $pos = strpos($key, '_');
-
-                if ($pos !== false) {
-                    $prefix = substr($key, 0, $pos);
-                    $column = substr($key, $pos + 1);
-
-                    $result[$prefix][$column] = $result[$key];
-                    unset($result[$key]);
-                }
-
-            }
-        }
         return new UserModel($result);
     }
+
     public function create(object $user)
     {
 
@@ -132,11 +86,6 @@ class UserDao extends AbstractDAO
     public function read()
     {
         // TODO: Implement read() method.
-    }
-
-    public function update()
-    {
-        // TODO: Implement update() method.
     }
 
     public function delete()
