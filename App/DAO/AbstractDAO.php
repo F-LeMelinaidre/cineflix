@@ -31,7 +31,14 @@
         }
         public function create(object $model) {}
 
-        public function findOneBy(array $params, array $options = null) {
+        /**
+         * @param array      $params
+         * @param array|null $options
+         *
+         * @return array
+         */
+        public function findOneBy(array $params, array $options = null): array
+        {
             if(!isset($options['select'])) {
                 $columns = ['*'];
             } else {
@@ -89,18 +96,39 @@
             return $result;
         }
 
+        /**
+         * @param object $model
+         *
+         * @return void
+         */
         public function update(object $model) {}
 
+        /**
+         * @return void
+         */
         public function delete() {}
 
+        /**
+         * @return void
+         */
         protected function setLastInsertId() {
             $this->last_insert_id = $this->db->getLastInsertId();
         }
+
+        /**
+         * @return int|null
+         */
         public function getLastInsertId()
         {
             return (isset($this->last_insert_id))? $this->last_insert_id : null;
         }
 
+        /**
+         * @param string $alias
+         * @param array  $columns
+         *
+         * @return string
+         */
         protected function setSelect(string $alias, array $columns): string
         {
             $selectColumns = array_map(function($column) use ($alias) {

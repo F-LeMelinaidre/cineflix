@@ -20,29 +20,39 @@
     </header>
 
     <form action="<?= self::$_Router->getUrl('profil_edit_identite') ?>" method="post"  class="edit-profil mt-4 m-auto p-4 rounded-2 bg-dark-subtle">
-        <div id="Identity" class="mb-4">
-            <h2 class="mb-3">Identité :</h2>
+        <div id="Identity">
+            <h2>Identité :</h2>
             <div class="row justify-content-center">
                 <div class="col-md-6 col-sm-6 col-12">
-                    <label class="nom col-6" for="Nom">Nom :</label>
-                    <input id="Nom" type="text" name="nom" value="<?= $profil->nom ?>" class="form-control mb-3">
+                    <label class="nom mt-3 mb-1" for="Nom">Nom :</label>
+                    <input id="Nom" class="form-control mb-2" type="text" name="nom" value="<?= $profil->nom ?>">
                 </div>
                 <div class="col-md-6 col-sm-6 col-12">
-                    <label class="prenom col-6" for="Prenom">Prénom :</label>
-                    <input id="Prenom" type="text" name="prenom" value="<?= $profil->prenom ?>" class="form-control
-                    mb-3">
+                    <label class="prenom mt-3 mb-1" for="Prenom">Prénom :</label>
+                    <input id="Prenom" class="form-control mb-2" type="text" name="prenom" value="<?= $profil->prenom ?>">
                 </div>
+
+                <?php $class =  (isset($errors['nom'])) ? '' : 'hidden';  ?>
+
+                <div class="col-6 <?= $class ?>">
+                    <?php if(isset($errors['nom'])) echo $errors['nom']; ?>
+                </div>
+
+                <?php $class =  (isset($errors['prenom'])) ? '' : 'hidden';  ?>
+
+                <div class="col-6 <?= $class ?>">
+                    <?php if(isset($errors['prenom'])) echo $errors['prenom']; ?>
+                </div>
+
             </div>
             <div class="row justify-content-start">
                 <div class="col-md-4 col-sm-4 col-12">
-                    <label class="date-de-naissance" for="DateNaissance">Date de naissance :</label>
-                    <input id="DateNaissance" type="date" name="date_naissance" value="<?= $profil->date_naissance ?>"
-                           class="form-control
-                    mb-3">
+                    <label class="date-de-naissance mt-3 mb-1" for="DateNaissance">Date de naissance :</label>
+                    <input id="DateNaissance" class="form-control mb-2" type="date" name="date_naissance" value="<?= $profil->date_naissance ?>">
                 </div>
             </div>
         </div>
-        <div class="col-auto mt-2">
+        <div class="col-auto mt-3">
             <input type="hidden" name="user_id" value="<?= $profil->user_id ?>">
             <button type="submit" class="btn btn-warning m-0">Modifier</button>
         </div>

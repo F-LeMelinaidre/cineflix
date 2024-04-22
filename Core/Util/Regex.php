@@ -16,6 +16,14 @@ class Regex
         'password'   => '/^(?=.*[a-zA-Z0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!?:_\-*#&%+]).{8,}$/'
     ];
 
+    private const MESSAGES = [
+        'alpha' => 'Caractères alphabétiques uniquement !',
+        'alphaNumeric' => 'Caractères alpha-numériques uniquement !',
+        'numeric' => 'Caractères numériques uniquement !',
+        'email'       => 'Votre email ne respete pas la norme RFC2822',
+        'password'   => '8 caratères minimum, comprenant au minimum une majascule, une minusclule, un chiffre, et un caratère !?:_-*#&%+'
+    ];
+
     public static function getPattern(string $name): string
     {
         try {
@@ -31,8 +39,17 @@ class Regex
 
     }
 
-    public static function getMessage(string): string
+    public static function getMessage(string $name): string
     {
-
+        try {
+            if (!array_key_exists($name, self::MESSAGES)) {
+                throw new Error("Le message pour le pattern '$name' n'existe pas.");
+            }
+            return self::MESSAGES[$name];
+        }
+        catch (Error $e) {
+            echo $e->getMessage();
+            return '';
+        }
     }
 }

@@ -2,7 +2,6 @@
 
     namespace Cineflix\App\DAO;
 
-    use Cineflix\App\DAO\AbstractDAO;
     use Cineflix\App\Model\ProfilModel;
 
     class ProfilDao extends AbstractDAO
