@@ -15,18 +15,16 @@
 
         public function findByUserToken(string $token, array $options = null)
         {
-            $options['hasOne'] =  [
-                    'user' => [
-                        'select' => (isset($options['user']['select'])) ? $options['user']['select'] : ['*']
-                    ]
-            ];
-
-            if(isset($options['user']['select'])) unset($options['user']);
-
+            if(isset($options['user']['select'])) {
+                $options['hasOne']['user']['select'] = array_merge($options['user']['select'], ['token']);
+                unset($options['user']);
+            } else {
+                $options['hasOne']['user']['select'] = ['id','email','token','connect','last_connect','created','modified'];
+            }
 
             $result = $this->findOneBy(['token' => $token], $options);
 
-            return $result;
+            return new ProfilModel($result);
 
         }
 

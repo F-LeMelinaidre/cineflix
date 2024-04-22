@@ -6,18 +6,27 @@
                mt-4
                border-top border-bottom border-dark">
         <h1 class="ms-5">Éditer</h1>
-        <p>Dernière modification</p>
+        <ul>
+            <li>Créé le <?= $profil->created ?></li>
+
+            <?php if($profil->created != $profil->modified): ?>
+
+                <li>Modifié le  <?= $profil->modified ?></li>
+
+            <?php endif; ?>
+
+        </ul>
         <a href="<?= self::$_Router->getUrl("profil_show") ?>" class="btn btn-sm btn-outline-warning me-lg-5">Retour</a>
     </header>
 
-    <form action="<?= self::$_Router->getUrl('profil_edit') ?>" method="post"  class="edit-profil mt-4 m-auto p-4 rounded-2 bg-dark-subtle">
+    <form action="<?= self::$_Router->getUrl('profil_edit_adresse') ?>" method="post"  class="edit-profil mt-4 m-auto p-4 rounded-2 bg-dark-subtle">
         
         <div id="Address">
             <h2 class="mb-3">Adresse :</h2>
             <div class="row justify-content-center">
                 <div class="col-md-2 col-sm-2 col-2">
                     <label class="numero-voie" for="NumeroVoie">N° :</label>
-                    <input id="NumeroVoie" type="text" name="numero_voie" value="<?= (0 == $profil->numero_voie)? '' : $profil->numero_voie  ?>"
+                    <input id="NumeroVoie" type="text" name="numero_voie" value="<?= $profil->numero_voie  ?>"
                     class="form-control
                     mb-3">
                 </div>
@@ -35,7 +44,7 @@
             <div class="row justify-content-center">
                 <div class="col-3">
                     <label class="code-postale" for="CodePostale">Code postale :</label>
-                    <input id="CodePostale" type="text" name="code_postale" value="<?= (0 == $profil->code_postale )? '' : $profil->code_postale
+                    <input id="CodePostale" type="number" name="code_postale" value="<?= $profil->code_postale
                     ?>" class="form-control
                     mb-3">
                 </div>

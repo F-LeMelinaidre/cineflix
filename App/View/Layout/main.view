@@ -42,8 +42,12 @@
 
     <?php if (\Cineflix\Core\Util\AuthConnect::isConnected()): ?>
     <div>
-        <?= $_SESSION[\Cineflix\App\AppController::APP_NAME]['point'] ?> point<?= (0 != $_SESSION[\Cineflix\App\AppController::APP_NAME]['point'])?
-            's' : '' ?>
+        <ul>
+            <li><?= $_SESSION[\Cineflix\App\AppController::APP_NAME]['point'] ?> point<?= (0 != $_SESSION[\Cineflix\App\AppController::APP_NAME]['point'])?
+                    's' : '' ?></li>
+            <li>Dernière connexion: <?= $_SESSION[\Cineflix\App\AppController::APP_NAME]['last_connect'] ?></li>
+        </ul>
+
     </div>
     <?php endif ?>
 
@@ -51,6 +55,11 @@
         <div class="collapse navbar-collapse">
             <?php if (\Cineflix\Core\Util\AuthConnect::isConnected()): ?>
                 <ul class="navbar-nav align-items-center">
+                    <li class="nav-item">
+                        <a href="<?= self::$_Router->getUrl("/") ?>" class="nav-link">
+                            Film en salle
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a href="<?= self::$_Router->getUrl("streaming_index") ?>" class="nav-link">
                             Streaming

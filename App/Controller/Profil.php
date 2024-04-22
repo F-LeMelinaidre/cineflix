@@ -3,7 +3,9 @@
 namespace Cineflix\App\Controller;
 
 use Cineflix\App\Dao\ProfilDao;
+use Cineflix\App\DAO\UserDao;
 use Cineflix\App\model\ProfilModel;
+use Cineflix\App\Model\UserModel;
 use Cineflix\Core\AbstractController;
 use Cineflix\Core\Util\AuthConnect;
 use Cineflix\Core\Util\MessageFlash;
@@ -35,7 +37,6 @@ class Profil extends AbstractController
         }
 
         $this->session = AuthConnect::getSession();
-
         $this->profilDao = new ProfilDao();
 
     }
@@ -43,141 +44,86 @@ class Profil extends AbstractController
     {
         //TODO valider les infos de la session
         // Et créer l'objet Profil dans le constructeur
-        $data = $this->profilDao->findByUserToken($this->session['token']);
-
-        $profil = new ProfilModel($data);
+        $options = [
+            'user' => [ 'select' => ['email']]
+        ];
+        $profil = $this->profilDao->findByUserToken($this->session['token']);
 
         return $this->render('profil.show',['profil' => $profil]);
     }
-    public function edit($slug = null)
+
+    public function editIdentite()
     {
-        $view = strtolower($slug);
+
 
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [];
-            if (isset($_POST['nom']) && !empty($_POST['nom'])) {
-                $data['nom'] = Security::sanitize($_POST['nom']);
+            //TODO verifier l'id
 
-                if(!preg_match(Regex::getPattern('alpha'), $data['nom'])) {
-                    $errors['nom'] = $this->msg_errors['alpha'];
-                }
-            } else {
-                $errors['nom'] = $this->msg_errors['empty'];
-                $data['nom'] = '';
-            }
+            $profil = new ProfilModel();
+            $profil->user_id = $_POST['user_id'];
+            $profil->setNom($_POST['nom']);
+            $profil->setPrenom($_POST['prenom']);
+            $profil->setDateNaissance($_POST['date_naissance']);
 
-            if (isset($_POST['prenom']) && !empty($_POST['prenom'])) {
-                $data['prenom'] = Security::sanitize($_POST['prenom']);
+            $profil->isValid();
 
-                if(!preg_match(Regex::getPattern('alpha'), $data['prenom'])) {
-                    $errors['prenom'] = $this->msg_errors['alpha'];
-                }
-            } else {
-                $errors['prenom'] = $this->msg_errors['empty'];
-                $data['prenom'] = '';
-            }
-
-            if (isset($_POST['email']) && !empty($_POST['email'])) {
-                $data['email'] = Security::sanitize($_POST['email']);
-
-                if (!preg_match(Regex::getPattern('email'), $data['email'])) {
-                    $errors['email'] = $this->msg_errors['email'];
-
-                }
-                //TODO verifier si le mail existe et exclure le compte actuelle de la recherche
-
-            } else {
-                $errors['email'] = $this->msg_errors['empty'];
-                $data['email'] = '';
-            }
-
-            if (isset($_POST['date_naissance']) && !empty($_POST['date_naissance'])) {
-                $data['date_naissance'] = Security::sanitize($_POST['date_naissance']);
-
-
-                //TODO regex date
-
-            } else {
-                $errors['date_naissance'] = $this->msg_errors['empty'];
-                $data['date_naissance'] = '';
-            }
-
-            if (isset($_POST['numero_voie']) && !empty($_POST['numero_voie'])) {
-                $data['numero_voie'] = Security::sanitize($_POST['numero_voie']);
-
-
-                //TODO regex alphaNumeric
-
-            } else {
-                $errors['numero_voie'] = $this->msg_errors['empty'];
-                $data['numero_voie'] = '';
-            }
-
-            if (isset($_POST['type_voie']) && !empty($_POST['type_voie'])) {
-                $data['type_voie'] = Security::sanitize($_POST['type_voie']);
-
-
-                //TODO vérif avec regex alpha
-
-            } else {
-                $errors['type_voie'] = $this->msg_errors['empty'];
-                $data['type_voie'] = '';
-            }
-
-            if (isset($_POST['nom_voie']) && !empty($_POST['nom_voie'])) {
-                $data['nom_voie'] = Security::sanitize($_POST['nom_voie']);
-
-
-                //TODO vérif avec regex alpha
-
-            } else {
-                $errors['nom_voie'] = $this->msg_errors['empty'];
-                $data['nom_voie'] = '';
-            }
-
-            if (isset($_POST['code_postale']) && !empty($_POST['code_postale'])) {
-                $data['code_postale'] = Security::sanitize($_POST['code_postale']);
-
-
-                //TODO vérif avec regex numeric
-
-            } else {
-                $errors['code_postale'] = $this->msg_errors['empty'];
-                $data['code_postale'] = '';
-            }
-
-
-            if (isset($_POST['ville']) && !empty($_POST['ville'])) {
-                $data['ville'] = Security::sanitize($_POST['ville']);
-
-
-                //TODO vérif avec regex alpha
-
-            } else {
-                $errors['ville'] = $this->msg_errors['empty'];
-                $data['ville'] = '';
-            }
-
-            if (isset($_POST['user_id']) && is_numeric($_POST['user_id'])) {
-                $data['user_id'] = $_POST['user_id'];
-            }
-
-            if (empty($errors)) {
-                $profil = new ProfilModel($data);
-
-                $this->profilDao->update($profil);
-
-                MessageFlash::create('Profil finalisé',$type = 'valide');
-
-                header('Location: /');
-                exit();
-            }
-        } else {
-            $data = $this->profilDao->findByUserToken($this->session['token']);
-
-            $profil = new ProfilModel($data);
+        } else{
+            $params = [
+                'select' => ['user_id','nom', 'prenom', 'date_naissance']
+            ];
+            $profil = $this->profilDao->findByUserToken($this->session['token'], $params);
         }
-        //TODO reflechir a mettre les champ nom prenom email en readOnly lors de l'edition du profil en fin d'inscription
-        return $this->render("profil.edit-$view",['profil' => $profil]);
+
+
+        return $this->render('profil.editIdentite',['profil' => $profil]);
+    }
+
+    public function editAdresse()
+    {
+
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            //TODO verifier l'id
+
+            $profil = new ProfilModel();
+            $profil->user_id = $_POST['user_id'];
+            $profil->setNumeroVoie($_POST['numero_voie']);
+            $profil->setTypeVoie($_POST['type_voie']);
+            $profil->setNomVoie($_POST['nom_voie']);
+            $profil->setCodePostale(intval($_POST['code_postale']));
+            $profil->setVille($_POST['ville']);
+
+            $profil->isValid();
+        } else {
+            $params = [
+                'select' => ['user_id','numero_voie', 'type_voie', 'nom_voie', 'code_postale', 'ville']
+            ];
+
+            $profil = $this->profilDao->findByUserToken($this->session['token'], $params);
+        }
+        return $this->render('profil.editAdresse',['profil' => $profil]);
+    }
+
+    public function editAuthentification()
+    {
+        $params = [
+            'user' => [
+                'select' => ['email']
+            ]
+        ];
+        $userDao = new UserDao();
+
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $user = new UserModel();
+            $user->id = $_POST['user_id'];
+            $user->setEmail($_POST['email']);
+
+
+        } else {
+            $user = $userDao->findOneBy(['token' => $this->session['token']]);
+        }
+
+
+
+        return $this->render('profil.editAuthentification',['user' => $user]);
     }
 }

@@ -66,25 +66,39 @@ class AuthConnect
      * $_NameSession nom de la session
      * @param array $params tableau des valeurs enregistré en session cles => valeurs
      */
-    public static function connect(string $id_value, array $params): void
+    public static function connect(string $id_value, array $params = null): bool
     {
-
-        if(!isset(self::$_Token)) self::setToken();
-
-        $params['token'] = self::getToken();
-
         $table = self::$_Table;
         $id_colonne = self::$_IdColonne;
 
-        $update = "UPDATE $table SET last_connect = connect, connect = CURRENT_TIMESTAMP, token = :token WHERE $id_colonne = :$id_colonne";
+
+        $sql = "SELECT last_connect FROM $table WHERE $id_colonne = :$id_colonne";
         $bindValues = [
-            ['col' => $id_colonne, 'val' => $id_value],
-            ['col' => 'token', 'val' => self::$_Token]
+            ['col' => $id_colonne, 'val' => $id_value]
+        ];
+        $req = self::$_Database->prepare($sql, $bindValues);
+        $result = $req->fetch();
+
+        $params_default = [
+            'token'         => self::getToken(),
+            'last_connect'  => date("d-m-Y H:i:s", strtotime($result['last_connect']))
         ];
 
-        $req = self::$_Database->prepare($update, $bindValues);
+        $params = array_merge($params, $params_default);
 
-        $_SESSION = [self::$_NameSession => $params];
+        $update = "UPDATE $table SET last_connect = connect, connect = :connect, token = :token WHERE $id_colonne = :$id_colonne";
+        $bindValues = [
+            ['col' => $id_colonne, 'val' => $id_value],
+            ['col' => 'token', 'val' => self::$_Token],
+            ['col' => 'connect', 'val' => date("Y-m-d H:i:s")]
+        ];
+
+        if(!is_null(self::$_Database->prepare($update, $bindValues))) {
+            self::$_Connect = true;
+            $_SESSION = [self::$_NameSession => $params];
+        }
+
+        return self::$_Connect;
     }
 
     /**
@@ -111,11 +125,14 @@ class AuthConnect
         return $_SESSION[self::$_NameSession];
     }
 
-    private static function setToken() {
+    private static function setToken(): void
+    {
         $randomBytes = random_bytes(16);
         self::$_Token = bin2hex($randomBytes);
     }
-    public static function getToken() {
+
+    public static function getToken(): string
+    {
         if(!isset(self::$_Token)) self::setToken();
 
         return self::$_Token;

@@ -32,18 +32,20 @@
         public function create(object $model) {}
 
         public function findOneBy(array $params, array $options = null) {
-            $columns = (isset($options['select']))? $options['select'] : ['*'];
+            if(!isset($options['select'])) {
+                $columns = ['*'];
+            } else {
+                $columns = array_merge(['created','modified'], $options['select']);
+            }
+
             $select = $this->setSelect($this->table, $columns);
 
             if(isset($options['hasOne'])) {
                 $hasOne = $this->relations['hasOne'];
+
                 foreach ($options['hasOne'] as $table => $opt) {
                     $join[] = "JOIN $table ON {$hasOne[$table]}";
-
-                    if(isset($opt['select'])) {
-                        $select .= ', '.$this->setSelect($table, $opt['select']);
-                    }
-
+                    $select .= ', '.$this->setSelect($table, $opt['select']);
                 }
             }
             $join = (isset($join))? implode($join) : '';

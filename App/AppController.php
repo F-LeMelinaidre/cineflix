@@ -59,9 +59,9 @@
             self::$_Router->get('home', '/', [Controller\Home::class, 'index']);
 
             self::$_Router->get('signin', '/Signin', [Controller\Auth::class, 'signin']);
-            self::$_Router->post('signin', '/Signin', [Controller\Auth::class, 'signin']);
-
             self::$_Router->get('signup', '/Signup', [Controller\Auth::class, 'signup']);
+
+            self::$_Router->post('signin', '/Signin', [Controller\Auth::class, 'signin']);
             self::$_Router->post('signup', '/Signup', [Controller\Auth::class, 'signup']);
 
             self::$_Router->get('signout', '/Signout', [Controller\Auth::class, 'signout']);
@@ -75,8 +75,13 @@
                 ['slug' => '[a-zA-Z_]+']);
 
             self::$_Router->get('profil_show', '/Profil', [ Controller\Profil::class, 'show']);
-            self::$_Router->get('profil_edit', '/Profil/Edit/{slug}', [ Controller\Profil::class, 'edit'],
-                ['slug' => 'Identity|Address|Connexion']);
+            self::$_Router->get('profil_edit_identite', '/Profil/Edit/Identite', [ Controller\Profil::class, 'editIdentite']);
+            self::$_Router->get('profil_edit_adresse', '/Profil/Edit/Adresse', [ Controller\Profil::class, 'editAdresse']);
+            self::$_Router->get('profil_edit_authentification', '/Profil/Edit/Authentification', [ Controller\Profil::class, 'editAuthentification']);
+
+            self::$_Router->post('profil_edit_adresse', '/Profil/Edit/Adresse', [ Controller\Profil::class, 'editAdresse']);
+            self::$_Router->post('profil_edit_identite', '/Profil/Edit/Identite', [ Controller\Profil::class, 'editIdentite']);
+            self::$_Router->post('profil_edit_authentification', '/Profil/Edit/Authentification', [ Controller\Profil::class, 'editAuthentification']);
 
             //Route partie Admin
             //Admin Home

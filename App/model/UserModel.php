@@ -2,16 +2,18 @@
 
 namespace Cineflix\App\Model;
 
-class UserModel
+use Cineflix\Core\Util\Security;
+
+class UserModel extends AbstractModel
 {
 
-    public string $table = 'user';
+    private string $table = 'user';
 
     public int $id;
-    public string $email;
-    public string $password;
+    public ?string $email = null;
+    public ?string $password = null;
     public string $token;
-    public int $admin;
+    public int $admin = 0;
     public string $created;
     public string $modified;
     public string $connect;
@@ -22,12 +24,17 @@ class UserModel
     {
         if(isset($data['id'])) $this->id = $data['id'];
         if(isset($data['email'])) $this->email = $data['email'];
-        if(isset($data['created'])) $this->created = $data['created'];
-        if(isset($data['modified'])) $this->modified = $data['modified'];
-        if(isset($data['connect'])) $this->connect = $data['connect'];
-        if(isset($data['last_connect'])) $this->last_connect = $data['last_connect'];
+        if(isset($data['created'])) $this->created = $this->setDateFr($data['created']);
+        if(isset($data['modified'])) $this->modified = $this->setDateFr($data['modified']);
+        if(isset($data['connect'])) $this->connect = $this->setDateFr($data['connect']);
+        if(isset($data['last_connect'])) $this->last_connect = $this->setDateFr($data['last_connect']);
 
         if(isset($data['profil'])) $this->setProfil($data['profil']);
+    }
+
+    public function setEmail(string $email)
+    {
+        $this->email = Security::sanitize($email);
     }
 
     /**
@@ -56,5 +63,7 @@ class UserModel
     {
         return $this->profil;
     }
+
+
 
 }

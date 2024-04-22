@@ -6,17 +6,26 @@
                mt-4
                border-top border-bottom border-dark">
         <h1 class="ms-5">Éditer</h1>
-        <p>Dernière modification</p>
+        <ul>
+            <li>Créé le <?= $user->created ?></li>
+
+            <?php if($user->created != $user->modified): ?>
+
+                <li>Modifié le  <?= $user->modified ?></li>
+
+            <?php endif; ?>
+
+        </ul>
         <a href="<?= self::$_Router->getUrl("profil_show") ?>" class="btn btn-sm btn-outline-warning me-lg-5">Retour</a>
     </header>
 
-    <form action="<?= self::$_Router->getUrl('profil_edit') ?>" method="post"  class="edit-profil mt-4 m-auto p-4 rounded-2 bg-dark-subtle">
+    <form action="<?= self::$_Router->getUrl('profil_edit_authentification') ?>" method="post"  class="edit-profil mt-4 m-auto p-4 rounded-2 bg-dark-subtle">
         <div id="Identity" class="mb-4">
             <h2 class="mb-3">Paramètres de connexion :</h2>
             <div class="row justify-content-center">
                 <div class="col-md-8 col-sm-8 col-12">
                     <label class="email" for="Email">Email :</label>
-                    <input id="Email" type="email" name="email" value="<?= $profil->user->email ?>" class="form-control
+                    <input id="Email" type="email" name="email" value="<?= $user->email ?>" class="form-control
                     mb-3">
                 </div>
             </div>
@@ -35,7 +44,7 @@
             </div>
         </div>
         <div class="col-auto mt-2">
-            <input type="hidden" name="user_id" value="<?= $profil->user_id ?>">
+            <input type="hidden" name="user_id" value="<?= $user->id ?>">
             <button type="submit" class="btn btn-warning m-0">Modifier</button>
         </div>
     </form>

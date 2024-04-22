@@ -6,7 +6,16 @@
                mt-4
                border-top border-bottom border-dark">
         <h1 class="ms-5">Mon Profil</h1>
-        <p>Dernière connection</p>
+        <ul>
+            <li>Créé le <?= $profil->created ?></li>
+
+            <?php if($profil->created != $profil->modified): ?>
+
+            <li>Modifié le  <?= $profil->modified ?></li>
+
+            <?php endif; ?>
+
+        </ul>
     </header>
 
     <div class="col-xl-8 col-lg-9 col-md-11 col-sm-12 row mt-4 m-auto p-4 pt-3 rounded-2 bg-dark-subtle">
@@ -19,7 +28,7 @@
             <dt class="col-2 text-end pe-2">Prénom :</dt>
             <dd class="col-3"><?= $profil->prenom ?></dd>
         </dl>
-        <a href="<?= self::$_Router->getUrl("profil_edit",['slug' => 'Identity']) ?>" class="col-auto ms-auto btn btn-sm btn-outline-warning
+        <a href="<?= self::$_Router->getUrl("profil_edit_identite") ?>" class="col-auto ms-auto btn btn-sm btn-outline-warning
         mt-3">Modifier</a>
         <h2 class="p-0 mb-2">Coordonnées</h2>
         <dl class="contact-view row row-gap-2 align-items-center">
@@ -30,7 +39,7 @@
             <dt class="col-1 text-end pe-2">Ville :</dt>
             <dd class="col-8"><?= $profil->ville ?></dd>
         </dl>
-        <a href="<?= self::$_Router->getUrl("profil_edit",['slug' => 'Address']) ?>" class="col-auto ms-auto btn btn-sm btn-outline-warning
+        <a href="<?= self::$_Router->getUrl("profil_edit_adresse") ?>" class="col-auto ms-auto btn btn-sm btn-outline-warning
         mt-3">Modifier</a>
         <h2 class="p-0 mb-2">Paramètres de connexion</h2>
         <dl class="contact-view row row-gap-2 align-items-center">
@@ -39,7 +48,7 @@
             <dt class="col-2 text-end pe-2">Mot de passe :</dt>
             <dd class="col-4">******</dd>
         </dl>
-        <a href="<?= self::$_Router->getUrl("profil_edit",['slug' => 'Connexion']) ?>" class="col-auto ms-auto btn btn-sm btn-outline-warning
+        <a href="<?= self::$_Router->getUrl("profil_edit_authentification") ?>" class="col-auto ms-auto btn btn-sm btn-outline-warning
         mt-3">Modifier</a>
     </div>
 

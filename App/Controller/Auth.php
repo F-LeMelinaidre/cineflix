@@ -88,8 +88,7 @@
                         AuthConnect::connect($email, [
                             'nom'    => $user->getProfil()->nom,
                             'prenom' => $user->getProfil()->prenom,
-                            'point'  => $user->getProfil()->point
-
+                            'point'  => $user->getProfil()->point,
                         ]);
 
 
@@ -190,11 +189,12 @@
                         AuthConnect::connect($email,[
                             'nom'    => $user->getProfil()->nom,
                             'prenom' => $user->getProfil()->prenom,
+                            'point'  => $user->getProfil()->point,
                         ]);
 
                         MessageFlash::create('Connecté, merci de compléter votre profil', $type = 'valide');
 
-                        header('Location: /Profil/Edit');
+                        header('Location: /Profil/Edit/Adresse');
                         exit;
                     }
 

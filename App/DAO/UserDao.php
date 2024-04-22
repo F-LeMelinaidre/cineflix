@@ -40,7 +40,7 @@ class UserDao extends AbstractDAO
             ];
 
 
-            $this->db->insert($user->table,$user_data);
+            $this->db->insert($this->table,$user_data);
 
             $this->setLastInsertId();
 
@@ -52,7 +52,7 @@ class UserDao extends AbstractDAO
                 'prenom'    => $profil->prenom
             ];
 
-            $this->db->insert($profil->table ,$profil_data);
+            $this->db->insert('profil' ,$profil_data);
 
             $this->db->commit();
 
@@ -83,10 +83,6 @@ class UserDao extends AbstractDAO
         return $req->count();
     }
 
-    public function read()
-    {
-        // TODO: Implement read() method.
-    }
 
     public function delete()
     {
