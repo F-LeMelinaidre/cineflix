@@ -8,16 +8,6 @@ use Cineflix\Core\Util\Security;
 class ProfilModel extends AbstractModel
 {
     private string $table = 'profil';
-    private array $rules = [
-        'nom'            => ['alpha', 'require'],
-        'prenom'         => ['alpha', 'require'],
-        'date_naissance' => ['date', 'require'],
-        'numero_voie'    => ['alphaNumeric', 'require'],
-        'type_voie'      => ['alpha', 'require'],
-        'nom_voie'       => ['alphaNumeric', 'require'],
-        'code_postale'   => ['numeric', 'require'],
-        'ville'          => ['alpha', 'require']
-    ];
 
     public int $user_id;
 
@@ -35,19 +25,22 @@ class ProfilModel extends AbstractModel
 
     public UserModel $user;
 
+    /**
+     * @param array|null $data
+     */
     public function __construct(array $data = null)
     {
         if(isset($data['user_id']))
             $this->user_id = $data['user_id'];
 
         if(isset($data['nom']))
-            $this->setNom($data['nom']);
+            $this->nom = $data['nom'];
 
         if(isset($data['prenom']))
-            $this->setPrenom($data['prenom']);
+            $this->prenom = $data['prenom'];
 
         if(isset($data['date_naissance']))
-            $this->date_naissance = $this->setDateFr($data['date_naissance']);
+            $this->date_naissance = date("d-m-Y", strtotime($data['date_naissance']));
 
         if(isset($data['numero_voie']))
             $this->numero_voie = $data['numero_voie'];
@@ -68,10 +61,10 @@ class ProfilModel extends AbstractModel
             $this->point = $data['point'];
 
         if(isset($data['created']))
-            $this->created = $this->setDateFr($data['created']);
+            $this->created = $this->getDateFr($data['created']);
 
         if(isset($data['modified']))
-            $this->modified = $this->setDateFr($data['modified']);
+            $this->modified = $this->getDateFr($data['modified']);
 
         if(isset($data['user']))
             $this->user = new UserModel($data['user']);
@@ -98,63 +91,72 @@ class ProfilModel extends AbstractModel
         $this->prenom = ucfirst(Security::sanitize($prenom));
     }
 
+    /**
+     * @param string $date
+     *
+     * @return void
+     */
     public function setDateNaissance(string $date): void
     {
         $this->date_naissance = Security::sanitize($date);
     }
 
+    /**
+     * @param string $n_voie
+     *
+     * @return void
+     */
     public function setNumeroVoie(string $n_voie): void
     {
         $this->numero_voie = Security::sanitize($n_voie);
     }
 
+    /**
+     * @param string $type
+     *
+     * @return void
+     */
     public function setTypeVoie(string $type): void
     {
         $this->type_voie = Security::sanitize($type);
     }
 
+    /**
+     * @param string $nom_voie
+     *
+     * @return void
+     */
     public function setNomVoie(string $nom_voie): void
     {
         $this->nom_voie = Security::sanitize($nom_voie);
     }
 
+    /**
+     * @param int $cp
+     *
+     * @return void
+     */
     public function setCodePostale(int $cp): void
     {
-        $this->code_postale = Security::sanitize($cp);
+        $this->code_postale = (0 != $cp)? Security::sanitize($cp) : null;
     }
 
+    /**
+     * @param string $ville
+     *
+     * @return void
+     */
     public function setVille(string $ville): void
     {
         $this->ville = Security::sanitize($ville);
     }
 
+    /**
+     * @return string
+     */
     public function getAddress(): string
     {
         return $this->numero_voie. ' ' .$this->type_voie. ' ' .$this->nom_voie;
-    }
-
-    public function isValid(): bool
-    {
-        foreach($this as $k => $v) {
-            if(array_key_exists($k, $this->rules) && isset($this->$k)) {
-                echo $k. ' - ' .$v. '<br>';
-                $this->validate($this->rules[$k], $v);
-            }
-        }
-        return false;
-    }
-
-    private function validate($rules, $value)
-    {
-        foreach ($rules as $rule)
-        {
-            if($rule === 'require' && empty($value)) {
-                echo 'vide'.$rule.'<br>';
-            }elseif(!empty($value) && $rule !== 'require' && !Regex::getPattern($rule,$value)){
-
-                echo 'non vide'.$rule.'<br>';
-            }
-        }
     }
 
 }

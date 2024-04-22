@@ -24,10 +24,10 @@ class UserModel extends AbstractModel
     {
         if(isset($data['id'])) $this->id = $data['id'];
         if(isset($data['email'])) $this->email = $data['email'];
-        if(isset($data['created'])) $this->created = $this->setDateFr($data['created']);
-        if(isset($data['modified'])) $this->modified = $this->setDateFr($data['modified']);
-        if(isset($data['connect'])) $this->connect = $this->setDateFr($data['connect']);
-        if(isset($data['last_connect'])) $this->last_connect = $this->setDateFr($data['last_connect']);
+        if(isset($data['created'])) $this->created = $this->getDateFr($data['created']);
+        if(isset($data['modified'])) $this->modified = $this->getDateFr($data['modified']);
+        if(isset($data['connect'])) $this->connect = $this->getDateFr($data['connect']);
+        if(isset($data['last_connect'])) $this->last_connect = $this->getDateFr($data['last_connect']);
 
         if(isset($data['profil'])) $this->setProfil($data['profil']);
     }
