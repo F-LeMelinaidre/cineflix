@@ -1,5 +1,4 @@
 # projet-WEB
-Projet Cinéflix (Frédéric, Charles)
 
 
 Installer composer
