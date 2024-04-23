@@ -37,7 +37,7 @@
          *
          * @return array
          */
-        public function findOneBy(array $params, array $options = null): array
+        public function findOneBy(array $params, array $options = null): mixed
         {
             if(!isset($options['select'])) {
                 $columns = ['*'];
@@ -92,7 +92,6 @@
                 }
                 $result = array_merge($result, $data);
             }
-
             return $result;
         }
 
@@ -120,7 +119,7 @@
          */
         public function getLastInsertId()
         {
-            return (isset($this->last_insert_id))? $this->last_insert_id : null;
+            return (isset($this->last_insert_id))? $this->last_insert_id : $this->db->getLastInsertId();
         }
 
         /**

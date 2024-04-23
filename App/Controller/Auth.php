@@ -3,6 +3,7 @@
     // mp major rRTxrTTMhLkQf4W!?
     namespace Cineflix\App\Controller;
 
+    use Cineflix\App\DAO\ProfilDao;
     use Cineflix\App\DAO\UserDao;
     use Cineflix\App\model\ProfilModel;
     use Cineflix\App\Model\UserModel;
@@ -15,13 +16,7 @@
     class Auth extends AbstractController
     {
         private UserDao $userDao;
-        public function __construct()
-        {
-            parent::__construct();
-
-            $this->userDao = new UserDao();
-
-        }
+        private ProfilDao $profilDao;
 
         private $msg_errors = [
             'empty'     => 'Champ obligatoire !',
@@ -31,6 +26,17 @@
             'exist'     => 'Email déja utilisé !',
             'not_equal' => 'Les mots de passes ne sont pas identique !'
         ];
+
+        private array $session;
+
+        public function __construct()
+        {
+            parent::__construct();
+
+            $this->userDao = new UserDao();
+            $this->profilDao = new ProfilDao();
+
+        }
 
         protected string $layout = 'auth';
 
@@ -83,6 +89,7 @@
                                 ]
                             ]
                         ]);
+                        var_dump($user);
 
                         // On le connect en lui passant les paramètre que l on désire mettre en session
                         AuthConnect::connect($email, [
@@ -185,16 +192,16 @@
                     if($this->userDao->create($user)) {
                         //TODO CAPTCHA
                         //TODO prevoir la validation du compte par envoi de mail
-
                         AuthConnect::connect($email,[
+                            'id'     => $this->userDao->getLastInsertId(),
                             'nom'    => $user->getProfil()->nom,
                             'prenom' => $user->getProfil()->prenom,
                             'point'  => $user->getProfil()->point,
                         ]);
 
-                        MessageFlash::create('Connecté, merci de compléter votre profil', $type = 'valide');
+                        MessageFlash::create('Merci de compléter votre profil', $type = 'valide');
 
-                        header('Location: /Profil/Edit/Adresse');
+                        header('Location: /Signup/Finalise');
                         exit;
                     }
 
@@ -215,7 +222,50 @@
         /**
          * @return void
          */
-        public function signout()
+        public function finalizeSignup(): string
+        {
+            if(!AuthConnect::isConnected()) {
+                header('Location: /');
+                exit();
+            }
+
+            $this->session = AuthConnect::getSession();
+
+            $profil = $this->profilDao->findOneBy(['user_id' => $this->session['id']]);
+
+            var_dump($profil);
+
+            if($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $profil->setNumeroVoie($_POST['numero_voie']);
+                $profil->setTypeVoie($_POST['type_voie']);
+                $profil->setNomVoie($_POST['nom_voie']);
+                $profil->setCodePostale(intval($_POST['code_postale']));
+                $profil->setVille($_POST['ville']);
+
+                $profil->addValidation('numero_voie',['rule' => 'alphaNumeric', 'require' => true]);
+                $profil->addValidation('type_voie',['rule' => 'alpha', 'require' => true]);
+                $profil->addValidation('nom_voie',['rule' => 'alphaNumeric', 'require' => true]);
+                $profil->addValidation('code_postale',['rule' => 'numeric', 'require' => true]);
+                $profil->addValidation('ville',['rule' => 'alpha', 'require' => true]);
+
+                if($profil->isValid() && $this->profilDao->update($profil)) {
+                    MessageFlash::create('Welcome, Vous êtez connecté', $type = 'valide');
+
+                    header('Location: /');
+                    exit;
+                }
+            }
+
+
+            $errors = $profil->getErrors();
+
+            return $this->render('Auth.finalizeSignup', [ 'profil' => $profil, 'errors' => $errors ]);
+        }
+
+        /**
+         * @return void
+         */
+        public function signout(): void
         {
             AuthConnect::deconnect();
             MessageFlash::create('Deconnecté',$type = 'erreur');

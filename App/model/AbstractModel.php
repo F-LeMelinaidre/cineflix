@@ -10,7 +10,7 @@ class AbstractModel
 
     protected array $validation_items;
     protected array $errors = [];
-    protected function getDateFr(string $date): string
+    public function getDateFr(string $date): string
     {
         return date("d-m-Y H:i:s", strtotime($date));
     }

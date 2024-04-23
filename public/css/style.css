@@ -16,7 +16,8 @@ dd {
 
 /* --- NAV --- */
 
-.nav-link:hover {
+.nav-link:hover,
+.require {
     color:var(--bs-yellow) !important;
 }
 /* --- ICON --- */

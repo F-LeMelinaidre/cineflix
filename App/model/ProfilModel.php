@@ -61,10 +61,10 @@ class ProfilModel extends AbstractModel
             $this->point = $data['point'];
 
         if(isset($data['created']))
-            $this->created = $this->getDateFr($data['created']);
+            $this->created = $data['created'];
 
         if(isset($data['modified']))
-            $this->modified = $this->getDateFr($data['modified']);
+            $this->modified = $data['modified'];
 
         if(isset($data['user']))
             $this->user = new UserModel($data['user']);
