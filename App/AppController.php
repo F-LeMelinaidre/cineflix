@@ -60,9 +60,11 @@
 
             self::$_Router->get('signin', '/Signin', [Controller\Auth::class, 'signin']);
             self::$_Router->get('signup', '/Signup', [Controller\Auth::class, 'signup']);
+            self::$_Router->get('finalize_signup', '/Signup/Finalise', [Controller\Auth::class, 'finalizeSignup']);
 
             self::$_Router->post('signin', '/Signin', [Controller\Auth::class, 'signin']);
             self::$_Router->post('signup', '/Signup', [Controller\Auth::class, 'signup']);
+            self::$_Router->post('finalize_signup', '/Signup/Finalise', [Controller\Auth::class, 'finalizeSignup']);
 
             self::$_Router->get('signout', '/Signout', [Controller\Auth::class, 'signout']);
 

@@ -12,6 +12,12 @@
             ]
         ];
 
+        public function findOneBy(array $params, array $options = null): object
+        {
+            $result = parent::findOneBy($params,$options);
+
+            return new ProfilModel($result);
+        }
         public function findByUserToken(string $token, array $options = null)
         {
             if(isset($options['user']['select'])) {
@@ -22,12 +28,11 @@
             }
 
             $result = $this->findOneBy(['token' => $token], $options);
-
-            return new ProfilModel($result);
+            return $result;
 
         }
 
-        public function update(object $profil): void
+        public function update(object $profil)
         {
 
             $sql = "UPDATE $this->table SET modified = CURRENT_TIMESTAMP";
@@ -39,6 +44,7 @@
             }
             $sql .= " WHERE user_id = :user_id";
             $bindValues[] = ['col' => 'user_id', 'val' => $profil->user_id];
-            $req = $this->db->prepare($sql, $bindValues);
+            return $this->db->prepare($sql, $bindValues);
+
         }
     }
