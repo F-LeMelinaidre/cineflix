@@ -82,17 +82,17 @@
 
 
                         $user = $this->userDao->findOneBy(['email' => $email ], [
-                            'select' => ['email'],
+                            'select' => ['id','email'],
                             'hasOne' => [
                                 'profil' => [
                                     'select' => ['nom', 'prenom', 'point']
                                 ]
                             ]
                         ]);
-                        var_dump($user);
 
                         // On le connect en lui passant les paramètre que l on désire mettre en session
                         AuthConnect::connect($email, [
+                            'id'     => $user->getId(),
                             'nom'    => $user->getProfil()->nom,
                             'prenom' => $user->getProfil()->prenom,
                             'point'  => $user->getProfil()->point,

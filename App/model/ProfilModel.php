@@ -9,8 +9,6 @@ class ProfilModel extends AbstractModel
 {
     private string $table = 'profil';
 
-    public int $user_id;
-
     public ?string $nom = null;
     public ?string $prenom = null;
     public ?string $date_naissance = null;
@@ -31,7 +29,7 @@ class ProfilModel extends AbstractModel
     public function __construct(array $data = null)
     {
         if(isset($data['user_id']))
-            $this->user_id = $data['user_id'];
+            $this->id = $data['user_id'];
 
         if(isset($data['nom']))
             $this->nom = $data['nom'];
@@ -40,7 +38,7 @@ class ProfilModel extends AbstractModel
             $this->prenom = $data['prenom'];
 
         if(isset($data['date_naissance']))
-            $this->date_naissance = date("d-m-Y", strtotime($data['date_naissance']));
+            $this->date_naissance = $data['date_naissance'];
 
         if(isset($data['numero_voie']))
             $this->numero_voie = $data['numero_voie'];

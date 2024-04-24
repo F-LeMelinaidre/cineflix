@@ -53,7 +53,6 @@
             </div>
         </div>
         <div class="col-auto mt-3">
-            <input type="hidden" name="user_id" value="<?= $profil->user_id ?>">
             <button type="submit" class="btn btn-warning m-0">Modifier</button>
         </div>
     </form>
