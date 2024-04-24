@@ -7,14 +7,10 @@ use Cineflix\Core\Util\Security;
 class UserModel extends AbstractModel
 {
 
-    private string $table = 'user';
-
     public ?string $email = null;
     public ?string $password = null;
     public string $token;
     public int $admin = 0;
-    public string $created;
-    public string $modified;
     public string $connect;
     public string $last_connect;
     private ProfilModel $profil;
@@ -32,7 +28,7 @@ class UserModel extends AbstractModel
         if(isset($data['profil'])) $this->setProfil($data['profil']);
     }
 
-    public function setEmail(string $email)
+    public function setEmail(string $email): void
     {
         $this->email = Security::sanitize($email);
     }
@@ -40,7 +36,7 @@ class UserModel extends AbstractModel
     /**
      * @param $password
      *
-     * @return $this
+     * @return void
      */
     public function setPassword($password): void
     {
@@ -55,11 +51,20 @@ class UserModel extends AbstractModel
         return $this->password;
     }
 
-    public function setProfil(array $data)
+    /**
+     * @param array $data
+     *
+     * @return void
+     */
+    public function setProfil(array $data): void
     {
         $this->profil = new ProfilModel($data);
     }
-    public function getProfil()
+
+    /**
+     * @return ProfilModel
+     */
+    public function getProfil(): ProfilModel
     {
         return $this->profil;
     }

@@ -2,18 +2,21 @@
 
 namespace Cineflix\App\DAO;
 
-use Cineflix\App\AppController;
+use Cineflix\App\DAO\List\StatusMovie;
 use Cineflix\App\Model\MovieModel;
-use Cineflix\Core\Database\Database;
 
-class MovieDao
+class MovieDao extends AbstractDAO
 {
-    private Database $db;
-    public function __construct() {
-        $this->db = AppController::$_Database;
+
+    public function findAllByStatus(string $status, array $options = null): array
+    {
+
+        $params = ['status' => StatusMovie::getStatus($status)];
+
+        return parent::findAllBy($params,$options);
     }
 
-    public function findAll(): array
+    public function findAllMovie(): array
     {
         $query = "SELECT film.id AS movie_id, fiche.id AS detail_id, fiche.nom AS nom, fiche.synopsis AS synopsis,
                   fiche.affiche AS affiche, fiche.date_sortie AS date_sortie, fiche.slug AS slug, cinema.nom AS cinema,
@@ -64,9 +67,5 @@ class MovieDao
 
 
     }
-
-    public function update(){}
-
-    public function delete(){}
   
 }
