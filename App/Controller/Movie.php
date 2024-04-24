@@ -12,7 +12,7 @@
         public function index(): string
         {
             $movieDao = new MovieDao();
-            $movies = $movieDao->findAll();
+            $movies = $movieDao->findAllMovie();
             return $this->render('Movie.index', compact('movies'));
 
         }

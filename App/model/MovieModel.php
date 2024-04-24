@@ -2,20 +2,30 @@
 
 namespace Cineflix\App\Model;
 
-class MovieModel extends DetailModel
+class MovieModel extends AbstractModel
 {
-    public $id;
-    public $movie_id;
-    public int $exploitation_id;
-    public string $exploitation_debut = '';
-    public string $exploitation_fin = '';
-    public int $fiche_id;
-    public int $cinema_id;
-    public $cinema;
-    public $ville;
-    public $seance_id;
-    public $date;
-    public $horaire;
+
+    private int $status = 0;
+
+    public ?string $synopsis;
+    public ?string $affiche;
+    public ?string $date_sortie;
+    public ?string $slug;
+
+
+    public function __construct(?array $data = null)
+    {
+        parent::__construct($data);
+    }
+    public function getStatus(): string
+    {
+        return $this->status_list[$this->status];
+    }
+
+    public function setStatus(int $status_id): void
+    {
+        $this->status = (array_key_exists($status_id, $this->status_list))? $this->status_list[$status_id] : $this->status_list[0];
+    }
 
 
 }

@@ -3,6 +3,7 @@
     namespace Cineflix\App\DAO;
 
     use Cineflix\App\Model\ProfilModel;
+    use Cineflix\Core\Database\Database;
 
     class ProfilDao extends AbstractDAO
     {
@@ -33,7 +34,7 @@
 
         }
 
-        public function update(object $profil, string $id_column = 'user_id')
+        public function update(object $profil, string $id_column = 'user_id'): Database
         {
             return parent::update($profil, $id_column);
         }

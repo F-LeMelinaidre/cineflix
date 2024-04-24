@@ -3,13 +3,13 @@
     namespace Cineflix\App\DAO;
 
     use Cineflix\App\AppController;
+    use Cineflix\App\Model\MovieModel;
     use Cineflix\Core\Database\Database;
 
     class AbstractDAO implements DAO
     {
 
         protected Database $db;
-        protected string $req;
         protected string $query;
 
         protected string $table;
@@ -51,7 +51,7 @@
                 $hasOne = $this->relations['hasOne'];
 
                 foreach ($options['hasOne'] as $table => $opt) {
-                    $join[] = "JOIN $table ON {$hasOne[$table]}";
+                    $join[] = "JOIN $table ON $hasOne[$table]";
                     $select .= ', '.$this->setSelect($table, $opt['select']);
                 }
             }
@@ -95,12 +95,56 @@
             return $result;
         }
 
+        public function findAll(array $options = null) {
+            $select = (isset($options['select']))? implode(' ,', $options['select']) : '*';
+            $where = '';
+            $bindValues = [];
+            $order = '';
+
+            if(isset($options['order'])) {
+                $order = 'ORDER BY ';
+                $order .= implode(', ', $options['order']);
+            }
+
+            if (isset($options['conditions'])) {
+                foreach ($options['conditions'] as $key => $val) {
+                    $conditions [] = "$key = :$key";
+                    $bindValues[] = ['col' => "$key", 'val' => $val];
+                }
+                $where = "WHERE ".implode(' AND ',$conditions);
+            }
+
+
+            $sql = "SELECT $select FROM $this->table $where $order";
+            $req = $this->db->prepare($sql, $bindValues);
+
+            return $req->fetchall(MovieModel::class);
+
+
+        }
+        public function findAllBy(array $params, array $options = null): mixed
+        {
+            $where = [];
+            $bindValues = [];
+            foreach ($params as $key => $val) {
+                $where [] = "$key = :$key";
+                $bindValues[] = ['col' => "$key", 'val' => $val];
+            }
+
+            $where = implode(' AND ',$where);
+
+            $sql = "SELECT * FROM $this->table WHERE $where";
+            $req = $this->db->prepare($sql, $bindValues);
+            return $req->fetchall($this->model);
+        }
+
         /**
          * @param object $model
+         * @param string $id_column
          *
-         * @return void
+         * @return Database
          */
-        public function update(object $model, string $id_column = 'id')
+        public function update(object $model, string $id_column = 'id'): Database
         {
 
             $sql = "UPDATE $this->table SET modified = CURRENT_TIMESTAMP";
@@ -124,14 +168,15 @@
         /**
          * @return void
          */
-        protected function setLastInsertId() {
+        protected function setLastInsertId(): void
+        {
             $this->last_insert_id = $this->db->getLastInsertId();
         }
 
         /**
-         * @return int|null
+         * @return int
          */
-        public function getLastInsertId()
+        public function getLastInsertId(): int
         {
             return (isset($this->last_insert_id))? $this->last_insert_id : $this->db->getLastInsertId();
         }
