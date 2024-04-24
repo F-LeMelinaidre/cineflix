@@ -100,7 +100,21 @@
          *
          * @return void
          */
-        public function update(object $model) {}
+        public function update(object $model, string $id_column = 'id')
+        {
+
+            $sql = "UPDATE $this->table SET modified = CURRENT_TIMESTAMP";
+            foreach ($model as $key => $val) {
+                if(!is_object($val) && !empty($val)) {
+                    $sql .= ", $key = :$key";
+                    $bindValues[] = ['col' => $key, 'val' => $val];
+                }
+            }
+
+            $sql .= " WHERE $id_column = :$id_column";
+            $bindValues[] = ['col' => $id_column, 'val' => $model->getId()];
+            return $this->db->prepare($sql, $bindValues);
+        }
 
         /**
          * @return void

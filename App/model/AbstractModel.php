@@ -8,8 +8,23 @@ class AbstractModel
 {
 
 
+    protected ?int $id = null;
     protected array $validation_items;
     protected array $errors = [];
+
+    public function __construct(?array $data)
+    {
+        if(isset($data['id'])) $this->id = $data['id'];
+    }
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
     public function getDateFr(string $date): string
     {
         return date("d-m-Y H:i:s", strtotime($date));

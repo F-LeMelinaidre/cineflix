@@ -8,6 +8,7 @@
     use Cineflix\App\Model\UserModel;
     use Cineflix\Core\AbstractController;
     use Cineflix\Core\Util\AuthConnect;
+    use Cineflix\Core\Util\MessageFlash;
 
     class Profil extends AbstractController
     {
@@ -36,12 +37,14 @@
          */
         public function show()
         {
-            //TODO valider les infos de la session
-            // Et créer l'objet Profil dans le constructeur
-            $options = [
-                'user' => [ 'select' => ['email']]
-            ];
-            $profil = $this->profilDao->findByUserToken($this->session['token']);
+
+            $profil = $this->profilDao->findOneBy(['user_id' => $this->session['id']],[
+                'hasOne' => [
+                    'user'=> [
+                        'select' => ['email']
+                    ]
+                ]
+            ]);
 
             return $this->render('profil.show',['profil' => $profil]);
         }
@@ -60,27 +63,31 @@
 
                 $profil->addValidation('nom',['rule' => 'alpha', 'require' => true]);
                 $profil->addValidation('prenom',['rule' => 'alpha', 'require' => true]);
-                $profil->addValidation('date_naissance',['rule' => 'date']);
+                $profil->addValidation('date_naissance',['rule' => 'alphaNumeric']);
 
-
-                $profil->user_id = $_POST['user_id'];
+                $profil->setId($this->session['id']);
                 $profil->setNom($_POST['nom']);
                 $profil->setPrenom($_POST['prenom']);
                 $profil->setDateNaissance($_POST['date_naissance']);
 
 
-                $profil->isValid();
+
+
+                if($profil->isValid() && $this->profilDao->update($profil)) {
+                    MessageFlash::create('Identité modifié',$type = 'valide');
+                    header('Location: /Profil');
+                    exit();
+                }
 
             } else{
                 $params = [
                     'select' => ['user_id','nom', 'prenom', 'date_naissance']
                 ];
-                $profil = $this->profilDao->findByUserToken($this->session['token'], $params);
+
+                $profil = $this->profilDao->findOneBy(['user_id' => $this->session['id']], $params);
             }
 
             $errors = $profil->getErrors();
-
-            var_dump($errors);
 
             return $this->render('profil.editIdentite',['profil' => $profil, 'errors' => $errors]);
         }
@@ -102,15 +109,17 @@
                 $profil->addValidation('code_postale', ['rule' => 'numeric', 'require']);
                 $profil->addValidation('ville', ['rule' => 'alpha','require']);
 
-                $profil->user_id = $_POST['user_id'];
+                $profil->setId($this->session['id']);
                 $profil->setNumeroVoie($_POST['numero_voie']);
                 $profil->setTypeVoie($_POST['type_voie']);
                 $profil->setNomVoie($_POST['nom_voie']);
                 $profil->setCodePostale(intval($_POST['code_postale']));
                 $profil->setVille($_POST['ville']);
 
-                if($profil->isValid()) {
-                    echo 'valid';
+                if($profil->isValid() && $this->profilDao->update($profil)) {
+                    MessageFlash::create('Adresse modifié',$type = 'valide');
+                    header('Location: /Profil');
+                    exit();
                 }
 
             } else {
@@ -118,7 +127,7 @@
                     'select' => ['user_id','numero_voie', 'type_voie', 'nom_voie', 'code_postale', 'ville']
                 ];
 
-                $profil = $this->profilDao->findByUserToken($this->session['token'], $params);
+                $profil = $this->profilDao->findOneBy(['user_id' => $this->session['id']], $params);
             }
 
             $errors = $profil->getErrors();
@@ -131,21 +140,16 @@
          */
         public function editAuthentification()
         {
-            $params = [
-                'user' => [
-                    'select' => ['email']
-                ]
-            ];
             $userDao = new UserDao();
 
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
+
                 $user = new UserModel();
-                $user->id = $_POST['user_id'];
+                $user->setId($this->session['id']);
                 $user->setEmail($_POST['email']);
 
-
             } else {
-                $user = $userDao->findOneBy(['token' => $this->session['token']]);
+                $user = $userDao->findOneBy(['id' => $this->session['id']],['select' => ['email']]);
             }
 
 

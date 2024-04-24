@@ -9,7 +9,6 @@ class UserModel extends AbstractModel
 
     private string $table = 'user';
 
-    public int $id;
     public ?string $email = null;
     public ?string $password = null;
     public string $token;
@@ -22,7 +21,8 @@ class UserModel extends AbstractModel
 
     public function __construct(array $data = null)
     {
-        if(isset($data['id'])) $this->id = $data['id'];
+        parent::__construct($data);
+
         if(isset($data['email'])) $this->email = $data['email'];
         if(isset($data['created'])) $this->created = $this->getDateFr($data['created']);
         if(isset($data['modified'])) $this->modified = $this->getDateFr($data['modified']);
