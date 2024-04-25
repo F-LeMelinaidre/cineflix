@@ -4,10 +4,10 @@ namespace Cineflix\App\Model\DAO;
 
 class CinemaDao
 {
-
-    public function __construct()
-    {
-
-    }
+    protected array $relations = [
+        'hasOne' => [
+            'ville' => 'cinema.ville_id = ville.id'
+        ]
+    ];
 
 }

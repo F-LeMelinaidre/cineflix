@@ -35,8 +35,9 @@
             $movieDao = new MovieDao();
             $movie = $movieDao->findBy('slug', $slug);
             //$this->title_page .= ' | ' . ucfirst($movie->nom);
-            $seanceDao = new SeanceDao();
-            $seances = $seanceDao->findAllFromMovie($movie->movie_id);
+            //$seanceDao = new SeanceDao();
+            //$seances = $seanceDao->findAllFromMovie($movie->movie_id);
+            $seances = [];
 
             return $this->render('Movie.show', compact('movie', 'seances'));
         }

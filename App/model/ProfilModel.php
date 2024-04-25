@@ -8,8 +8,6 @@ use Cineflix\Core\Util\Security;
 class ProfilModel extends AbstractModel
 {
     private string $table = 'profil';
-
-    public ?string $nom = null;
     public ?string $prenom = null;
     public ?string $date_naissance = null;
     public ?string $numero_voie = null;
@@ -18,8 +16,6 @@ class ProfilModel extends AbstractModel
     public ?int $code_postale = null;
     public ?string $ville = null;
     public ?int $point = null;
-    public ?string $modified = null;
-    public ?string $created = null;
 
     public UserModel $user;
 

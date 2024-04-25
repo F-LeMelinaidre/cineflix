@@ -8,13 +8,22 @@ class AbstractModel
 {
 
 
+    private array $validation_items;
+    private array $errors = [];
+
     protected ?int $id = null;
-    protected array $validation_items;
-    protected array $errors = [];
+    protected string $created;
+    protected string $modified;
+
+    public ?string $nom = null;
 
     public function __construct(?array $data)
     {
         if(isset($data['id'])) $this->id = $data['id'];
+        if(isset($data['created'])) $this->created = $data['created'];
+        if(isset($data['modified'])) $this->modified = $data['modified'];
+        if(isset($data['nom'])) $this->nom = $data['nom'];
+
     }
     public function getId(): int
     {
