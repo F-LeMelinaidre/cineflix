@@ -96,7 +96,7 @@
                 ['id' => '[0-9]+']);
 
             //Admin Film
-            self::$_Router->get('admin_movie_index', '/Admin/Movie', [ Controller\Admin\Movie::class, 'index']);
+            self::$_Router->get('admin_movie_index', '/Admin/Film', [ Controller\Admin\Movie::class, 'index']);
             self::$_Router->get('admin_movie_add', '/Admin/Movie/Add', [ Controller\Admin\Movie::class, 'edit']);
             self::$_Router->get('admin_movie', '/Admin/Film/{status}', [ Controller\Admin\Movie::class, 'index'],
                 ['status' => '[A-Z-]+']);

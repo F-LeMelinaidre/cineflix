@@ -9,13 +9,11 @@
     class AbstractDAO implements DAO
     {
 
+        private array $default_column = ['created', 'modified'];
         protected Database $db;
-        protected string $query;
-
         protected string $table;
         protected array $relations;
         protected string $model;
-
         protected int $last_insert_id;
 
 
@@ -96,31 +94,10 @@
         }
 
         public function findAll(array $options = null) {
-            $select = (isset($options['select']))? implode(' ,', $options['select']) : '*';
-            $where = '';
-            $bindValues = [];
-            $order = '';
 
-            if(isset($options['order'])) {
-                $order = 'ORDER BY ';
-                $order .= implode(', ', $options['order']);
-            }
-
-            if (isset($options['conditions'])) {
-                foreach ($options['conditions'] as $key => $val) {
-                    $conditions [] = "$key = :$key";
-                    $bindValues[] = ['col' => "$key", 'val' => $val];
-                }
-                $where = "WHERE ".implode(' AND ',$conditions);
-            }
-
-
-            $sql = "SELECT $select FROM $this->table $where $order";
-            $req = $this->db->prepare($sql, $bindValues);
-
-            return $req->fetchall(MovieModel::class);
-
-
+            $sql = "SELECT * FROM $this->table";
+            $req = $this->db->prepare($sql);
+            return $req->fetchall($this->model);
         }
         public function findAllBy(array $params, array $options = null): mixed
         {

@@ -7,13 +7,14 @@ use Cineflix\Core\Util\Security;
 class UserModel extends AbstractModel
 {
 
+    private ProfilModel $profil;
+
     public ?string $email = null;
     public ?string $password = null;
     public string $token;
     public int $admin = 0;
     public string $connect;
     public string $last_connect;
-    private ProfilModel $profil;
 
     public function __construct(array $data = null)
     {

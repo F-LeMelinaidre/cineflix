@@ -22,11 +22,11 @@
 
         public function index(?string $status = null): string
         {
-
+            $options = [];
             if(is_null($status)) {
-                $movies = $this->movieDao->findAll(['order' => ['created']]);
+                $movies = $this->movieDao->findAll($options);
             } else {
-                $movies = $this->movieDao->findAllByStatus($status);
+                $movies = $this->movieDao->findAllByStatus($status,$options);
             }
 
             return $this->render('Movie.admin.index',compact('movies'));
