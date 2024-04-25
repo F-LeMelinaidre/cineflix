@@ -148,6 +148,12 @@
             return $this;
         }
 
+        public function leftJoin(string $table, string $alias, string $condition): self
+        {
+
+            return $this;
+        }
+
         public function returnQuery()
         {
             echo "SELECT $this->select FROM $this->table $this->where";
