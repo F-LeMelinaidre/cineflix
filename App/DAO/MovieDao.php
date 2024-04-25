@@ -22,7 +22,9 @@ class MovieDao extends AbstractDAO
         $r = $query->select('a','select','truc')
               ->from($this->table, "m")
               ->setParameter('nom', 'nom')
-              ->andWhere('truc != :truc');
+              ->andWhere('truc != :truc')
+              ->setParameter('truc', ':truc')
+              ->leftJoin('truc', 't', 'bidule');
 
         $r->returnQuery();
         die();
