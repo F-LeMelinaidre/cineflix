@@ -15,46 +15,25 @@ class MovieDao extends AbstractDAO
         ]
     ];
 
-    public function findAll(array $options = null)
-    {
-        $query = AppController::$_Database;
-
-        $r = $query->select('a','select','truc')
-              ->from($this->table, "m")
-              ->setParameter('nom', 'nom')
-              ->andWhere('truc != :truc')
-              ->setParameter('truc', ':truc')
-              ->leftJoin('truc', 't', 'bidule');
-
-        $r->returnQuery();
-        die();
-        return parent::findAll($options);
-    }
-
+    /**
+     * @param string $status
+     * @param array|null $options
+     * @return array
+     */
     public function findAllByStatus(string $status, array $options = null): array
     {
+        $params['condition'] = ['status' => StatusMovie::getStatus($status)];
 
-        $params = ['status' => StatusMovie::getStatus($status)];
+        return $this->findAll($params);
 
-        return parent::findAllBy($params,$options);
+        //return parent::findAllBy($params,$options);
     }
 
-    public function findAllMovie(): array
-    {
-        $query = "SELECT film.id AS movie_id, fiche.id AS detail_id, fiche.nom AS nom, fiche.synopsis AS synopsis,
-                  fiche.affiche AS affiche, fiche.date_sortie AS date_sortie, fiche.slug AS slug, cinema.nom AS cinema,
-                  ville.nom AS ville
-                  FROM film AS film JOIN fiche ON film.fiche_id = fiche.id JOIN cinema ON film.cinema_id = cinema.id JOIN ville ON cinema.ville_id = ville.id";
-
-        $req = $this->db->prepare($query);
-
-        $result = $req->fetchall(MovieModel::class);
-
-
-    }
-
-
-
+    /**
+     * @param string $item
+     * @param mixed $value
+     * @return mixed|null
+     */
     public function findBy(string $item, mixed $value)
     {
         $model = MovieModel::class;
@@ -79,12 +58,15 @@ class MovieDao extends AbstractDAO
         return $req->fetch(MovieModel::class);
 
     }
-  
-    public function add(MovieModel $movie){
+
+    /**
+     * @param MovieModel $movie
+     * @return void
+     */
+    public function add(MovieModel $movie)
+    {
 
         var_dump($movie);
-
-
 
     }
   
