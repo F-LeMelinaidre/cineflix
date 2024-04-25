@@ -8,7 +8,7 @@
     class Database
     {
 
-        private string $select;
+        private string $select = '';
         private string $table;
         private array $where = [];
         private array $join = [];
@@ -71,17 +71,22 @@
 
         /**
          * @param string ...$selects
+         * Pour un select * mettre seulement la premiere lettre de la table,
+         * pour une colonne où plusieurs colonnes prefixer d'un l'alias
+         * alias = première lettre de la table suivi d'un .
          *
          * @return self
          */
         public function select(string ...$selects): self
         {
+            //var_dump($this->select);
 
             foreach($selects as $k => $val) {
                 $selects[$k]= (strlen($val) == 1)? "$val.*" : $val;
             }
 
             $this->select = implode(', ', $selects);
+            //echo __CLASS__.' '.__FUNCTION__.' '.__LINE__.'<br>'.$this->select.'<br>';
             return $this;
         }
 
@@ -92,7 +97,10 @@
          */
         public function from(string $table, string $alias = null): self
         {
-            $this->table = (isset($alias))? "$table AS $alias" : $table." AS ".substr($table, 0, 1);
+            if(!isset($alias)) $alias = substr($table, 0, 1);
+
+            $this->table = "$table AS $alias";
+            //echo __CLASS__.' '.__FUNCTION__.' '.__LINE__.'<br>'.$this->table.'<br>';
             return $this;
         }
 
@@ -104,7 +112,7 @@
         public function where(string $condition): self
         {
             $this->where[] = "WHERE $condition";
-
+            //var_dump($this->where); die();
             return $this;
         }
 
@@ -139,13 +147,15 @@
          */
         public function setParameter(string $col, string $val): self
         {
-            echo $col .'-'. $val;
+            //echo __CLASS__.' '.__FUNCTION__.' '.__LINE__.'<br>'.$col .'-'. $val.'<br>';
             $this->bind_values[] = [
                 'col' => $col,
                 'val' => $val
             ];
 
             if(empty($this->where)) $this->where[] = "WHERE $col = :$col";
+            //var_dump($this->bind_values);
+            //var_dump($this->where); die();
 
             return $this;
         }
@@ -159,8 +169,12 @@
         public function leftJoin(string $table, string $alias, string $condition): self
         {
             $this->join[] = "LEFT JOIN $table AS $alias ON $condition";
+            //var_dump($this->join);
             return $this;
         }
+
+        //TODO Pour les requetes complexe
+        public function createCustomQuery(){}
 
         /**
          * @return string|null
@@ -169,11 +183,12 @@
         {
             try {
 
-                if((count($this->where) + count($this->join)) != count($this->bind_values))
+                if(count($this->where) != count($this->bind_values))
                     throw new Exception("paramètre manquant");
 
                 $where = implode(' ',$this->where);
                 $join = implode(' ', $this->join);
+                //echo $where.' - '.$join; die();
 
                 return "SELECT $this->select FROM $this->table $join $where";
 
@@ -183,6 +198,7 @@
             }
         }
 
+        //TODO retirer progressivement les requete utilisant la methode ci dessous et la passer en privé
         /**
          * @param string $query
          * @param array  $bindvalues
@@ -191,16 +207,22 @@
          */
         public function prepare(string $query, array $bindvalues = [])
         {
+            echo $query.'<br>';
             try {
-
+                //echo __CLASS__.' '.__FUNCTION__.' '.__LINE__.'<br>'.$query. '<br>'.var_dump($bindvalues);
                 $this->request = $this->connexion->prepare($query);
 
                 if (!empty($bindvalues)) {
+                    //var_dump($bindvalues); die();
 
                     foreach ($bindvalues as $val) {
                         $this->request->bindValue(':'.$val['col'], $val['val'], PDO::PARAM_STR);
                     }
                 }
+
+                $this->where = [];
+                $this->join = [];
+                $this->bind_values = [];
 
                 return $this;
 
@@ -215,12 +237,22 @@
          *
          * @return mixed
          */
-        public function fetch(string $class_name = null)
+        public function fetch(mixed $class = null)
         {
-            $mode = (is_null($class_name))? [PDO::FETCH_ASSOC] : [PDO::FETCH_CLASS, $class_name];
+
+            $mode = (is_null($class))? [PDO::FETCH_ASSOC] : [PDO::FETCH_CLASS, $class];
 
             try {
+
+                $sql = $this->queryBuilder();
+
+                $this->prepare($sql, $this->bind_values);
+
+                $this->request->execute();
+
                 $this->request->setFetchMode(...$mode);
+
+                //$this->resetProperties();
 
                 return $this->request->fetch();
 
@@ -245,15 +277,15 @@
 
                 $sql = $this->queryBuilder();
 
-                $this->prepare($sql);
+                $this->prepare($sql, $this->bind_values);
 
                 $this->request->execute();
 
                 $this->request->setFetchMode(...$mode);
 
-                $data = $this->request->fetchAll();
+                $this->resetProperties();
 
-                return $data;
+                return $this->request->fetchAll();
 
             }catch (Exception $e) {
                 echo 'erreur fetchAll() '.$e->getMessage();
@@ -317,6 +349,11 @@
             return $result;
         }
 
+        public function upDate($sql, $bindValues)
+        {
+            $this->prepare($sql, $bindValues);
+            return $this->request->execute();
+        }
         /**
          * @return false|string
          */
@@ -350,5 +387,14 @@
         public function rollback()
         {
             $this->connexion->rollBack();
+        }
+
+        private function resetProperties(): void
+        {
+            $this->select = '';
+            $this->table = '';
+            $this->where = [];
+            $this->join = [];
+            $this->bind_values = [];
         }
     }

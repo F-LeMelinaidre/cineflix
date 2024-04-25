@@ -36,54 +36,48 @@
          *
          * @return array
          */
-        public function findOneBy(array $params, array $options = null): mixed
-        {
-            if(!isset($options['select'])) {
-                $columns = ['*'];
-            } else {
-                $columns = array_merge(['created','modified'], $options['select']);
-            }
+        public function findOneBy(string $col, string $val, array $options = null): mixed
+        {   //TODO à completer (Where, Order etc...)
 
-            $select = $this->setSelect($this->table, $columns);
+            $alias = substr($this->table, 0, 1);
+
+            $select = $options['select'] ?? [$alias];
+            $req = $this->db->select(...$select)
+                            ->from($this->table)
+                            ->setParameter($col,$val);
 
             if(isset($options['hasOne'])) {
-                $hasOne = $this->relations['hasOne'];
+                $hasOne = $options['hasOne'];
+                foreach ($hasOne as $relation) {
 
-                foreach ($options['hasOne'] as $table => $opt) {
-                    $join[] = "JOIN $table ON $hasOne[$table]";
-                    $select .= ', '.$this->setSelect($table, $opt['select']);
+                    $alias = substr($relation, 0, 1);
+                    $req->leftJoin($relation, $alias, $this->relations['hasOne'][$relation]);
+
                 }
             }
-            $join = (isset($join))? implode($join) : '';
 
-            $where = [];
-            $bindValues = [];
-            foreach ($params as $key => $val) {
-                $where [] = "$key = :$key";
-                $bindValues[] = ['col' => "$key", 'val' => $val];
-            }
+            //if(isset($options['hasOne']))
+            //    $this->buildJoin($req, $options);
 
-            $where = implode(' AND ',$where);
-            $query = "SELECT $select FROM $this->table $join WHERE $where";
-
-            $req = $this->db->prepare($query, $bindValues);
             $result = $req->fetch();
+
+            //if(isset($options['hasOne']))
+            //    $result = $this->mapResult($result, $options);
 
             if(isset($options['hasOne'])) {
                 $data = [];
-
+                $hasOne = $this->relations['hasOne'];
                 foreach ($result as $key => $val) {
 
                     $pos = strpos($key, '_');
+
                     if ($pos !== false) {
 
                         $prefix = substr($key, 0, $pos);
-
                         if (isset($hasOne[$prefix]) && $key !== $prefix . '_id') {
 
-                            $unprefixed_kry = substr($key, $pos + 1);
-
-                            $data[$prefix][$unprefixed_kry] = $val;
+                            $unprefixed_key = substr($key, $pos + 1);
+                            $data[$prefix][$unprefixed_key] = $val;
 
                             unset($result[$key]);
                         }
@@ -91,7 +85,9 @@
                 }
                 $result = array_merge($result, $data);
             }
+
             return $result;
+
         }
 
         /**
@@ -105,9 +101,9 @@
             $req = $this->db->select($alias)
                             ->from($this->table);
 
-            if(isset($options['condition'])) {
-                $req->setParameter(...$options['condition']);
-                die();
+            if(isset($options['where'])) {
+
+                $req->setParameter($options['where']['col'],$options['where']['val']);
             }
 
             return $req->fetchall($this->model);

@@ -12,6 +12,7 @@ class Home extends AbstractController
     {
         $movieDao = new MovieDao();
         $movies = $movieDao->findAllByStatus('En-Salle');
+
         return $this->render('Home.index',compact('movies'));
     }
 }
