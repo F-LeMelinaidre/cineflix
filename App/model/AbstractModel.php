@@ -12,8 +12,8 @@ class AbstractModel
     private array $errors = [];
 
     protected ?int $id = null;
-    protected string $created;
-    protected string $modified;
+    public string $created;
+    public string $modified;
 
     public ?string $nom = null;
 
