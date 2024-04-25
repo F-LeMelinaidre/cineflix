@@ -16,15 +16,10 @@ class UserDao extends AbstractDAO
      */
     protected array $relations = [
         'hasOne' => [
-            'profil' => 'user.id = profil.user_id'
+            'profil' => 'u.id = p.user_id'
             ]
     ];
 
-    public function findOneBy(array $params, array $options = null): object
-    {
-        $result = parent::findOneBy($params, $options);
-        return new UserModel($result);
-    }
 
     public function create(object $user)
     {

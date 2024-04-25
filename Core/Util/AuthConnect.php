@@ -46,16 +46,15 @@ class AuthConnect
      * @param string $value Valeur de la colonne
      * @param string $pwd Mot de passe
      */
-    public static function verify(string $id_value, string $pwd): bool
+    public static function verify(string $identifiant, string $pwd): bool
     {
 
         $table = self::$_Table;
-        $id_colonne = self::$_IdColonne;
+        $ident_col = self::$_IdColonne;
 
-        $query ="SELECT $id_colonne, password FROM $table WHERE $id_colonne = :$id_colonne";
-        $bindValues[] = ['col' => $id_colonne, 'val' => $id_value];
-
-        $req = self::$_Database->prepare($query, $bindValues);
+        $req = self::$_Database->select($ident_col, 'password')
+                               ->from($table)
+                               ->setParameter('email', $identifiant);
 
         $result = $req->fetch();
 
@@ -71,29 +70,29 @@ class AuthConnect
         $table = self::$_Table;
         $id_colonne = self::$_IdColonne;
 
+        $req = self::$_Database->select('last_connect','connect')
+            ->from($table)
+            ->setParameter($id_colonne, $id_value);
 
-        $sql = "SELECT last_connect FROM $table WHERE $id_colonne = :$id_colonne";
-        $bindValues = [
-            ['col' => $id_colonne, 'val' => $id_value]
-        ];
-        $req = self::$_Database->prepare($sql, $bindValues);
         $result = $req->fetch();
 
         $params_default = [
             'token'         => self::getToken(),
             'last_connect'  => date("d-m-Y H:i:s", strtotime($result['last_connect']))
         ];
-
         $params = array_merge($params, $params_default);
 
-        $update = "UPDATE $table SET last_connect = connect, connect = :connect, token = :token WHERE $id_colonne = :$id_colonne";
-        $bindValues = [
-            ['col' => $id_colonne, 'val' => $id_value],
-            ['col' => 'token', 'val' => self::$_Token],
-            ['col' => 'connect', 'val' => date("Y-m-d H:i:s")]
-        ];
 
-        if(!is_null(self::$_Database->prepare($update, $bindValues))) {
+        $req = self::$_Database->createUpdate($table)
+            ->set('last_connect', 'connect')
+            ->set('connect', ':new_connect')
+            ->set('token', ':token')
+            ->setParameter('new_connect', date("Y-m-d H:i:s"))
+            ->setParameter('token', self::$_Token)
+            ->where("$id_colonne = :$id_colonne")
+            ->execute();
+
+        if($req) {
             self::$_Connect = true;
             $_SESSION = [self::$_NameSession => $params];
         }
