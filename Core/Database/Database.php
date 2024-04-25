@@ -10,7 +10,8 @@
 
         private string $select;
         private string $table;
-        private ?string $where = null;
+        private array $where = [];
+        private array $join = [];
         private array $bind_values;
         private $request;
 
@@ -102,7 +103,7 @@
          */
         public function where(string $condition): self
         {
-            $this->where .= "WHERE $condition";
+            $this->where[] = "WHERE $condition";
 
             return $this;
         }
@@ -114,7 +115,7 @@
          */
         public function orWhere(string $condition): self
         {
-            $this->where .= " OR $condition";
+            $this->where[] = " OR $condition";
 
             return $this;
         }
@@ -126,7 +127,7 @@
          */
         public function andWhere(string $condition): self
         {
-            $this->where .= " AND $condition";
+            $this->where[] = " AND $condition";
 
             return $this;
         }
@@ -143,20 +144,21 @@
                 'val' => $val
             ];
 
-            if(is_null($this->where)) $this->where = "WHERE $col = :$col";
+            if(empty($this->where)) $this->where[] = "WHERE $col = :$col";
 
             return $this;
         }
 
         public function leftJoin(string $table, string $alias, string $condition): self
         {
-
+            $this->join[] = "LEFT JOIN $table AS $alias ON $condition";
             return $this;
         }
 
         public function returnQuery()
         {
-            echo "SELECT $this->select FROM $this->table $this->where";
+            echo (count($this->where) + count($this->join)). ' - ' .count($this->bind_values);
+            if((count($this->where) + count($this->join)) != count($this->bind_values)) echo 'parametre manquant';
         }
         /**
          * Debut de transaction
