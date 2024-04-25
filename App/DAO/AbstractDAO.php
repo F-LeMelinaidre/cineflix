@@ -16,8 +16,9 @@
         protected string $model;
         protected int $last_insert_id;
 
-
-
+        /**
+         *
+         */
         public function __construct()
         {
             $this->db = AppController::$_Database;
@@ -93,12 +94,30 @@
             return $result;
         }
 
+        /**
+         * @param array|null $options
+         * @return mixed|null
+         */
         public function findAll(array $options = null) {
+            //TODO gerer les options
 
-            $sql = "SELECT * FROM $this->table";
-            $req = $this->db->prepare($sql);
+            $alias = substr($this->table, 0, 1);
+            $req = $this->db->select($alias)
+                            ->from($this->table);
+
+            if(isset($options['condition'])) {
+                $req->setParameter(...$options['condition']);
+                die();
+            }
+
             return $req->fetchall($this->model);
         }
+
+        /**
+         * @param array $params
+         * @param array|null $options
+         * @return mixed
+         */
         public function findAllBy(array $params, array $options = null): mixed
         {
             $where = [];

@@ -12,7 +12,7 @@
         private string $table;
         private array $where = [];
         private array $join = [];
-        private array $bind_values;
+        private array $bind_values = [];
         private $request;
 
         public static $_Instance;
@@ -92,7 +92,7 @@
          */
         public function from(string $table, string $alias = null): self
         {
-            $this->table = (isset($alias))? "$table AS $alias" : $table;
+            $this->table = (isset($alias))? "$table AS $alias" : $table." AS ".substr($table, 0, 1);
             return $this;
         }
 
@@ -115,7 +115,7 @@
          */
         public function orWhere(string $condition): self
         {
-            $this->where[] = " OR $condition";
+            $this->where[] = "OR $condition";
 
             return $this;
         }
@@ -127,7 +127,7 @@
          */
         public function andWhere(string $condition): self
         {
-            $this->where[] = " AND $condition";
+            $this->where[] = "AND $condition";
 
             return $this;
         }
@@ -139,6 +139,7 @@
          */
         public function setParameter(string $col, string $val): self
         {
+            echo $col .'-'. $val;
             $this->bind_values[] = [
                 'col' => $col,
                 'val' => $val
@@ -149,43 +150,37 @@
             return $this;
         }
 
+        /**
+         * @param string $table
+         * @param string $alias
+         * @param string $condition
+         * @return $this
+         */
         public function leftJoin(string $table, string $alias, string $condition): self
         {
             $this->join[] = "LEFT JOIN $table AS $alias ON $condition";
             return $this;
         }
 
-        public function returnQuery()
-        {
-            echo (count($this->where) + count($this->join)). ' - ' .count($this->bind_values);
-            if((count($this->where) + count($this->join)) != count($this->bind_values)) echo 'parametre manquant';
-        }
         /**
-         * Debut de transaction
-         * @return void
+         * @return string|null
          */
-        public function beginTransaction()
+        private function queryBuilder()
         {
-            $this->connexion->beginTransaction();
-        }
+            try {
 
+                if((count($this->where) + count($this->join)) != count($this->bind_values))
+                    throw new Exception("paramètre manquant");
 
-        /**
-         * Validation de la transaction
-         * @return void
-         */
-        public function commit()
-        {
-            $this->connexion->commit();
-        }
+                $where = implode(' ',$this->where);
+                $join = implode(' ', $this->join);
 
-        /**
-         * En cas d'erreur, annule la transaction
-         * @return void
-         */
-        public function rollback()
-        {
-            $this->connexion->rollBack();
+                return "SELECT $this->select FROM $this->table $join $where";
+
+            } catch (Exception $e) {
+                echo 'Erreur buildQuery(): '.$e->getMessage();
+                return null;
+            }
         }
 
         /**
@@ -197,6 +192,7 @@
         public function prepare(string $query, array $bindvalues = [])
         {
             try {
+
                 $this->request = $this->connexion->prepare($query);
 
                 if (!empty($bindvalues)) {
@@ -204,32 +200,14 @@
                     foreach ($bindvalues as $val) {
                         $this->request->bindValue(':'.$val['col'], $val['val'], PDO::PARAM_STR);
                     }
-
                 }
-
-                $this->request->execute();
 
                 return $this;
 
             } catch (Exception $e) {
                 echo 'erreur prepare() '.$e->getMessage();
-                //MessageFlash::create("Impossible de récupérer les données sur la table! <br>" . $e->getMessage(), 'erreur');
                 return null;
             }
-        }
-
-        /**
-         * @param array $data
-         *
-         * @return $this
-         */
-        public function setBindValues(array $data) {
-
-            foreach ($data as $col => $val) {
-                $this->bind_values[] = ['col' => $col,'val' => $val];
-            }
-
-            return $this;
         }
 
         /**
@@ -260,21 +238,33 @@
          */
         public function fetchall(string $class_name = null)
         {
+
             $mode = (is_null($class_name))? [PDO::FETCH_ASSOC] : [PDO::FETCH_CLASS, $class_name];
 
             try {
+
+                $sql = $this->queryBuilder();
+
+                $this->prepare($sql);
+
+                $this->request->execute();
+
                 $this->request->setFetchMode(...$mode);
+
                 $data = $this->request->fetchAll();
 
                 return $data;
 
             }catch (Exception $e) {
-                echo 'erreur fetch() '.$e->getMessage();
+                echo 'erreur fetchAll() '.$e->getMessage();
                 //MessageFlash::create("Impossible de récupérer les données sur la table! <br>" . $e->getMessage(), 'erreur');
                 return null;
             }
         }
 
+        /**
+         * @return null
+         */
         public function count()
         {
             try {
@@ -327,8 +317,38 @@
             return $result;
         }
 
+        /**
+         * @return false|string
+         */
         public function getLastInsertId()
         {
             return $this->connexion->lastInsertId();
+        }
+
+        /**
+         * Debut de transaction
+         * @return void
+         */
+        public function beginTransaction()
+        {
+            $this->connexion->beginTransaction();
+        }
+
+        /**
+         * Validation de la transaction
+         * @return void
+         */
+        public function commit()
+        {
+            $this->connexion->commit();
+        }
+
+        /**
+         * En cas d'erreur, annule la transaction
+         * @return void
+         */
+        public function rollback()
+        {
+            $this->connexion->rollBack();
         }
     }
