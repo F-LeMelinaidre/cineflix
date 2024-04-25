@@ -7,6 +7,13 @@
 
     class Database
     {
+
+        private string $select;
+        private string $table;
+        private ?string $where = null;
+        private array $bind_values;
+        private $request;
+
         public static $_Instance;
 
         public PDO $connexion;
@@ -16,11 +23,6 @@
             PDO::ATTR_EMULATE_PREPARES => false
         ];
 
-        private string $select = '*';
-        private string $table;
-        private string $where = '';
-        private array $bind_values;
-        private $request;
 
         /**
          * @param string $root
@@ -66,6 +68,90 @@
             }
         }
 
+        /**
+         * @param string ...$selects
+         *
+         * @return self
+         */
+        public function select(string ...$selects): self
+        {
+
+            foreach($selects as $k => $val) {
+                $selects[$k]= (strlen($val) == 1)? "$val.*" : $val;
+            }
+
+            $this->select = implode(', ', $selects);
+            return $this;
+        }
+
+        /**
+         * @param string $table
+         *
+         * @return $this
+         */
+        public function from(string $table, string $alias = null): self
+        {
+            $this->table = (isset($alias))? "$table AS $alias" : $table;
+            return $this;
+        }
+
+        /**
+         * @param string $condition
+         *
+         * @return $this
+         */
+        public function where(string $condition): self
+        {
+            $this->where .= "WHERE $condition";
+
+            return $this;
+        }
+
+        /**
+         * @param string $condition
+         *
+         * @return $this
+         */
+        public function orWhere(string $condition): self
+        {
+            $this->where .= " OR $condition";
+
+            return $this;
+        }
+
+        /**
+         * @param string $condition
+         *
+         * @return $this
+         */
+        public function andWhere(string $condition): self
+        {
+            $this->where .= " AND $condition";
+
+            return $this;
+        }
+        /**
+         * @param string $col
+         * @param string $val
+         *
+         * @return $this
+         */
+        public function setParameter(string $col, string $val): self
+        {
+            $this->bind_values[] = [
+                'col' => $col,
+                'val' => $val
+            ];
+
+            if(is_null($this->where)) $this->where = "WHERE $col = :$col";
+
+            return $this;
+        }
+
+        public function returnQuery()
+        {
+            echo "SELECT $this->select FROM $this->table $this->where";
+        }
         /**
          * Debut de transaction
          * @return void

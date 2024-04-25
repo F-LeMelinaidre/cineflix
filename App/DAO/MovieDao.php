@@ -2,6 +2,7 @@
 
 namespace Cineflix\App\DAO;
 
+use Cineflix\App\AppController;
 use Cineflix\App\DAO\List\StatusMovie;
 use Cineflix\App\Model\MovieModel;
 
@@ -16,6 +17,15 @@ class MovieDao extends AbstractDAO
 
     public function findAll(array $options = null)
     {
+        $query = AppController::$_Database;
+
+        $r = $query->select('a','select','truc')
+              ->from($this->table, "m")
+              ->setParameter('nom', 'nom')
+              ->andWhere('truc != :truc');
+
+        $r->returnQuery();
+        die();
         return parent::findAll($options);
     }
 
