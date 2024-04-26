@@ -8,7 +8,9 @@
     class Database
     {
 
+        private string $sql = '';
         private string $select = '';
+        private array $set = [];
         private string $table;
         private array $where = [];
         private array $join = [];
@@ -79,14 +81,16 @@
          */
         public function select(string ...$selects): self
         {
+            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>';
             //var_dump($this->select);
+            //echo '<br><br>';
 
             foreach($selects as $k => $val) {
                 $selects[$k]= (strlen($val) == 1)? "$val.*" : $val;
             }
 
             $this->select = implode(', ', $selects);
-            //echo __CLASS__.' '.__FUNCTION__.' '.__LINE__.'<br>'.$this->select.'<br>';
+            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>'.$this->select.'<br><br>';
             return $this;
         }
 
@@ -100,7 +104,7 @@
             if(!isset($alias)) $alias = substr($table, 0, 1);
 
             $this->table = "$table AS $alias";
-            //echo __CLASS__.' '.__FUNCTION__.' '.__LINE__.'<br>'.$this->table.'<br>';
+            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>'.$this->table.'<br><br>';
             return $this;
         }
 
@@ -112,7 +116,9 @@
         public function where(string $condition): self
         {
             $this->where[] = "WHERE $condition";
-            //var_dump($this->where); die();
+            echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>';
+            var_dump($this->where);
+            echo '<br><br>';
             return $this;
         }
 
@@ -124,7 +130,9 @@
         public function orWhere(string $condition): self
         {
             $this->where[] = "OR $condition";
-
+            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>';
+            //var_dump($this->where);
+            //echo '<br><br>';
             return $this;
         }
 
@@ -136,27 +144,9 @@
         public function andWhere(string $condition): self
         {
             $this->where[] = "AND $condition";
-
-            return $this;
-        }
-        /**
-         * @param string $col
-         * @param string $val
-         *
-         * @return $this
-         */
-        public function setParameter(string $col, string $val): self
-        {
-            //echo __CLASS__.' '.__FUNCTION__.' '.__LINE__.'<br>'.$col .'-'. $val.'<br>';
-            $this->bind_values[] = [
-                'col' => $col,
-                'val' => $val
-            ];
-
-            if(empty($this->where)) $this->where[] = "WHERE $col = :$col";
-            //var_dump($this->bind_values);
-            //var_dump($this->where); die();
-
+            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>';
+            //var_dump($this->where);
+            //echo '<br><br>';
             return $this;
         }
 
@@ -169,12 +159,38 @@
         public function leftJoin(string $table, string $alias, string $condition): self
         {
             $this->join[] = "LEFT JOIN $table AS $alias ON $condition";
+            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>';
             //var_dump($this->join);
+            //echo '<br><br>';
+            //die();
             return $this;
         }
 
         //TODO Pour les requetes complexe
         public function createCustomQuery(){}
+
+
+        /**
+         * @param string $col
+         * @param string $val
+         *
+         * @return $this
+         */
+        public function setParameter(string $col, string $val): self
+        {
+            echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>$col = '.$col .' - $val = '. $val.'<br><br>';
+            $this->bind_values[] = [
+                'col' => $col,
+                'val' => $val
+            ];
+            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>';
+            //var_dump($this->bind_values);
+            //echo ''<br><br>';
+            //die();
+
+
+            return $this;
+        }
 
         /**
          * @return string|null
@@ -188,7 +204,9 @@
 
                 $where = implode(' ',$this->where);
                 $join = implode(' ', $this->join);
-                //echo $where.' - '.$join; die();
+                //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>';
+                //echo $where.' - '.$join'<br><br>';
+                //die();
 
                 return "SELECT $this->select FROM $this->table $join $where";
 
@@ -207,9 +225,12 @@
          */
         public function prepare(string $query, array $bindvalues = [])
         {
-            echo $query.'<br>';
+            echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>'.$query.'<br><br>';
             try {
-                //echo __CLASS__.' '.__FUNCTION__.' '.__LINE__.'<br>'.$query. '<br>'.var_dump($bindvalues);
+                //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>';
+                //echo '$query: '.$query. '<br>';
+                //var_dump($bindvalues);
+                //echo '<br><br>';
                 $this->request = $this->connexion->prepare($query);
 
                 if (!empty($bindvalues)) {
@@ -354,6 +375,35 @@
             $this->prepare($sql, $bindValues);
             return $this->request->execute();
         }
+
+        /**
+         * @param string $table
+         *
+         * @return void
+         */
+        public function createUpdate(string $table): self
+        {
+            $this->sql = "UPDATE $table SET ";
+            echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>'.$this->sql.'<br><br>';
+            return $this;
+        }
+
+        /**
+         * @param string $col
+         * @param string $val
+         *
+         * @return void
+         */
+        public function set(string $col, string $val): self
+        {
+            $this->set[] = "$col = $val";
+            echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>'.$this->sql.'<br>';
+            var_dump($this->set);
+            echo '<br>';
+
+            return $this;
+        }
+
         /**
          * @return false|string
          */

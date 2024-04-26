@@ -43,8 +43,9 @@
 
             $select = $options['select'] ?? [$alias];
             $req = $this->db->select(...$select)
-                            ->from($this->table)
-                            ->setParameter($col,$val);
+                ->from($this->table)
+                ->where("$col = :$col")
+                ->setParameter($col,$val);
 
             if(isset($options['hasOne'])) {
                 $hasOne = $options['hasOne'];

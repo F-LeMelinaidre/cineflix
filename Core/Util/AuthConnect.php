@@ -48,13 +48,14 @@ class AuthConnect
      */
     public static function verify(string $identifiant, string $pwd): bool
     {
-
+        echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' - Ligne: '.__LINE__.'<br><br>';
         $table = self::$_Table;
         $ident_col = self::$_IdColonne;
 
         $req = self::$_Database->select($ident_col, 'password')
-                               ->from($table)
-                               ->setParameter('email', $identifiant);
+            ->from($table)
+            ->where("$ident_col = :$ident_col")
+            ->setParameter('email', $identifiant);
 
         $result = $req->fetch();
 
@@ -67,12 +68,14 @@ class AuthConnect
      */
     public static function connect(string $id_value, array $params = null): bool
     {
+        echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' - Ligne: '.__LINE__.'<br><br>';
         $table = self::$_Table;
-        $id_colonne = self::$_IdColonne;
+        $ident_col = self::$_IdColonne;
 
         $req = self::$_Database->select('last_connect','connect')
             ->from($table)
-            ->setParameter($id_colonne, $id_value);
+            ->where("$ident_col = :$ident_col")
+            ->setParameter($ident_col, $id_value);
 
         $result = $req->fetch();
 
@@ -89,7 +92,7 @@ class AuthConnect
             ->set('token', ':token')
             ->setParameter('new_connect', date("Y-m-d H:i:s"))
             ->setParameter('token', self::$_Token)
-            ->where("$id_colonne = :$id_colonne")
+            ->where("$ident_col = :$ident_col")
             ->execute();
 
         if($req) {
