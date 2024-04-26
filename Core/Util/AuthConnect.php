@@ -69,8 +69,10 @@ class AuthConnect
     public static function connect(string $id_value, array $params = null): bool
     {
         echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' - Ligne: '.__LINE__.'<br><br>';
+
         $table = self::$_Table;
         $ident_col = self::$_IdColonne;
+
 
         $req = self::$_Database->select('last_connect','connect')
             ->from($table)
@@ -78,7 +80,8 @@ class AuthConnect
             ->setParameter($ident_col, $id_value);
 
         $result = $req->fetch();
-
+        var_dump($result);
+        echo'<br>';
         $params_default = [
             'token'         => self::getToken(),
             'last_connect'  => date("d-m-Y H:i:s", strtotime($result['last_connect']))
