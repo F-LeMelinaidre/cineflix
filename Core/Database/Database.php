@@ -207,7 +207,7 @@
          */
         public function prepare(string $query, array $bindvalues = [])
         {
-            echo $query.'<br>';
+            //echo $query.'<br>';
             try {
                 //echo __CLASS__.' '.__FUNCTION__.' '.__LINE__.'<br>'.$query. '<br>'.var_dump($bindvalues);
                 $this->request = $this->connexion->prepare($query);

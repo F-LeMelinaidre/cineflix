@@ -2,7 +2,9 @@
 
 namespace Cineflix\App\Model\DAO;
 
-class CinemaDao
+use Cineflix\App\DAO\AbstractDAO;
+
+class CinemaDao extends AbstractDAO
 {
     protected array $relations = [
         'hasOne' => [

@@ -30,6 +30,11 @@
         }
         public function create(object $model) {}
 
+        public function find(int $id, array $options)
+        {
+            return [];
+        }
+
         /**
          * @param array      $params
          * @param array|null $options
