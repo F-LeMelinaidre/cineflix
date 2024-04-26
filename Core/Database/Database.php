@@ -467,8 +467,8 @@
 
         private function resetProperties(): void
         {
-            $this->select = '';
-            $this->table = '';
+            $this->select = [];
+            $this->table = [];
             $this->where = [];
             $this->join = [];
             $this->bind_values = [];
