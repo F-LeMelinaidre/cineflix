@@ -22,12 +22,9 @@ class MovieDao extends AbstractDAO
      */
     public function findAllByStatus(string $status, array $options = null): array
     {
-        $params = [
-            'where' => ['col' => 'status',
-                        'val' => StatusMovie::getStatus($status)],
-        ];
 
-        return $this->findAll($params);
+
+        return [];
 
         //return parent::findAllBy($params,$options);
     }

@@ -4,14 +4,17 @@
 
     use Exception;
     use PDO;
+    use PhpParser\Node\Scalar\String_;
 
     class Database
     {
 
-        private string $sql = '';
-        private string $select = '';
+        private string $sql;
+        private array $select = [];
         private array $set = [];
-        private string $table;
+        private array $table = [];
+        private array $table_join;
+        private string $alias;
         private array $where = [];
         private array $join = [];
         private array $bind_values = [];
@@ -81,17 +84,17 @@
          */
         public function select(string ...$selects): self
         {
-            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>';
-            //var_dump($this->select);
-            //echo '<br><br>';
+            $this->select = $selects;
 
-            foreach($selects as $k => $val) {
-                $selects[$k]= (strlen($val) == 1)? "$val.*" : $val;
-            }
-
-            $this->select = implode(', ', $selects);
-            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>'.$this->select.'<br><br>';
             return $this;
+        }
+
+        /**
+         * @return string
+         */
+        private function getSelect(): string
+        {
+            return implode(', ',$this->select);
         }
 
         /**
@@ -101,11 +104,20 @@
          */
         public function from(string $table, string $alias = null): self
         {
-            if(!isset($alias)) $alias = substr($table, 0, 1);
+            $alias = (!is_null($alias))? $alias : substr($table, 0, 1);
 
-            $this->table = "$table AS $alias";
-            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>'.$this->table.'<br><br>';
+            $this->table[$alias] = $table;
+
             return $this;
+        }
+
+        /**
+         * @return string
+         */
+        private function getFrom(): string
+        {
+            $key = array_key_first($this->table);
+            return (empty($this->join))? $this->table[$key] : $this->table[$key].' AS '.$key;
         }
 
         /**
@@ -116,9 +128,7 @@
         public function where(string $condition): self
         {
             $this->where[] = "WHERE $condition";
-            echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>';
-            var_dump($this->where);
-            echo '<br><br>';
+
             return $this;
         }
 
@@ -130,12 +140,16 @@
         public function orWhere(string $condition): self
         {
             $this->where[] = "OR $condition";
-            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>';
-            //var_dump($this->where);
-            //echo '<br><br>';
+
             return $this;
         }
 
+        /**
+         * @return string
+         */
+        public function getWhere(): string{
+            return implode(' ',$this->where);
+        }
         /**
          * @param string $condition
          *
@@ -144,9 +158,7 @@
         public function andWhere(string $condition): self
         {
             $this->where[] = "AND $condition";
-            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>';
-            //var_dump($this->where);
-            //echo '<br><br>';
+
             return $this;
         }
 
@@ -156,14 +168,20 @@
          * @param string $condition
          * @return $this
          */
-        public function leftJoin(string $table, string $alias, string $condition): self
+        public function join(string $table, string $alias, string $type, string $condition): self
         {
-            $this->join[] = "LEFT JOIN $table AS $alias ON $condition";
-            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>';
-            //var_dump($this->join);
-            //echo '<br><br>';
-            //die();
+            $this->table[$alias] = $table;
+
+            array_push($this->join, "$type JOIN $table AS $alias ON $condition");
+
             return $this;
+        }
+
+        /**
+         * @return string
+         */
+        public function getJoin(): string{
+            return implode(' ', $this->join);
         }
 
         //TODO Pour les requetes complexe
@@ -178,16 +196,10 @@
          */
         public function setParameter(string $col, string $val): self
         {
-            echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>$col = '.$col .' - $val = '. $val.'<br><br>';
             $this->bind_values[] = [
                 'col' => $col,
                 'val' => $val
             ];
-            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>';
-            //var_dump($this->bind_values);
-            //echo ''<br><br>';
-            //die();
-
 
             return $this;
         }
@@ -202,13 +214,13 @@
                 if(count($this->where) != count($this->bind_values))
                     throw new Exception("paramètre manquant");
 
-                $where = implode(' ',$this->where);
-                $join = implode(' ', $this->join);
-                //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>';
-                //echo $where.' - '.$join'<br><br>';
-                //die();
+                $select = $this->getSelect();
+                $table = $this->getFrom();
+                $where = $this->getWhere();
+                $join = $this->getJoin();
 
-                return "SELECT $this->select FROM $this->table $join $where";
+
+                return "SELECT $select FROM $table $join $where";
 
             } catch (Exception $e) {
                 echo 'Erreur buildQuery(): '.$e->getMessage();
@@ -253,6 +265,19 @@
             }
         }
 
+        public function execute(): self
+        {
+            $set = implode(', ', $this->set);
+            $where = implode(' ',$this->where);
+
+            $this->sql .= "$set $where";
+
+            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>'.$this->sql.'<br><br>';
+
+            $this->prepare($this->sql, $this->bind_values);
+
+            return $this;
+        }
         /**
          * @param string|null $class_name
          *
@@ -384,7 +409,8 @@
         public function createUpdate(string $table): self
         {
             $this->sql = "UPDATE $table SET ";
-            echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>'.$this->sql.'<br><br>';
+
+            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>'.$this->sql.'<br><br>';
             return $this;
         }
 
@@ -397,9 +423,9 @@
         public function set(string $col, string $val): self
         {
             $this->set[] = "$col = $val";
-            echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>'.$this->sql.'<br>';
-            var_dump($this->set);
-            echo '<br>';
+            //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>'.$this->sql.'<br>';
+            //var_dump($this->set);
+            //echo '<br>';
 
             return $this;
         }

@@ -39,9 +39,9 @@
         public function findOneBy(string $col, string $val, array $options = null): mixed
         {   //TODO à completer (Where, Order etc...)
 
-            $alias = substr($this->table, 0, 1);
 
-            $select = $options['select'] ?? [$alias];
+
+            $select = $options['select'] ?? ['*'];
             $req = $this->db->select(...$select)
                 ->from($this->table)
                 ->where("$col = :$col")
@@ -52,7 +52,7 @@
                 foreach ($hasOne as $relation) {
 
                     $alias = substr($relation, 0, 1);
-                    $req->leftJoin($relation, $alias, $this->relations['hasOne'][$relation]);
+                    $req->join($relation, $alias, 'LEFT', $this->relations['hasOne'][$relation]);
 
                 }
             }
@@ -103,8 +103,9 @@
                             ->from($this->table);
 
             if(isset($options['where'])) {
-
-                $req->setParameter($options['where']['col'],$options['where']['val']);
+                $where = $options['where']['col'].' = :'.$options['where']['col'];
+                $req->where($where)
+                ->setParameter($options['where']['col'],$options['where']['val']);
             }
 
             return $req->fetchall($this->model);
