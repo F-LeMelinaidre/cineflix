@@ -52,14 +52,14 @@ class AuthConnect
         $table = self::$_Table;
         $ident_col = self::$_IdColonne;
 
-        $req = self::$_Database->select($ident_col, 'password')
+        $req = self::$_Database->select($ident_col, 'password_hash')
             ->from($table)
             ->where("$ident_col = :$ident_col")
             ->setParameter('email', $identifiant);
 
         $result = $req->fetch();
 
-        return $result && password_verify($pwd, $result['password']);
+        return $result && password_verify($pwd, $result['password_hash']);
     }
 
     /**
