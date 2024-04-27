@@ -269,7 +269,11 @@
         }
 
         //TODO Pour les requetes complexe
-        public function createCustomQuery(){}
+        public function createCustomQuery(string $sql): self
+        {
+            $this->sql = $sql;
+            return $this;
+        }
 
         /**
          * Prépare le tableau pour les valeurs à passer à la methode bindValue()
@@ -314,22 +318,21 @@
             }
         }
 
-        //TODO retirer progressivement les requete utilisant la methode ci dessous et la passer en privé
         /**
          * @param string $query
          * @param array  $bindvalues
          *
          * @return Database
          */
-        public function prepare(string $query, array $bindvalues = [])
+        private function prepare()
         {
             try {
 
-                $this->request = $this->connexion->prepare($query);
+                $this->request = $this->connexion->prepare($this->sql);
 
-                if (!empty($bindvalues)) {
+                if (!empty($this->bind_values)) {
 
-                    foreach ($bindvalues as $val) {
+                    foreach ($this->bind_values as $val) {
                         $this->request->bindValue(':'.$val['col'], $val['val'], PDO::PARAM_STR);
                     }
                 }
@@ -356,7 +359,7 @@
             //echo __CLASS__.' | '.__FUNCTION__.'<br>';
             //$this->debug();
 
-            $this->prepare($this->sql, $this->bind_values);
+            $this->prepare();
 
             $this->request->execute();
 
@@ -379,7 +382,7 @@
                 //echo __CLASS__.' | '.__FUNCTION__.'<br>';
                 //$this->debug();
 
-                $this->prepare($this->sql, $this->bind_values);
+                $this->prepare();
 
                 $this->request->execute();
 
@@ -413,7 +416,7 @@
                 //echo __CLASS__.' | '.__FUNCTION__.'<br>';
                 //$this->debug();
 
-                $this->prepare($this->sql, $this->bind_values);
+                $this->prepare();
 
                 $this->request->execute();
 
@@ -436,6 +439,9 @@
         public function count()
         {
             try {
+
+                $this->prepare();
+                $this->request->execute();
 
                 return $this->request->fetchColumn();
 
@@ -498,7 +504,8 @@
          */
         public function createUpdate(string $table): self
         {
-            $this->sql = "UPDATE $table SET ";
+            $this->table = $table;
+            $this->sql = "UPDATE $this->table SET ";
 
             return $this;
         }
@@ -565,17 +572,37 @@
         public function debug(): void
         {
             echo 'DEBUG<br>';
-            echo 'Array SELECT:<br>';
-            var_dump($this->select);
+            if(!empty($this->select)) {
+                echo 'Array SELECT:<br>';
+                var_dump($this->select);
+            }
+
             echo "Table: $this->table <br>";
-            echo 'Array JOIN:<br>';
-            var_dump($this->join);
-            echo 'Array Alias:<br>';
-            var_dump($this->alias);
-            echo 'Array WHERE:<br>';
-            var_dump($this->where);
-            echo 'BindValues:<br>';
-            var_dump($this->bind_values);
+
+            if(!empty($this->set)) {
+                echo 'Array SET:<br>';
+                var_dump($this->set);
+            }
+
+            if(!empty($this->join)) {
+                echo 'Array JOIN:<br>';
+                var_dump($this->join);
+            }
+
+            if(!empty($this->alias)) {
+                echo 'Array Alias:<br>';
+                var_dump($this->alias);
+            }
+
+            if(!empty($this->where)) {
+                echo 'Array WHERE:<br>';
+                var_dump($this->where);
+            }
+
+            if(!empty($this->bind_values)) {
+                echo 'BindValues:<br>';
+                var_dump($this->bind_values);
+            }
             echo 'Requete final:<br>';
             echo $this->sql.'<br>';
         }

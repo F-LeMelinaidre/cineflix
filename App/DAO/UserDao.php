@@ -30,7 +30,7 @@ class UserDao extends AbstractDAO
 
             $user_data = [
                 'email'     => $user->email,
-                'password'  => $user->getPassword(),
+                'password'  => $user->getHashPassword(),
             ];
 
 
@@ -62,19 +62,6 @@ class UserDao extends AbstractDAO
 
         return $result;
 
-    }
-
-    /**
-     * @param $mail
-     *
-     * @return null
-     */
-    public function isExist($email)
-    {
-        $query = 'SELECT EXISTS ( SELECT email FROM user WHERE email LIKE :email )';
-        $bindValues[] = ['col' => 'email', 'val' => $email];
-        $req = $this->db->prepare($query, $bindValues);
-        return $req->count();
     }
 
 

@@ -3,7 +3,6 @@
     namespace Cineflix\App\DAO;
 
     use Cineflix\App\AppController;
-    use Cineflix\App\Model\MovieModel;
     use Cineflix\Core\Database\Database;
 
     class AbstractDAO implements DAO
@@ -66,32 +65,11 @@
             if(isset($options['contain'])) {
                 $result = $this->mapResult($result, $options['contain']);
             }
-            var_dump($result);
+
             return $result;
 
         }
 
-        private function mapResult(array $data, array $relations): array
-        {
-            foreach($relations as $table) {
-                // place toutes les colonnes de la relation hasOne dans un sous tableau de $resultat
-                // et supprime toutes les paires cle => valeur des clés prefixé par le nom de la table lié
-                if(isset($this->relations['hasOne']) && array_key_exists($table,$this->relations['hasOne'])) {
-
-                    $data[$table] = [];
-                    foreach ($data as $key => $value) {
-                        if (strpos($key, $table . '_') === 0 && !isset($data[$table . '_id'])) {
-                            $unprefixed_key = substr($key, strlen($table) + 1);
-                            $data[$table][$unprefixed_key] = $value;
-                            unset($data[$key]);
-                        }
-                    }
-                }
-
-            }
-
-            return $data;
-        }
         /**
          * @param array|null $options
          * @return mixed|null
@@ -101,12 +79,12 @@
 
             $alias = substr($this->table, 0, 1);
             $req = $this->db->select($alias)
-                            ->from($this->table);
+                ->from($this->table);
 
             if(isset($options['where'])) {
                 $where = $options['where']['col'].' = :'.$options['where']['col'];
                 $req->where($where)
-                ->setParameter($options['where']['col'],$options['where']['val']);
+                    ->setParameter($options['where']['col'],$options['where']['val']);
             }
 
             return $req->fetchall($this->model);
@@ -134,6 +112,21 @@
         }
 
         /**
+         * @param string $col
+         * @param string $val
+         *
+         * @return null
+         */
+        public function isExist(string $col, string $val)
+        {
+            $sql = "SELECT EXISTS ( SELECT $col FROM $this->table WHERE $col LIKE :$col )";
+            $req =$this->db->createCustomQuery($sql)
+                ->setParameter($col, $val);
+
+            return $req->count();
+        }
+
+        /**
          * @param object $model
          * @param string $id_column
          *
@@ -141,18 +134,20 @@
          */
         public function update(object $model, string $id_column = 'id'): Database
         {
-
-            $sql = "UPDATE $this->table SET modified = CURRENT_TIMESTAMP";
-            foreach ($model as $key => $val) {
-                if(!is_object($val) && !empty($val)) {
-                    $sql .= ", $key = :$key";
-                    $bindValues[] = ['col' => $key, 'val' => $val];
+            $req = $this->db->createUpdate($this->table);
+            foreach($model as $item => $value) {
+                echo $item;
+                if(!is_null($value)) {
+                    $req->set($item, ':'.$item)
+                        ->setParameter($item, $value);
                 }
             }
+            $req->set('modified', ':modified')
+                ->setParameter('modified', date("Y-m-d H:i:s"));
 
-            $sql .= " WHERE $id_column = :$id_column";
-            $bindValues[] = ['col' => $id_column, 'val' => $model->getId()];
-            return $this->db->prepare($sql, $bindValues);
+            return $req->where("$id_column = :$id_column")
+                ->setParameter($id_column, $model->getId())
+                ->execute();
         }
 
         /**
@@ -174,5 +169,33 @@
         public function getLastInsertId(): int
         {
             return (isset($this->last_insert_id))? $this->last_insert_id : $this->db->getLastInsertId();
+        }
+
+        /**
+         * @param array $data
+         * @param array $relations
+         *
+         * @return array
+         */
+        private function mapResult(array $data, array $relations): array
+        {
+            foreach($relations as $table) {
+                // place toutes les colonnes de la relation hasOne dans un sous tableau de $resultat
+                // et supprime toutes les paires cle => valeur des clés prefixé par le nom de la table lié
+                if(isset($this->relations['hasOne']) && array_key_exists($table,$this->relations['hasOne'])) {
+
+                    $data[$table] = [];
+                    foreach ($data as $key => $value) {
+                        if (strpos($key, $table . '_') === 0 && !isset($data[$table . '_id'])) {
+                            $unprefixed_key = substr($key, strlen($table) + 1);
+                            $data[$table][$unprefixed_key] = $value;
+                            unset($data[$key]);
+                        }
+                    }
+                }
+
+            }
+
+            return $data;
         }
     }

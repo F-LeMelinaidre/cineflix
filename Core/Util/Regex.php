@@ -20,7 +20,7 @@ class Regex
         'alpha' => 'Caractères alphabétiques uniquement !',
         'alphaNumeric' => 'Caractères alpha-numériques uniquement !',
         'numeric' => 'Caractères numériques uniquement !',
-        'email'       => 'Votre email ne respete pas la norme RFC2822',
+        'email'       => 'Votre email ne respecte pas la norme RFC2822',
         'password'   => '8 caratères minimum, comprenant au minimum une majascule, une minusclule, un chiffre, et un caratère !?:_-*#&%+'
     ];
 
