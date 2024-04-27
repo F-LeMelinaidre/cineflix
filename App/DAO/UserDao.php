@@ -16,7 +16,7 @@ class UserDao extends AbstractDAO
      */
     protected array $relations = [
         'hasOne' => [
-            'profil' => 'u.id = p.user_id'
+            'profil' => 'user.id = profil.user_id'
             ]
     ];
 
@@ -30,20 +30,18 @@ class UserDao extends AbstractDAO
 
             $user_data = [
                 'email'     => $user->email,
-                'password'  => $user->getPassword(),
+                'password_hash'  => $user->password_hash,
             ];
 
 
             $this->db->insert($this->table,$user_data);
 
-            $this->setLastInsertId();
-
-            $profil = $user->getProfil();
+            $this->last_id = $this->db->getLastInsertId();
 
             $profil_data = [
-                'user_id' => $this->last_insert_id,
-                'nom'       => $profil->nom,
-                'prenom'    => $profil->prenom
+                'user_id'   => $this->last_id,
+                'nom'       => $user->profil->nom,
+                'prenom'    => $user->profil->prenom
             ];
 
             $this->db->insert('profil' ,$profil_data);
@@ -62,19 +60,6 @@ class UserDao extends AbstractDAO
 
         return $result;
 
-    }
-
-    /**
-     * @param $mail
-     *
-     * @return null
-     */
-    public function isExist($email)
-    {
-        $query = 'SELECT EXISTS ( SELECT email FROM user WHERE email LIKE :email )';
-        $bindValues[] = ['col' => 'email', 'val' => $email];
-        $req = $this->db->prepare($query, $bindValues);
-        return $req->count();
     }
 
 

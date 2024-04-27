@@ -48,17 +48,18 @@ class AuthConnect
      */
     public static function verify(string $identifiant, string $pwd): bool
     {
-
+        //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' - Ligne: '.__LINE__.'<br><br>';
         $table = self::$_Table;
         $ident_col = self::$_IdColonne;
 
-        $req = self::$_Database->select($ident_col, 'password')
-                               ->from($table)
-                               ->setParameter('email', $identifiant);
+        $req = self::$_Database->select($ident_col, 'password_hash')
+            ->from($table)
+            ->where("$ident_col = :$ident_col")
+            ->setParameter('email', $identifiant);
 
         $result = $req->fetch();
 
-        return $result && password_verify($pwd, $result['password']);
+        return $result && password_verify($pwd, $result['password_hash']);
     }
 
     /**
@@ -67,18 +68,23 @@ class AuthConnect
      */
     public static function connect(string $id_value, array $params = null): bool
     {
-        $table = self::$_Table;
-        $id_colonne = self::$_IdColonne;
+        //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' - Ligne: '.__LINE__.'<br><br>';
 
-        $req = self::$_Database->select('last_connect','connect')
+        $table = self::$_Table;
+        $ident_col = self::$_IdColonne;
+
+
+        $req = self::$_Database->select('connect')
             ->from($table)
-            ->setParameter($id_colonne, $id_value);
+            ->where("$ident_col = :$ident_col")
+            ->setParameter($ident_col, $id_value);
 
         $result = $req->fetch();
 
+
         $params_default = [
             'token'         => self::getToken(),
-            'last_connect'  => date("d-m-Y H:i:s", strtotime($result['last_connect']))
+            'last_connect'  => date("d-m-Y H:i:s", strtotime($result['connect']))
         ];
         $params = array_merge($params, $params_default);
 
@@ -89,7 +95,8 @@ class AuthConnect
             ->set('token', ':token')
             ->setParameter('new_connect', date("Y-m-d H:i:s"))
             ->setParameter('token', self::$_Token)
-            ->where("$id_colonne = :$id_colonne")
+            ->where("$ident_col = :$ident_col")
+            ->setParameter($ident_col, $id_value)
             ->execute();
 
         if($req) {

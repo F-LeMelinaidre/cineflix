@@ -7,14 +7,17 @@
     class UserModel extends AbstractModel
     {
 
-        private ProfilModel $profil;
         protected ?string $password = null;
+        protected ?string $password_confirm = null;
+        public ?string $password_hash = null;
 
         public ?string $email = null;
         public string $token;
         public int $admin = 0;
         public string $connect;
         public string $last_connect;
+
+        public ProfilModel $profil;
 
         /**
          * @param array|null $data
@@ -24,12 +27,10 @@
             parent::__construct($data);
 
             if(isset($data['email'])) $this->email = $data['email'];
-            if(isset($data['created'])) $this->created = $this->getDateFr($data['created']);
-            if(isset($data['modified'])) $this->modified = $this->getDateFr($data['modified']);
             if(isset($data['connect'])) $this->connect = $this->getDateFr($data['connect']);
             if(isset($data['last_connect'])) $this->last_connect = $this->getDateFr($data['last_connect']);
 
-            if(isset($data['profil'])) $this->setProfil($data['profil']);
+            if(isset($data['profil'])) $this->profil = new ProfilModel($data['profil']);
         }
 
         /**
@@ -50,24 +51,35 @@
         public function setPassword(string $password): void
         {
             $this->password = Security::sanitize($password);
-        }
-
-        /**
-         * @param $password
-         *
-         * @return void
-         */
-        public function hashPassword($password): void
-        {
-            $this->password = password_hash($password, PASSWORD_BCRYPT);
+            $this->password_hash = password_hash($this->password, PASSWORD_BCRYPT);
         }
 
         /**
          * @return string
          */
-        public function getPassword(): string
+        public function getPassword(): ?string
         {
             return $this->password;
+        }
+
+        /**
+         * @param string $password
+         *
+         * @return void
+         */
+        public function setPasswordConfirm(string $password): void
+        {
+            $this->password_confirm = Security::sanitize($password);
+        }
+
+        /**
+         * @param string $password
+         *
+         * @return void
+         */
+        public function getPasswordConfirm(): ?string
+        {
+            return $this->password_confirm;
         }
 
         /**
@@ -75,17 +87,9 @@
          *
          * @return void
          */
-        public function setProfil(array $data): void
+        public function addProfil(array $data = null): void
         {
             $this->profil = new ProfilModel($data);
-        }
-
-        /**
-         * @return ProfilModel
-         */
-        public function getProfil(): ProfilModel
-        {
-            return $this->profil;
         }
 
         /**
@@ -103,7 +107,7 @@
             if(isset($data['connect'])) $this->connect = $this->getDateFr($data['connect']);
             if(isset($data['last_connect'])) $this->last_connect = $this->getDateFr($data['last_connect']);
 
-            if(isset($data['profil'])) $this->setProfil($data['profil']);
+            if(isset($data['profil'])) $this->profil->hydrate($data['profil']);
         }
 
     }

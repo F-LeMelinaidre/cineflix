@@ -7,11 +7,11 @@
                border-top border-bottom border-dark">
         <h1 class="ms-5">Edition: Paramètres de connexion</h1>
         <ul>
-            <li>Créé le <?= $user->created ?></li>
+            <li>Créé le <?= $user->getCreated() ?></li>
 
-            <?php if($user->created != $user->modified): ?>
+            <?php if($user->getCreated() != $user->getModified()): ?>
 
-                <li>Modifié le  <?= $user->modified ?></li>
+                <li>Modifié le  <?= $user->getModified() ?></li>
 
             <?php endif; ?>
 
@@ -21,7 +21,7 @@
     <form action="<?= self::$_Router->getUrl('profil_edit_authentification') ?>" method="post"  class="edit-profil mt-4 m-auto p-4 rounded-2 bg-dark-subtle">
         <div id="Identity" class="mb-4">
             <h2 class="mb-3">Paramètres de connexion :</h2>
-            <div class="row justify-content-center">
+            <div class="row justify-content-start">
                 <div class="col-md-8 col-sm-8 col-12">
                     <label class="email" for="Email">Email :</label>
                     <input id="Email" type="email" name="email" value="<?= $user->email ?>" class="form-control
@@ -29,17 +29,18 @@
                 </div>
             </div>
 
-            <div class="row justify-content-center">
-                <div class="col-md-4 col-sm-4 col-12">
-                    <label for="Password">Mot de passe</label>
-                    <input type="password" id="Password" name="password" class="form-control mb-3" value="<?php if(isset($form['password'])) echo
-                    $form['password'] ?>">
+            <div class="row justify-content-start align-items-center">
+                <div class="col-md-5 col-sm-5 col-8">
+                    <label for="Password">Modifier le mot de passe</label>
+                    <input type="password" id="Password" name="password" class="form-control mb-3" value="<?php if(!empty($user->getPassword())) echo
+                    $user->getPassword() ?>">
                 </div>
-                <div class="col-md-4 col-sm-4 col-12">
-                    <label for="Password">Mot de passe</label>
-                    <input type="password" id="Password" name="password" class="form-control mb-3" value="<?php if(isset($form['password'])) echo
-                    $form['password'] ?>">
-                </div>
+                <a class="icon p-0 m-0" href="#" onclick="toggleVisibility()">
+                    <span id="Visibility" class="visibility-off-icon"></span>
+                </a>
+                <a class="icon p-0 m-0" href="#" onclick="getNewPassword()">
+                    <span id="NewPassword" class="renew-icon"></span>
+                </a>
             </div>
         </div>
         <div class="row justify-content-between mt-3">
@@ -52,3 +53,4 @@
         </div>
     </form>
 </section>
+<script src="../../public/js/lib.js"></script>

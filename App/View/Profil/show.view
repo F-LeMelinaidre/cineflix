@@ -7,11 +7,11 @@
                border-top border-bottom border-dark">
         <h1 class="ms-5">Mon Profil</h1>
         <ul>
-            <li>Créé le <?= $profil->getDateFr($profil->created) ?></li>
+            <li>Créé le <?= $profil->getCreated() ?></li>
 
-            <?php if($profil->created != $profil->modified): ?>
+            <?php if($profil->getCreated() != $profil->getModified()): ?>
 
-            <li>Modifié le  <?= $profil->getDateFr($profil->modified) ?></li>
+            <li>Modifié le  <?= $profil->getModified() ?></li>
 
             <?php endif; ?>
 
