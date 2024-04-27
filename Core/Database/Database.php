@@ -491,11 +491,6 @@
             return $result;
         }
 
-        public function upDate($sql, $bindValues)
-        {
-            $this->prepare($sql, $bindValues);
-            return $this->request->execute();
-        }
 
         /**
          * @param string $table

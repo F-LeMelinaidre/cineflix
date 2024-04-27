@@ -8,12 +8,11 @@
     class AbstractDAO implements DAO
     {
 
-        private array $default_column = ['created', 'modified'];
         protected Database $db;
         protected string $table;
         protected array $relations;
         protected string $model;
-        protected int $last_insert_id;
+        protected int $last_id;
 
         /**
          *
@@ -28,7 +27,10 @@
 
         }
         public function create(object $model) {}
-
+        public function getLastId(): int
+        {
+            return $this->last_id;
+        }
         /**
          * @param array      $params
          * @param array|null $options
@@ -37,7 +39,6 @@
          */
         public function findOneBy(string $col, string $val, array $options = null): mixed
         {   //TODO à completer (Where, Order etc...)
-
 
             $select = $options['select'] ?? ['*'];
             $req = $this->db->select(...$select)
@@ -75,19 +76,8 @@
          * @return mixed|null
          */
         public function findAll(array $options = null) {
-            //TODO gerer les options
 
-            $alias = substr($this->table, 0, 1);
-            $req = $this->db->select($alias)
-                ->from($this->table);
-
-            if(isset($options['where'])) {
-                $where = $options['where']['col'].' = :'.$options['where']['col'];
-                $req->where($where)
-                    ->setParameter($options['where']['col'],$options['where']['val']);
-            }
-
-            return $req->fetchall($this->model);
+            return [];
         }
 
         /**
@@ -97,18 +87,8 @@
          */
         public function findAllBy(array $params, array $options = null): mixed
         {
-            $where = [];
-            $bindValues = [];
-            foreach ($params as $key => $val) {
-                $where [] = "$key = :$key";
-                $bindValues[] = ['col' => "$key", 'val' => $val];
-            }
 
-            $where = implode(' AND ',$where);
-
-            $sql = "SELECT * FROM $this->table WHERE $where";
-            $req = $this->db->prepare($sql, $bindValues);
-            return $req->fetchall($this->model);
+            return [];
         }
 
         /**
@@ -136,7 +116,6 @@
         {
             $req = $this->db->createUpdate($this->table);
             foreach($model as $item => $value) {
-                echo $item;
                 if(!is_null($value)) {
                     $req->set($item, ':'.$item)
                         ->setParameter($item, $value);
@@ -156,22 +135,6 @@
         public function delete() {}
 
         /**
-         * @return void
-         */
-        protected function setLastInsertId(): void
-        {
-            $this->last_insert_id = $this->db->getLastInsertId();
-        }
-
-        /**
-         * @return int
-         */
-        public function getLastInsertId(): int
-        {
-            return (isset($this->last_insert_id))? $this->last_insert_id : $this->db->getLastInsertId();
-        }
-
-        /**
          * @param array $data
          * @param array $relations
          *
@@ -186,7 +149,7 @@
 
                     $data[$table] = [];
                     foreach ($data as $key => $value) {
-                        if (strpos($key, $table . '_') === 0 && !isset($data[$table . '_id'])) {
+                        if (strpos($key, $table . '_') === 0 && $key !== $table.'_id') {
                             $unprefixed_key = substr($key, strlen($table) + 1);
                             $data[$table][$unprefixed_key] = $value;
                             unset($data[$key]);

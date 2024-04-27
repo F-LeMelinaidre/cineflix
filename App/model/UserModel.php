@@ -7,15 +7,17 @@
     class UserModel extends AbstractModel
     {
 
-        protected ProfilModel $profil;
         protected ?string $password = null;
         protected ?string $password_confirm = null;
+        public ?string $password_hash = null;
 
         public ?string $email = null;
         public string $token;
         public int $admin = 0;
         public string $connect;
         public string $last_connect;
+
+        public ProfilModel $profil;
 
         /**
          * @param array|null $data
@@ -25,12 +27,10 @@
             parent::__construct($data);
 
             if(isset($data['email'])) $this->email = $data['email'];
-            if(isset($data['created'])) $this->created = $this->getDateFr($data['created']);
-            if(isset($data['modified'])) $this->modified = $this->getDateFr($data['modified']);
             if(isset($data['connect'])) $this->connect = $this->getDateFr($data['connect']);
             if(isset($data['last_connect'])) $this->last_connect = $this->getDateFr($data['last_connect']);
 
-            if(isset($data['profil'])) $this->setProfil($data['profil']);
+            if(isset($data['profil'])) $this->profil = new ProfilModel($data['profil']);
         }
 
         /**
@@ -51,6 +51,7 @@
         public function setPassword(string $password): void
         {
             $this->password = Security::sanitize($password);
+            $this->password_hash = password_hash($this->password, PASSWORD_BCRYPT);
         }
 
         /**
@@ -82,31 +83,13 @@
         }
 
         /**
-         * @param $password
-         *
-         * @return string
-         */
-        public function getHashPassword(): string
-        {
-            return password_hash($this->password, PASSWORD_BCRYPT);
-        }
-
-        /**
          * @param array $data
          *
          * @return void
          */
-        public function setProfil(object $profil): void
+        public function addProfil(array $data = null): void
         {
-            $this->profil = $profil;
-        }
-
-        /**
-         * @return ProfilModel
-         */
-        public function getProfil(): ProfilModel
-        {
-            return $this->profil;
+            $this->profil = new ProfilModel($data);
         }
 
         /**
@@ -124,7 +107,7 @@
             if(isset($data['connect'])) $this->connect = $this->getDateFr($data['connect']);
             if(isset($data['last_connect'])) $this->last_connect = $this->getDateFr($data['last_connect']);
 
-            if(isset($data['profil'])) $this->setProfil($data['profil']);
+            if(isset($data['profil'])) $this->profil->hydrate($data['profil']);
         }
 
     }

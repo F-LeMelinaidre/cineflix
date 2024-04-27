@@ -24,6 +24,8 @@ class ProfilModel extends AbstractModel
      */
     public function __construct(array $data = null)
     {
+        parent::__construct($data);
+
         if(isset($data['user_id']))
             $this->id = $data['user_id'];
 
@@ -53,12 +55,6 @@ class ProfilModel extends AbstractModel
 
         if(isset($data['point']))
             $this->point = $data['point'];
-
-        if(isset($data['created']))
-            $this->created = $data['created'];
-
-        if(isset($data['modified']))
-            $this->modified = $data['modified'];
 
         if(isset($data['user']))
             $this->user = new UserModel($data['user']);
@@ -151,6 +147,42 @@ class ProfilModel extends AbstractModel
     public function getAddress(): string
     {
         return $this->numero_voie. ' ' .$this->type_voie. ' ' .$this->nom_voie;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return void
+     */
+    public function addUser(array $data = null): void
+    {
+        $this->user = new UserModel($data);
+    }
+
+    /**
+     * @param array|null $data
+     *
+     * @return void
+     */
+    public function hydrate(array $data = null)
+    {
+        parent::hydrate($data);
+
+        if(isset($data['user_id'])) $this->id = $data['user_id'];
+        if(isset($data['nom'])) $this->nom = $data['nom'];
+        if(isset($data['prenom'])) $this->prenom = $data['prenom'];
+        if(isset($data['date_naissance'])) $this->date_naissance = $data['date_naissance'];
+        if(isset($data['numero_voie'])) $this->numero_voie = $data['numero_voie'];
+        if(isset($data['type_voie'])) $this->type_voie = $data['type_voie'];
+        if(isset($data['nom_voie'])) $this->nom_voie = $data['nom_voie'];
+        if(isset($data['code_postale'])) $this->code_postale = $data['code_postale'];
+        if(isset($data['ville'])) $this->ville = $data['ville'];
+        if(isset($data['point'])) $this->point = $data['point'];
+        if(isset($data['created'])) $this->created = $data['created'];
+        if(isset($data['modified'])) $this->modified = $data['modified'];
+
+
+        if(isset($data['user'])) $this->user->hydrate($data['user']);
     }
 
 }

@@ -14,6 +14,7 @@
     {
 
         private ProfilDao $profilDao;
+        private UserDao $userDao;
 
         private array $session;
 
@@ -29,6 +30,7 @@
 
             $this->session = AuthConnect::getSession();
             $this->profilDao = new ProfilDao();
+            $this->userDao = new UserDao();
 
         }
 
@@ -52,11 +54,16 @@
         public function editIdentite()
         {
 
+            $params = [
+                'select' => ['user_id','nom', 'prenom', 'date_naissance', 'created', 'modified']
+            ];
+
+            $data = $this->profilDao->findOneBy('user_id',$this->session['id'], $params);
+            $profil = new ProfilModel($data);
 
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 //TODO verifier l'id
 
-                $profil = new ProfilModel();
 
                 $profil->addValidation('nom',['alpha', 'require']);
                 $profil->addValidation('prenom',['alpha', 'require']);
@@ -76,13 +83,6 @@
                     exit();
                 }
 
-            } else{
-                $params = [
-                    'select' => ['user_id','nom', 'prenom', 'date_naissance', 'created', 'modified']
-                ];
-
-                $data = $this->profilDao->findOneBy('user_id',$this->session['id'], $params);
-                $profil = new ProfilModel($data);
             }
 
             $errors = $profil->getErrors();
@@ -95,11 +95,15 @@
          */
         public function editAdresse()
         {
+            $params = [
+                'select' => ['user_id','numero_voie', 'type_voie', 'nom_voie', 'code_postale', 'ville', 'created', 'modified']
+            ];
+
+            $data = $this->profilDao->findOneBy('user_id', $this->session['id'], $params);
+            $profil = new ProfilModel($data);
 
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 //TODO verifier l'id
-
-                $profil = new ProfilModel();
 
                 $profil->addValidation('numero_voie', ['alphaNumeric','require']);
                 $profil->addValidation('type_voie', ['alpha','require']);
@@ -120,14 +124,6 @@
                     exit();
                 }
 
-            } else {
-                $params = [
-                    'select' => ['user_id','numero_voie', 'type_voie', 'nom_voie', 'code_postale', 'ville', 'created', 'modified']
-                ];
-
-                $data = $this->profilDao->findOneBy('user_id', $this->session['id'], $params);
-
-                $profil = new ProfilModel($data);
             }
 
             $errors = $profil->getErrors();
@@ -140,20 +136,30 @@
          */
         public function editAuthentification()
         {
-            $userDao = new UserDao();
+            $data = $this->userDao->findOneBy('id',$this->session['id'],['select' => ['email', 'created', 'modified']]);
+            $user = new UserModel($data);
 
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-                $user = new UserModel();
                 $user->setId($this->session['id']);
                 $user->setEmail($_POST['email']);
+                $user->setPassword($_POST['password']);
 
-            } else {
-                $user = $userDao->findOneBy(['id' => $this->session['id']],['select' => ['email']]);
+                $user->addValidation('email',['email']);
+                $user->addValidation('password',['password']);
+
+                $is_valid =$user->isValid();
+
+                if($is_valid && $this->userDao->update($user)) {
+                    MessageFlash::create('Adresse modifié',$type = 'valide');
+                    header('Location: /Profil');
+                    exit();
+                }
+
             }
 
+            $errors = $user->getErrors();
 
-
-            return $this->render('profil.editAuthentification',['user' => $user]);
+            return $this->render('profil.editAuthentification',compact('user','errors'));
         }
     }

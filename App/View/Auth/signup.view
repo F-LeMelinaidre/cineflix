@@ -44,13 +44,13 @@
             <div class="row justify-content-center">
                 <div class="col-md-6 col-sm-6 col-12">
                     <label for="Name">Nom</label>
-                    <input id="Name" class="form-control mb-2" type="text" name="nom" value="<?php if(isset($user->getProfil()->nom)) echo
-                    $user->getProfil()->nom ?>">
+                    <input id="Name" class="form-control mb-2" type="text" name="nom" value="<?php if(isset($user->profil->nom)) echo
+                    $user->profil->nom ?>">
                 </div>
                 <div class="col-md-6 col-sm-6 col-12">
                     <label for="Firstname">Prénom</label>
-                    <input type="text" id="Firstname" name="prenom" class="form-control mb-2" value="<?php if(isset($user->getProfil()->prenom)) echo
-                    $user->getProfil()->prenom ?>">
+                    <input type="text" id="Firstname" name="prenom" class="form-control mb-2" value="<?php if(isset($user->profil->prenom)) echo
+                    $user->profil->prenom ?>">
                 </div>
                 <div class="col-md-12 col-sm-12 col-12">
                     <label for="Email">Email</label>
