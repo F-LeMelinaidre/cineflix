@@ -13,8 +13,8 @@
         protected array $errors = [];
         protected ?int $id = null;
 
-        public string $created;
-        public string $modified;
+        protected string $created;
+        protected string $modified;
 
         public ?string $nom = null;
 
@@ -39,6 +39,13 @@
         public function setCreated(string $date): void
         {
             $this->created = date("Y-m-d H:i:s", strtotime($date));
+        }
+
+        public function getCreated() {
+            return date("d-m-Y H:i:s", strtotime($this->created));
+        }
+        public function getModified() {
+            return date("d-m-Y H:i:s", strtotime($this->modified));
         }
         public function getDateFr(string $date): string
         {
@@ -80,29 +87,28 @@
         {
             $rules = $params['rules'];
             $messages = $params['messages'];
+            $valid = true;
 
             foreach($rules as $rule) {
+                if(!empty($this->$item) && $rule === 'equal') {
 
-                switch ($rule) {
-                    case 'equal':
-                        $item_confirm = $item."_confirm";
-                        $valid = $this->$item == $this->$item_confirm;
-                        $message = (isset($messages['equal']))? $messages['equal'] : "les champs ne sont pas identiques !";
-                        break;
+                    $item_confirm = $item."_confirm";
+                    $valid = $this->$item == $this->$item_confirm;
+                    $message = (isset($messages['equal']))? $messages['equal'] : "les champs ne sont pas identiques !";
 
-                    case 'require':
-                        $valid = !empty($this->$item);
-                        $message = (isset($messages['require']))? $messages['require'] : "Champ requis !";
-                        break;
+                } elseif (!empty($this->$item) && $rule !== 'require') {
 
-                    default:
-                        $pattern = Regex::getPattern($rule);
-                        $valid = preg_match($pattern, $this->$item);
-                        $message = (isset($messages[$rule]))? $messages[$rule] : Regex::getMessage($rule);
-                        break;
+                    $pattern = Regex::getPattern($rule);
+                    $valid = preg_match($pattern, $this->$item);
+                    $message = (isset($messages[$rule]))? $messages[$rule] : Regex::getMessage($rule);
+
+                } elseif(empty($this->$item) && $rule === 'require') {
+
+                    $valid = false;
+                    $message = (isset($messages['require']))? $messages['require'] : "Champ requis !";
                 }
 
-                if(!$valid) $this->errors[$item] = $message;
+                if(!$valid ) $this->errors[$item] = $message;
 
             }
         }
