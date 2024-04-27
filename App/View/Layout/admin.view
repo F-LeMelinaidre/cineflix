@@ -14,24 +14,17 @@
     <aside>
 
         <nav class="main-menu">
+            <h2>Les Films</h2>
             <ul>
-               <?php if (isset($page) && $page == 'movie_index'){  ?>
 
-                <li>Film</li>
-              
-                <?php } else { ?>
-              
-                <li><a href="<?= self::$_Router->getUrl("admin_movie_index") ?>">Films</a></li>
-              
-                <?php } ?>
-              
-                <li><a href="<?= self::$_Router->getUrl("admin_streaming_index") ?>">Streamings</a></li>
-
-                <li><a href="<?= self::$_Router->getUrl("admin_cinema_index") ?>">Cinémas</a></li>
-
-                <li><a href="<?= self::$_Router->getUrl("admin_user_index") ?>">Membres</a></li>
-
+                <li><a href="<?= self::$_Router->getUrl("admin_movie_index") ?>">Tous les films</a></li>
+                <li><a href="<?= self::$_Router->getUrl("admin_movie",['status' => 'En-Salle']) ?>">En salle</a></li>
+                <li><a href="<?= self::$_Router->getUrl("admin_movie",['status' => 'En-Streaming']) ?>">En streaming</a></li>
+                <li><a href="<?= self::$_Router->getUrl("admin_movie",['status' => 'Indisponible']) ?>">Indisponible</a></li>
             </ul>
+
+            <div><a href="<?= self::$_Router->getUrl("admin_cinema_index") ?>">Cinémas</a></div>
+            <div><a href="<?= self::$_Router->getUrl("admin_user_index") ?>">Membres</a></div>
         </nav>
     </aside>
 

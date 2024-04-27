@@ -10,7 +10,7 @@ abstract class AbstractController
 {
 
     protected static Router $_Router;
-
+    protected string $dao;
     protected string $layout = 'main';
 
     // APP_NAME est défini dans la Class AppController
@@ -25,6 +25,10 @@ abstract class AbstractController
     public function __construct()
     {
         self::$_Router = Router::getInstance();
+
+        $class_name = basename(get_called_class());
+        $this->dao = "\\Cineflix\\App\\DAO\\".ucfirst($class_name).'Dao';
+
         $this->path_view = AppController::$_Root.'/App/View/';
     }
 
@@ -68,11 +72,13 @@ abstract class AbstractController
     protected function layoutContent($data): string
     {
         ob_start();
+
         if(isset($data['footer'])) {
             $footer = $data['footer'];
         } else {
             $footer = '';
         }
+
         include_once $this->path_view."Layout/$this->layout.view";
         return ob_get_clean();
     }

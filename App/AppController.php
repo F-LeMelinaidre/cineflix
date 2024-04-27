@@ -70,11 +70,11 @@
 
             self::$_Router->get('movie_index', '/Movie', [ Controller\Movie::class, 'index']);
             self::$_Router->get('movie_show', '/Movie/{slug}', [ Controller\Movie::class, 'show'],
-                ['slug' => '[a-zA-Z_]+']);
+                ['slug' => '[A-Z_]+']);
 
             self::$_Router->get('streaming_index', '/Streaming', [Controller\Streaming::class, 'index']);
             self::$_Router->get('streaming_show', '/Streaming/{slug}', [Controller\Streaming::class, 'show'],
-                ['slug' => '[a-zA-Z_]+']);
+                ['slug' => '[A-Z_]+']);
 
             self::$_Router->get('profil_show', '/Profil', [ Controller\Profil::class, 'show']);
             self::$_Router->get('profil_edit_identite', '/Profil/Edit/Identite', [ Controller\Profil::class, 'editIdentite']);
@@ -96,8 +96,11 @@
                 ['id' => '[0-9]+']);
 
             //Admin Film
-            self::$_Router->get('admin_movie_index', '/Admin/Movie', [ Controller\Admin\Movie::class, 'index']);
+            self::$_Router->get('admin_movie_index', '/Admin/Film', [ Controller\Admin\Movie::class, 'index']);
             self::$_Router->get('admin_movie_add', '/Admin/Movie/Add', [ Controller\Admin\Movie::class, 'edit']);
+            self::$_Router->get('admin_movie', '/Admin/Film/{status}', [ Controller\Admin\Movie::class, 'index'],
+                ['status' => '[A-Z-]+']);
+
             self::$_Router->get('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\Movie::class, 'edit'],
                 ['id' => '[0-9]+']);
 

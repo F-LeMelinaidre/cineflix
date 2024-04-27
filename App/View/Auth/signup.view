@@ -44,15 +44,17 @@
             <div class="row justify-content-center">
                 <div class="col-md-6 col-sm-6 col-12">
                     <label for="Name">Nom</label>
-                    <input id="Name" class="form-control mb-2" type="text" name="nom" value="<?php if(isset($form['nom'])) echo $form['nom'] ?>">
+                    <input id="Name" class="form-control mb-2" type="text" name="nom" value="<?php if(isset($user->profil->nom)) echo
+                    $user->profil->nom ?>">
                 </div>
                 <div class="col-md-6 col-sm-6 col-12">
                     <label for="Firstname">Prénom</label>
-                    <input type="text" id="Firstname" name="prenom" class="form-control mb-2" value="<?php if(isset($form['prenom'])) echo $form['prenom'] ?>">
+                    <input type="text" id="Firstname" name="prenom" class="form-control mb-2" value="<?php if(isset($user->profil->prenom)) echo
+                    $user->profil->prenom ?>">
                 </div>
                 <div class="col-md-12 col-sm-12 col-12">
                     <label for="Email">Email</label>
-                    <input type="email" id="Email" name="email" class="form-control mb-2" value="<?php if(isset($form['email'])) echo $form['email']
+                    <input type="text" id="Email" name="email" class="form-control mb-2" value="<?php if(isset($user->email)) echo $user->email
                     ?>">
 
                     <div id="validationMail" class="invalid-message <?php if (empty($errors['email'])) echo 'hide'; ?> ">
@@ -62,14 +64,15 @@
                 </div>
                 <div class="col-md-6 col-sm-6 col-12">
                     <label for="Password">Mot de passe</label>
-                    <input type="password" id="Password" name="password" class="form-control mb-2" value="<?php if(isset($form['password'])) echo
-                    $form['password'] ?>">
+                    <input type="password" id="Password" name="password" class="form-control mb-2" value="<?php if(!empty($user->getPassword())) echo
+                    $user->getPassword() ?>">
                     <div id="validationPassword" class="invalid-message hide"></div>
                 </div>
                 <div class="col-md-6 col-sm-6 col-12">
                     <label for="PasswordConfirm">Confirmer le mot de passe</label>
-                    <input type="password" id="PasswordConfirm" name="password_confirm" class="form-control mb-2" value="<?php if(isset($form['password_confirm'])) echo
-                    $form['password_confirm'] ?>">
+                    <input type="password" id="PasswordConfirm" name="password_confirm" class="form-control mb-2" value="<?php if(!empty
+                    ($user->getPasswordConfirm())) echo
+                    $user->getPasswordConfirm() ?>">
                 </div>
                 <div class="col-auto mt-4">
                 <button type="submit" class="btn btn-warning">S'enregistrer</button>

@@ -9,17 +9,14 @@
     {
 
         protected Database $db;
-        protected string $req;
-        protected string $query;
-
         protected string $table;
         protected array $relations;
         protected string $model;
+        protected int $last_id;
 
-        protected int $last_insert_id;
-
-
-
+        /**
+         *
+         */
         public function __construct()
         {
             $this->db = AppController::$_Database;
@@ -30,77 +27,107 @@
 
         }
         public function create(object $model) {}
-
+        public function getLastId(): int
+        {
+            return $this->last_id;
+        }
         /**
          * @param array      $params
          * @param array|null $options
          *
          * @return array
          */
-        public function findOneBy(array $params, array $options = null): mixed
-        {
-            if(!isset($options['select'])) {
-                $columns = ['*'];
-            } else {
-                $columns = array_merge(['created','modified'], $options['select']);
-            }
+        public function findOneBy(string $col, string $val, array $options = null): mixed
+        {   //TODO à completer (Where, Order etc...)
 
-            $select = $this->setSelect($this->table, $columns);
+            $select = $options['select'] ?? ['*'];
+            $req = $this->db->select(...$select)
+                ->from($this->table)
+                ->where("$col = :$col")
+                ->setParameter($col,$val);
 
-            if(isset($options['hasOne'])) {
-                $hasOne = $this->relations['hasOne'];
+            if(isset($options['contain'])) {
+                $hasOne = $options['contain'];
+                foreach ($hasOne as $relation) {
+                    $req->join($relation, 'LEFT', $this->relations['hasOne'][$relation]);
 
-                foreach ($options['hasOne'] as $table => $opt) {
-                    $join[] = "JOIN $table ON {$hasOne[$table]}";
-                    $select .= ', '.$this->setSelect($table, $opt['select']);
                 }
             }
-            $join = (isset($join))? implode($join) : '';
 
-            $where = [];
-            $bindValues = [];
-            foreach ($params as $key => $val) {
-                $where [] = "$key = :$key";
-                $bindValues[] = ['col' => "$key", 'val' => $val];
-            }
+            //if(isset($options['hasOne']))
+            //    $this->buildJoin($req, $options);
 
-            $where = implode(' AND ',$where);
-            $query = "SELECT $select FROM $this->table $join WHERE $where";
-
-            $req = $this->db->prepare($query, $bindValues);
             $result = $req->fetch();
 
-            if(isset($options['hasOne'])) {
-                $data = [];
 
-                foreach ($result as $key => $val) {
+            //if(isset($options['hasOne']))
+            //    $result = $this->mapResult($result, $options);
 
-                    $pos = strpos($key, '_');
-                    if ($pos !== false) {
-
-                        $prefix = substr($key, 0, $pos);
-
-                        if (isset($hasOne[$prefix]) && $key !== $prefix . '_id') {
-
-                            $unprefixed_kry = substr($key, $pos + 1);
-
-                            $data[$prefix][$unprefixed_kry] = $val;
-
-                            unset($result[$key]);
-                        }
-                    }
-                }
-                $result = array_merge($result, $data);
+            if(isset($options['contain'])) {
+                $result = $this->mapResult($result, $options['contain']);
             }
+
             return $result;
+
+        }
+
+        /**
+         * @param array|null $options
+         * @return mixed|null
+         */
+        public function findAll(array $options = null) {
+
+            return [];
+        }
+
+        /**
+         * @param array $params
+         * @param array|null $options
+         * @return mixed
+         */
+        public function findAllBy(array $params, array $options = null): mixed
+        {
+
+            return [];
+        }
+
+        /**
+         * @param string $col
+         * @param string $val
+         *
+         * @return null
+         */
+        public function isExist(string $col, string $val)
+        {
+            $sql = "SELECT EXISTS ( SELECT $col FROM $this->table WHERE $col LIKE :$col )";
+            $req =$this->db->createCustomQuery($sql)
+                ->setParameter($col, $val);
+
+            return $req->count();
         }
 
         /**
          * @param object $model
+         * @param string $id_column
          *
-         * @return void
+         * @return Database
          */
-        public function update(object $model) {}
+        public function update(object $model, string $id_column = 'id'): Database
+        {
+            $req = $this->db->createUpdate($this->table);
+            foreach($model as $item => $value) {
+                if(!is_null($value)) {
+                    $req->set($item, ':'.$item)
+                        ->setParameter($item, $value);
+                }
+            }
+            $req->set('modified', ':modified')
+                ->setParameter('modified', date("Y-m-d H:i:s"));
+
+            return $req->where("$id_column = :$id_column")
+                ->setParameter($id_column, $model->getId())
+                ->execute();
+        }
 
         /**
          * @return void
@@ -108,32 +135,30 @@
         public function delete() {}
 
         /**
-         * @return void
-         */
-        protected function setLastInsertId() {
-            $this->last_insert_id = $this->db->getLastInsertId();
-        }
-
-        /**
-         * @return int|null
-         */
-        public function getLastInsertId()
-        {
-            return (isset($this->last_insert_id))? $this->last_insert_id : $this->db->getLastInsertId();
-        }
-
-        /**
-         * @param string $alias
-         * @param array  $columns
+         * @param array $data
+         * @param array $relations
          *
-         * @return string
+         * @return array
          */
-        protected function setSelect(string $alias, array $columns): string
+        private function mapResult(array $data, array $relations): array
         {
-            $selectColumns = array_map(function($column) use ($alias) {
-                return ($alias == $this->table || $column == '*')? "$alias.$column" : "$alias.$column AS ". $alias. "_" .$column;
-            }, $columns);
+            foreach($relations as $table) {
+                // place toutes les colonnes de la relation hasOne dans un sous tableau de $resultat
+                // et supprime toutes les paires cle => valeur des clés prefixé par le nom de la table lié
+                if(isset($this->relations['hasOne']) && array_key_exists($table,$this->relations['hasOne'])) {
 
-            return implode(", ", $selectColumns);
+                    $data[$table] = [];
+                    foreach ($data as $key => $value) {
+                        if (strpos($key, $table . '_') === 0 && $key !== $table.'_id') {
+                            $unprefixed_key = substr($key, strlen($table) + 1);
+                            $data[$table][$unprefixed_key] = $value;
+                            unset($data[$key]);
+                        }
+                    }
+                }
+
+            }
+
+            return $data;
         }
     }

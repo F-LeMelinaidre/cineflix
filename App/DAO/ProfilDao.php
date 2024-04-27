@@ -3,6 +3,7 @@
     namespace Cineflix\App\DAO;
 
     use Cineflix\App\Model\ProfilModel;
+    use Cineflix\Core\Database\Database;
 
     class ProfilDao extends AbstractDAO
     {
@@ -12,12 +13,6 @@
             ]
         ];
 
-        public function findOneBy(array $params, array $options = null): object
-        {
-            $result = parent::findOneBy($params,$options);
-
-            return new ProfilModel($result);
-        }
         public function findByUserToken(string $token, array $options = null)
         {
             if(isset($options['user']['select'])) {
@@ -32,19 +27,8 @@
 
         }
 
-        public function update(object $profil)
+        public function update(object $profil, string $id_column = 'user_id'): Database
         {
-
-            $sql = "UPDATE $this->table SET modified = CURRENT_TIMESTAMP";
-            foreach ($profil as $key => $val) {
-                if(!is_object($val) && $key != 'table' && $key != 'email' && $key != 'user_id') {
-                    $sql .= ", $key = :$key";
-                    $bindValues[] = ['col' => $key, 'val' => $val];
-                }
-            }
-            $sql .= " WHERE user_id = :user_id";
-            $bindValues[] = ['col' => 'user_id', 'val' => $profil->user_id];
-            return $this->db->prepare($sql, $bindValues);
-
+            return parent::update($profil, $id_column);
         }
     }
