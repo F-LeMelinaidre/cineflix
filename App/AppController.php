@@ -95,18 +95,24 @@
             self::$_Router->get('admin_cinema_edit', '/Admin/Cinema/Edit/{id}', [ Controller\Admin\Cinema::class, 'edit'],
                 ['id' => '[0-9]+']);
 
+
             //Admin Film
             self::$_Router->get('admin_movie_index', '/Admin/Film', [ Controller\Admin\Movie::class, 'index']);
-            self::$_Router->get('admin_movie_add', '/Admin/Movie/Add', [ Controller\Admin\Movie::class, 'edit']);
             self::$_Router->get('admin_movie', '/Admin/Film/{status}', [ Controller\Admin\Movie::class, 'index'],
                 ['status' => '[A-Z-]+']);
+            self::$_Router->get('admin_movie_add', '/Admin/Film/{status}/Add', [ Controller\Admin\Movie::class, 'edit'],
+                ['status' => '[A-Z-]+']);
 
-            self::$_Router->get('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\Movie::class, 'edit'],
-                ['id' => '[0-9]+']);
+            self::$_Router->post('admin_movie_add', '/Admin/Film/{status}/Add', [ Controller\Admin\Movie::class, 'edit'],
+                ['status' => '[A-Z-]+']);
 
-            self::$_Router->post('admin_movie_add', '/Admin/Movie/Add', [ Controller\Admin\Movie::class, 'edit']);
-            self::$_Router->post('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\Movie::class, 'edit'],
-                ['id' => '[0-9]+']);
+
+            // self::$_Router->get('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\Movie::class, 'edit'],
+            //    ['id' => '[0-9]+']);
+
+            //self::$_Router->post('admin_movie_add', '/Admin/Movie/Add', [ Controller\Admin\Movie::class, 'edit']);
+            //self::$_Router->post('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\Movie::class, 'edit'],
+            //    ['id' => '[0-9]+']);
 
             //Admin Streaming
             self::$_Router->get('admin_streaming_index', '/Admin/Streaming', [ Controller\Admin\Streaming::class, 'index']);
