@@ -35,6 +35,11 @@
         {
             $this->id = $id;
         }
+
+        public function setCreated(string $date): void
+        {
+            $this->created = date("Y-m-d H:i:s", strtotime($date));
+        }
         public function getDateFr(string $date): string
         {
             return date("d-m-Y H:i:s", strtotime($date));
@@ -46,9 +51,12 @@
          *
          * @return void
          */
-        public function addValidation(string $item, array $options): void
+        public function addValidation(string $item, array $rules, array $custom_messages = null): void
         {
-            $this->validation_items[$item] = $options;
+            $this->validation_items[$item] = [
+                'rules'     => $rules,
+                'messages'  => $custom_messages
+            ];
         }
 
         /**
@@ -56,10 +64,9 @@
          */
         public function isValid(): bool
         {
-            foreach($this->validation_items as $item => $rule) {
-                $this->validate($rule, $item);
+            foreach ($this->validation_items as $item => $rules) {
+                $this->validate($item, $rules);
             }
-
             return empty($this->errors);
         }
 
@@ -69,18 +76,34 @@
          *
          * @return void
          */
-        private function validate($rule, $item)
+        private function validate(string $item, array $params)
         {
-            $require = in_array('require', $rule);
-            $message = (isset($rule['message'])) ? $rule['message'] : null;
-            $rule = (isset($rule['rule'])) ? $rule['rule'] : null;
+            $rules = $params['rules'];
+            $messages = $params['messages'];
 
-            if($require && empty($this->$item)) {
+            foreach($rules as $rule) {
 
-                $this->errors[$item] = (isset($message['require']))? $message['require'] : "Champ requis !";
+                switch ($rule) {
+                    case 'equal':
+                        $item_confirm = $item."_confirm";
+                        $valid = $this->$item == $this->$item_confirm;
+                        $message = (isset($messages['equal']))? $messages['equal'] : "les champs ne sont pas identiques !";
+                        break;
 
-            } elseif(!empty($this->$item) && !is_null($rule) && !preg_match(Regex::getPattern($rule), $this->$item)) {
-                $this->errors[$item] = (isset($message[$rule]))? $message[$rule] : Regex::getMessage($rule);
+                    case 'require':
+                        $valid = !empty($this->$item);
+                        $message = (isset($messages['require']))? $messages['require'] : "Champ requis !";
+                        break;
+
+                    default:
+                        $pattern = Regex::getPattern($rule);
+                        $valid = preg_match($pattern, $this->$item);
+                        $message = (isset($messages[$rule]))? $messages[$rule] : Regex::getMessage($rule);
+                        break;
+                }
+
+                if(!$valid) $this->errors[$item] = $message;
+
             }
         }
 

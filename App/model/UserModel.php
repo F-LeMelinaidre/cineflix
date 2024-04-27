@@ -7,8 +7,9 @@
     class UserModel extends AbstractModel
     {
 
-        private ProfilModel $profil;
+        protected ProfilModel $profil;
         protected ?string $password = null;
+        protected ?string $password_confirm = null;
 
         public ?string $email = null;
         public string $token;
@@ -53,21 +54,41 @@
         }
 
         /**
-         * @param $password
-         *
-         * @return void
+         * @return string
          */
-        public function hashPassword($password): void
+        public function getPassword(): ?string
         {
-            $this->password = password_hash($password, PASSWORD_BCRYPT);
+            return $this->password;
         }
 
         /**
+         * @param string $password
+         *
+         * @return void
+         */
+        public function setPasswordConfirm(string $password): void
+        {
+            $this->password_confirm = Security::sanitize($password);
+        }
+
+        /**
+         * @param string $password
+         *
+         * @return void
+         */
+        public function getPasswordConfirm(): ?string
+        {
+            return $this->password_confirm;
+        }
+
+        /**
+         * @param $password
+         *
          * @return string
          */
-        public function getPassword(): string
+        public function getHashPassword(): string
         {
-            return $this->password;
+            return password_hash($this->password, PASSWORD_BCRYPT);
         }
 
         /**
@@ -75,9 +96,9 @@
          *
          * @return void
          */
-        public function setProfil(array $data): void
+        public function setProfil(object $profil): void
         {
-            $this->profil = new ProfilModel($data);
+            $this->profil = $profil;
         }
 
         /**
