@@ -16,7 +16,7 @@
         public function findOneBy(string $col, string $val, array $options = null): mixed
         {
 
-            //$result = parent::findOneBy($params,$options);
+            $result = parent::findOneBy($col, $val, $options);
 
             return [];//new ProfilModel($result);
         }

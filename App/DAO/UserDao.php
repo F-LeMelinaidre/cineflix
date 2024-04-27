@@ -16,7 +16,7 @@ class UserDao extends AbstractDAO
      */
     protected array $relations = [
         'hasOne' => [
-            'profil' => 'u.id = p.user_id'
+            'profil' => 'user.id = profil.user_id'
             ]
     ];
 

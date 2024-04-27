@@ -40,19 +40,16 @@
         {   //TODO à completer (Where, Order etc...)
 
 
-
             $select = $options['select'] ?? ['*'];
             $req = $this->db->select(...$select)
                 ->from($this->table)
                 ->where("$col = :$col")
                 ->setParameter($col,$val);
 
-            if(isset($options['hasOne'])) {
-                $hasOne = $options['hasOne'];
+            if(isset($options['contain'])) {
+                $hasOne = $options['contain'];
                 foreach ($hasOne as $relation) {
-
-                    $alias = substr($relation, 0, 1);
-                    $req->join($relation, $alias, 'LEFT', $this->relations['hasOne'][$relation]);
+                    $req->join($relation, 'LEFT', $this->relations['hasOne'][$relation]);
 
                 }
             }
@@ -62,35 +59,31 @@
 
             $result = $req->fetch();
 
+            var_dump($result);
+
             //if(isset($options['hasOne']))
             //    $result = $this->mapResult($result, $options);
 
-            if(isset($options['hasOne'])) {
-                $data = [];
-                $hasOne = $this->relations['hasOne'];
-                foreach ($result as $key => $val) {
-
-                    $pos = strpos($key, '_');
-
-                    if ($pos !== false) {
-
-                        $prefix = substr($key, 0, $pos);
-                        if (isset($hasOne[$prefix]) && $key !== $prefix . '_id') {
-
-                            $unprefixed_key = substr($key, $pos + 1);
-                            $data[$prefix][$unprefixed_key] = $val;
-
-                            unset($result[$key]);
-                        }
-                    }
-                }
-                $result = array_merge($result, $data);
+            if(isset($options['contain'])) {
+                $r = $this->mapResult($result, $options['contain']);
             }
-
             return $result;
 
         }
 
+        private function mapResult(array $data, array $relations): array
+        {
+            foreach($relations as $table) {
+
+                if(isset($this->relations['hasOne']) && array_key_exists($table,$this->relations['hasOne'])) {
+
+                    echo $table;
+                }
+
+            }
+
+            return [];
+        }
         /**
          * @param array|null $options
          * @return mixed|null
@@ -173,20 +166,5 @@
         public function getLastInsertId(): int
         {
             return (isset($this->last_insert_id))? $this->last_insert_id : $this->db->getLastInsertId();
-        }
-
-        /**
-         * @param string $alias
-         * @param array  $columns
-         *
-         * @return string
-         */
-        protected function setSelect(string $alias, array $columns): string
-        {
-            $selectColumns = array_map(function($column) use ($alias) {
-                return ($alias == $this->table || $column == '*')? "$alias.$column" : "$alias.$column AS ". $alias. "_" .$column;
-            }, $columns);
-
-            return implode(", ", $selectColumns);
         }
     }

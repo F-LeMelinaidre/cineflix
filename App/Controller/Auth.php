@@ -61,8 +61,8 @@
                     $user->setPassword('');
 
                     $data = $this->userDao->findOneBy('email',$user->email, [
-                        'select' => ['u.id','p.nom AS profil_nom','p.prenom AS profil_prenom','p.point profil_point'],
-                        'hasOne' => ['profil']
+                        'select' => ['user.id','profil.nom','profil.prenom','profil.point'],
+                        'contain' => ['profil']
                     ]);
 
                     $user->hydrate($data);
