@@ -13,12 +13,12 @@
             ]
         ];
 
-        public function findOneBy(array $params, array $options = null): object
+        public function findOneBy(string $col, string $val, array $options = null): mixed
         {
 
-            $result = parent::findOneBy($params,$options);
+            $result = parent::findOneBy($col, $val, $options);
 
-            return new ProfilModel($result);
+            return [];//new ProfilModel($result);
         }
         public function findByUserToken(string $token, array $options = null)
         {

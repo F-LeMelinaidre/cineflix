@@ -20,11 +20,6 @@ class UserDao extends AbstractDAO
             ]
     ];
 
-    public function findOneBy(array $params, array $options = null): object
-    {
-        $result = parent::findOneBy($params, $options);
-        return new UserModel($result);
-    }
 
     public function create(object $user)
     {
