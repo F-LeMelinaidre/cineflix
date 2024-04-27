@@ -38,11 +38,11 @@
         public function show()
         {
 
-            $profil = $this->profilDao->findOneBy('user_id', $this->session['id'],[
+            $data = $this->profilDao->findOneBy('user_id', $this->session['id'],[
                 'select'    => ['profil.*', 'user.email'],
                 'contain'   => ['user']
                 ]);
-var_dump($profil);
+            $profil = new ProfilModel($data);
             return $this->render('profil.show',['profil' => $profil]);
         }
 
@@ -58,9 +58,9 @@ var_dump($profil);
 
                 $profil = new ProfilModel();
 
-                $profil->addValidation('nom',['rule' => 'alpha', 'require' => true]);
-                $profil->addValidation('prenom',['rule' => 'alpha', 'require' => true]);
-                $profil->addValidation('date_naissance',['rule' => 'alphaNumeric']);
+                $profil->addValidation('nom',['alpha', 'require']);
+                $profil->addValidation('prenom',['alpha', 'require']);
+                $profil->addValidation('date_naissance',['alphaNumeric']);
 
                 $profil->setId($this->session['id']);
                 $profil->setNom($_POST['nom']);
@@ -78,10 +78,11 @@ var_dump($profil);
 
             } else{
                 $params = [
-                    'select' => ['user_id','nom', 'prenom', 'date_naissance']
+                    'select' => ['user_id','nom', 'prenom', 'date_naissance', 'created', 'modified']
                 ];
 
-                $profil = $this->profilDao->findOneBy(['user_id' => $this->session['id']], $params);
+                $data = $this->profilDao->findOneBy('user_id',$this->session['id'], $params);
+                $profil = new ProfilModel($data);
             }
 
             $errors = $profil->getErrors();
@@ -100,11 +101,11 @@ var_dump($profil);
 
                 $profil = new ProfilModel();
 
-                $profil->addValidation('numero_voie', ['rule' => 'alphaNumeric','require']);
-                $profil->addValidation('type_voie', ['rule' => 'alpha','require']);
-                $profil->addValidation('nom_voie', ['rule' => 'alpha','require']);
-                $profil->addValidation('code_postale', ['rule' => 'numeric', 'require']);
-                $profil->addValidation('ville', ['rule' => 'alpha','require']);
+                $profil->addValidation('numero_voie', ['alphaNumeric','require']);
+                $profil->addValidation('type_voie', ['alpha','require']);
+                $profil->addValidation('nom_voie', ['alpha','require']);
+                $profil->addValidation('code_postale', ['numeric', 'require']);
+                $profil->addValidation('ville', ['alpha','require']);
 
                 $profil->setId($this->session['id']);
                 $profil->setNumeroVoie($_POST['numero_voie']);
@@ -121,10 +122,12 @@ var_dump($profil);
 
             } else {
                 $params = [
-                    'select' => ['user_id','numero_voie', 'type_voie', 'nom_voie', 'code_postale', 'ville']
+                    'select' => ['user_id','numero_voie', 'type_voie', 'nom_voie', 'code_postale', 'ville', 'created', 'modified']
                 ];
 
-                $profil = $this->profilDao->findOneBy(['user_id' => $this->session['id']], $params);
+                $data = $this->profilDao->findOneBy('user_id', $this->session['id'], $params);
+
+                $profil = new ProfilModel($data);
             }
 
             $errors = $profil->getErrors();
