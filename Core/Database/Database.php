@@ -326,6 +326,7 @@
          */
         private function prepare()
         {
+          
             try {
 
                 $this->request = $this->connexion->prepare($this->sql);

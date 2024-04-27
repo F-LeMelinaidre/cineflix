@@ -3,6 +3,7 @@
     namespace Cineflix\App\model;
 
     use Cineflix\Core\Util\Regex;
+    use Cineflix\Core\Util\Security;
 
     class AbstractModel
     {
@@ -18,6 +19,9 @@
 
         public ?string $nom = null;
 
+        /**
+         * @param array|null $data
+         */
         public function __construct(?array $data)
         {
             if(isset($data['id'])) $this->id = $data['id'];
@@ -26,11 +30,19 @@
             if(isset($data['nom'])) $this->nom = $data['nom'];
 
         }
+
+        /**
+         * @return int
+         */
         public function getId(): int
         {
             return $this->id;
         }
 
+        /**
+         * @param int $id
+         * @return void
+         */
         public function setId(int $id): void
         {
             $this->id = $id;
@@ -44,9 +56,11 @@
         public function getCreated() {
             return date("d-m-Y H:i:s", strtotime($this->created));
         }
+      
         public function getModified() {
             return date("d-m-Y H:i:s", strtotime($this->modified));
         }
+      
         public function getDateFr(string $date): string
         {
             return date("d-m-Y H:i:s", strtotime($date));

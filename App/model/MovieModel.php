@@ -10,12 +10,12 @@ class MovieModel extends AbstractModel
 
     private int $cinema_id = 0;
     private int $status = 0;
-    public ?CinemaModel $cinema = null;
-    public ?string $ville = null;
 
     public ?string $synopsis;
     public ?string $affiche;
     public ?string $date_sortie;
+    public ?CinemaModel $cinema = null;
+    public ?string $ville = null;
     public ?string $slug;
 
 
@@ -36,7 +36,39 @@ class MovieModel extends AbstractModel
         if(isset($data['cinema'])) $this->setCinema($data['cinema']);
     }
 
+    public function setName(string $nom): void
+    {
+        parent::setNom($nom);
+        $this->slug = str_replace([' ',"'"],'-',$this->nom);
+    }
 
+    /**
+     * @param string $date
+     * @return void
+     */
+    public function setDateSortie(string $date): void
+    {
+        $this->date_sortie = $date;
+    }
+
+    public function setSynopsis(string $synopsis): void
+    {
+        $this->synopsis = $synopsis;
+    }
+
+    /**
+     * @param int $id
+     * @return void
+     */
+    public function setCinemaId(int $id): void
+    {
+        $this->cinema_id = $id;
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     */
     public function setCinema(array $data): void
     {
         $this->cinema = new CinemaModel($data);

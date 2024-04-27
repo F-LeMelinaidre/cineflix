@@ -8,35 +8,34 @@
         <h2 class="titre">Information du film</h2>
   
         <label class="form-label" for="InputNom">Nom</label>
-        <input id="InputNom" class="form-control" type="text" name="nom" value="<?= $stream->nom ?>" aria-required="true">
+        <input id="InputNom" class="form-control" type="text" name="nom" value="" aria-required="true">
         <div id="MoviesList"></div>
 
         <label class="form-label" for="InputDateSortie">Date de sortie</label>
-        <input id="InputDateSortie" class="form-control" type="date" name="date_sortie" value="<?= $stream->date_sortie ?>" aria-required="true">
+        <input id="InputDateSortie" class="form-control" type="date" name="date_sortie" value="" aria-required="true">
 
         <label class="form-label" for="InputCinema">Cinema</label>
-        <input id="InputCinema" class="form-select" type="text" name="cinema" value="<?= '$movie->cinema->nom $movie->ville->nom' ?>"
+        <input id="InputCinema" class="form-select" type="text" name="cinema" value=""
                placeholder="Saisissez un cinéma ou une ville" aria-required="true">
         <div id="CinemasList"></div>
-        <input type="hidden" id="cinema_id" name="cinema_id" value="">
+        <input type="hidden" id="cinema_id" name="cinema_id" value=0 >
 
         <h2 class="exploitation">Information d'exploitation</h2>
         <label class="form-label" for="InputDateDebut">Début</label>
-        <input id="InputDateDebut" class="form-control" type="date" name="exploitation_debut" value="<?= '$movie->exploitation_debut' ?>" aria-required="true">
+        <input id="InputDateDebut" class="form-control" type="date" name="exploitation_debut" value="" aria-required="true">
         <label class="form-label" for="InputDateFin">Fin</label>
-        <input id="InputDateFin" class="form-control" type="date" name="exploitation_fin" value="<?= '$movie->exploitation_fin' ?>" aria-required="true">
+        <input id="InputDateFin" class="form-control" type="date" name="exploitation_fin" value="" aria-required="true">
 
         <label class="form-label" for="TextareaSynopsis">Synopsis</label>
-        <textarea id="TextareaSynopsis" class="form-control" name="synopsis" cols="30" rows="5" aria-required="true"><?= $stream->synopsis ?></textarea>
+        <textarea id="TextareaSynopsis" class="form-control" name="synopsis" cols="30" rows="5" aria-required="true"></textarea>
 
         <label class="form-label" for="InputAffiche">Affiche</label>
         <input id="InputAffiche" class="form-control" name="affiche" type="file" accept=".png, .jpg, .jpeg" aria-required="true">
-        <div class="thumb"><img src="" alt="" width="120px"></div>
+        <div id="ThumbAffiche" class="thumb"><img src="" alt="" width="120px"></div>
 
-        <input type="hidden" id="fiche_id" name="fiche_id" value="">
         <button id="SubmitButton" class="btn btn-warning" type="submit">Ajouter</button>
     </form>
 </section>
-<script src="/public/js/ajaxRequest.js" data-function="MovieSearch"></script>
+<!--<script src="/public/js/ajaxRequest.js" data-function="MovieSearch"></script>
 <script src="/public/js/ajaxRequest.js" data-function="CinemaSearch"></script>
-<script src="/public/js/validationLib.js"></script>
+<script src="/public/js/validationLib.js"></script>-->

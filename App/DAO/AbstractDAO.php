@@ -26,11 +26,13 @@
             $this->model = "\\Cineflix\\App\\Model\\".ucfirst($this->table).'Model';
 
         }
+      
         public function create(object $model) {}
         public function getLastId(): int
         {
             return $this->last_id;
         }
+
         /**
          * @param array      $params
          * @param array|null $options

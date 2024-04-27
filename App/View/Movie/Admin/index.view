@@ -1,6 +1,6 @@
 <header>
     <h1>Liste des films en salles</h1>
-    <a href="<?= self::$_Router->getUrl('admin_movie_add') ?>" class="btn btn-sm btn-warning">Ajouter un film</a>
+    <a href="<?= self::$_Router->getUrl('admin_movie_add',['status' => $status]) ?>" class="btn btn-sm btn-warning">Ajouter un film</a>
 </header>
 <table class="table table-striped align-middle">
     <thead class="table-light">

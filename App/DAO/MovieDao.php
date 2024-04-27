@@ -15,6 +15,11 @@ class MovieDao extends AbstractDAO
         ]
     ];
 
+    public function find(int $id, $options)
+    {
+
+        return parent::find($id, $options);
+    }
     /**
      * @param string $status
      * @param array|null $options
@@ -63,11 +68,11 @@ class MovieDao extends AbstractDAO
      * @param MovieModel $movie
      * @return void
      */
-    public function add(MovieModel $movie)
+    public function create(object $movie): void
     {
 
         var_dump($movie);
-
+die();
     }
   
 }
