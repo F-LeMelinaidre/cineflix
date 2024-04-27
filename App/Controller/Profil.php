@@ -38,14 +38,11 @@
         public function show()
         {
 
-            $profil = $this->profilDao->findOneBy(['user_id' => $this->session['id']],[
-                'hasOne' => [
-                    'user'=> [
-                        'select' => ['email']
-                    ]
-                ]
-            ]);
-
+            $profil = $this->profilDao->findOneBy('user_id', $this->session['id'],[
+                'select'    => ['profil.*', 'user.email'],
+                'contain'   => ['user']
+                ]);
+var_dump($profil);
             return $this->render('profil.show',['profil' => $profil]);
         }
 

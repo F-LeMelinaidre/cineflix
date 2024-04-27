@@ -48,7 +48,7 @@ class AuthConnect
      */
     public static function verify(string $identifiant, string $pwd): bool
     {
-        echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' - Ligne: '.__LINE__.'<br><br>';
+        //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' - Ligne: '.__LINE__.'<br><br>';
         $table = self::$_Table;
         $ident_col = self::$_IdColonne;
 
@@ -68,7 +68,7 @@ class AuthConnect
      */
     public static function connect(string $id_value, array $params = null): bool
     {
-        echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' - Ligne: '.__LINE__.'<br><br>';
+        //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' - Ligne: '.__LINE__.'<br><br>';
 
         $table = self::$_Table;
         $ident_col = self::$_IdColonne;
