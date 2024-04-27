@@ -13,6 +13,7 @@ class Home extends AbstractController
     public function index() {
 
         $menu ='Home index';
+
         return $this->render('Home.admin.index',compact('menu'));
     }
 }

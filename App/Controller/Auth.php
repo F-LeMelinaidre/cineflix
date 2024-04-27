@@ -50,9 +50,10 @@
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $user = new UserModel();
+                $user->addProfil();
 
-                $user->addValidation('email',['rule' => 'email', 'require' => true]);
-                $user->addValidation('password',['rule' => 'password', 'require' => true]);
+                $user->addValidation('email',['email', 'require']);
+                $user->addValidation('password',['password', 'require']);
 
                 $user->setEmail($_POST['email']);
                 $user->setPassword($_POST['password']);
@@ -69,9 +70,9 @@
 
                     AuthConnect::connect($user->email, [
                         'id'     => $user->getId(),
-                        'nom'    => $user->getProfil()->nom,
-                        'prenom' => $user->getProfil()->prenom,
-                        'point'  => $user->getProfil()->point,
+                        'nom'    => $user->profil->nom,
+                        'prenom' => $user->profil->prenom,
+                        'point'  => $user->profil->point,
                     ]);
 
                     MessageFlash::create('Connecté',$type = 'valide');
@@ -95,8 +96,7 @@
         public function signup(): string
         {
             $user = new UserModel();
-            $profil = new ProfilModel();
-            $user->setProfil($profil);
+            $user->addProfil();
 
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -108,27 +108,25 @@
                 $user->addValidation('password',['password', 'equal', 'require']);
 
 
-                $profil->setNom($_POST['nom']);
-                $profil->setPrenom($_POST['prenom']);
-                $user->setProfil($profil);
+                $user->profil->setNom($_POST['nom']);
+                $user->profil->setPrenom($_POST['prenom']);
 
-                $profil->addValidation('nom',['alpha', 'require']);
-                $profil->addValidation('prenom',['alpha', 'require']);
+                $user->profil->addValidation('nom',['alpha', 'require']);
+                $user->profil->addValidation('prenom',['alpha', 'require']);
 
                 $exist = $this->userDao->isExist('email', $user->email);
 
                 $user_is_valid =$user->isValid();
-                $profil_is_valid = $profil->isValid();
-
+                $profil_is_valid = $user->profil->isValid();
                 $valid = $user_is_valid && $profil_is_valid && !$exist;
 
                 if($valid && $this->userDao->create($user)) {
 
                     AuthConnect::connect($user->email,[
-                        'id'     => $this->userDao->getLastInsertId(),
-                        'nom'    => $user->getProfil()->nom,
-                        'prenom' => $user->getProfil()->prenom,
-                        'point'  => $user->getProfil()->point,
+                        'id'     => $this->userDao->getLastId(),
+                        'nom'    => $user->profil->nom,
+                        'prenom' => $user->profil->prenom,
+                        'point'  => $user->profil->point,
                     ]);
 
                     MessageFlash::create('Merci de compléter votre profil', $type = 'valide');
@@ -137,7 +135,7 @@
                     exit;
                 }
             }
-            $errors = array_merge($user->getErrors(),$profil->getErrors());
+            $errors = array_merge($user->getErrors(),$user->profil->getErrors());
             if(isset($exist) && $exist) $errors['email'] = 'Email déja utilisé !';
 
             return $this->render('Auth.signup', compact('user','errors'));
@@ -155,26 +153,26 @@
             }
 
             $this->session = AuthConnect::getSession();
-            $user = new ProfilModel();
-            $user->setId($this->session['id']);
+            $profil = new ProfilModel();
+            $profil->setId($this->session['id']);
 
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-                $user->setNumeroVoie($_POST['numero_voie']);
-                $user->setTypeVoie($_POST['type_voie']);
-                $user->setNomVoie($_POST['nom_voie']);
-                $user->setCodePostale(intval($_POST['code_postale']));
-                $user->setVille($_POST['ville']);
-                $user->setCreated($this->session['last_connect']);
+                $profil->setNumeroVoie($_POST['numero_voie']);
+                $profil->setTypeVoie($_POST['type_voie']);
+                $profil->setNomVoie($_POST['nom_voie']);
+                $profil->setCodePostale(intval($_POST['code_postale']));
+                $profil->setVille($_POST['ville']);
+                $profil->setCreated($this->session['last_connect']);
 
 
-                $user->addValidation('numero_voie',['alphaNumeric', 'require']);
-                $user->addValidation('type_voie',['alpha', 'require']);
-                $user->addValidation('nom_voie',['alphaNumeric', 'require']);
-                $user->addValidation('code_postale',['numeric', 'require']);
-                $user->addValidation('ville',['alpha', 'require']);
+                $profil->addValidation('numero_voie',['alphaNumeric', 'require']);
+                $profil->addValidation('type_voie',['alpha', 'require']);
+                $profil->addValidation('nom_voie',['alphaNumeric', 'require']);
+                $profil->addValidation('code_postale',['numeric', 'require']);
+                $profil->addValidation('ville',['alpha', 'require']);
 
-                if($user->isValid() && $this->profilDao->update($user)) {
+                if($profil->isValid() && $this->profilDao->update($profil)) {
                     MessageFlash::create('Welcome, Vous êtez connecté', $type = 'valide');
 
                     header('Location: /');
@@ -183,9 +181,9 @@
             }
 
 
-            $errors = $user->getErrors();
+            $errors = $profil->getErrors();
 
-            return $this->render('Auth.finalizeSignup', [ 'profil' => $user, 'errors' => $errors ]);
+            return $this->render('Auth.finalizeSignup', compact( 'profil', 'errors'));
         }
 
         /**
