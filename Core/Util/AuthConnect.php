@@ -74,17 +74,17 @@ class AuthConnect
         $ident_col = self::$_IdColonne;
 
 
-        $req = self::$_Database->select('last_connect','connect')
+        $req = self::$_Database->select('connect')
             ->from($table)
             ->where("$ident_col = :$ident_col")
             ->setParameter($ident_col, $id_value);
 
         $result = $req->fetch();
-        var_dump($result);
-        echo'<br>';
+
+
         $params_default = [
             'token'         => self::getToken(),
-            'last_connect'  => date("d-m-Y H:i:s", strtotime($result['last_connect']))
+            'last_connect'  => date("d-m-Y H:i:s", strtotime($result['connect']))
         ];
         $params = array_merge($params, $params_default);
 
@@ -96,6 +96,7 @@ class AuthConnect
             ->setParameter('new_connect', date("Y-m-d H:i:s"))
             ->setParameter('token', self::$_Token)
             ->where("$ident_col = :$ident_col")
+            ->setParameter($ident_col, $id_value)
             ->execute();
 
         if($req) {

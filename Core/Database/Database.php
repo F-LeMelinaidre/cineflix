@@ -240,13 +240,10 @@
             echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>'.$query.'<br><br>';
             try {
                 //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>';
-                //echo '$query: '.$query. '<br>';
-                //var_dump($bindvalues);
-                //echo '<br><br>';
+
                 $this->request = $this->connexion->prepare($query);
 
                 if (!empty($bindvalues)) {
-                    //var_dump($bindvalues); die();
 
                     foreach ($bindvalues as $val) {
                         $this->request->bindValue(':'.$val['col'], $val['val'], PDO::PARAM_STR);
@@ -272,9 +269,12 @@
 
             $this->sql .= "$set $where";
 
+
             //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>'.$this->sql.'<br><br>';
 
             $this->prepare($this->sql, $this->bind_values);
+
+            $this->request->execute();
 
             return $this;
         }
@@ -291,6 +291,7 @@
             try {
 
                 $sql = $this->queryBuilder();
+                //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>'.$sql.'<br><br>';
 
                 $this->prepare($sql, $this->bind_values);
 
@@ -322,6 +323,7 @@
             try {
 
                 $sql = $this->queryBuilder();
+                //echo 'Class: '.__CLASS__.'<br>Function: '.__FUNCTION__.' | Ligne: '.__LINE__.'<br>'.$sql.'<br><br>';
 
                 $this->prepare($sql, $this->bind_values);
 
