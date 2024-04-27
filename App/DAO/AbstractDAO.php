@@ -59,14 +59,14 @@
 
             $result = $req->fetch();
 
-            var_dump($result);
 
             //if(isset($options['hasOne']))
             //    $result = $this->mapResult($result, $options);
 
             if(isset($options['contain'])) {
-                $r = $this->mapResult($result, $options['contain']);
+                $result = $this->mapResult($result, $options['contain']);
             }
+            var_dump($result);
             return $result;
 
         }
@@ -74,15 +74,23 @@
         private function mapResult(array $data, array $relations): array
         {
             foreach($relations as $table) {
-
+                // place toutes les colonnes de la relation hasOne dans un sous tableau de $resultat
+                // et supprime toutes les paires cle => valeur des clés prefixé par le nom de la table lié
                 if(isset($this->relations['hasOne']) && array_key_exists($table,$this->relations['hasOne'])) {
 
-                    echo $table;
+                    $data[$table] = [];
+                    foreach ($data as $key => $value) {
+                        if (strpos($key, $table . '_') === 0 && !isset($data[$table . '_id'])) {
+                            $unprefixed_key = substr($key, strlen($table) + 1);
+                            $data[$table][$unprefixed_key] = $value;
+                            unset($data[$key]);
+                        }
+                    }
                 }
 
             }
 
-            return [];
+            return $data;
         }
         /**
          * @param array|null $options
