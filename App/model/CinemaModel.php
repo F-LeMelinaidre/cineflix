@@ -2,7 +2,7 @@
 
 namespace Cineflix\App\Model;
 
-class CinemaModel
+class CinemaModel extends AbstractModel
 {
     public int $id;
     public int $ville_id;

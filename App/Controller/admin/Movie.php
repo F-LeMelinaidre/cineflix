@@ -2,10 +2,12 @@
 
     namespace Cineflix\App\Controller\Admin;
 
+    use Cineflix\App\AppController;
     use Cineflix\App\DAO\List\StatusMovie;
     use Cineflix\App\DAO\MovieDao;
     use Cineflix\App\Model\MovieModel;
     use Cineflix\Core\AbstractController;
+    use Cineflix\Core\Router\Router;
 
     class Movie extends AbstractController
     {
@@ -22,14 +24,25 @@
 
         public function index(?string $status = null): string
         {
-            $options = [];
+            $status_id = (!is_null($status)) ? StatusMovie::getStatus($status) : null;
+            $buttons = [
+                StatusMovie::getStatus('en salle') => self::$_Router->getUrl('admin_movie_add',['status' => StatusMovie::getUrl('en salle')]),
+                StatusMovie::getStatus('en streaming') => self::$_Router->getUrl('admin_movie_add',['status' => StatusMovie::getUrl('en streaming')])
+            ];
+
+            $options = [
+                'select'    => ['movie.*','cinema.nom','ville.nom'],
+                'contain'   => ['cinema','ville'],
+                'order'     => ['movie.modified']
+            ];
+
             if(is_null($status)) {
                 $movies = $this->movieDao->findAll($options);
             } else {
-                $movies = $this->movieDao->findAllByStatus($status,$options);
+                $movies = $this->movieDao->findAllByStatus($status);
             }
 
-            return $this->render('Movie.admin.index',compact('movies'));
+            return $this->render('Movie.admin.index',compact('movies', 'buttons', 'status_id'));
         }
 
         public function cinema(): string
@@ -41,41 +54,39 @@
 
         public function show(int $id){}
 
-        public function edit(int $id = null): string
+        public function edit(string $status = null, int $id = null): string
         {
-            $movieDao = new MovieDao();
+            $errors = [];
             // ajouter si c'est un ajout dans une salle une verification si il n'est pas deja en salle
-            if(!empty($_POST)) {
-
+            if($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $status_id = StatusMovie::getStatus($status);
                 $movie = new MovieModel();
+                $movie->setNom($_POST['nom']);
+                $movie->setDateSortie($_POST['date_sortie']);
+                $movie->setSynopsis($_POST['synopsis']);
 
-                $movie->nom = $_POST['nom'];
-                $movie->synopsis = $_POST['synopsis'];
-                $movie->cinema = $_POST['cinema'];
-                $movie->date_sortie = strtotime($_POST['date_sortie']);
-                $movie->affiche = $_POST['affiche'];
+                //$movie->setCinemaId(intval($_POST['cinema_id']));
 
-                $movieDao->add($movie);
+                //$movie->addValidation('nom',['rule' => 'alphaNumeric', 'require' => true]);
+                //$movie->addValidation('date_sortie',['rule' => 'alphaNumeric', 'require' => true]);
+                //$movie->addValidation('synopsis',['require' => true]);
+                //$movie->addValidation('cinema_id',['rule' => 'numeric', 'require' => true]);
 
-                $url = '';
-            } else {
-                // si id n est pas null update
-                if (!is_null($id)) {
-
-                    $movie = $movieDao->findBy('id', $id);
-                    $timeToDate = strtotime($movie->date_sortie);
-                    //$movie->cinema->nom = $movie->cinema->nom. ' - ' .$movie->ville->nom;
-                    $url = self::$_Router->getUrl('admin_movie_edit', [ 'id' => $id ]);
-
-                    // sinon ajout
-                } else {
-                    $movie = new MovieModel();
-
-                    $url = self::$_Router->getUrl('admin_movie_add');
+                if($this->movieDao->create($movie)) {
+                    echo 'ok';
                 }
+
+                $errors = $movie->getErrors();
+            } else {
+
             }
 
-            $title = (!isset($movie->id))? "Ajouter un film" : "Editer: ".ucwords($movie->nom);
+            var_dump($errors);
+
+            $title = (!isset($id))? "Ajouter un film" : "Editer: ".ucwords($movie->nom);
+
+            $url = self::$_Router->getUrl('admin_movie_add',['status' => $status]);
+            $movie = [];
 
             return $this->render('Movie.admin.edit',compact('title', 'movie', 'url'));
         }

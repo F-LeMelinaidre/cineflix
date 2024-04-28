@@ -10,7 +10,6 @@
 
         protected Database $db;
         protected string $table;
-        protected array $relations;
         protected string $model;
         protected int $last_id;
 
@@ -26,11 +25,22 @@
             $this->model = "\\Cineflix\\App\\Model\\".ucfirst($this->table).'Model';
 
         }
-        public function create(object $model) {}
+
+        /**
+         * @return int
+         */
         public function getLastId(): int
         {
             return $this->last_id;
         }
+
+        /**
+         * @param object $model
+         *
+         * @return void
+         */
+        public function create(object $model) {}
+
         /**
          * @param array      $params
          * @param array|null $options
@@ -47,27 +57,14 @@
                 ->setParameter($col,$val);
 
             if(isset($options['contain'])) {
-                $hasOne = $options['contain'];
-                foreach ($hasOne as $relation) {
-                    $req->join($relation, 'LEFT', $this->relations['hasOne'][$relation]);
+
+                foreach ($options['contain'] as $relation => $condition) {
+                    $req->join($relation, 'LEFT', $condition);
 
                 }
             }
 
-            //if(isset($options['hasOne']))
-            //    $this->buildJoin($req, $options);
-
-            $result = $req->fetch();
-
-
-            //if(isset($options['hasOne']))
-            //    $result = $this->mapResult($result, $options);
-
-            if(isset($options['contain'])) {
-                $result = $this->mapResult($result, $options['contain']);
-            }
-
-            return $result;
+            return $req->fetch();
 
         }
 
@@ -75,10 +72,7 @@
          * @param array|null $options
          * @return mixed|null
          */
-        public function findAll(array $options = null) {
-
-            return [];
-        }
+        public function findAll(array $options = null) {}
 
         /**
          * @param array $params
@@ -115,11 +109,14 @@
         public function update(object $model, string $id_column = 'id'): Database
         {
             $req = $this->db->createUpdate($this->table);
+
             foreach($model as $item => $value) {
-                if(!is_null($value)) {
+
+                if(!is_null($value) && !is_object($value)) {
                     $req->set($item, ':'.$item)
                         ->setParameter($item, $value);
                 }
+
             }
             $req->set('modified', ':modified')
                 ->setParameter('modified', date("Y-m-d H:i:s"));
@@ -133,32 +130,4 @@
          * @return void
          */
         public function delete() {}
-
-        /**
-         * @param array $data
-         * @param array $relations
-         *
-         * @return array
-         */
-        private function mapResult(array $data, array $relations): array
-        {
-            foreach($relations as $table) {
-                // place toutes les colonnes de la relation hasOne dans un sous tableau de $resultat
-                // et supprime toutes les paires cle => valeur des clés prefixé par le nom de la table lié
-                if(isset($this->relations['hasOne']) && array_key_exists($table,$this->relations['hasOne'])) {
-
-                    $data[$table] = [];
-                    foreach ($data as $key => $value) {
-                        if (strpos($key, $table . '_') === 0 && $key !== $table.'_id') {
-                            $unprefixed_key = substr($key, strlen($table) + 1);
-                            $data[$table][$unprefixed_key] = $value;
-                            unset($data[$key]);
-                        }
-                    }
-                }
-
-            }
-
-            return $data;
-        }
     }
