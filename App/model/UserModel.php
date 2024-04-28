@@ -26,11 +26,42 @@
         {
             parent::__construct($data);
 
-            if(isset($data['email'])) $this->email = $data['email'];
-            if(isset($data['connect'])) $this->connect = $this->getDateFr($data['connect']);
-            if(isset($data['last_connect'])) $this->last_connect = $this->getDateFr($data['last_connect']);
+            $this->hydrate($data);
+        }
 
-            if(isset($data['profil'])) $this->profil = new ProfilModel($data['profil']);
+        /**
+         * @param array|null $data
+         *
+         * @return void
+         */
+        public function hydrate(array $data = null)
+        {
+            parent::hydrate($data);
+
+            if(isset($data['email'])) {
+                $this->email = $data['email'];
+                unset($data['email']);
+            }
+            if(isset($data['connect'])) {
+                $this->connect = $this->getDateFr($data['connect']);
+                unset($data['connect']);
+            }
+            if(isset($data['last_connect'])) {
+                $this->last_connect = $this->getDateFr($data['last_connect']);
+                unset($data['last_connect']);
+            }
+
+            $profil = [];
+            if(!empty($data)) {
+                foreach ($data as $col => $val) {
+                    $parts = explode('_', $col);
+                    if($parts[0] === 'profil') {
+                        $profil[$parts[1]] = $val;
+                    }
+                }
+            }
+
+            if(!empty($profil)) $this->profil = new ProfilModel($profil);
         }
 
         /**
@@ -90,24 +121,6 @@
         public function addProfil(array $data = null): void
         {
             $this->profil = new ProfilModel($data);
-        }
-
-        /**
-         * @param array|null $data
-         *
-         * @return void
-         */
-        public function hydrate(array $data = null)
-        {
-            parent::hydrate($data);
-
-            if(isset($data['email'])) $this->email = $data['email'];
-            if(isset($data['created'])) $this->created = $this->getDateFr($data['created']);
-            if(isset($data['modified'])) $this->modified = $this->getDateFr($data['modified']);
-            if(isset($data['connect'])) $this->connect = $this->getDateFr($data['connect']);
-            if(isset($data['last_connect'])) $this->last_connect = $this->getDateFr($data['last_connect']);
-
-            if(isset($data['profil'])) $this->profil->hydrate($data['profil']);
         }
 
     }
