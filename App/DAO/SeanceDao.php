@@ -5,10 +5,9 @@
     use Cineflix\App\AppController;
     use Cineflix\Core\Database\Database;
 
-    class SeanceDao
+    class SeanceDao extends AbstractDAO
     {
 
-        private Database $db;
         public function __construct() {
             $this->db = AppController::$_Database;
         }

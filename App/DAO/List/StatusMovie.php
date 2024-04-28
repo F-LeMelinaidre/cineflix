@@ -17,11 +17,11 @@
         {
             return match($id)
             {
-                0 => 'indisponible',
-                1 => 'en salle',
-                2 => 'en streaming',
-                3 => 'prochainement en salle',
-                4 => 'prochainement en streaming',
+                0 => 'Indisponibles',
+                1 => 'en Salle',
+                2 => 'en Streaming',
+                3 => 'prochainement en Salle',
+                4 => 'prochainement en Streaming',
                 default => 'statut inconnu'
             };
         }
@@ -33,7 +33,7 @@
          */
         public static function getStatus(string $status): int
         {
-            $status = strtoupper(str_replace('-', '_', $status));
+            $status = strtoupper(str_replace(['-',' '], '_', $status));
             return match($status)
             {
                 'INDISPONIBLE' => 0,
@@ -45,12 +45,25 @@
             };
         }
 
-        public static function getUrlFormatNames(): array
+        public static function getUrl(string $status): string
+        {
+            $status = strtoupper(str_replace(' ', '_', $status));
+            return match($status)
+            {
+                'INDISPONIBLE' => 'Indisponible',
+                'EN_SALLE' => 'En-Salle',
+                'EN_STREAMING' => 'En-Streaming',
+                'PROCHAINEMENT_EN_SALLE' => 'Prochainement-En-Salle',
+                'PROCHAINEMENT_EN_STREAMING' => 'Prochainement-En-Streaming',
+                default => ''
+            };
+        }
+        public static function getUrlArray(): array
         {
             $constantNames = [];
             foreach (self::cases() as $constant) {
                 $name = str_replace('_', ' ', strtolower($constant->name));
-                
+
                 $formattedKey = ucfirst($name);
                 $formattedValue = str_replace(' ', '-', ucwords($name));
                 $constantNames[$formattedKey] = $formattedValue;

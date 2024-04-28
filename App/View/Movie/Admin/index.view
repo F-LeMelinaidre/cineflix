@@ -1,17 +1,29 @@
-<header>
-    <h1>Liste des films en salles</h1>
-    <a href="<?= self::$_Router->getUrl('admin_movie_add') ?>" class="btn btn-sm btn-warning">Ajouter un film</a>
+<header class="p-0">
+    <h1>Liste des films <?php if(!is_null($status_id)) echo \Cineflix\App\DAO\List\StatusMovie::toString($status_id); ?></h1>
+    <nav class="d-flex align-items-center">
+        <?php if ($status_id || is_null($status_id))
+        echo "<h6 class='m-0 p-0 me-2'>Ajouter un Film :</h6>";
+        ?>
+
+        <?php foreach($buttons as $id => $url): ?>
+            <?php if ($status_id === $id || is_null($status_id)) { ?>
+
+            <a href="<?= $url ?>" class="me-2 btn btn-sm btn-warning"><?php echo \Cineflix\App\DAO\List\StatusMovie::toString($id); ?></a>
+
+            <?php } ?>
+        <?php endforeach; ?>
+    </nav>
 </header>
 <table class="table table-striped align-middle">
     <thead class="table-light">
-        <tr>
-            <th>Nom</th>
-            <th>Cinéma</th>
-            <th>Ville</th>
-            <th>Début d'exploitation</th>
-            <th>Fin d'exploitation</th>
-            <th>Action</th>
-        </tr>
+    <tr>
+        <th>Nom</th>
+        <th>Cinéma</th>
+        <th>Ville</th>
+        <th>Début d'exploitation</th>
+        <th>Fin d'exploitation</th>
+        <th>Action</th>
+    </tr>
     </thead>
     <tbody >
 
@@ -19,8 +31,8 @@
 
         <tr>
             <td><?= $movie->nom ?></td>
-            <td><?= '$movie->cinema->nom' ?></td>
-            <td><?= '$movie->ville->nom' ?></td>
+            <td><?= $movie->cinema->nom ?></td>
+            <td><?= $movie->cinema->ville->nom ?></td>
             <td>début d'exploitation</td>
             <td>fin d'exploitation</td>
             <td>
@@ -38,8 +50,8 @@
     </tbody>
 
     <tfoot>
-        <tr>
-            <td colspan="6">Pagination</td>
-        </tr>
+    <tr>
+        <td colspan="6">Pagination</td>
+    </tr>
     </tfoot>
 </table>

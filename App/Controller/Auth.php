@@ -18,15 +18,6 @@
         private UserDao $userDao;
         private ProfilDao $profilDao;
 
-        private $msg_errors = [
-            'empty'     => 'Champ obligatoire !',
-            'alpha'     => 'Seul les majuscules, minuscules et caratères accentués acceptés !',
-            'email'     => 'Format invalide (norme RFC2822) !',
-            'password'  => 'Doit contenir au minimum 8 caratères, un caratères majuscule et minuscule, un chiffre, et un caratères spéciaux !?:_\-*#&%+',
-            'exist'     => 'Email déja utilisé !',
-            'not_equal' => 'Les mots de passes ne sont pas identique !'
-        ];
-
         private array $session;
 
         public function __construct()
@@ -63,7 +54,7 @@
 
                     $data = $this->userDao->findOneBy('email',$user->email, [
                         'select' => ['user.id','profil.nom','profil.prenom','profil.point'],
-                        'contain' => ['profil']
+                        'contain' => ['profil' => 'user.id = profil.user_id']
                     ]);
 
                     $user->hydrate($data);

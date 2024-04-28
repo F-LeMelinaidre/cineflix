@@ -7,11 +7,6 @@
 
     class ProfilDao extends AbstractDAO
     {
-        protected array $relations = [
-            'hasOne' => [
-                'user' => 'profil.user_id = user.id'
-            ]
-        ];
 
         public function findByUserToken(string $token, array $options = null)
         {
