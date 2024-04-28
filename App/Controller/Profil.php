@@ -15,7 +15,6 @@
 
         private ProfilDao $profilDao;
         private UserDao $userDao;
-
         private array $session;
 
         /**
@@ -42,9 +41,11 @@
 
             $data = $this->profilDao->findOneBy('user_id', $this->session['id'],[
                 'select'    => ['profil.*', 'user.email'],
-                'contain'   => ['user']
+                'contain'   => ['user' => 'profil.user_id = user.id']
                 ]);
+
             $profil = new ProfilModel($data);
+
             return $this->render('profil.show',['profil' => $profil]);
         }
 
@@ -82,14 +83,15 @@
                     unset($data['created']);
                     unset($data['modified']);
 
-                    // transforme l'objet en array sans valeur null
+                    // transforme l'objet en array sans valeur null, ni objet
                     $profil_to_array = array_filter(get_object_vars($profil), function($var) {
-                        return !is_null($var);
+
+                        return !is_null($var) && !is_object($var);
                     });
 
                     $array_diff = array_diff($data,$profil_to_array);
-
                     if(!empty($array_diff)) MessageFlash::create('Identité modifié',$type = 'valide');
+
                     header('Location: /Profil');
                     exit();
                 }
@@ -134,9 +136,9 @@
                     unset($data['created']);
                     unset($data['modified']);
 
-                    // transforme l'objet en array sans valeur null
+                    // transforme l'objet en array sans valeur null ni objet
                     $profil_to_array = array_filter(get_object_vars($profil), function($var) {
-                        return !is_null($var);
+                        return !is_null($var)  && !is_object($var);
                     });
 
                     $array_diff = array_diff($data,$profil_to_array);

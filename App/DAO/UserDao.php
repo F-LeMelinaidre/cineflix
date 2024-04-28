@@ -10,17 +10,6 @@ use Cineflix\Core\Database\Database;
 class UserDao extends AbstractDAO
 {
 
-    /**
-     * nom de la table jointe | cle de la table courante , cle de la table jointe
-     * @var array|array[]
-     */
-    protected array $relations = [
-        'hasOne' => [
-            'profil' => 'user.id = profil.user_id'
-            ]
-    ];
-
-
     public function create(object $user)
     {
 
