@@ -15,7 +15,6 @@
 
         private ProfilDao $profilDao;
         private UserDao $userDao;
-
         private array $session;
 
         /**
@@ -42,9 +41,11 @@
 
             $data = $this->profilDao->findOneBy('user_id', $this->session['id'],[
                 'select'    => ['profil.*', 'user.email'],
-                'contain'   => ['user']
+                'contain'   => ['user' => 'profil.user_id = user.id']
                 ]);
+
             $profil = new ProfilModel($data);
+
             return $this->render('profil.show',['profil' => $profil]);
         }
 
@@ -78,7 +79,19 @@
 
 
                 if($profil->isValid() && $this->profilDao->update($profil)) {
-                    MessageFlash::create('Identité modifié',$type = 'valide');
+                    unset($data['user_id']);
+                    unset($data['created']);
+                    unset($data['modified']);
+
+                    // transforme l'objet en array sans valeur null, ni objet
+                    $profil_to_array = array_filter(get_object_vars($profil), function($var) {
+
+                        return !is_null($var) && !is_object($var);
+                    });
+
+                    $array_diff = array_diff($data,$profil_to_array);
+                    if(!empty($array_diff)) MessageFlash::create('Identité modifié',$type = 'valide');
+
                     header('Location: /Profil');
                     exit();
                 }
@@ -119,7 +132,18 @@
                 $profil->setVille($_POST['ville']);
 
                 if($profil->isValid() && $this->profilDao->update($profil)) {
-                    MessageFlash::create('Adresse modifié',$type = 'valide');
+                    unset($data['user_id']);
+                    unset($data['created']);
+                    unset($data['modified']);
+
+                    // transforme l'objet en array sans valeur null ni objet
+                    $profil_to_array = array_filter(get_object_vars($profil), function($var) {
+                        return !is_null($var)  && !is_object($var);
+                    });
+
+                    $array_diff = array_diff($data,$profil_to_array);
+                    if(!empty($array_diff)) MessageFlash::create('Adresse modifié',$type = 'valide');
+
                     header('Location: /Profil');
                     exit();
                 }
@@ -151,7 +175,16 @@
                 $is_valid =$user->isValid();
 
                 if($is_valid && $this->userDao->update($user)) {
-                    MessageFlash::create('Adresse modifié',$type = 'valide');
+                    $items = [];
+
+                    if($user->getPassword()) $items[] = 'mot de passe';
+                    if($user->email !== $data['email']) $items[] = 'email';
+
+                    $message = implode(' et ', $items). ' modifié';
+                    if(count($items) > 1) $message .= 's';
+
+                    if(count($items)) MessageFlash::create($message,$type = 'valide');
+
                     header('Location: /Profil');
                     exit();
                 }

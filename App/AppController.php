@@ -98,12 +98,12 @@
 
             //Admin Film
             self::$_Router->get('admin_movie_index', '/Admin/Film', [ Controller\Admin\Movie::class, 'index']);
-            self::$_Router->get('admin_movie', '/Admin/Film/{status}', [ Controller\Admin\Movie::class, 'index'],
+            self::$_Router->get('admin_movie', '/Admin/Film-{status}', [ Controller\Admin\Movie::class, 'index'],
                 ['status' => '[A-Z-]+']);
-            self::$_Router->get('admin_movie_add', '/Admin/Film/{status}/Add', [ Controller\Admin\Movie::class, 'edit'],
+            self::$_Router->get('admin_movie_add', '/Admin/Nouveau/Film-{status}', [ Controller\Admin\Movie::class, 'edit'],
                 ['status' => '[A-Z-]+']);
 
-            self::$_Router->post('admin_movie_add', '/Admin/Film/{status}/Add', [ Controller\Admin\Movie::class, 'edit'],
+            self::$_Router->post('admin_movie_add', '/Admin/Nouveau/Film-{status}', [ Controller\Admin\Movie::class, 'edit'],
                 ['status' => '[A-Z-]+']);
 
 

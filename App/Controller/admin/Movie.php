@@ -2,10 +2,12 @@
 
     namespace Cineflix\App\Controller\Admin;
 
+    use Cineflix\App\AppController;
     use Cineflix\App\DAO\List\StatusMovie;
     use Cineflix\App\DAO\MovieDao;
     use Cineflix\App\Model\MovieModel;
     use Cineflix\Core\AbstractController;
+    use Cineflix\Core\Router\Router;
 
     class Movie extends AbstractController
     {
@@ -22,14 +24,25 @@
 
         public function index(?string $status = null): string
         {
-            $options = [];
+            $status_id = (!is_null($status)) ? StatusMovie::getStatus($status) : null;
+            $buttons = [
+                StatusMovie::getStatus('en salle') => self::$_Router->getUrl('admin_movie_add',['status' => StatusMovie::getUrl('en salle')]),
+                StatusMovie::getStatus('en streaming') => self::$_Router->getUrl('admin_movie_add',['status' => StatusMovie::getUrl('en streaming')])
+            ];
+
+            $options = [
+                'select'    => ['movie.*','cinema.nom','ville.nom'],
+                'contain'   => ['cinema','ville'],
+                'order'     => ['movie.modified']
+            ];
+
             if(is_null($status)) {
                 $movies = $this->movieDao->findAll($options);
             } else {
-                $movies = $this->movieDao->findAllByStatus($status,$options);
+                $movies = $this->movieDao->findAllByStatus($status);
             }
 
-            return $this->render('Movie.admin.index',compact('movies', 'status'));
+            return $this->render('Movie.admin.index',compact('movies', 'buttons', 'status_id'));
         }
 
         public function cinema(): string
@@ -41,7 +54,7 @@
 
         public function show(int $id){}
 
-        public function edit(string $status, int $id = null): string
+        public function edit(string $status = null, int $id = null): string
         {
             $errors = [];
             // ajouter si c'est un ajout dans une salle une verification si il n'est pas deja en salle

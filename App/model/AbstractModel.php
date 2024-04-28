@@ -13,7 +13,6 @@
 
         protected array $errors = [];
         protected ?int $id = null;
-
         protected string $created;
         protected string $modified;
 
@@ -48,19 +47,47 @@
             $this->id = $id;
         }
 
+        /**
+         * @param string $nom
+         *
+         * @return $this
+         */
+        public function setNom(string $nom): void
+        {
+            $this->nom = ucfirst(Security::sanitize($nom));
+        }
+
+        /**
+         * @param string $date
+         *
+         * @return void
+         */
         public function setCreated(string $date): void
         {
             $this->created = date("Y-m-d H:i:s", strtotime($date));
         }
 
-        public function getCreated() {
+        /**
+         * @return string
+         */
+        public function getCreated(): string
+        {
             return date("d-m-Y H:i:s", strtotime($this->created));
         }
-      
-        public function getModified() {
+
+        /**
+         * @return string
+         */
+        public function getModified(): string
+        {
             return date("d-m-Y H:i:s", strtotime($this->modified));
         }
-      
+
+        /**
+         * @param string $date
+         *
+         * @return string
+         */
         public function getDateFr(string $date): string
         {
             return date("d-m-Y H:i:s", strtotime($date));
@@ -133,6 +160,13 @@
         public function getErrors(): array
         {
             return $this->errors;
+        }
+
+        public function objectToArrayWithValuesNotNull(object $model): array
+        {
+            return  array_filter(get_object_vars($model), function($var) {
+                return !is_null($var);
+            });
         }
 
         /**

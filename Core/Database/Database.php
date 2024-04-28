@@ -16,6 +16,7 @@
         private array $table_join;
         private array $alias = [];
         private array $where = [];
+        private array $order = [];
         private array $join = [];
         private array $bind_values = [];
         private $request;
@@ -103,7 +104,7 @@
 
                     // si l'alias récupéré est différent du nom de la table,
                     // on renomme la référence de la colonne
-                    if($alias !== $this->table) {
+                    if($alias !== $this->table && $column !== '*') {
                         $select = $select.' AS '.$alias.'_'.$column;
                     }
 
@@ -220,8 +221,31 @@
          * Assemble l'ensemble de condition where stocké dans le tableau $where
          * @return string
          */
-        public function getWhere(): string{
+        private function getWhere(): string{
             return implode(' ',$this->where);
+        }
+
+        /**
+         * @param string $column
+         * @param string $order
+         *
+         * @return $this
+         */
+        public function order(string $column, string $order = 'DESC'): self
+        {
+            $column = $this->convertToAliasColumn($column);
+
+            $this->order[] = "$column $order";
+            return $this;
+        }
+
+        /**
+         * @return string
+         */
+        private function getOrder(): string
+        {
+            $order = "ORDER BY ".implode(' AND ', $this->order);
+            return !empty($this->order)? $order : '';
         }
 
         /**
@@ -264,7 +288,7 @@
          * Assemble l'ensemble des jointures stockées de le tableau $join
          * @return string
          */
-        public function getJoin(): string{
+        private function getJoin(): string{
             return implode(' ', $this->join);
         }
 
@@ -308,9 +332,10 @@
                 $table = $this->getFrom();
                 $join = $this->getJoin();
                 $where = $this->getWhere();
+                $order = $this->getOrder();
                 //TODO Order
 
-                return "SELECT $select FROM $table $join $where";
+                return "SELECT $select FROM $table $join $where $order";
 
             } catch (Exception $e) {
                 echo 'Erreur buildQuery(): '.$e->getMessage();
@@ -359,6 +384,7 @@
 
             //echo __CLASS__.' | '.__FUNCTION__.'<br>';
             //$this->debug();
+            //die();
 
             $this->prepare();
 
