@@ -68,7 +68,7 @@
 
                 $profil->addValidation('nom',['alpha', 'require']);
                 $profil->addValidation('prenom',['alpha', 'require']);
-                $profil->addValidation('date_naissance',['alphaNumeric']);
+                $profil->addValidation('date_naissance',['date']);
 
                 $profil->setId($this->session['id']);
                 $profil->setNom($_POST['nom']);
@@ -89,6 +89,9 @@
                         return !is_null($var) && !is_object($var);
                     });
 
+                    // compare $data (issue de la bd) à l'object $profil transformé en array
+                    // si ils sont différents informe de la modification des données en bd
+                    // TODO faire cette vérification avant et ne pas faire l'update si ils sont identiques
                     $array_diff = array_diff($data,$profil_to_array);
                     if(!empty($array_diff)) MessageFlash::create('Identité modifié',$type = 'valide');
 

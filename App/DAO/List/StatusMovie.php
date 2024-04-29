@@ -45,16 +45,15 @@
             };
         }
 
-        public static function getUrl(string $status): string
+        public static function getUrl(int $id): string
         {
-            $status = strtoupper(str_replace(' ', '_', $status));
-            return match($status)
+            return match($id)
             {
-                'INDISPONIBLE' => 'Indisponible',
-                'EN_SALLE' => 'En-Salle',
-                'EN_STREAMING' => 'En-Streaming',
-                'PROCHAINEMENT_EN_SALLE' => 'Prochainement-En-Salle',
-                'PROCHAINEMENT_EN_STREAMING' => 'Prochainement-En-Streaming',
+                0 => 'Indisponible',
+                1 => 'En-Salle',
+                2 => 'En-Streaming',
+                3 => 'Prochainement-En-Salle',
+                4 => 'Prochainement-En-Streaming',
                 default => ''
             };
         }

@@ -30,8 +30,8 @@
                 </a>
             </h5>
             <ul class="card-text">
-                <li><?= $movie->cinema ?></li>
-                <li><?= $movie->ville ?></li>
+                <li><?= $movie->cinema->nom ?></li>
+                <li><?= $movie->cinema->ville->nom ?></li>
             </ul>
         </div>
     </div>

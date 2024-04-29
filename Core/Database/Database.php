@@ -231,11 +231,13 @@
          *
          * @return $this
          */
-        public function order(string $column, string $order = 'DESC'): self
+        public function order(array $orders, string $direction = 'DESC'): self
         {
-            $column = $this->convertToAliasColumn($column);
 
-            $this->order[] = "$column $order";
+            foreach ($orders as $order) {
+                $column = $this->convertToAliasColumn($order);
+                $this->order[] = "$column $direction";
+            }
             return $this;
         }
 

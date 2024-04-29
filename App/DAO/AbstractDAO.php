@@ -72,17 +72,37 @@
          * @param array|null $options
          * @return mixed|null
          */
-        public function findAll(array $options = null) {}
+        public function findAll(array $options = null) {
+            $select = $options['select'] ?? ['*'];
+            $req = $this->db->select(...$select)
+                ->from($this->table);
 
-        /**
-         * @param array $params
-         * @param array|null $options
-         * @return mixed
-         */
-        public function findAllBy(array $params, array $options = null): mixed
-        {
+            if(isset($options['contain'])) {
 
-            return [];
+                foreach ($options['contain'] as $relation => $condition) {
+                    $req->join($relation, 'LEFT', $condition);
+                }
+            }
+
+            if(isset($options['where'])) {
+                $where  = $options['where'];
+                $params = $options['params'];
+
+                foreach ($where as $k => $condition) {
+                    if($k === 0) {
+                        $req->where($condition);
+                    } else {
+                        $req->andWhere($condition);
+                    }
+                }
+
+                foreach ($params as $col => $val) {
+                    $req->setParameter($col,$val);
+                }
+
+            }
+            return $req->order($options['order'])
+                ->fetchall();
         }
 
         /**

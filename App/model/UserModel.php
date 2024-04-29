@@ -2,6 +2,7 @@
 
     namespace Cineflix\App\Model;
 
+    use Cineflix\App\DAO\List\Role;
     use Cineflix\Core\Util\Security;
 
     class UserModel extends AbstractModel
@@ -13,7 +14,8 @@
 
         public ?string $email = null;
         public string $token;
-        public int $admin = 0;
+
+        public int $role = Role::ADHERENT->value;
         public string $connect;
         public string $last_connect;
 
@@ -26,13 +28,62 @@
         {
             parent::__construct($data);
 
-            if(isset($data['email'])) $this->email = $data['email'];
-            if(isset($data['connect'])) $this->connect = $this->getDateFr($data['connect']);
-            if(isset($data['last_connect'])) $this->last_connect = $this->getDateFr($data['last_connect']);
-
-            if(isset($data['profil'])) $this->profil = new ProfilModel($data['profil']);
+            $this->hydrate($data);
         }
 
+        /**
+         * @param array|null $data
+         *
+         * @return void
+         */
+        public function hydrate(array $data = null)
+        {
+            parent::hydrate($data);
+
+            if(isset($data['role'])) {
+                $this->role = $data['role'];
+                unset($data['role']);
+            }
+
+            if(isset($data['email'])) {
+                $this->email = $data['email'];
+                unset($data['email']);
+            }
+            if(isset($data['connect'])) {
+                $this->connect = $this->getDateFr($data['connect']);
+                unset($data['connect']);
+            }
+            if(isset($data['last_connect'])) {
+                $this->last_connect = $this->getDateFr($data['last_connect']);
+                unset($data['last_connect']);
+            }
+
+            $profil = [];
+            if(!empty($data)) {
+                foreach ($data as $col => $val) {
+                    $parts = explode('_', $col);
+                    if($parts[0] === 'profil') {
+                        $profil[$parts[1]] = $val;
+                    }
+                }
+            }
+
+            if(!empty($profil)) $this->profil = new ProfilModel($profil);
+        }
+
+        public function setRole(int|string $role = Role::ADHERENT->value ): void
+        {
+            if(is_numeric($role)) {
+                $this->role = $role;
+            } else {
+                $this->role = Role::getRole($role);
+            }
+        }
+
+        public function getRole()
+        {
+            return $this->role;
+        }
         /**
          * @param string $email
          *
@@ -90,24 +141,6 @@
         public function addProfil(array $data = null): void
         {
             $this->profil = new ProfilModel($data);
-        }
-
-        /**
-         * @param array|null $data
-         *
-         * @return void
-         */
-        public function hydrate(array $data = null)
-        {
-            parent::hydrate($data);
-
-            if(isset($data['email'])) $this->email = $data['email'];
-            if(isset($data['created'])) $this->created = $this->getDateFr($data['created']);
-            if(isset($data['modified'])) $this->modified = $this->getDateFr($data['modified']);
-            if(isset($data['connect'])) $this->connect = $this->getDateFr($data['connect']);
-            if(isset($data['last_connect'])) $this->last_connect = $this->getDateFr($data['last_connect']);
-
-            if(isset($data['profil'])) $this->profil->hydrate($data['profil']);
         }
 
     }

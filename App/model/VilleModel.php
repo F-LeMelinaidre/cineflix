@@ -4,6 +4,10 @@ namespace Cineflix\App\Model;
 
 class VilleModel extends AbstractModel
 {
-    public int $id;
-    public string $nom;
+    public function __construct(?array $data = null)
+    {
+        parent::__construct($data);
+
+    }
+
 }
