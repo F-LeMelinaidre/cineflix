@@ -2,6 +2,7 @@
 
     namespace Cineflix\App\Model;
 
+    use Cineflix\App\DAO\List\Role;
     use Cineflix\Core\Util\Security;
 
     class UserModel extends AbstractModel
@@ -13,7 +14,8 @@
 
         public ?string $email = null;
         public string $token;
-        public int $admin = 0;
+
+        public int $role = Role::ADHERENT->value;
         public string $connect;
         public string $last_connect;
 
@@ -37,6 +39,11 @@
         public function hydrate(array $data = null)
         {
             parent::hydrate($data);
+
+            if(isset($data['role'])) {
+                $this->role = $data['role'];
+                unset($data['role']);
+            }
 
             if(isset($data['email'])) {
                 $this->email = $data['email'];
@@ -64,6 +71,19 @@
             if(!empty($profil)) $this->profil = new ProfilModel($profil);
         }
 
+        public function setRole(int|string $role = Role::ADHERENT->value ): void
+        {
+            if(is_numeric($role)) {
+                $this->role = $role;
+            } else {
+                $this->role = Role::getRole($role);
+            }
+        }
+
+        public function getRole()
+        {
+            return $this->role;
+        }
         /**
          * @param string $email
          *

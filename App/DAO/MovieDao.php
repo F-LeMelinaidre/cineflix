@@ -2,6 +2,7 @@
 
     namespace Cineflix\App\DAO;
 
+    use Cineflix\App\DAO\List\StatusMovie;
     use Cineflix\App\Model\MovieModel;
 
     class MovieDao extends AbstractDAO
@@ -10,12 +11,7 @@
         public function findAll(array $options = null)
         {
 
-            $result = $this->db->select('movie.*','cinema.nom', 'ville.id', 'ville.nom')
-                ->from($this->table)
-                ->join('cinema','LEFT','cinema.id = movie.cinema_id')
-                ->join('ville', 'LEFT', 'ville.id = cinema.ville_id')
-                ->order('movie.modified')
-                ->fetchall();
+            $result = parent::findAll($options);
 
             //$keys = ['cinema','ville'];
             foreach($result as $k => $movie) {
@@ -73,20 +69,6 @@
         }*/
 
         /**
-         * @param string $status
-         * @param array|null $options
-         * @return array
-         */
-        public function findAllByStatus(string $status, array $options = null): array
-        {
-
-
-            return [];
-
-            //return parent::findAllBy($params,$options);
-        }
-
-        /**
          * @param string $item
          * @param mixed $value
          * @return mixed|null
@@ -122,6 +104,46 @@
          */
         public function create(object $movie): void
         {
+            try {
+
+                $this->db->beginTransaction();
+
+                $user_data = [
+                    'email'     => $user->email,
+                    'password_hash'  => $user->password_hash,
+                ];
+
+
+                $this->db->insert($this->table,$user_data);
+
+                /*if($movie->status === StatusMovie::EN_SALLE) {
+
+                    $this->last_id = $this->db->getLastInsertId();
+
+                    $profil_data = [
+                        'user_id'   => $this->last_id,
+                        'nom'       => $user->profil->nom,
+                        'prenom'    => $user->profil->prenom
+                    ];
+
+                    $this->db->insert('profil' ,$profil_data);
+
+                }*/
+
+
+                $this->db->commit();
+
+                $result = true;
+
+            } catch (\PDOException $e) {
+                $result = false;
+
+                $this->db->rollback();
+
+                echo "PDOException: " . $e->getMessage();
+            }
+
+            return $result;
 
             var_dump($movie);
             die();

@@ -6,7 +6,7 @@
         ?>
 
         <?php foreach($buttons as $id => $url): ?>
-            <?php if ($status_id === $id || is_null($status_id)) { ?>
+            <?php if ($id == $status_id || is_null($status_id)) { ?>
 
             <a href="<?= $url ?>" class="me-2 btn btn-sm btn-warning"><?php echo \Cineflix\App\DAO\List\StatusMovie::toString($id); ?></a>
 

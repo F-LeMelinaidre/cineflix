@@ -3,6 +3,7 @@
     // mp major rRTxrTTMhLkQf4W!?
     namespace Cineflix\App\Controller;
 
+    use Cineflix\App\DAO\List\Role;
     use Cineflix\App\DAO\ProfilDao;
     use Cineflix\App\DAO\UserDao;
     use Cineflix\App\model\ProfilModel;
@@ -36,8 +37,12 @@
          */
         public function signin(): string
         {
-            $errors = [];
+            if(AuthConnect::isConnected()) {
+                header('Location: /');
+                exit();
+            }
 
+            $errors = [];
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $user = new UserModel();
@@ -53,7 +58,7 @@
                     $user->setPassword('');
 
                     $data = $this->userDao->findOneBy('email',$user->email, [
-                        'select' => ['user.id','profil.nom','profil.prenom','profil.point'],
+                        'select' => ['user.id', 'user.role','profil.nom','profil.prenom','profil.point'],
                         'contain' => ['profil' => 'user.id = profil.user_id']
                     ]);
 
@@ -64,6 +69,7 @@
                         'nom'    => $user->profil->nom,
                         'prenom' => $user->profil->prenom,
                         'point'  => $user->profil->point,
+                        'role'   => $user->getRole(),
                     ]);
 
                     MessageFlash::create('Connecté',$type = 'valide');
@@ -86,11 +92,18 @@
          */
         public function signup(): string
         {
+
+            if(AuthConnect::isConnected()) {
+                header('Location: /');
+                exit();
+            }
+
             $user = new UserModel();
             $user->addProfil();
 
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $user->setRole(Role::ADHERENT->value);
                 $user->setEmail($_POST['email']);
                 $user->setPassword($_POST['password']);
                 $user->setPasswordConfirm($_POST['password_confirm']);
@@ -118,6 +131,7 @@
                         'nom'    => $user->profil->nom,
                         'prenom' => $user->profil->prenom,
                         'point'  => $user->profil->point,
+                        'role'   => $user->getRole(),
                     ]);
 
                     MessageFlash::create('Merci de compléter votre profil', $type = 'valide');

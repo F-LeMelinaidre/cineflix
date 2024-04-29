@@ -6,7 +6,7 @@
     class MovieModel extends AbstractModel
     {
 
-        private int $status = 0;
+        public int $status = 0;
 
         public ?string $synopsis;
         public ?string $affiche;
@@ -44,15 +44,18 @@
             }
 
             $cinema = [];
-            foreach ($data as $col => $val) {
-                $parts = explode('_', $col);
-                if($parts[0] === 'cinema') {
-                    $cinema[$parts[1]] = $val;
-                } else {
-                    $cinema[$col] = $val;
+            if(!empty($data)) {
+                foreach ($data as $col => $val) {
+                    $parts = explode('_', $col);
+                    if($parts[0] === 'cinema') {
+                        $cinema[$parts[1]] = $val;
+                    } else {
+                        $cinema[$col] = $val;
+                    }
                 }
             }
             if(!empty($cinema)) $this->cinema = new CinemaModel($cinema);
+
         }
 
         public function setName(string $nom): void
@@ -73,6 +76,11 @@
         public function setSynopsis(string $synopsis): void
         {
             $this->synopsis = $synopsis;
+        }
+
+        public function setAffiche(string $affiche): void
+        {
+
         }
 
 

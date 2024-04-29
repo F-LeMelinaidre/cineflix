@@ -2,17 +2,19 @@
     <h1><?= $title ?></h1>
 </header>
 <section>
-  
+
     <form class="film" action="<?= $url ?>" method="post">
         <div class="form-message hidden"></div>
         <h2 class="titre">Information du film</h2>
-  
+
         <label class="form-label" for="InputNom">Nom</label>
         <input id="InputNom" class="form-control" type="text" name="nom" value="" aria-required="true">
         <div id="MoviesList"></div>
 
         <label class="form-label" for="InputDateSortie">Date de sortie</label>
         <input id="InputDateSortie" class="form-control" type="date" name="date_sortie" value="" aria-required="true">
+
+        <?php if($movie->status === \Cineflix\App\DAO\List\StatusMovie::EN_SALLE->value): ?>
 
         <label class="form-label" for="InputCinema">Cinema</label>
         <input id="InputCinema" class="form-select" type="text" name="cinema" value=""
@@ -25,6 +27,8 @@
         <input id="InputDateDebut" class="form-control" type="date" name="exploitation_debut" value="" aria-required="true">
         <label class="form-label" for="InputDateFin">Fin</label>
         <input id="InputDateFin" class="form-control" type="date" name="exploitation_fin" value="" aria-required="true">
+
+        <?php endif; ?>
 
         <label class="form-label" for="TextareaSynopsis">Synopsis</label>
         <textarea id="TextareaSynopsis" class="form-control" name="synopsis" cols="30" rows="5" aria-required="true"></textarea>

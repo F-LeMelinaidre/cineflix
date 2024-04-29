@@ -95,5 +95,12 @@
 </main>
 
 <footer class="m-0 mt-auto p-0 border-top border-light-subtle bg-dark-subtle">
-    <?= $footer ?><p>accès à <a href="<?= self::$_Router->getUrl("admin_home_index") ?>">Admin</a> en attendant la page de connexion</p>
+    <?= $footer ?> <?php if(isset($_SESSION[\Cineflix\App\AppController::APP_NAME]) && $_SESSION[\Cineflix\App\AppController::APP_NAME]['role'] >
+        \Cineflix\App\DAO\List\Role::ADHERENT->value)
+        : ?>
+        <p>accès
+        à <a
+                href="<?= self::$_Router->getUrl
+            ("admin_home_index")
+        ?>">Admin</a></p> <?php endif; ?>
 </footer>

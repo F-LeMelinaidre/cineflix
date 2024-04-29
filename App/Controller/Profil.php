@@ -68,7 +68,7 @@
 
                 $profil->addValidation('nom',['alpha', 'require']);
                 $profil->addValidation('prenom',['alpha', 'require']);
-                $profil->addValidation('date_naissance',['alphaNumeric']);
+                $profil->addValidation('date_naissance',['date']);
 
                 $profil->setId($this->session['id']);
                 $profil->setNom($_POST['nom']);
