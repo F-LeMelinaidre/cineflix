@@ -106,15 +106,11 @@
         {
             try {
 
-                $this->db->beginTransaction();
-
-                $user_data = [
-                    'email'     => $user->email,
-                    'password_hash'  => $user->password_hash,
-                ];
+                //$this->db->beginTransaction();
 
 
-                $this->db->insert($this->table,$user_data);
+
+                //$this->db->insert($this->table,$user_data);
 
                 /*if($movie->status === StatusMovie::EN_SALLE) {
 
@@ -131,22 +127,22 @@
                 }*/
 
 
-                $this->db->commit();
+                //$this->db->commit();
 
                 $result = true;
 
             } catch (\PDOException $e) {
                 $result = false;
 
-                $this->db->rollback();
+                //$this->db->rollback();
 
                 echo "PDOException: " . $e->getMessage();
             }
+            /*var_dump($movie);
+            die();*/
 
-            return $result;
+            //return $result;
 
-            var_dump($movie);
-            die();
         }
 
     }
