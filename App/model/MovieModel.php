@@ -2,6 +2,7 @@
 
     namespace Cineflix\App\Model;
 
+    use Normalizer;
 
     class MovieModel extends AbstractModel
     {
@@ -12,7 +13,7 @@
         public ?string $affiche;
         public ?string $date_sortie;
         public ?CinemaModel $cinema = null;
-        public ?string $slug;
+        private string $slug = '';
 
 
         /**
@@ -58,10 +59,11 @@
 
         }
 
-        public function setName(string $nom): void
+        public function setNom(string $nom): void
         {
             parent::setNom($nom);
-            $this->slug = str_replace([' ',"'"],'-',$this->nom);
+
+            $this->setSlug($nom);
         }
 
         /**
@@ -81,6 +83,27 @@
         public function setAffiche(string $affiche): void
         {
 
+        }
+
+        public function setSlug(string $slug): void
+        {
+            // remplace les caratère accentué par leur equivalant non accentué
+            // Activer l'extention intl de PHP
+            // Parametrer la lib dans composer.json "ext-intl": "*"
+            $normalized =  Normalizer::normalize($slug, Normalizer::FORM_D);
+            $slug = preg_replace('/\p{Mn}/u', '', $normalized);
+            // Remplace les caratère spéciaux par un -
+            $slug = preg_replace('/[^\p{L}\p{N}]/u', '-', $slug);
+            // supprime les doubles --
+            $slug = preg_replace('/-{2,}/', '-', $slug);
+            // supprime les - en debut et fin de chaine
+            $slug = trim($slug, '-');
+            $this->slug = str_replace(' ', '-', ucfirst($slug));
+        }
+
+        public function getSlug(): string
+        {
+            return $this->slug;
         }
 
 

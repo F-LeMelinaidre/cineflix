@@ -10,6 +10,7 @@
     use Cineflix\Core\AbstractController;
     use Cineflix\Core\Router\Router;
     use Cineflix\Core\Util\AuthConnect;
+    use Normalizer;
 
     class Movie extends AbstractController
     {
@@ -90,7 +91,7 @@
                 //$movie->addValidation('affiche',['file', 'require']);
 
                 if($this->movieDao->create($movie)) {
-                    echo 'ok';
+
                 }
 
             }
