@@ -13,6 +13,7 @@
         public ?string $affiche;
         public ?string $date_sortie;
         public ?CinemaModel $cinema = null;
+        public ?ExploitationModel $exploitation = null;
         private string $slug = '';
 
 
@@ -44,19 +45,32 @@
                 unset($data['slug']);
             }
 
-            $cinema = [];
+
             if(!empty($data)) {
-                foreach ($data as $col => $val) {
-                    $parts = explode('_', $col);
-                    if($parts[0] === 'cinema') {
-                        $cinema[$parts[1]] = $val;
-                    } else {
-                        $cinema[$col] = $val;
+                // les cle doivent etre configurer pour faire en sorte qu'elles
+                // coincide avec les relations de tables
+                // cinema => ville  =  cinema_ville
+                // * la methode select() class Database ajoute par defaut AS "table_colonne" pour les
+                // jointure de premier niveau
+                // si la table liée est elle même jointe ajouter manuellement dans le select
+                // exemple AS cinema_ville_"nom de la colonne"
+                $prefix_list = ['cinema', 'exploitation'];
+                foreach ($data as $key => $val) {
+
+                    foreach ($prefix_list as $prefix) {
+
+                        if (strpos($key, $prefix . '_') === 0) {
+
+                            $unprefixed_key = substr($key, strlen($prefix) + 1);
+
+                            $data[$prefix][$unprefixed_key] = $val;
+                            unset($data[$key]);
+                        }
                     }
                 }
             }
-            if(!empty($cinema)) $this->cinema = new CinemaModel($cinema);
-
+            if(isset($data['cinema'])) $this->cinema = new CinemaModel($data['cinema']);
+            if(isset($data['exploitation'])) $this->exploitation = new ExploitationModel($data['exploitation']);
         }
 
         public function setNom(string $nom): void

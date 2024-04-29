@@ -15,7 +15,7 @@ class User extends AbstractController
     {
         parent::__construct();
 
-        if(!AuthConnect::isConnected() || AuthConnect::getSession()['role'] < Role::SUPER_ADMINISTRATEUR->value) {
+        if(!AuthConnect::isConnected() || AuthConnect::getSession()['role'] < Role::SUPER_ADMINISTRATEUR) {
             header('Location: /');
             exit();
         }

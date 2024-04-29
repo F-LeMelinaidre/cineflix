@@ -13,7 +13,6 @@
 
             $result = parent::findAll($options);
 
-            //$keys = ['cinema','ville'];
             foreach($result as $k => $movie) {
                 $result[$k] = new MovieModel($movie);
             }

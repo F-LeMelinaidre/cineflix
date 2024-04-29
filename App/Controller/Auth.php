@@ -152,10 +152,6 @@
          */
         public function finalizeSignup(): string
         {
-            if(!AuthConnect::isConnected()) {
-                header('Location: /');
-                exit();
-            }
 
             $this->session = AuthConnect::getSession();
             $profil = new ProfilModel();

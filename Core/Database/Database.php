@@ -78,6 +78,12 @@
         /**
          * @param string ...$selects
          * mettre un alias des lors que l'on fait une requete avec jointure table.colonne
+         *
+         * la methode getSelect() ajoute par defaut AS "table_colonne" pour les
+         * jointures de premier niveau
+         * si la table liée est elle même jointe de nouveau, ajouter manuellement le AS dans le select
+         * exemple AS cinema_ville_"nom de la colonne"
+         *
          * @return self
          */
         public function select(string ...$selects): self
@@ -104,7 +110,7 @@
 
                     // si l'alias récupéré est différent du nom de la table,
                     // on renomme la référence de la colonne
-                    if($alias !== $this->table && $column !== '*') {
+                    if($alias !== $this->table && $column !== '*' && !strpos($column, "AS")) {
                         $select = $select.' AS '.$alias.'_'.$column;
                     }
 
@@ -444,6 +450,7 @@
 
                 //echo __CLASS__.' | '.__FUNCTION__.'<br>';
                 //$this->debug();
+                //die();
 
                 $this->prepare();
 

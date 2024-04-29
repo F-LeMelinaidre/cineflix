@@ -44,16 +44,17 @@
             }
 
             $options = [
-                'select'  => ['movie.*','cinema.nom','ville.nom'],
+                'select'  => ['movie.*','cinema.nom','ville.nom AS cinema_ville_nom','exploitation.debut','exploitation.fin'],
                 'contain' => [
                     'cinema' => 'cinema.id = movie.cinema_id',
-                    'ville'  => 'ville.id = cinema.ville_id'],
+                    'ville'  => 'ville.id = cinema.ville_id',
+                    'exploitation' => 'exploitation.movie_id = movie.id'],
                 'order'  => ['movie.modified']
             ];
 
             if(!is_null($status)) {
                 $options['where']  = ['status = :status'];
-                $options['params'] = ['status' => $status];
+                $options['params'] = ['status' => $status_id];
             }
 
             $movies = $this->movieDao->findAll($options);

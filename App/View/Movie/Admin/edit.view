@@ -14,7 +14,7 @@
         <label class="form-label" for="InputDateSortie">Date de sortie</label>
         <input id="InputDateSortie" class="form-control" type="date" name="date_sortie" value="" aria-required="true">
 
-        <?php if($movie->status === \Cineflix\App\DAO\List\StatusMovie::EN_SALLE->value): ?>
+        <?php if($movie->status === \Cineflix\App\DAO\List\StatusMovie::EN_SALLE): ?>
 
         <label class="form-label" for="InputCinema">Cinema</label>
         <input id="InputCinema" class="form-select" type="text" name="cinema" value=""
