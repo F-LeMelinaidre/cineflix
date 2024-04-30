@@ -416,6 +416,7 @@
 
                 //echo __CLASS__.' | '.__FUNCTION__.'<br>';
                 //$this->debug();
+                //die();
 
                 $this->prepare();
 

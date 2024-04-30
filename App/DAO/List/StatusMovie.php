@@ -45,7 +45,7 @@
             };
         }
 
-        public static function getUrl(int $id): string
+        public static function getUrlById(int $id): string
         {
             return match($id)
             {
@@ -55,6 +55,19 @@
                 3 => 'Prochainement-En-Salle',
                 4 => 'Prochainement-En-Streaming',
                 default => ''
+            };
+        }
+
+        public static function getUrlByName(self $const): string
+        {
+            return match($const)
+            {
+                self::INDISPONIBLE => 'Indisponible',
+                self::EN_SALLE => 'En-Salle',
+                self::EN_STREAMING => 'En-Streaming',
+                self::PROCHAINEMENT_EN_SALLE => 'Prochainement-En-Salle',
+                self::PROCHAINEMENT_EN_STREAMING => 'Prochainement-En-Streaming',
+                default => 'En-Salle'
             };
         }
         public static function getUrlArray(): array

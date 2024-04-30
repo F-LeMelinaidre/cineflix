@@ -13,7 +13,7 @@ class Streaming extends AbstractController
     {
         parent::__construct();
         if(!AuthConnect::isConnected()) {
-            header('Location: /');
+            header('Location: /Signin');
             exit();
         }
     }

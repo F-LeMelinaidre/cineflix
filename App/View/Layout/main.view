@@ -56,15 +56,26 @@
             <?php if (\Cineflix\Core\Util\AuthConnect::isConnected()): ?>
                 <ul class="navbar-nav align-items-center">
                     <li class="nav-item">
-                        <a href="<?= self::$_Router->getUrl("/") ?>" class="nav-link">
+                        <a href="<?= self::$_Router->getUrl("movie_index",['status' => \Cineflix\App\DAO\List\StatusMovie::getUrlByName(\Cineflix\App\DAO\List\StatusMovie::EN_SALLE)]) ?>" class="nav-link">
                             Film en salle
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="<?= self::$_Router->getUrl("streaming_index") ?>" class="nav-link">
+                        <a href="<?= self::$_Router->getUrl("movie_index",['status' => \Cineflix\App\DAO\List\StatusMovie::getUrlByName(\Cineflix\App\DAO\List\StatusMovie::EN_STREAMING)]) ?>" class="nav-link">
                             Streaming
                         </a>
                     </li>
+
+                    <?php if($_SESSION[\Cineflix\App\AppController::APP_NAME]['role'] >= \Cineflix\App\DAO\List\Role::ADMINISTRATEUR->value): ?>
+
+                    <li>
+                        <a href="<?= self::$_Router->getUrl("admin_home_index") ?>" class="nav-link">
+                            Administration
+                        </a>
+                    </li>
+
+                    <?php endif; ?>
+
                     <li class="nav-item">
                         <a href="<?= self::$_Router->getUrl("profil_show") ?>" class="nav-link">
                             Mon compte
@@ -95,12 +106,5 @@
 </main>
 
 <footer class="m-0 mt-auto p-0 border-top border-light-subtle bg-dark-subtle">
-    <?= $footer ?> <?php if(isset($_SESSION[\Cineflix\App\AppController::APP_NAME]) && $_SESSION[\Cineflix\App\AppController::APP_NAME]['role'] >
-        \Cineflix\App\DAO\List\Role::ADHERENT->value)
-        : ?>
-        <p>accès
-        à <a
-                href="<?= self::$_Router->getUrl
-            ("admin_home_index")
-        ?>">Admin</a></p> <?php endif; ?>
+    <?= $footer ?>
 </footer>

@@ -68,14 +68,12 @@
 
             self::$_Router->get('signout', '/Signout', [Controller\Auth::class, 'signout']);
 
-            self::$_Router->get('movie_index', '/Movie', [ Controller\Movie::class, 'index']);
+            self::$_Router->get('movie_index', '/Film-{status}', [ Controller\Movie::class, 'index'],
+                ['status' => '[A-Z-]+']);
             self::$_Router->get('movie_show', '/Movie/{slug}', [ Controller\Movie::class, 'show'],
                 ['slug' => '[A-Z_]+']);
 
-            self::$_Router->get('streaming_index', '/Streaming', [Controller\Streaming::class, 'index']);
-            self::$_Router->get('streaming_show', '/Streaming/{slug}', [Controller\Streaming::class, 'show'],
-                ['slug' => '[A-Z_]+']);
-
+            //Profil
             self::$_Router->get('profil_show', '/Profil', [ Controller\Profil::class, 'show']);
             self::$_Router->get('profil_edit_identite', '/Profil/Edit/Identite', [ Controller\Profil::class, 'editIdentite']);
             self::$_Router->get('profil_edit_adresse', '/Profil/Edit/Adresse', [ Controller\Profil::class, 'editAdresse']);

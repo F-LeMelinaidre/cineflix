@@ -14,6 +14,7 @@
     <aside>
 
         <nav class="main-menu">
+            <div><a href="<?= self::$_Router->getUrl("/") ?>">Retour au site</a></div>
             <h2>Les Films</h2>
             <ul>
 

@@ -37,10 +37,6 @@
          */
         public function signin(): string
         {
-            if(AuthConnect::isConnected()) {
-                header('Location: /');
-                exit();
-            }
 
             $errors = [];
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {

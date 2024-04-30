@@ -2,6 +2,7 @@
 
     namespace Cineflix\App\Controller;
 
+    use Cineflix\App\DAO\List\StatusMovie;
     use Cineflix\App\DAO\MovieDao;
     use Cineflix\App\DAO\SeanceDao;
     use Cineflix\Core\AbstractController;
@@ -9,12 +10,25 @@
     class Movie extends AbstractController
     {
 
-        public function index(): string
+        public function index(?string $status = null): string
         {
-            $movieDao = new MovieDao();
-            $movies = $movieDao->findAllMovie();
-            return $this->render('Movie.index', compact('movies'));
+            $status_id = StatusMovie::getStatus($status);
 
+            $movieDao = new MovieDao();
+
+            $options = [
+                'select'  => ['movie.*','cinema.nom','ville.nom AS cinema_ville_nom'],
+                'where'  => ['status = :status'],
+                'params' => ['status' => $status_id],
+                'contain' => [
+                    'cinema' => 'cinema.id = movie.cinema_id',
+                    'ville'  => 'ville.id = cinema.ville_id'],
+                'order'  => ['movie.modified']
+            ];
+
+            $movies = $movieDao->findAll($options);
+
+            return $this->render('Movie.index',compact('movies', 'status_id'));
         }
 
         public function show(string $slug): string

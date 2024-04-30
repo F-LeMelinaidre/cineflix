@@ -23,7 +23,7 @@
             parent::__construct();
 
             if(!AuthConnect::isConnected() || AuthConnect::getSession()['role'] < Role::ADMINISTRATEUR->value) {
-                header('Location: /');
+                header('Location: /Signin');
                 exit();
             }
             $this->movieDao = new $this->dao();
@@ -36,11 +36,11 @@
 
             if($status_id !== StatusMovie::EN_SALLE->value || !is_null($status_id)){
                 $id = StatusMovie::EN_SALLE->value;
-                $buttons[StatusMovie::EN_SALLE->value] = self::$_Router->getUrl('admin_movie_add', [ 'status' => StatusMovie::getUrl($id) ]);
+                $buttons[StatusMovie::EN_SALLE->value] = self::$_Router->getUrl('admin_movie_add', [ 'status' => StatusMovie::getUrlById($id) ]);
             }
             if($status_id !== StatusMovie::EN_STREAMING->value || !is_null($status_id)) {
                 $id = StatusMovie::EN_STREAMING->value;
-                $buttons[StatusMovie::EN_STREAMING->value] = self::$_Router->getUrl('admin_movie_add',['status' => StatusMovie::getUrl($id)]);
+                $buttons[StatusMovie::EN_STREAMING->value] = self::$_Router->getUrl('admin_movie_add',['status' => StatusMovie::getUrlById($id)]);
             }
 
             $options = [
@@ -83,27 +83,30 @@
 
                 //$movie->setCinemaId(intval($_POST['cinema_id']));
 
-                //$movie->addValidation('nom',['alphaNumeric', 'require']);
-                //$movie->addValidation('date_sortie',['date', 'require']);
-                //$movie->addValidation('synopsis',['require']);
-                //$movie->addValidation('cinema_id',['numeric', 'require']);
-                //$movie->addValidation('exploitation_debut',['alphaNumeric', 'require']);
-                //$movie->addValidation('exploitation_fin',['alphaNumeric', 'require']);
-                //$movie->addValidation('affiche',['file', 'require']);
+                $movie->addValidation('nom',['alphaNumeric', 'require']);
+                $movie->addValidation('date_sortie',['date', 'require']);
+                $movie->addValidation('synopsis',['require']);
+                $movie->addValidation('cinema_id',['numeric', 'require']);
+                $movie->addValidation('exploitation_debut',['alphaNumeric', 'require']);
+                $movie->addValidation('exploitation_fin',['alphaNumeric', 'require']);
+                $movie->addValidation('affiche',['file', 'require']);
 
-                if($this->movieDao->create($movie)) {
+                if($movie->isValid() && $this->movieDao->create($movie)) {
 
                 }
 
             }
 
             $errors = $movie->getErrors();
+            var_dump($errors);
+            var_dump($movie);
+            die();
 
             $title = (!isset($id))? "Ajouter un film ".StatusMovie::toString($movie->status) : "Editer: ".ucwords($movie->nom);
 
             $url = self::$_Router->getUrl('admin_movie_add',['status' => $status]);
 
-            return $this->render('Movie.admin.edit',compact('title', 'movie', 'url'));
+            return $this->render('Movie.admin.edit',compact('title', 'movie', 'url', 'errors'));
         }
 
         public function delete()

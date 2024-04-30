@@ -17,7 +17,7 @@ class Cinema extends AbstractController
         parent::__construct();
 
         if(!AuthConnect::isConnected() || AuthConnect::getSession()['role'] < Role::SUPER_ADMINISTRATEUR) {
-            header('Location: /');
+            header('Location: /Signin');
             exit();
         }
     }

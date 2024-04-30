@@ -17,7 +17,7 @@ class Home extends AbstractController
         parent::__construct();
 
         if(!AuthConnect::isConnected() || AuthConnect::getSession()['role'] < Role::ADMINISTRATEUR->value) {
-            header('Location: /');
+            header('Location: /Signin');
             exit();
         }
     }

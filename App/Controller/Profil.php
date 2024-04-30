@@ -38,6 +38,7 @@
          */
         public function show()
         {
+            echo $this->session['role'];
 
             $data = $this->profilDao->findOneBy('user_id', $this->session['id'],[
                 'select'    => ['profil.*', 'user.email'],

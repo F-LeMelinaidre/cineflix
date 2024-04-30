@@ -15,7 +15,7 @@
         public ?string $email = null;
         public string $token;
 
-        public int $role = Role::ADHERENT->value;
+        private int $role = Role::ADHERENT->value;
         public string $connect;
         public string $last_connect;
 
