@@ -9,6 +9,8 @@ abstract class AbstractController
 
 {
 
+    private array $js_lib = [];
+
     protected static Router $_Router;
     protected string $dao;
     protected string $layout = 'main';
@@ -51,7 +53,10 @@ abstract class AbstractController
         // par le contenu du fichier  $contentView précédemment récupéré
         $layout = str_replace('{{content}}', $contentView, $layout);
 
-        // Enclenche la temporisation de sortie, quand elle est activé aucune sortie n'est effectué.
+        // Declaration de la variable $js_block pour l'ajout des scripts js
+        if(!empty($this->js_lib)) $js_block = $this->js_lib;
+
+            // Enclenche la temporisation de sortie, quand elle est activé aucune sortie n'est effectué.
         // Stock en memoire le code du fichier appeler par include_once
         // Ce fichier est la base de la page, du code HTML
         ob_start();
@@ -97,5 +102,33 @@ abstract class AbstractController
         extract($data);
         include_once $this->path_view.str_replace('.', '/', $view).".view";
         return ob_get_clean();
+    }
+
+    /**
+     * @param ...$scripts
+     * Formatage de la chaine et ajout du chemin du fichier ou lien js
+     * à la lib $js
+     * @return void
+     */
+    protected function addJavascript(...$scripts): void
+    {
+        foreach ($scripts as $script) {
+            $js = '';
+
+            if(is_string($script)) {
+
+                if(str_starts_with($script,'https')) {
+                    $js = $script;
+                } else {
+
+                    if(!str_starts_with($script,'/public/js/')) $js = '../../public/js/'.$script;
+                    if(!str_ends_with($script,'.js')) $js = $js.'.js';
+                }
+
+                if(!empty($js)) array_push($this->js_lib,$js);
+
+            }
+
+        }
     }
 }

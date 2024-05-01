@@ -104,6 +104,7 @@ main header h1 {
 }
 
 
+
 /* ---------------------- *\
           Profil
 \* ---------------------- */
@@ -319,9 +320,7 @@ select,
 button {
     margin-bottom: 0.8rem;
 }
-.test datalist {
-    background-color: #0a3622;
-}
+
 textarea {
     resize: none;
 }
@@ -341,6 +340,17 @@ button {
     grid-row-gap: 0.2rem;
     grid-column-gap: 0.8rem;
 }
+#AdminContent #ThumbAffiche img {
+    display: block;
+    margin: auto;
+}
+#AdminContent .en-salle #ThumbAffiche img {
+
+}
+#AdminContent .streaming #ThumbAffiche img {
+    max-width: 240px;
+    width: 100%;
+}
 
 /* --- ADMIN MOVIE --- */
 #AdminContent .film label:first-of-type {
@@ -353,10 +363,10 @@ button {
 #AdminContent .film .exploitation {
     grid-row: 1;
 }
-#AdminContent label[for="SelectCinema"] {
+#AdminContent label[for="InputCinema"] {
     grid-row: 2;
 }
-#AdminContent #SelectCinema {
+#AdminContent #InputCinema {
     grid-row: 3;
 }
 #AdminContent label[for="InputDateSortie"],
@@ -374,8 +384,11 @@ button {
     grid-row: 6;
 }
 #AdminContent #TextareaSynopsis,
-#AdminContent #ThumbAffiche {
+#AdminContent .en-salle #ThumbAffiche {
     grid-row: 7/9;
+}
+#AdminContent .streaming #ThumbAffiche {
+    grid-row: 3/11;
 }
 #AdminContent label[for="InputAffiche"] {
     grid-row: 10;
@@ -394,7 +407,7 @@ button {
 }
 #AdminContent .film .exploitation,
 #AdminContent label[for="SelectCinema"],
-#AdminContent #SelectCinema {
+#AdminContent #InputCinema {
     grid-column: 5/7;
 }
 #AdminContent label[for="InputDateSortie"],

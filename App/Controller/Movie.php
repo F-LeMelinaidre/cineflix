@@ -9,12 +9,17 @@
 
     class Movie extends AbstractController
     {
+        protected MovieDao $movieDao;
+        public function __construct()
+        {
+            parent::__construct();
+
+            $this->movieDao = new $this->dao();
+        }
 
         public function index(?string $status = null): string
         {
             $status_id = StatusMovie::getStatus($status);
-
-            $movieDao = new MovieDao();
 
             $options = [
                 'select'  => ['movie.*','cinema.nom','ville.nom AS cinema_ville_nom'],
@@ -26,7 +31,7 @@
                 'order'  => ['movie.modified']
             ];
 
-            $movies = $movieDao->findAll($options);
+            $movies = $this->movieDao->findAll($options);
 
             return $this->render('Movie.index',compact('movies', 'status_id'));
         }
@@ -54,6 +59,40 @@
             $seances = [];
 
             return $this->render('Movie.show', compact('movie', 'seances'));
+        }
+
+        /**
+         * @param string $ajax
+         *
+         * @return void
+         */
+        public function movieSearch(string $ajax): void
+        {
+            //supprime le 1er caratère => ?
+            $ajax = substr($ajax,1);
+
+            $parts = explode('=', $ajax);
+            $params = array(
+                'col' => $parts[0],
+                'val' => $parts[1]
+            );
+
+            $options = [
+                'select' => ['movie.*','cinema.nom','exploitation.debut','exploitation.fin','ville.nom AS cinema_ville_nom'],
+                'where'  => ['m.'.$params['col'].' LIKE :'.$params['col']],
+                'params' => [$params['col'] => '%'.$params['val'].'%'],
+                'contain' => [
+                    'cinema' => 'cinema.id = movie.cinema_id',
+                    'exploitation' => 'exploitation.movie_id = movie.id',
+                    'ville'  => 'ville.id = cinema.ville_id']
+            ];
+
+            $movies = $this->movieDao->findAll($options);
+            // Convertir le tableau PHP en format JSON
+            $jsonData = json_encode($movies, JSON_PRETTY_PRINT);
+
+            // Afficher le JSON
+            echo $jsonData;
         }
 
     }

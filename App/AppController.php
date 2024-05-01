@@ -3,6 +3,7 @@
     namespace Cineflix\App;
 
 
+    use Cineflix\App\Controller\Movie;
     use Cineflix\App\Model\UserModel;
     use Cineflix\Core\Database\Database;
     use Cineflix\Core\Router\RouteNotFoundException;
@@ -127,7 +128,7 @@
 
             //Requete Ajax
             self::$_Router->post('ajax_cinemaSearch', '/Ajax/cinemaSearch', [ Ajax\AjaxRequest::class, 'cinemaSearch']);
-            self::$_Router->post('ajax_filmSearch', '/Ajax/filmSearch', [ Ajax\AjaxRequest::class, 'filmSearch']);
+            self::$_Router->ajax('ajax_filmSearch', '/Ajax/movieSearch', [ Controller\Movie::class, 'movieSearch']);
 
 
             try {
@@ -147,8 +148,8 @@
                 // index 0: la Class
                 // index 1: la methode
                 // $params est un tableau des paramètres passés à la méthode de la Class $callback
+                // exemple un parametre d'url
                 // return vers public/index.view
-
                 return call_user_func_array($callback, $params);
 
 

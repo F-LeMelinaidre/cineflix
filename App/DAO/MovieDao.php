@@ -12,7 +12,6 @@
         {
 
             $result = parent::findAll($options);
-
             foreach($result as $k => $movie) {
                 $result[$k] = new MovieModel($movie);
             }

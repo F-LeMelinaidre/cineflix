@@ -12,9 +12,8 @@
     use Cineflix\Core\Util\AuthConnect;
     use Normalizer;
 
-    class Movie extends AbstractController
+    class Movie extends \Cineflix\App\Controller\Movie
     {
-        private MovieDao $movieDao;
 
         protected string $layout = 'admin';
 
@@ -26,7 +25,7 @@
                 header('Location: /Signin');
                 exit();
             }
-            $this->movieDao = new $this->dao();
+
         }
 
         public function index(?string $status = null): string
@@ -62,12 +61,15 @@
             return $this->render('Movie.admin.index',compact('movies', 'buttons', 'status_id'));
         }
 
-        public function show(int $id){}
-
         public function edit(string $status = null, int $id = null): string
         {
             $movie = new MovieModel();
             $movie->status = !is_null($status) ? StatusMovie::getStatus($status) : null;
+
+            $title = (!isset($id))? "Ajouter un film ".StatusMovie::toString($movie->status) : "Editer: ".ucwords($movie->nom);
+            $url = self::$_Router->getUrl('admin_movie_add',['status' => $status]);
+            $class = ($movie->status == StatusMovie::EN_SALLE->value)? 'en-salle' : 'streaming';
+
 
             // ajouter si c'est un ajout dans une salle une verification si il n'est pas deja en salle
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -98,15 +100,9 @@
             }
 
             $errors = $movie->getErrors();
-            var_dump($errors);
-            var_dump($movie);
-            die();
 
-            $title = (!isset($id))? "Ajouter un film ".StatusMovie::toString($movie->status) : "Editer: ".ucwords($movie->nom);
-
-            $url = self::$_Router->getUrl('admin_movie_add',['status' => $status]);
-
-            return $this->render('Movie.admin.edit',compact('title', 'movie', 'url', 'errors'));
+            $this->addJavascript('ajaxRequest');
+            return $this->render('Movie.admin.edit',compact('title', 'movie', 'class', 'url', 'errors'));
         }
 
         public function delete()

@@ -2,22 +2,29 @@ $(document).ready(function () {
 
     $('#SubmitButton').attr('disabled','disabled');
 
-    // Récupérer toutes les balises <script> avec l'attribut data-function
-    $('script[data-function]').each(function() {
-       let functionName = $(this).attr('data-function');
+    // Récupérer toutes les inputs avec l'attribut data-action
+    $('input[data-action]').each(function() {
 
-       // Active les differentes fonctions appelées
-        switch (functionName) {
-            case 'MovieSearch':
-                MovieSearch();
-                break;
-            case 'CinemaSearch':
-                CinemaSearch();
-                break;
+        console.log($(this));
+        // ajout un ecouteur sur les inputs avec l'attribut data-action
+        $(this).on('input', function() {
+            // Récupère l'action
+            let action = $(this).data('action');
 
-            default:
-                console.error('Fonction inconnu');
-        }
+            // Active la methode correspondant a la valeur de data-action
+            switch (action) {
+                case 'movieSearch':
+                    MovieSearch();
+                    break;
+                case 'CinemaSearch':
+                    CinemaSearch();
+                    break;
+
+                default:
+                    console.error('Fonction inconnu');
+            }
+
+        });
 
     });
 
@@ -67,9 +74,10 @@ function CinemaSearch() {
     });
 }
 function MovieSearch() {
-
     let list = [];
-    $('#InputNom').on('input', function () {
+    let item = $('#InputNom');
+
+    item.on('input', function () {
         let value = $(this).val().trim();
 
         // Vérifier si la valeur de l'entrée correspond à un nom de film dans la list
@@ -78,18 +86,18 @@ function MovieSearch() {
         // Si la valeur de l'entrée ne correspond à aucun nom de film dans la list, vider les champs associés
         if (!found) {
 
-            //$('#InputDateSortie').val('');
+            $('#InputDateSortie').val('');
 
-            //$('#TextareaSynopsis').text('');
+            $('#TextareaSynopsis').text('');
 
-            //$('.thumb').attr('src', '').addClass('hidden');
+            $('.thumb').attr('src', '').addClass('hidden');
 
             $('.form-message').text('').addClass('hidden');
             $('#fiche_id').val('');
         }
     });
 
-    $('#InputNom').autocomplete({
+    item.autocomplete({
 
         minLength: 2,
         delay: 500, // Utilisation du paramètre de délai intégré à l'autocomplétion
@@ -100,8 +108,8 @@ function MovieSearch() {
 
 
             $.ajax({
-                url: '/Ajax/filmSearch',
-                method: 'POST',
+                url: '/Ajax/movieSearch',
+                method: 'GET',
                 data: {
                     nom: value,
                 },
@@ -116,10 +124,16 @@ function MovieSearch() {
 
         },
         select: function(event, ui) {
+
             let value = ui.item.value;
             let props = list.find(movie => movie.nom === value);
 
-            $('#InputDateSortie').val(props.date_sortie);
+            console.log(props);
+            $('#InputDateSortie').val(formatDate(props.date_sortie));
+            $('#InputDateDebut').val(formatDate(props.exploitation.debut));
+            $('#InputDateFin').val(formatDate(props.exploitation.fin));
+
+            $('#InputCinema').val(`${props.cinema.nom} - ${props.cinema.ville.nom}`);
 
             $('#TextareaSynopsis').text(props.synopsis);
 
@@ -134,4 +148,10 @@ function MovieSearch() {
             }
         }
     });
+
+
+}
+function formatDate(date) {
+    let dateParts = date.split(' ')[0].split('-');
+    return dateParts[0] + '-' + dateParts[1] + '-' + dateParts[2];
 }

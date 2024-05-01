@@ -69,6 +69,11 @@ class Router
         $this->add('POST', $name, $path, $callback, $requirement);
     }
 
+    public function ajax(string $name, string $path, array $callback):void
+    {
+        $this->add('AJAX', $name, $path.'{ajax}', $callback, ['ajax' => '\?(?:[a-zA-Z0-9_-]+=[a-zA-Z0-9_-]+(?:&[a-zA-Z0-9_-]+=[a-zA-Z0-9_-]+)*)']);
+    }
+
     /**
      * Crée un Objet Route et l'ajout au tableau des routes indéxé par la $methode et son $name
      *
@@ -119,6 +124,10 @@ class Router
     {
         $path = $_SERVER['REQUEST_URI'] ?? '/'; // url courant hors nom de domaine
         $method = $_SERVER['REQUEST_METHOD']; // methode POST ou GET
+
+        if (str_starts_with($path, '/Ajax') && $method === 'GET') {
+            $method = 'AJAX';
+        }
 
         $routes = $this->routes[$method]; // Prend seulement les routes suivant la methode utilisé
 

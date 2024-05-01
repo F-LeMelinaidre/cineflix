@@ -194,6 +194,7 @@
          */
         public function where(string $condition): self
         {
+
             $this->where[] = "WHERE $condition";
 
             return $this;

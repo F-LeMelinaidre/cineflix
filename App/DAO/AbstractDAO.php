@@ -73,7 +73,9 @@
          * @return mixed|null
          */
         public function findAll(array $options = null) {
+
             $select = $options['select'] ?? ['*'];
+
             $req = $this->db->select(...$select)
                 ->from($this->table);
 
@@ -101,8 +103,12 @@
                 }
 
             }
-            return $req->order($options['order'])
-                ->fetchall();
+
+            if(isset($options['order'])) {
+                $req->order($options['order']);
+            }
+
+            return $req->fetchall();
         }
 
         /**
