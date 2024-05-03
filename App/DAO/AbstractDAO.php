@@ -53,7 +53,7 @@
             $select = $options['select'] ?? ['*'];
             $req = $this->db->select(...$select)
                 ->from($this->table)
-                ->where("$col = :$col")
+                ->where("$this->table.$col = :$col")
                 ->setParameter($col,$val);
 
             if(isset($options['contain'])) {

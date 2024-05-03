@@ -24,11 +24,12 @@
         /**
          * @param array|null $data
          */
-        public function __construct(array $data = null)
+        public function __construct(?array $data = null)
         {
             parent::__construct($data);
 
             $this->hydrate($data);
+
         }
 
         /**
@@ -39,34 +40,16 @@
         public function hydrate(array $data = null)
         {
             parent::hydrate($data);
+            if(isset($data['role'])) $this->role = $data['role'];
 
-            if(isset($data['role'])) {
-                $this->role = $data['role'];
-                unset($data['role']);
-            }
+            if(isset($data['email'])) $this->email = $data['email'];
 
-            if(isset($data['email'])) {
-                $this->email = $data['email'];
-                unset($data['email']);
-            }
-            if(isset($data['connect'])) {
-                $this->connect = $this->getDateFr($data['connect']);
-                unset($data['connect']);
-            }
-            if(isset($data['last_connect'])) {
-                $this->last_connect = $this->getDateFr($data['last_connect']);
-                unset($data['last_connect']);
-            }
+            if(isset($data['connect'])) $this->connect = $this->getDateFr($data['connect']);
 
-            $profil = [];
-            if(!empty($data)) {
-                foreach ($data as $col => $val) {
-                    $parts = explode('_', $col);
-                    if($parts[0] === 'profil') {
-                        $profil[$parts[1]] = $val;
-                    }
-                }
-            }
+            if(isset($data['last_connect'])) $this->last_connect = $this->getDateFr($data['last_connect']);
+
+            if(isset($data['profil'])) $this->profil = new ProfilModel($data['profil']);
+
 
             if(!empty($profil)) $this->profil = new ProfilModel($profil);
         }
@@ -133,14 +116,9 @@
             return $this->password_confirm;
         }
 
-        /**
-         * @param array $data
-         *
-         * @return void
-         */
-        public function addProfil(array $data = null): void
+        public function __set(string $item, mixed $value): void
         {
-            $this->profil = new ProfilModel($data);
+            $this->$item = $value;
         }
 
     }

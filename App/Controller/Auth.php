@@ -16,23 +16,21 @@
 
     class Auth extends AbstractController
     {
+
+        private array $session;
         private UserDao $userDao;
         private ProfilDao $profilDao;
 
-        private array $session;
+        protected string $layout = 'auth';
 
         public function __construct()
         {
             parent::__construct();
-
             $this->userDao = new UserDao();
             $this->profilDao = new ProfilDao();
-
         }
-
-        protected string $layout = 'auth';
-
         /**
+         * Connexion
          * @return string
          */
         public function signin(): string
@@ -42,7 +40,6 @@
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $user = new UserModel();
-                $user->addProfil();
 
                 $user->addValidation('email',['email', 'require']);
                 $user->addValidation('password',['password', 'require']);
@@ -54,11 +51,12 @@
                     $user->setPassword('');
 
                     $data = $this->userDao->findOneBy('email',$user->email, [
-                        'select' => ['user.id', 'user.role','profil.nom','profil.prenom','profil.point'],
+                        'select' => ['user.id', 'user.role', 'profil.nom','profil.prenom', 'profil.point'],
                         'contain' => ['profil' => 'user.id = profil.user_id']
                     ]);
 
                     $user->hydrate($data);
+
 
                     AuthConnect::connect($user->email, [
                         'id'     => $user->getId(),
@@ -84,6 +82,7 @@
         }
 
         /**
+         * Inscription
          * @return string
          */
         public function signup(): string
@@ -95,10 +94,10 @@
             }
 
             $user = new UserModel();
-            $user->addProfil();
 
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
                 $user->setRole(Role::ADHERENT->value);
                 $user->setEmail($_POST['email']);
                 $user->setPassword($_POST['password']);
@@ -144,6 +143,7 @@
         }
 
         /**
+         * Finalisation inscription, edition du Profil
          * @return void
          */
         public function finalizeSignup(): string
@@ -154,6 +154,7 @@
             $profil->setId($this->session['id']);
 
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
+
 
                 $profil->setNumeroVoie($_POST['numero_voie']);
                 $profil->setTypeVoie($_POST['type_voie']);

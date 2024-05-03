@@ -174,7 +174,7 @@
          *
          * @return void
          */
-        public function hydrate(?array $data)
+        public function hydrate(array $data = null)
         {
             if(isset($data['id'])) $this->id = $data['id'];
             if(isset($data['created'])) $this->created = $data['created'];

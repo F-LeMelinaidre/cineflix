@@ -3,12 +3,12 @@
     namespace Cineflix\App;
 
 
-    use Cineflix\App\Controller\Movie;
-    use Cineflix\App\Model\UserModel;
+    use Cineflix\App\Model\ProfilModel;
     use Cineflix\Core\Database\Database;
     use Cineflix\Core\Router\RouteNotFoundException;
     use Cineflix\Core\Router\Router;
     use Cineflix\Core\Util\AuthConnect;
+    use ReflectionClass;
 
     // Charge la class autoload (package de composer)
     require '../vendor/autoload.php';
@@ -57,7 +57,7 @@
             // 2nd le format de l'url qui doit estre matché
             // 3eme tableau de paramètre contenant la class controller et le nom de la méthode
             // 4eme optionnel tableau [nom du paramètre => format de la valeur (expression régulière)]
-            self::$_Router->get('home', '/', [Controller\Home::class, 'index']);
+            self::$_Router->get('home', '/', [Controller\Movie::class, 'index']);
 
             self::$_Router->get('signin', '/Signin', [Controller\Auth::class, 'signin']);
             self::$_Router->get('signup', '/Signup', [Controller\Auth::class, 'signup']);
@@ -141,8 +141,6 @@
 
                 $controller = new $callback[0]();
                 $callback[0] = $controller;
-
-
                 // call_user_func_array Retourne une methode de Class instancié
                 // Le parametre $callback doit etre une methode d'objet instancié sous forme de tableau
                 // index 0: la Class
@@ -150,15 +148,9 @@
                 // $params est un tableau des paramètres passés à la méthode de la Class $callback
                 // exemple un parametre d'url
                 // return vers public/index.view
-                return call_user_func_array($callback, $params);
 
+                $reflectionClass = new ReflectionClass(ProfilModel::class);
 
-                // call_user_func_array Retourne une methode de Class instancié
-                // Le parametre $callback doit etre une methode d'objet instancié sous forme de tableau
-                // index 0: la Class
-                // index 1: la methode
-                // $params est un tableau des paramètres passés à la méthode de la Class $callback
-                // return vers public/index.view
                 return call_user_func_array($callback, $params);
 
             } catch (RouteNotFoundException $exception) {

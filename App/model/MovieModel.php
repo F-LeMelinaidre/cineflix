@@ -2,11 +2,13 @@
 
     namespace Cineflix\App\Model;
 
+    use Attribute;
     use Normalizer;
 
     class MovieModel extends AbstractModel
     {
 
+        public string $myProperty;
         public int $status = 0;
 
         public ?string $synopsis;
@@ -45,30 +47,8 @@
                 unset($data['slug']);
             }
 
+            if(isset($data['ville']) && isset($data['cinema'])) $data['cinema']['ville'] = $data['ville'];
 
-            if(!empty($data)) {
-                // les cle doivent etre configurer pour faire en sorte qu'elles
-                // coincide avec les relations de tables
-                // cinema => ville  =  cinema_ville
-                // * la methode select() class Database ajoute par defaut AS "table_colonne" pour les
-                // jointure de premier niveau
-                // si la table liée est elle même jointe ajouter manuellement dans le select
-                // exemple AS cinema_ville_"nom de la colonne"
-                $prefix_list = ['cinema', 'exploitation'];
-                foreach ($data as $key => $val) {
-
-                    foreach ($prefix_list as $prefix) {
-
-                        if (strpos($key, $prefix . '_') === 0) {
-
-                            $unprefixed_key = substr($key, strlen($prefix) + 1);
-
-                            $data[$prefix][$unprefixed_key] = $val;
-                            unset($data[$key]);
-                        }
-                    }
-                }
-            }
             if(isset($data['cinema'])) $this->cinema = new CinemaModel($data['cinema']);
             if(isset($data['exploitation'])) $this->exploitation = new ExploitationModel($data['exploitation']);
         }

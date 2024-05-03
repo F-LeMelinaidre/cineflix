@@ -10,28 +10,23 @@
     class Movie extends AbstractController
     {
         protected MovieDao $movieDao;
-        public function __construct()
-        {
-            parent::__construct();
-
-            $this->movieDao = new $this->dao();
-        }
 
         public function index(?string $status = null): string
         {
-            $status_id = StatusMovie::getStatus($status);
+            $status_id = (!is_null($status)) ? StatusMovie::getStatus($status) : StatusMovie::EN_SALLE->value;
 
             $options = [
-                'select'  => ['movie.*','cinema.nom','ville.nom AS cinema_ville_nom'],
-                'where'  => ['status = :status'],
+                'select'  => ['*','cinema.nom','ville.nom'],
+                'where'  => ['movie.status = :status'],
                 'params' => ['status' => $status_id],
                 'contain' => [
                     'cinema' => 'cinema.id = movie.cinema_id',
                     'ville'  => 'ville.id = cinema.ville_id'],
-                'order'  => ['movie.modified']
+                'order'  => 'movie.modified'
             ];
 
-            $movies = $this->movieDao->findAll($options);
+            $movieDao = new MovieDao();
+            $movies = $movieDao->findAll($options);
 
             return $this->render('Movie.index',compact('movies', 'status_id'));
         }
@@ -87,7 +82,8 @@
                     'ville'  => 'ville.id = cinema.ville_id']
             ];
 
-            $movies = $this->movieDao->findAll($options);
+            $movieDao = new MovieDao();
+            $movies = $movieDao->findAll($options);
             // Convertir le tableau PHP en format JSON
             $jsonData = json_encode($movies, JSON_PRETTY_PRINT);
 

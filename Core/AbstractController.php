@@ -8,11 +8,9 @@ use Cineflix\Core\Router\Router;
 abstract class AbstractController
 
 {
-
     private array $js_lib = [];
 
     protected static Router $_Router;
-    protected string $dao;
     protected string $layout = 'main';
 
     // APP_NAME est défini dans la Class AppController
@@ -28,12 +26,8 @@ abstract class AbstractController
     {
         self::$_Router = Router::getInstance();
 
-        $class_name = basename(get_called_class());
-        $this->dao = "\\Cineflix\\App\\DAO\\".ucfirst($class_name).'Dao';
-
         $this->path_view = AppController::$_Root.'/App/View/';
     }
-
 
     /**
      * Cette methode est appelé dans la methode du controller fille dans un return

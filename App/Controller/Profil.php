@@ -17,9 +17,6 @@
         private UserDao $userDao;
         private array $session;
 
-        /**
-         *
-         */
         public function __construct() {
             parent::__construct();
             if(!AuthConnect::isConnected()) {
@@ -38,7 +35,6 @@
          */
         public function show()
         {
-            echo $this->session['role'];
 
             $data = $this->profilDao->findOneBy('user_id', $this->session['id'],[
                 'select'    => ['profil.*', 'user.email'],

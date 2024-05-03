@@ -2,12 +2,14 @@
 
     namespace Cineflix\App\Model;
 
-    use Cineflix\Core\Util\Regex;
+    use Cineflix\App\Controller\Admin\User;
     use Cineflix\Core\Util\Security;
 
     class ProfilModel extends AbstractModel
     {
         private string $table = 'profil';
+
+        #[MyAttribute('truc')]
         public ?string $prenom = null;
         public ?string $date_naissance = null;
         public ?string $numero_voie = null;
@@ -15,91 +17,38 @@
         public ?string $nom_voie = null;
         public ?int $code_postale = null;
         public ?string $ville = null;
-        public ?int $point = null;
+        public ?int $point = 0;
 
         public UserModel $user;
 
         /**
          * @param array|null $data
          */
-        public function __construct(array $data = null)
+        public function __construct(?array $data = null)
         {
             parent::__construct($data);
 
-            $this->hydrate($data);
+            if (isset($data['user_id'])) $this->id = $data['user_id'];
 
-        }
+            if (isset($data['nom'])) $this->nom = $data['nom'];
 
-        /**
-         * @param array|null $data
-         *
-         * @return void
-         */
-        public function hydrate(array $data = null)
-        {
-            parent::hydrate($data);
+            if (isset($data['prenom'])) $this->prenom = $data['prenom'];
 
-            if(isset($data['user_id'])) $this->id = $data['user_id'];
+            if (isset($data['date_naissance'])) $this->date_naissance = $data['date_naissance'];
 
-            if(isset($data['nom'])) {
-                $this->nom = $data['nom'];
-                unset($data['nom']);
-            }
+            if (isset($data['numero_voie'])) $this->numero_voie = $data['numero_voie'];
 
-            if(isset($data['prenom'])) {
-                $this->prenom = $data['prenom'];
-                unset($data['prenom']);
-            }
+            if (isset($data['type_voie'])) $this->type_voie = $data['type_voie'];
 
-            if(isset($data['date_naissance'])) {
-                $this->date_naissance = $data['date_naissance'];
-                unset($data['date_naissance']);
-            }
+            if (isset($data['nom_voie'])) $this->nom_voie = $data['nom_voie'];
 
-            if(isset($data['numero_voie'])) {
-                $this->numero_voie = $data['numero_voie'];
-                unset($data['numero_voie']);
-            }
+            if (isset($data['code_postale'])) $this->code_postale = $data['code_postale'];
 
-            if(isset($data['type_voie'])) {
-                $this->type_voie = $data['type_voie'];
-                unset($data['type_voie']);
-            }
+            if (isset($data['ville'])) $this->ville = $data['ville'];
 
-            if(isset($data['nom_voie'])) {
-                $this->nom_voie = $data['nom_voie'];
-                unset($data['nom_voie']);
-            }
+            if (isset($data['point'])) $this->point = $data['point'];
 
-            if(isset($data['code_postale'])) {
-                $this->code_postale = $data['code_postale'];
-                unset($data['code_postale']);
-            }
-
-            if(isset($data['ville'])) {
-                $this->ville = $data['ville'];
-                unset($data['ville']);
-            }
-
-            if(isset($data['point'])) {
-                $this->point = $data['point'];
-                unset($data['point']);
-            }
-
-            $user = [];
-            if(!empty($data)) {
-                foreach ($data as $col => $val) {
-                    $parts = explode('_', $col);
-                    if($parts[0] === 'user') {
-                        $user[$parts[1]] = $val;
-                    }
-                }
-            }
-
-
-            if(!empty($user)) {
-                $this->user = new UserModel($user);
-            }
+            if (isset($data['user'])) $this->user = new UserModel($data['user']);
         }
 
         /**
@@ -197,6 +146,5 @@
         {
             $this->user = new UserModel($data);
         }
-
 
     }
