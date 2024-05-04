@@ -17,13 +17,13 @@
 
     <div class="card card-info">
         <div class="bill-container">
-            <a href="<?= self::$_Router->getUrl("movie_show",['slug' => $movie->getSlug()]) ?>">
+            <a href="<?= self::$_Router->getUrl("movie_show",['slug' => $movie->slug]) ?>">
                 <img src="<?= $movie->affiche ?>" alt="la bête" class="bill card-img-top">
             </a>
         </div>
         <div class="card-body border-top py-1">
             <h5 class="card-title">
-                <a href="<?= self::$_Router->getUrl("movie_show",['slug' => $movie->getSlug()]) ?>" class="link-warning link-offset-1
+                <a href="<?= self::$_Router->getUrl("movie_show",['slug' => $movie->slug]) ?>" class="link-warning link-offset-1
                 link-underline-opacity-50
                 link-underline-opacity-100-hover text-capitalize">
                     <?= $movie->nom ?>

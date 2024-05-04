@@ -63,7 +63,6 @@
 
                 }
             }
-
             return $req->fetch();
 
         }
@@ -72,7 +71,7 @@
          * @param array|null $options
          * @return mixed|null
          */
-        public function findAll(array $options = null) {
+        public function findAll(array $options = [], string $format = 'model') {
 
             $select = $options['select'] ?? ['*'];
 
@@ -108,7 +107,21 @@
                 $req->order($options['order']);
             }
 
-            return $req->fetchall();
+            $result = $req->fetchAll();
+
+            switch (strtolower($format)) {
+
+                case 'model':
+                    $result =$this->mapToModel($result);
+                    break;
+                case 'json':
+                    $result =$this->mapToJson($result);
+                    break;
+                case 'array':
+                default:
+                    break;
+            }
+            return $result;
         }
 
         /**
@@ -156,4 +169,18 @@
          * @return void
          */
         public function delete() {}
+
+        private function mapToModel(array $result): array
+        {
+            foreach($result as $k => $movie) {
+                $result[$k] = new $this->model($movie);
+            }
+
+            return $result;
+        }
+
+        private function mapToJson(array $result): string
+        {
+            return json_encode($result, JSON_PRETTY_PRINT);
+        }
     }

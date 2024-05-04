@@ -15,6 +15,7 @@
     class Movie extends \Cineflix\App\Controller\Movie
     {
 
+        private MovieDao $dao;
         protected string $layout = 'admin';
 
         public function __construct()
@@ -26,6 +27,7 @@
                 exit();
             }
 
+            $this->dao = new MovieDao();
         }
 
         public function index(?string $status = null): string
@@ -43,20 +45,20 @@
             }
 
             $options = [
-                'select'  => ['movie.*','cinema.nom','ville.nom AS cinema_ville_nom','exploitation.debut','exploitation.fin'],
+                'select'  => ['movie.*','cinema.nom','ville.nom','exploitation.debut','exploitation.fin'],
                 'contain' => [
                     'cinema' => 'cinema.id = movie.cinema_id',
                     'ville'  => 'ville.id = cinema.ville_id',
                     'exploitation' => 'exploitation.movie_id = movie.id'],
-                'order'  => ['movie.modified']
+                'order'  => 'movie.modified'
             ];
 
             if(!is_null($status)) {
-                $options['where']  = ['status = :status'];
+                $options['where']  = ['movie.status = :status'];
                 $options['params'] = ['status' => $status_id];
             }
 
-            $movies = $this->movieDao->findAll($options);
+            $movies = $this->dao->findAll($options);
 
             return $this->render('Movie.admin.index',compact('movies', 'buttons', 'status_id'));
         }
@@ -64,7 +66,7 @@
         public function edit(string $status = null, int $id = null): string
         {
             $movie = new MovieModel();
-            $movie->status = !is_null($status) ? StatusMovie::getStatus($status) : null;
+            $movie->setStatus($status);
 
             $title = (!isset($id))? "Ajouter un film ".StatusMovie::toString($movie->status) : "Editer: ".ucwords($movie->nom);
             $url = self::$_Router->getUrl('admin_movie_add',['status' => $status]);

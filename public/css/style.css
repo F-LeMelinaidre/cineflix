@@ -194,12 +194,14 @@ img.card-img-top {
 }
 
 #Film {
+    margin: 4rem 0;
     border-right: none;
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
     background-color: rgba(255, 255, 255, 0.2);
 }
 #Cinema {
+    margin: 4rem 0;
     border-left: none;
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
@@ -211,6 +213,17 @@ img.affiche {
     width: 100%;
     margin: 2rem auto;
 }
+
+/* ----- Seance Card ----- */
+#Cinema .card-body {
+    padding:0.5rem!important;
+    text-align: center;
+}
+
+#Cinema .card h4 {
+    font-size: 1rem;
+}
+
 @media screen and (max-width: 990px) {
     #Film {
         border-top-left-radius: 12px;

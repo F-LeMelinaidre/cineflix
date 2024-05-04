@@ -9,17 +9,6 @@
     class MovieDao extends AbstractDAO
     {
 
-        public function findAll(array $options = null)
-        {
-
-            $result = parent::findAll($options);
-            var_dump($result);die();
-            foreach($result as $k => $movie) {
-                $result[$k] = new MovieModel($movie);
-            }
-            return $result;
-        }
-
         public function findOneBy(string $col, string $val, array $options = null): mixed
         {
             $result = parent::findOneBy($col, $val, $options);

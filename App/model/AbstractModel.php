@@ -9,14 +9,13 @@
     {
 
 
+        private ?string $nom = null;
         private array $validation_items;
 
         protected array $errors = [];
         protected ?int $id = null;
         protected string $created;
         protected string $modified;
-
-        public ?string $nom = null;
 
         /**
          * @param array|null $data
@@ -30,6 +29,22 @@
 
         }
 
+        public function __get(string $item): mixed
+        {
+            switch($item) {
+                case 'id':
+                case 'created':
+                case 'modified':
+                case 'nom':
+                    $item = $this->$item;
+                    break;
+                default:
+                    $item = '';
+                    break;
+            }
+
+            return $item;
+        }
         /**
          * @return int
          */

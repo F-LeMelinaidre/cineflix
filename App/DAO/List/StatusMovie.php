@@ -58,6 +58,11 @@
             };
         }
 
+        /**
+         * @param StatusMovie $const
+         *
+         * @return string
+         */
         public static function getUrlByName(self $const): string
         {
             return match($const)
@@ -70,6 +75,31 @@
                 default => 'En-Salle'
             };
         }
+
+        /**
+         * Renvoie un tableau des status
+         * index valeur de la constante
+         * valeur nom de la constante en minuscule sans _
+         * @return array
+         */
+        public static function statusToArray(): array
+        {
+            $constants = [];
+            foreach (self::cases() as $constant) {
+                $name = str_replace('_', ' ', strtolower($constant->name));
+
+                $key = $constant->value;
+                $value = $name;
+
+                $constants[$key] = $value;
+            }
+            return $constants;
+
+        }
+
+        /**
+         * @return array
+         */
         public static function getUrlArray(): array
         {
             $constantNames = [];

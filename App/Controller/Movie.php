@@ -6,6 +6,7 @@
     use Cineflix\App\DAO\MovieDao;
     use Cineflix\App\DAO\SeanceDao;
     use Cineflix\Core\AbstractController;
+    use Cineflix\Core\Util\Security;
 
     class Movie extends AbstractController
     {
@@ -33,22 +34,31 @@
 
         public function show(string $slug): string
         {
+            $movieDao = new MovieDao();
             $options = [
                 'select'  => ['*','cinema.nom','ville.nom'],
-                'where'  => ['movie.slug = :slug'],
-                'params' => ['slug' => $slug],
                 'contain' => [
                     'cinema' => 'cinema.id = movie.cinema_id',
                     'ville'  => 'ville.id = cinema.ville_id'],
             ];
-            $movieDao = new MovieDao();
             $movie = $movieDao->findOneBy('slug', $slug, $options);
-            //$this->title_page .= ' | ' . ucfirst($movie->nom);
-            //$seanceDao = new SeanceDao();
-            //$seances = $seanceDao->findAllFromMovie($movie->movie_id);
-            $seances = [];
 
-            return $this->render('Movie.show', compact('movie', 'seances'));
+            $this->title_page .= ' | ' . ucfirst($movie->nom);
+
+            $seanceDao = new SeanceDao();
+            $options = [
+                'select'  => ['*'],
+                'where'  => ['seance.movie_id = :movie_id'],
+                'params' => ['movie_id' => $movie->id],
+                'order'  => 'seance.date'
+            ];
+
+            $seances = $seanceDao->findAll($options);
+
+            $nb_seances = count($seances) - 1;
+            $seances = array_chunk($seances, 3);
+
+            return $this->render('Movie.show', compact('movie', 'seances', 'nb_seances'));
         }
 
         /**
@@ -62,28 +72,28 @@
             $ajax = substr($ajax,1);
 
             $parts = explode('=', $ajax);
-            $params = array(
-                'col' => $parts[0],
-                'val' => $parts[1]
-            );
+
+            $col = Security::sanitize($parts[0]);
+            $val = Security::sanitize($parts[1]);
 
             $options = [
-                'select' => ['movie.*','cinema.nom','exploitation.debut','exploitation.fin','ville.nom AS cinema_ville_nom'],
-                'where'  => ['m.'.$params['col'].' LIKE :'.$params['col']],
-                'params' => [$params['col'] => '%'.$params['val'].'%'],
+                'select' => ['movie.*','cinema.nom','ville.nom','exploitation.debut','exploitation.fin'],
+                'where'  => ["movie.$col LIKE :$col"],
+                'params' => [$col => '%'.urldecode($val).'%'],
                 'contain' => [
                     'cinema' => 'cinema.id = movie.cinema_id',
-                    'exploitation' => 'exploitation.movie_id = movie.id',
-                    'ville'  => 'ville.id = cinema.ville_id']
+                    'ville'  => 'ville.id = cinema.ville_id',
+                    'exploitation' => 'exploitation.movie_id = movie.id']
             ];
 
             $movieDao = new MovieDao();
-            $movies = $movieDao->findAll($options);
-            // Convertir le tableau PHP en format JSON
-            $jsonData = json_encode($movies, JSON_PRETTY_PRINT);
+            $movies = $movieDao->findAll($options,'Json');
+            $status = json_encode(StatusMovie::statusToArray());
+
+            $json = '{"movies":'.$movies.', "movieStatus":'.$status.'}';
 
             // Afficher le JSON
-            echo $jsonData;
+            echo $json;
         }
 
     }

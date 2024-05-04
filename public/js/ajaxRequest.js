@@ -74,18 +74,18 @@ function CinemaSearch() {
     });
 }
 function MovieSearch() {
-    let list = [];
+    let movies = [];
+    let movieStatus = [];
     let item = $('#InputNom');
 
     item.on('input', function () {
         let value = $(this).val().trim();
 
         // Vérifier si la valeur de l'entrée correspond à un nom de film dans la list
-        let found = list.some(movie => movie === value);
+        let found = movies.some(movie => movie === value);
 
         // Si la valeur de l'entrée ne correspond à aucun nom de film dans la list, vider les champs associés
         if (!found) {
-
             $('#InputDateSortie').val('');
 
             $('#TextareaSynopsis').text('');
@@ -116,7 +116,11 @@ function MovieSearch() {
                 success: function (data) {
                     if (data.trim() !== "") {
                         list = JSON.parse(data);
-                        let noms = list.map(item => item.nom);
+
+                        movies = list.movies;
+                        movieStatus = list.movieStatus;
+
+                        let noms = movies.map(item => item.nom);
                         response(noms);
                     }
                 }
@@ -125,26 +129,36 @@ function MovieSearch() {
         },
         select: function(event, ui) {
 
-            let value = ui.item.value;
-            let props = list.find(movie => movie.nom === value);
+            let value = ui.item.label; // Accéder directement à la propriété nom
+            let props = movies.find(movie => movie.nom === value);
 
-            console.log(props);
             $('#InputDateSortie').val(formatDate(props.date_sortie));
-            $('#InputDateDebut').val(formatDate(props.exploitation.debut));
-            $('#InputDateFin').val(formatDate(props.exploitation.fin));
 
-            $('#InputCinema').val(`${props.cinema.nom} - ${props.cinema.ville.nom}`);
+            let debut = (null !== props.exploitation.debut) ? formatDate(props.exploitation.debut) : '';
+            let fin = (null !== props.exploitation.debut) ? formatDate(props.exploitation.fin) : '';
+
+            let cinema = [];
+            if (null !== props.cinema.nom) {
+                cinema.push(props.cinema.nom, props.ville.nom);
+            }
+
+            $('#InputDateDebut').val(debut);
+            $('#InputDateFin').val(fin);
+
+            $('#InputCinema').val(cinema.join('-'));
 
             $('#TextareaSynopsis').text(props.synopsis);
 
-            $('.thumb img').attr('src', '../../' + props.affiche);
+            $('.thumb img').attr('src', `../../${props.affiche}`);
 
             $('#fiche_id').val(props.id);
 
+
             $('.thumb').removeClass('hidden');
 
-            if (null != props.film_id) {
-                $('.form-message').text('Ce film est déjà proposé en salle!').removeClass('hidden');
+            if ( 1 <= props.status) {
+                console.log(movieStatus);
+                $('.form-message').text(`Ce film est déjà proposé ${movieStatus[props.status]}!`).removeClass('hidden');
             }
         }
     });
@@ -153,5 +167,5 @@ function MovieSearch() {
 }
 function formatDate(date) {
     let dateParts = date.split(' ')[0].split('-');
-    return dateParts[0] + '-' + dateParts[1] + '-' + dateParts[2];
+    return `${dateParts[0]}-${dateParts[1]}-${dateParts[2]}`;
 }

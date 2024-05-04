@@ -455,7 +455,7 @@
          *
          * @return mixed
          */
-        public function fetchall()
+        public function fetchAll()
         {
 
             try {
