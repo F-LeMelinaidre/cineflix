@@ -14,6 +14,7 @@ class Home extends AbstractController
 
     public function __construct()
     {
+
         parent::__construct();
 
         if(!AuthConnect::isConnected() || AuthConnect::getSession()['role'] < Role::ADMINISTRATEUR->value) {
