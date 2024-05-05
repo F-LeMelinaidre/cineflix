@@ -51,9 +51,6 @@ const rules = {
         message: `8 caratères minimum, comprenant au minimum une majascule, une minusclule, un chiffre, et un caratère !?:_-*#&%+ !`,
     },
     require: {
-        callback: (value) => {
-            return (0 < value.length);
-        },
         message: `Champs requis !`,
     },
 }
@@ -61,9 +58,6 @@ const rules = {
 document.addEventListener('DOMContentLoaded', function () {
 
     const items = document.querySelectorAll('input, textarea');
-    const button = document.querySelector('button');
-
-    let hasRequired = false;
 
     items.forEach(function (item, i) {
 
@@ -73,7 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
             'true' === item.getAttribute('aria-required')) {
             inputRules.push('require');
 
-            if(!hasRequired) hasRequired = true;
+            item.setAttribute('aria-invalid', 'true');
+
         }
 
 
@@ -93,10 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if(0 !== inputRules.length) addValidationListener(item, inputRules);
     });
 
-
-    if(hasRequired) {
-        button.disabled = true;
-    }
+    handleButton();
 
 });
 
@@ -105,41 +97,93 @@ document.addEventListener('DOMContentLoaded', function () {
  * @param {HTMLElement} item - Le champ du formulaire
  * @param {Array} rules
  */
-function addValidationListener(item, rules) {
+function addValidationListener(item, inputRules) {
 
     let timeout;
 
-
     item.addEventListener('input', function () {
 
-        const inputId = item.id;
-        let value = item.value;
-
+        clearTimeout(timeout);
 
         timeout = setTimeout(function() {
 
+            handleAlertMessage(item, inputRules);
 
+            handleButton();
 
         }, 500);
+    });
+
+    item.addEventListener('focusout', function (invalid) {
+
+        handleAlertMessage(item, inputRules)
+
     });
 }
 
 /**
  *
- * @param {HTMLElement} item - Le champ du formulaire
- * @param {string} message - Message d'erreur
+ * @param {HTMLElement} item
+ * @param {Array} inputRules
  */
-function addAlertMessage(item, message) {
-    const inputId = item.id;
-    item.setAttribute('aria-describedby', 'Alert' + inputId);
-    item.setAttribute('aria-invalid', 'true');
+function handleAlertMessage(item, inputRules) {
 
-    const alertDiv = document.createElement('div');
-    alertDiv.id = 'Alert' + inputId;
-    alertDiv.className = 'invalid-message';
-    alertDiv.setAttribute('role', 'alert');
-    alertDiv.textContent = message;
-    item.insertAdjacentElement('afterend', alertDiv);
+    let value = item.value;
+    let error = {
+        massage: '',
+        type: '',
+    };
+
+
+    if (inputRules.includes('require') && 0 === value.length) {
+        error.message = rules.require.message;
+        error.type = 'invalid';
+
+    } else {
+        inputRules.forEach(function(rule) {
+            let validationRule = rules[rule];
+
+            if(rule !== 'require' && !validationRule.callback(value)) {
+                error.message = validationRule.message;
+                error.type = 'error';
+
+            }
+        });
+    }
+
+    if (Object.values(error).every(value => value === '')) {
+        removeAlertMessge(item);
+    } else {
+        addAlertMessage(item,error);
+    }
+
+}
+
+/**
+ *
+ * @param {HTMLElement} item - Le champ du formulaire
+ * @param {Array} error      - Message et type d'erreur
+ */
+function addAlertMessage(item, error) {
+    const inputId = item.id;
+    const { message, type } = error;
+
+    let alertDiv = document.getElementById(`Alert${inputId}`);
+
+    if (!alertDiv) {
+        item.setAttribute('aria-describedby', `Alert${inputId}`);
+        item.setAttribute('aria-invalid', 'true');
+        item.classList.add(type);
+
+        alertDiv = document.createElement('div');
+        alertDiv.id = 'Alert' + inputId;
+        alertDiv.className = `invalid-message ${type}`;
+        alertDiv.setAttribute('role', 'alert');
+        alertDiv.textContent = message;
+        item.insertAdjacentElement('afterend', alertDiv);
+    } else {
+        alertDiv.textContent = message;
+    }
 
 }
 
@@ -149,7 +193,28 @@ function addAlertMessage(item, message) {
  */
 function removeAlertMessge(item) {
     const inputId = item.id;
-    const alertMessage = document.getElementById('Alert' + inputId);
-    if (alertMessage) alertMessage.remove();
+    const alertMessage = document.getElementById(`Alert${inputId}`);
 
+    item.removeAttribute('aria-invalid');
+
+    if (alertMessage) {
+        item.classList.remove('invalid', 'error');
+        alertMessage.remove();
+    }
+
+}
+
+function handleButton() {
+    const button = document.querySelector('button');
+    button.disabled = (countInvalidFields() !== 0);
+
+}
+
+/**
+ *
+ * @returns {number}
+ */
+function countInvalidFields() {
+    let invalidFields = document.querySelectorAll('[aria-invalid="true"]');
+    return invalidFields.length;
 }

@@ -16,8 +16,7 @@ dd {
 
 /* --- NAV --- */
 
-.nav-link:hover,
-.require {
+.nav-link:hover {
     color:var(--bs-yellow) !important;
 }
 /* --- ICON --- */
@@ -73,25 +72,22 @@ input.valid {
     box-shadow: #318307 0 0 3px 2px;
 }
 
+textarea.invalid,
 input.invalid {
     border-color: #ba8b00!important;
     box-shadow: #ba8b00 0 0 3px 2px;
 }
+.invalid-message.invalid {
+    color: var(--bs-yellow) !important;
+}
 
+textarea.error,
 input.error {
     border-color: #721c24!important;
     box-shadow: #721c24 0 0 3px 2px;
 }
-
-.invalid-message {
-    visibility: visible;
-}
 .invalid-message.error {
-    color: #b01919;
-}
-
-.invalid-message.hide {
-    visibility: hidden;
+    color: var(--bs-red) !important;
 }
 
 main.main-page {

@@ -103,6 +103,7 @@
 
             $errors = $movie->getErrors();
 
+            $this->addJavascript('validationLib');
             $this->addJavascript('ajaxRequest');
             return $this->render('Movie.admin.edit',compact('title', 'movie', 'class', 'url', 'errors'));
         }
