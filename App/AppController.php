@@ -101,9 +101,15 @@
                 ['status' => '[A-Z-]+']);
             self::$_Router->get('admin_movie_add', '/Admin/Nouveau/Film-{status}', [ Controller\Admin\Movie::class, 'edit'],
                 ['status' => '[A-Z-]+']);
+            self::$_Router->get('admin_movie_edit', '/Admin/Nouveau/Film-{status}/{id}', [ Controller\Admin\Movie::class, 'edit'],
+                ['status' => '[A-Z-]+',
+                 'id' => '[0-9]+']);
 
             self::$_Router->post('admin_movie_add', '/Admin/Nouveau/Film-{status}', [ Controller\Admin\Movie::class, 'edit'],
                 ['status' => '[A-Z-]+']);
+            self::$_Router->post('admin_movie_edit', '/Admin/Nouveau/Film-{status}/{id}', [ Controller\Admin\Movie::class, 'edit'],
+                ['status' => '[A-Z-]+',
+                 'id' => '[0-9]+']);
 
 
             // self::$_Router->get('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\Movie::class, 'edit'],

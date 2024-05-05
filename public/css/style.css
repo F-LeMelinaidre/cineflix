@@ -14,6 +14,9 @@ dd {
     margin: 0!important;
 }
 
+.hidden {
+    visibility: hidden;
+}
 /* --- NAV --- */
 
 .nav-link:hover {
@@ -86,9 +89,21 @@ input.error {
     border-color: #721c24!important;
     box-shadow: #721c24 0 0 3px 2px;
 }
+
+/* --- Message --- */
+.info-alert {
+    width: 100%;
+    padding: 0.4rem;
+    margin-bottom: 0.8rem;
+    color: white;
+    text-align: center;
+    border-radius: 0.4rem;
+    background-color: #721c24;
+}
 .invalid-message.error {
     color: var(--bs-red) !important;
 }
+
 
 main.main-page {
     padding-bottom: 3em!important;
@@ -363,30 +378,39 @@ button {
     width: 100%;
 }
 
-/* --- ADMIN MOVIE --- */
+/* --- FORMULAIRE FILM --- */
+#AdminContent .info-alert {
+    grid-row: 1;
+}
 #AdminContent .titre,
 #AdminContent .exploitation {
-    grid-row: 1;
+    grid-row: 2;
 }
 #AdminContent #Nom,
 #AdminContent #Cinema {
-    grid-row: 2;
+    grid-row: 3;
 }
 #AdminContent #DateSortie,
 #AdminContent #DateDebut,
 #AdminContent #DateFin {
-    grid-row: 3;
-}
-#AdminContent #Synopsis {
     grid-row: 4;
 }
-#AdminContent #ThumbAffiche {
-    grid-row: 4/6;
-}
-#AdminContent #Affiche {
+#AdminContent #Synopsis {
     grid-row: 5;
 }
+#AdminContent #ThumbAffiche {
+    grid-row: 5/7;
+}
+#AdminContent #Affiche {
+    grid-row: 6;
+}
+#AdminContent button {
+    grid-row: 8;
+}
 
+#AdminContent .info-alert {
+    grid-column: 1/7;
+}
 #AdminContent #DateSortie {
     grid-column: 1;
 }

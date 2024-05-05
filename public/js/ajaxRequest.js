@@ -78,6 +78,7 @@ function MovieSearch() {
     let movies = [];
     let movieStatus = [];
     let item = $('#InputNom');
+    let $addMovie = $('#AddMovie');
 
     item.on('input', function () {
         let value = $(this).val().trim();
@@ -88,13 +89,19 @@ function MovieSearch() {
         // Si la valeur de l'entrée ne correspond à aucun nom de film dans la list, vider les champs associés
         if (!found) {
             $('#InputDateSortie').val('');
+            $('#InputSynopsis').text('');
 
-            $('#TextareaSynopsis').text('');
+            $('#InputCinema').val('');
+            $('#InputDateDebut').val('');
+            $('#InputDateFin').val('');
 
             $('.thumb').attr('src', '').addClass('hidden');
 
-            $('.form-message').text('').addClass('hidden');
             $('#fiche_id').val('');
+
+            if ($addMovie) {
+                removeAlertInfo();
+            }
         }
     });
 
@@ -149,24 +156,56 @@ function MovieSearch() {
 
             $('#InputCinema').val(cinema.join('-'));
 
-            $('#TextareaSynopsis').text(props.synopsis);
+            $('#InputSynopsis').text(props.synopsis);
 
             $('.thumb img').attr('src', `../../${props.affiche}`);
-
-            $('#fiche_id').val(props.id);
 
 
             $('.thumb').removeClass('hidden');
 
-            if ( 1 <= props.status) {
-                console.log(movieStatus);
-                $('.form-message').text(`Ce film est déjà proposé ${movieStatus[props.status]}!`).removeClass('hidden');
+            if ($addMovie) {
+                addAlertInfo(movieStatus[props.status]);
             }
         }
     });
 
 
 }
+
+
+/**
+ *
+ * @param {string} status
+ */
+function addAlertInfo(status) {
+    const infoAlert = $(`<div class="info-alert">Ce film est déjà proposé ${status}!</div>`);
+
+    $('form').append(infoAlert);
+    infoAlert.hide().fadeIn(500);
+
+    $('#AddButton').prop('disabled', true);
+}
+
+
+/**
+ *
+ */
+function removeAlertInfo() {
+    const $infoAlert = $('.info-alert');
+    if($infoAlert) {
+        $infoAlert.fadeOut(500, function() {
+            $(this).remove();
+        });
+    }
+
+}
+
+
+/**
+ *
+ * @param date
+ * @returns {string}
+ */
 function formatDate(date) {
     let dateParts = date.split(' ')[0].split('-');
     return `${dateParts[0]}-${dateParts[1]}-${dateParts[2]}`;

@@ -3,7 +3,7 @@
 </header>
 <section>
 
-    <form class="film <?= $class ?>" action="<?= $url ?>" method="post">
+    <form id="<?= $form_id ?>" class="film <?= $class ?>" action="<?= $url ?>" method="post">
         <h2 class="titre">Information du film</h2>
         <div id="Nom">
             <label class="form-label" for="Nom">Nom</label>
@@ -51,7 +51,10 @@
 
 
         <div id="ThumbAffiche" class="thumb"><img src="" alt="" width="120px"></div>
-
-        <button id="SubmitButton" class="btn btn-warning" type="submit">Ajouter</button>
+        <?php if($form_id === "AddMovie"): ?>
+        <button id="AddButton" class="btn btn-warning" type="submit">Ajouter</button>
+        <?php else: ?>
+        <button id="EditButton" class="btn btn-warning" type="submit">Modifier</button>
+        <?php endif; ?>
     </form>
 </section>
