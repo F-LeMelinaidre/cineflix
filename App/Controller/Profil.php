@@ -193,6 +193,7 @@
 
             $errors = $user->getErrors();
 
+            $this->addJavascript('lib');
             return $this->render('profil.editAuthentification',compact('user','errors'));
         }
     }

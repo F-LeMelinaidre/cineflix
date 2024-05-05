@@ -193,14 +193,14 @@ img.card-img-top {
     text-transform: capitalize;
 }
 
-#Film {
+section#Film {
     margin: 4rem 0;
     border-right: none;
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
     background-color: rgba(255, 255, 255, 0.2);
 }
-#Cinema {
+section#Cinema {
     margin: 4rem 0;
     border-left: none;
     border-top-right-radius: 12px;
@@ -317,13 +317,15 @@ img.affiche {
 
 /* --- Formulaire --- */
 form h2 {
-    margin: 0;
+    margin: 0 0 0.8rem 0;
     padding: 0;
     font-size: 1rem;
     line-height: 1rem;
+    text-decoration: white 1px underline;
+    text-underline-offset: 0.2rem;
 }
 label {
-    margin: 0!important;
+    margin: 0 0 0.4rem 0!important;
     padding: 0!important;
     font-size: 0.8rem;
 }
@@ -366,86 +368,52 @@ button {
 }
 
 /* --- ADMIN MOVIE --- */
-#AdminContent .film label:first-of-type {
-    grid-row: 2;
-}
-#AdminContent .film input:first-of-type {
-    grid-row: 3;
-}
-#AdminContent .film .titre,
-#AdminContent .film .exploitation {
+#AdminContent .titre,
+#AdminContent .exploitation {
     grid-row: 1;
 }
-#AdminContent label[for="InputCinema"] {
+#AdminContent #Nom,
+#AdminContent #Cinema {
     grid-row: 2;
 }
-#AdminContent #InputCinema {
+#AdminContent #DateSortie,
+#AdminContent #DateDebut,
+#AdminContent #DateFin {
     grid-row: 3;
 }
-#AdminContent label[for="InputDateSortie"],
-#AdminContent label[for="InputDateDebut"],
-#AdminContent label[for="InputDateFin"] {
+#AdminContent #Synopsis {
     grid-row: 4;
 }
-#AdminContent #InputDateSortie,
-#AdminContent #InputDateDebut,
-#AdminContent #InputDateFin {
+#AdminContent #ThumbAffiche {
+    grid-row: 4/6;
+}
+#AdminContent #Affiche {
     grid-row: 5;
 }
-#AdminContent label[for="TextareaSynopsis"]
-{
-    grid-row: 6;
-}
-#AdminContent #TextareaSynopsis,
-#AdminContent .en-salle #ThumbAffiche {
-    grid-row: 7/9;
-}
-#AdminContent .streaming #ThumbAffiche {
-    grid-row: 3/11;
-}
-#AdminContent label[for="InputAffiche"] {
-    grid-row: 10;
-}
-#AdminContent #InputAffiche {
-    grid-row: 11;
-}
-#AdminContent button {
-    grid-row: 12;
-}
 
-#AdminContent .film .titre,
-#AdminContent .film label:first-of-type,
-#AdminContent .film input:first-of-type {
-    grid-column: 1/5;
-}
-#AdminContent .film .exploitation,
-#AdminContent label[for="SelectCinema"],
-#AdminContent #InputCinema {
-    grid-column: 5/7;
-}
-#AdminContent label[for="InputDateSortie"],
-#AdminContent #InputDateSortie {
+#AdminContent #DateSortie {
     grid-column: 1;
 }
-#AdminContent label[for="InputDateDebut"],
-#AdminContent #InputDateDebut {
-    grid-column: 5/6;
+#AdminContent #Affiche {
+    grid-column: 1/4;
 }
+#AdminContent .titre,
+#AdminContent #Nom,
+#AdminContent #Synopsis {
+    grid-column: 1/5;
+}
+#AdminContent #DateDebut {
+    grid-column: 5;
+}
+#AdminContent #DateFin {
+    grid-column: 6;
+}
+#AdminContent #Cinema,
 #AdminContent #ThumbAffiche {
     grid-column: 5/7;
 }
-#AdminContent label[for="InputDateFin"],
-#AdminContent #InputDateFin {
-    grid-column: 6/7;
-}
-
-#AdminContent label[for="TextareaSynopsis"],
-#AdminContent #TextareaSynopsis {
-    grid-column: 1/5;
-}
-#AdminContent #InputAffiche,
-#AdminContent label[for="InputAffiche"] {
-    grid-column: 1/4;
+#AdminContent .exploitation {
+    grid-column: 5/7;
 }
 
 #AdminContent button {

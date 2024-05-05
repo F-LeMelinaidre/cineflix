@@ -1,11 +1,8 @@
 $(document).ready(function () {
 
-    $('#SubmitButton').attr('disabled','disabled');
-
     // Récupérer toutes les inputs avec l'attribut data-action
     $('input[data-action]').each(function() {
 
-        console.log($(this));
         // ajout un ecouteur sur les inputs avec l'attribut data-action
         $(this).on('input', function() {
             // Récupère l'action
@@ -26,6 +23,10 @@ $(document).ready(function () {
 
         });
 
+    });
+
+    $('button[data-token]').click(function() {
+        console.log($(this).attr('data-token'));
     });
 
 });
@@ -114,6 +115,7 @@ function MovieSearch() {
                     nom: value,
                 },
                 success: function (data) {
+                    let list;
                     if (data.trim() !== "") {
                         list = JSON.parse(data);
 

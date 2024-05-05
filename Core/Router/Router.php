@@ -71,7 +71,7 @@ class Router
 
     public function ajax(string $name, string $path, array $callback):void
     {
-        $this->add('AJAX', $name, $path.'{ajax}', $callback, ['ajax' => '\?(?:[a-zA-Z0-9_-]+=[a-zA-Z0-9_%\-]+(?:&[a-zA-Z0-9_-]+=[a-zA-Z0-9_%\-]+)*)']);
+        $this->add('AJAX', $name, $path.'{ajax}', $callback, ['ajax' => '\?(?:[a-zA-Z0-9_-]+=[a-zA-Z0-9!?_%\-]+(?:&[a-zA-Z0-9_-]+=[a-zA-Z0-9!?_%\-]+)*)']);
     }
 
     /**

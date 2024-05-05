@@ -55,10 +55,12 @@
 
             $seances = $seanceDao->findAll($options);
 
-            $nb_seances = count($seances) - 1;
+
             $seances = array_chunk($seances, 3);
 
-            return $this->render('Movie.show', compact('movie', 'seances', 'nb_seances'));
+            $this->addJavascript('ajaxRequest');
+
+            return $this->render('Movie.show', compact('movie', 'seances'));
         }
 
         /**

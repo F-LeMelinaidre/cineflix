@@ -35,7 +35,8 @@
                                 <h4><?= $seance->date_fr ?></h4>
                                 <p><?= $seance->horaire ?></p>
                                 <?php if(\Cineflix\Core\Util\AuthConnect::isConnected()): ?>
-                                <a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Achat</a>
+                                <button class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button"
+                                        data-token="<?= \Cineflix\Core\Util\Security::getAndStoreToken() ?>">Achat</button>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -72,7 +73,7 @@
                     <input type="number" name="quantity" min="1" max="10">
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Valider</button>
+                    <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Confirmer</button>
                 </div>
             </div>
         </div>
@@ -82,6 +83,22 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Modal 2</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Hide this modal and show the first with the button below.
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal">Valider</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel3" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel3">Modal 3</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

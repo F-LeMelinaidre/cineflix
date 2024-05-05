@@ -4,41 +4,54 @@
 <section>
 
     <form class="film <?= $class ?>" action="<?= $url ?>" method="post">
-        <div class="form-message hidden"></div>
         <h2 class="titre">Information du film</h2>
+        <div id="Nom">
+            <label class="form-label" for="Nom">Nom</label>
+            <input id="InputNom" class="form-control" type="text" name="nom" value="" aria-required="true" data-action="movieSearch"
+                   data-validation="alphaNumericExtended">
+            <div id="MoviesList"></div>
+        </div>
 
-        <label class="form-label" for="InputNom">Nom</label>
-        <input id="InputNom" class="form-control" type="text" name="nom" value="" aria-required="true" data-action="movieSearch">
-        <div id="MoviesList"></div>
+        <div id="DateSortie">
+            <label class="form-label" for="DateSortie">Date de sortie</label>
+            <input id="InputDateSortie" class="form-control" type="date" name="date_sortie" value="" aria-required="true">
+        </div>
 
-        <label class="form-label" for="InputDateSortie">Date de sortie</label>
-        <input id="InputDateSortie" class="form-control" type="date" name="date_sortie" value="" aria-required="true">
         <?php if($movie->status === \Cineflix\App\DAO\List\StatusMovie::EN_SALLE->value): ?>
 
-        <label class="form-label" for="InputCinema">Cinema</label>
-        <input id="InputCinema" class="form-select" type="text" name="cinema" value=""
-               placeholder="Saisissez un cinéma ou une ville" aria-required="true">
-        <div id="CinemasList"></div>
-        <input type="hidden" id="cinema_id" name="cinema_id" value=0 >
+        <div id="Cinema">
+            <label class="form-label" for="Cinema">Cinema</label>
+            <input id="InputCinema" class="form-select" type="text" name="cinema" value=""
+                   placeholder="Saisissez un cinéma ou une ville" aria-required="true" data-validation="alpha">
+            <div id="CinemasList"></div>
+        </div>
 
         <h2 class="exploitation">Information d'exploitation</h2>
-        <label class="form-label" for="InputDateDebut">Début</label>
-        <input id="InputDateDebut" class="form-control" type="date" name="exploitation_debut" value="" aria-required="true">
-        <label class="form-label" for="InputDateFin">Fin</label>
-        <input id="InputDateFin" class="form-control" type="date" name="exploitation_fin" value="" aria-required="true">
+        <div id="DateDebut">
+            <label class="form-label" for="DateDebut">Début</label>
+            <input id="InputDateDebut" class="form-control" type="date" name="exploitation_debut" value="" aria-required="true">
+        </div>
+
+        <div id="DateFin">
+            <label class="form-label" for="DateFin">Fin</label>
+            <input id="InputDateFin" class="form-control" type="date" name="exploitation_fin" value="" aria-required="true">
+        </div>
 
         <?php endif; ?>
+        <div id="Synopsis">
+            <label class="form-label" for="Synopsis">Synopsis</label>
+            <textarea id="InputSynopsis" class="form-control" name="synopsis" cols="30" rows="7" aria-required="true"
+                      data-validation="alphaNumericExtended"></textarea>
+        </div>
 
-        <label class="form-label" for="TextareaSynopsis">Synopsis</label>
-        <textarea id="TextareaSynopsis" class="form-control" name="synopsis" cols="30" rows="5" aria-required="true"></textarea>
+        <div id="Affiche">
+            <label class="form-label" for="Affiche">Affiche</label>
+            <input id="InputAffiche" class="form-control" name="affiche" type="file" accept=".png, .jpg, .jpeg">
+        </div>
 
-        <label class="form-label" for="InputAffiche">Affiche</label>
-        <input id="InputAffiche" class="form-control" name="affiche" type="file" accept=".png, .jpg, .jpeg" aria-required="true">
+
         <div id="ThumbAffiche" class="thumb"><img src="" alt="" width="120px"></div>
 
         <button id="SubmitButton" class="btn btn-warning" type="submit">Ajouter</button>
     </form>
 </section>
-<!--<script src="/public/js/ajaxRequest.js" data-function="MovieSearch"></script>
-<script src="/public/js/ajaxRequest.js" data-function="CinemaSearch"></script>
-<script src="/public/js/validationLib.js"></script>-->
