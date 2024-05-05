@@ -9,6 +9,7 @@ abstract class AbstractController
 
 {
     private array $js_lib = [];
+    private string $path_view;
 
     protected static Router $_Router;
     protected string $layout = 'main';
@@ -17,14 +18,23 @@ abstract class AbstractController
     // $title_page correspond à la valeur de l'élément <title></title>
     // Peux être complèté ou modifié directement dans le controller de la page
     protected string $title_page = AppController::APP_NAME;
+    protected $dao;
+    protected string $path_dao = "\\Cineflix\\App\\DAO\\";
 
-    private string $path_view;
 
     public string $action = '';
 
     public function __construct()
     {
         self::$_Router = Router::getInstance();
+
+        $class_name = basename(get_called_class());
+
+        if('Home' !== $class_name) {
+            $dao_class = $this->path_dao.$class_name.'Dao';
+            $this->dao = new $dao_class();
+        }
+
 
         $this->path_view = AppController::$_Root.'/App/View/';
     }

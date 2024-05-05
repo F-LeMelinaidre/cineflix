@@ -14,7 +14,8 @@
 
         <div id="DateSortie">
             <label class="form-label" for="DateSortie">Date de sortie</label>
-            <input id="InputDateSortie" class="form-control" type="date" name="date_sortie" value="" aria-required="true">
+            <input id="InputDateSortie" class="form-control" type="date" name="date_sortie" value="" max="<?php echo date('Y-m-d'); ?>" min=""
+                   aria-required="true">
         </div>
 
         <?php if($movie->status === \Cineflix\App\DAO\List\StatusMovie::EN_SALLE->value): ?>
@@ -22,19 +23,21 @@
         <div id="Cinema">
             <label class="form-label" for="Cinema">Cinema</label>
             <input id="InputCinema" class="form-select" type="text" name="cinema" value=""
-                   placeholder="Saisissez un cinéma ou une ville" aria-required="true" data-validation="alpha">
+                   placeholder="Saisissez un cinéma ou une ville" aria-required="true" data-validation="alpha"  data-action="cinemaSearch">
             <div id="CinemasList"></div>
         </div>
 
         <h2 class="exploitation">Information d'exploitation</h2>
         <div id="DateDebut">
             <label class="form-label" for="DateDebut">Début</label>
-            <input id="InputDateDebut" class="form-control" type="date" name="exploitation_debut" value="" aria-required="true">
+            <input id="InputDateDebut" class="form-control" type="date" name="exploitation_debut" value="" min="<?php echo date('Y-m-d'); ?>"
+                   range-end="InputDateFin" aria-required="true">
         </div>
 
         <div id="DateFin">
             <label class="form-label" for="DateFin">Fin</label>
-            <input id="InputDateFin" class="form-control" type="date" name="exploitation_fin" value="" aria-required="true">
+            <input id="InputDateFin" class="form-control" type="date" name="exploitation_fin" value="" min="<?php echo date('Y-m-d'); ?>"
+                   range-start="InputDateDebut" aria-required="true">
         </div>
 
         <?php endif; ?>

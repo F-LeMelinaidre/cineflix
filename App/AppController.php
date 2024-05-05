@@ -133,7 +133,7 @@
                 ['id' => '[0-9]+']);
 
             //Requete Ajax
-            self::$_Router->post('ajax_cinemaSearch', '/Ajax/cinemaSearch', [ Ajax\AjaxRequest::class, 'cinemaSearch']);
+            self::$_Router->ajax('ajax_cinemaSearch', '/Ajax/cinemaSearch', [ Controller\Cinema::class, 'cinemaSearch']);
             self::$_Router->ajax('ajax_filmSearch', '/Ajax/movieSearch', [ Controller\Movie::class, 'movieSearch']);
 
 

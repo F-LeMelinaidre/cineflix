@@ -50,6 +50,12 @@ const rules = {
         },
         message: `8 caratères minimum, comprenant au minimum une majascule, une minusclule, un chiffre, et un caratère !?:_-*#&%+ !`,
     },
+    dateRange: {
+        callback: (start, end) => {
+            return (start <= end);
+        },
+        message: `La date de début doit être inférieur ou égale à la date de fin !`,
+    },
     require: {
         message: `Champs requis !`,
     },
@@ -59,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const items = document.querySelectorAll('input, textarea');
 
-    items.forEach(function (item, i) {
+    items.forEach(function (item) {
 
         let inputRules = [];
 
@@ -71,6 +77,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         }
 
+        if(item.hasAttribute('range-end')) {
+            let end = item.getAttribute('range-end');
+            let rule = `dateRange-end-${end}`;
+
+            inputRules.push(rule);
+        }
+        if(item.hasAttribute('range-start')) {
+            let start = item.getAttribute('range-start');
+            let rule = `dateRange-start-${start}`;
+
+            inputRules.push(rule);
+        }
 
         if(item.hasAttribute('minlength')) inputRules.push('minLength');
         if(item.hasAttribute('password')) inputRules.push('email');
@@ -95,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
 /**
  * Ajout d'un écouteur d'événements pour la validation
  * @param {HTMLElement} item - Le champ du formulaire
- * @param {Array} rules
+ * @param {Array} inputRules
  */
 function addValidationListener(item, inputRules) {
 
@@ -114,7 +132,7 @@ function addValidationListener(item, inputRules) {
         }, 500);
     });
 
-    item.addEventListener('focusout', function (invalid) {
+    item.addEventListener('focusout', function () {
 
         handleAlertMessage(item, inputRules)
 
@@ -135,24 +153,36 @@ function handleAlertMessage(item, inputRules) {
     };
 
 
-    if (inputRules.includes('require') && 0 === value.length) {
-        error.message = rules.require.message;
-        error.type = 'invalid';
+    inputRules.forEach(function(rule) {
 
-    } else {
-        inputRules.forEach(function(rule) {
-            let validationRule = rules[rule];
+        let validationRule = rules[rule];
 
-            if(rule !== 'require' && !validationRule.callback(value)) {
+        if(0 === value.length && 'require' === rule) {
+
+            error.message = rules.require.message;
+            error.type = 'invalid';
+
+        } else if(0 !== value.length && 'require' !== rule) {
+
+            if(rule.startsWith('dateRange')) {
+
+                const parts = rule.split('-');
+                const linkedInput = document.getElementById(rule.split('-')[2]);
+
+                linkedInput.setAttribute((parts[1] === 'start') ? 'max' : 'min', value);
+
+            } else if(!validationRule.callback(value)) {
+
                 error.message = validationRule.message;
                 error.type = 'error';
 
             }
-        });
-    }
+        }
+
+    });
 
     if (Object.values(error).every(value => value === '')) {
-        removeAlertMessge(item);
+        removeAlertMessage(item);
     } else {
         addAlertMessage(item,error);
     }
@@ -180,8 +210,14 @@ function addAlertMessage(item, error) {
         alertDiv.className = `invalid-message ${type}`;
         alertDiv.setAttribute('role', 'alert');
         alertDiv.textContent = message;
+
         item.insertAdjacentElement('afterend', alertDiv);
     } else {
+        item.classList.remove('invalid', 'error');
+        item.classList.add(type);
+
+        alertDiv.classList.remove('invalid', 'error');
+        alertDiv.classList.add(type);
         alertDiv.textContent = message;
     }
 
@@ -191,7 +227,7 @@ function addAlertMessage(item, error) {
  *
  * @param {HTMLElement} item
  */
-function removeAlertMessge(item) {
+function removeAlertMessage(item) {
     const inputId = item.id;
     const alertMessage = document.getElementById(`Alert${inputId}`);
 

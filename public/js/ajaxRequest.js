@@ -13,7 +13,7 @@ $(document).ready(function () {
                 case 'movieSearch':
                     MovieSearch();
                     break;
-                case 'CinemaSearch':
+                case 'cinemaSearch':
                     CinemaSearch();
                     break;
 
@@ -44,7 +44,7 @@ function CinemaSearch() {
 
             $.ajax({
                 url: '/Ajax/cinemaSearch',
-                method: 'POST',
+                method: 'GET',
                 data: {
                     cinema: value,
                 },

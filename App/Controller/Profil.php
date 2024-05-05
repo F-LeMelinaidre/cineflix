@@ -25,7 +25,6 @@
             }
 
             $this->session = AuthConnect::getSession();
-            $this->profilDao = new ProfilDao();
             $this->userDao = new UserDao();
 
         }
@@ -36,7 +35,7 @@
         public function show()
         {
 
-            $data = $this->profilDao->findOneBy('user_id', $this->session['id'],[
+            $data = $this->dao->findOneBy('user_id', $this->session['id'],[
                 'select'    => ['profil.*', 'user.email'],
                 'contain'   => ['user' => 'profil.user_id = user.id']
                 ]);
@@ -56,7 +55,7 @@
                 'select' => ['user_id','nom', 'prenom', 'date_naissance', 'created', 'modified']
             ];
 
-            $data = $this->profilDao->findOneBy('user_id',$this->session['id'], $params);
+            $data = $this->dao->findOneBy('user_id',$this->session['id'], $params);
             $profil = new ProfilModel($data);
 
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -112,7 +111,7 @@
                 'select' => ['user_id','numero_voie', 'type_voie', 'nom_voie', 'code_postale', 'ville', 'created', 'modified']
             ];
 
-            $data = $this->profilDao->findOneBy('user_id', $this->session['id'], $params);
+            $data = $this->dao->findOneBy('user_id', $this->session['id'], $params);
             $profil = new ProfilModel($data);
 
             if($_SERVER['REQUEST_METHOD'] === 'POST') {

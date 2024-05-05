@@ -15,7 +15,6 @@
     class Movie extends \Cineflix\App\Controller\Movie
     {
 
-        private MovieDao $dao;
         protected string $layout = 'admin';
 
         public function __construct()
@@ -27,9 +26,15 @@
                 exit();
             }
 
-            $this->dao = new MovieDao();
         }
 
+
+
+        /**
+         * @param string|null $status
+         *
+         * @return string
+         */
         public function index(?string $status = null): string
         {
             $status_id = (!is_null($status)) ? StatusMovie::getStatus($status) : null;
@@ -63,12 +68,28 @@
             return $this->render('Movie.admin.index',compact('movies', 'buttons', 'status_id'));
         }
 
+
+
+        /**
+         * @param string|null $status
+         * @param int|null    $id
+         *
+         * @return string
+         */
         public function edit(string $status = null, int $id = null): string
         {
             $movie = new MovieModel();
             $movie->setStatus($status);
 
-            $title = (!isset($id))? "Ajouter un film ".StatusMovie::toString($movie->status) : "Editer: ".ucwords($movie->nom);
+
+            $title = "Ajouter un film ".StatusMovie::toString($movie->status);
+            $form_id = "AddMovie";
+
+            if (!is_null($id)) {
+                $title =  "Editer: ".ucwords($movie->nom);
+                $form_id = "EditMovie";
+            }
+
             $url = self::$_Router->getUrl('admin_movie_add',['status' => $status]);
             $class = ($movie->status == StatusMovie::EN_SALLE->value)? 'en-salle' : 'streaming';
 
@@ -95,19 +116,32 @@
                 $movie->addValidation('exploitation_fin',['alphaNumeric', 'require']);
                 $movie->addValidation('affiche',['file', 'require']);
 
-                if($movie->isValid() && $this->movieDao->create($movie)) {
+                if($movie->isValid() && $this->dao->create($movie)) {
 
                 }
 
             }
 
-            $errors = $movie->getErrors();
+
+            $props = [
+                'form_id'   => $form_id,
+                'title'     => $title,
+                'class'     => $class,
+                'url'       => $url,
+                'movie'     => $movie,
+                'errors'    => $movie->getErrors()
+            ];
 
             $this->addJavascript('validationLib');
             $this->addJavascript('ajaxRequest');
-            return $this->render('Movie.admin.edit',compact('title', 'movie', 'class', 'url', 'errors'));
+            return $this->render('Movie.admin.edit', $props);
         }
 
+
+
+        /**
+         * @return void
+         */
         public function delete()
         {
 

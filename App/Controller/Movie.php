@@ -26,22 +26,22 @@
                 'order'  => 'movie.modified'
             ];
 
-            $movieDao = new MovieDao();
-            $movies = $movieDao->findAll($options);
+            $movies = $this->dao->findAll($options);
 
             return $this->render('Movie.index',compact('movies', 'status_id'));
         }
 
         public function show(string $slug): string
         {
-            $movieDao = new MovieDao();
+
             $options = [
                 'select'  => ['*','cinema.nom','ville.nom'],
                 'contain' => [
                     'cinema' => 'cinema.id = movie.cinema_id',
                     'ville'  => 'ville.id = cinema.ville_id'],
             ];
-            $movie = $movieDao->findOneBy('slug', $slug, $options);
+
+            $movie = $this->dao->findOneBy('slug', $slug, $options);
 
             $this->title_page .= ' | ' . ucfirst($movie->nom);
 
@@ -88,8 +88,7 @@
                     'exploitation' => 'exploitation.movie_id = movie.id']
             ];
 
-            $movieDao = new MovieDao();
-            $movies = $movieDao->findAll($options,'Json');
+            $movies = $this->dao->findAll($options,'Json');
             $status = json_encode(StatusMovie::statusToArray());
 
             $json = '{"movies":'.$movies.', "movieStatus":'.$status.'}';

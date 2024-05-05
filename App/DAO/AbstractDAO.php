@@ -11,6 +11,7 @@
         protected Database $db;
         protected string $table;
         protected string $model;
+        protected string $path_model = "\\Cineflix\\App\\Model\\";
         protected int $last_id;
 
         /**
@@ -22,7 +23,7 @@
 
             $class_name = basename(get_called_class());
             $this->table = str_replace('dao', '', strtolower($class_name));
-            $this->model = "\\Cineflix\\App\\Model\\".ucfirst($this->table).'Model';
+            $this->model = $this->path_model.ucfirst($this->table).'Model';
 
         }
 
