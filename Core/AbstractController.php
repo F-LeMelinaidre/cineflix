@@ -30,7 +30,7 @@ abstract class AbstractController
 
         $class_name = basename(get_called_class());
 
-        if('Home' !== $class_name) {
+        if('Home' !== $class_name && 'Auth' !== $class_name) {
             $dao_class = $this->path_dao.$class_name.'Dao';
             $this->dao = new $dao_class();
         }

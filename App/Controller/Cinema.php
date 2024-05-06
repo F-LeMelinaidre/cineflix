@@ -15,7 +15,7 @@
          *
          * @return void
          */
-        public function movieSearch(string $ajax): void
+        public function cinemaSearch(string $ajax): void
         {
             //supprime le 1er caratère => ?
             $ajax = substr($ajax,1);
@@ -26,20 +26,13 @@
             $val = Security::sanitize($parts[1]);
 
             $options = [
-                'select' => ['movie.*','cinema.nom','ville.nom','exploitation.debut','exploitation.fin'],
-                'where'  => ["movie.$col LIKE :$col"],
+                'select' => ['cinema.*', 'ville.nom'],
+                'where'  => ["cinema.$col LIKE :$col"],
                 'params' => [$col => '%'.urldecode($val).'%'],
-                'contain' => [
-                    'cinema' => 'cinema.id = movie.cinema_id',
-                    'ville'  => 'ville.id = cinema.ville_id',
-                    'exploitation' => 'exploitation.movie_id = movie.id']
+                'contain' => ['ville'  => 'ville.id = cinema.ville_id']
             ];
 
-            $movieDao = new MovieDao();
-            $movies = $movieDao->findAll($options,'Json');
-            $status = json_encode(StatusMovie::statusToArray());
-
-            $json = '{"movies":'.$movies.', "movieStatus":'.$status.'}';
+            $json = $this->dao->findAll($options,'Json');
 
             // Afficher le JSON
             echo $json;

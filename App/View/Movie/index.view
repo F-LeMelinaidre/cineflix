@@ -29,9 +29,11 @@
                     <?= $movie->nom ?>
                 </a>
             </h5>
+            <?php if($movie->status === \Cineflix\App\DAO\List\StatusMovie::EN_SALLE->value): ?>
             <ul class="card-text">
                 <li><?= $movie->cinema->nom ?></li>
                 <li><?= $movie->cinema->ville->nom ?></li>
+            <?php endif; ?>
             </ul>
         </div>
     </div>

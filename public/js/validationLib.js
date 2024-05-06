@@ -50,12 +50,6 @@ const rules = {
         },
         message: `8 caratères minimum, comprenant au minimum une majascule, une minusclule, un chiffre, et un caratère !?:_-*#&%+ !`,
     },
-    dateRange: {
-        callback: (start, end) => {
-            return (start <= end);
-        },
-        message: `La date de début doit être inférieur ou égale à la date de fin !`,
-    },
     require: {
         message: `Champs requis !`,
     },
@@ -90,9 +84,9 @@ document.addEventListener('DOMContentLoaded', function () {
             inputRules.push(rule);
         }
 
-        if(item.hasAttribute('minlength')) inputRules.push('minLength');
-        if(item.hasAttribute('password')) inputRules.push('email');
-        if(item.hasAttribute('password')) inputRules.push('password');
+        if(item.type =='min') inputRules.push('minLength');
+        if(item.type == 'email') inputRules.push('email');
+        if(item.type == 'password') inputRules.push('password');
 
 
         if(item.hasAttribute('data-validation')) {
@@ -158,9 +152,8 @@ function handleAlertMessage(item, inputRules) {
         let validationRule = rules[rule];
 
         if(0 === value.length && 'require' === rule) {
-
-            error.message = rules.require.message;
             error.type = 'invalid';
+            error.message = rules[rule].message;
 
         } else if(0 !== value.length && 'require' !== rule) {
 
@@ -177,8 +170,8 @@ function handleAlertMessage(item, inputRules) {
                 error.type = 'error';
 
             }
-        }
 
+        }
     });
 
     if (Object.values(error).every(value => value === '')) {

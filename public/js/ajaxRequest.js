@@ -46,13 +46,13 @@ function CinemaSearch() {
                 url: '/Ajax/cinemaSearch',
                 method: 'GET',
                 data: {
-                    cinema: value,
+                    nom: value,
                 },
                 success: function (data) {
 
                     if (data.trim() !== "") {
                         list = JSON.parse(data);
-                        let cinemas = list.map(item => item.nom + ' - ' + item.ville);
+                        let cinemas = list.map(item => item.nom + ' - ' + item.ville.nom);
                         response(cinemas);
 
                     }
@@ -163,6 +163,10 @@ function MovieSearch() {
 
             $('.thumb').removeClass('hidden');
 
+            //ici gerer le message en fonction du status
+            // remettre en ligne si indisponible
+            // modifier le texte du boutton
+
             if ($addMovie) {
                 addAlertInfo(movieStatus[props.status]);
             }
@@ -178,12 +182,16 @@ function MovieSearch() {
  * @param {string} status
  */
 function addAlertInfo(status) {
-    const infoAlert = $(`<div class="info-alert">Ce film est déjà proposé ${status}!</div>`);
 
-    $('form').append(infoAlert);
-    infoAlert.hide().fadeIn(500);
+    if(1>=status) {
+        const infoAlert = $(`<div class="info-alert">Ce film est déjà proposé ${status}!</div>`);
 
-    $('#AddButton').prop('disabled', true);
+        $('form').append(infoAlert);
+        infoAlert.hide().fadeIn(500);
+
+        $('#AddButton').prop('disabled', true);
+    }
+
 }
 
 

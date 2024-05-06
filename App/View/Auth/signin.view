@@ -50,7 +50,8 @@
 
                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-7 col-9 row mx-auto">
                     <label for="Password">Mot de passe</label>
-                    <input type="password" id="Password" name="password" class="form-control mb-2 w-100" min="8" value="<?php if(isset($form['password'])) echo
+                    <input type="password" id="Password" name="password" class="form-control mb-2 w-100" aria-required="true" value="<?php if
+                    (isset($form['password'])) echo
                     $form['password'] ?>">
                     <div id="validationPassword" class="invalid-message hide"></div>
                 </div>

@@ -74,7 +74,7 @@
 
 
 
-                if($profil->isValid() && $this->profilDao->update($profil)) {
+                if($profil->isValid() && $this->dao->update($profil)) {
                     unset($data['user_id']);
                     unset($data['created']);
                     unset($data['modified']);
@@ -130,7 +130,7 @@
                 $profil->setCodePostale(intval($_POST['code_postale']));
                 $profil->setVille($_POST['ville']);
 
-                if($profil->isValid() && $this->profilDao->update($profil)) {
+                if($profil->isValid() && $this->dao->update($profil)) {
                     unset($data['user_id']);
                     unset($data['created']);
                     unset($data['modified']);
