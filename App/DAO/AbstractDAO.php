@@ -68,6 +68,27 @@
 
         }
 
+        public function findAllBy(string $col, string $val, array $options = null): mixed
+        {   //TODO à completer (Where, Order etc...)
+
+            $select = $options['select'] ?? ['*'];
+            $req = $this->db->select(...$select)
+                ->from($this->table)
+                ->where("$col = :$col")
+                ->setParameter($col,$val);
+
+            if(isset($options['contain'])) {
+
+                foreach ($options['contain'] as $relation => $condition) {
+                    $req->join($relation, 'INNER', $condition);
+
+                }
+            }
+
+            return $req->fetchAll();
+
+        }
+
         /**
          * @param array|null $options
          * @return mixed|null

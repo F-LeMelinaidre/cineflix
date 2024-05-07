@@ -9,11 +9,11 @@
     {
 
 
-        private ?string $nom = null;
         private array $validation_items;
 
         protected array $errors = [];
         protected ?int $id = null;
+        protected ?string $nom = null;
         protected string $created;
         protected string $modified;
 
@@ -146,8 +146,8 @@
             $valid = true;
 
             foreach($rules as $rule) {
-                if(!empty($this->$item) && $rule === 'equal') {
 
+                if(!empty($this->$item) && $rule === 'equal') {
                     $item_confirm = $item."_confirm";
                     $valid = $this->$item == $this->$item_confirm;
                     $message = (isset($messages['equal']))? $messages['equal'] : "les champs ne sont pas identiques !";
@@ -160,6 +160,7 @@
 
                 } elseif(empty($this->$item) && $rule === 'require') {
 
+                    echo $this->$item;
                     $valid = false;
                     $message = (isset($messages['require']))? $messages['require'] : "Champ requis !";
                 }

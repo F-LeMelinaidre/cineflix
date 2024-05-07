@@ -96,6 +96,7 @@
 
             // ajouter si c'est un ajout dans une salle une verification si il n'est pas deja en salle
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
+
                 $movie->setNom($_POST['nom']);
                 $movie->setDateSortie($_POST['date_sortie']);
                 $movie->setSynopsis($_POST['synopsis']);
@@ -114,12 +115,13 @@
                 $movie->addValidation('cinema_id',['numeric', 'require']);
                 $movie->addValidation('exploitation_debut',['alphaNumeric', 'require']);
                 $movie->addValidation('exploitation_fin',['alphaNumeric', 'require']);
-                $movie->addValidation('affiche',['file', 'require']);
+                //$movie->addValidation('affiche',['file', 'require']);
 
                 if($movie->isValid() && $this->dao->create($movie)) {
 
                 }
-
+                var_dump($movie);
+                var_dump($movie->getErrors());die();
             }
 
 

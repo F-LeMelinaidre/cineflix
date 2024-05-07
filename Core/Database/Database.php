@@ -464,7 +464,6 @@
 
                 //echo __CLASS__.' | '.__FUNCTION__.'<br>';
                 //$this->debug();
-                //die();
                 $this->request->execute();
 
                 $this->request->setFetchMode(PDO::FETCH_ASSOC);
@@ -502,6 +501,7 @@
         {
             $tables = array_flip($this->alias);
             foreach($data as $id => $val) {
+
                 $parts = explode("_",$id);
                 if (in_array($parts[0],$tables)) {
                     $tbl = $parts[0];

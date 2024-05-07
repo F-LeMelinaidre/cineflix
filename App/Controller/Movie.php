@@ -17,7 +17,7 @@
             $status_id = (!is_null($status)) ? StatusMovie::getStatus($status) : StatusMovie::EN_SALLE->value;
 
             $options = [
-                'select'  => ['*','cinema.nom','ville.nom'],
+                'select'  => ['movie.*','cinema.nom','ville.nom'],
                 'where'  => ['movie.status = :status'],
                 'params' => ['status' => $status_id],
                 'contain' => [

@@ -23,7 +23,13 @@ class User extends AbstractController
 
     public function index()
     {
-        $users = [];
+        $options = [
+            'select' => ['user.email','profil.nom','profil.prenom'],
+            'contain' => [
+                'profil' => 'user.id = profil.user_id',]
+        ];
+
+        $users = $this->dao->findAll($options);
         return $this->render('User.admin.index',compact("users"));
     }
 

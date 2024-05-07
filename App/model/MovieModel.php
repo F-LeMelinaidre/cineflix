@@ -109,11 +109,4 @@
             $this->slug = str_replace(' ', '-', ucfirst($slug));
         }
 
-        public function getJson(): array
-        {
-            $jsonData = json_encode($this, JSON_PRETTY_PRINT);
-
-            return $jsonData;
-        }
-
     }

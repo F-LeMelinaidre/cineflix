@@ -15,8 +15,8 @@
     <?php foreach($users as $user): ?>
 
         <tr>
-            <td><?= $user->nom ?></td>
-            <td><?= $user->prenom ?></td>
+            <td><?= $user->profil->nom ?></td>
+            <td><?= $user->profil->prenom ?></td>
             <td><?= $user->email ?></td>
             <td>
                 <nav class="action-menu">

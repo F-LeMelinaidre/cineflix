@@ -168,7 +168,7 @@ function MovieSearch() {
             // modifier le texte du boutton
 
             if ($addMovie) {
-                addAlertInfo(movieStatus[props.status]);
+                setAlertInfo(props.status, movieStatus);
             }
         }
     });
@@ -178,22 +178,29 @@ function MovieSearch() {
 
 
 /**
- *
- * @param {string} status
+ * @param {Json} status
+ * @param {integer} statusId
  */
-function addAlertInfo(status) {
-
-    if(1>=status) {
-        const infoAlert = $(`<div class="info-alert">Ce film est déjà proposé ${status}!</div>`);
-
-        $('form').append(infoAlert);
-        infoAlert.hide().fadeIn(500);
-
-        $('#AddButton').prop('disabled', true);
+function setAlertInfo(statusId, status) {
+    let label = status[statusId];
+    if(1>=statusId) {
+        addAlertInfo(label)
     }
 
 }
 
+/**
+ *
+ * @param {string} label
+ */
+function addAlertInfo(label) {
+    const infoAlert = $(`<div class="info-alert">Ce film est déjà proposé ${label}!</div>`);
+
+    $('form').append(infoAlert);
+    infoAlert.hide().fadeIn(500);
+
+    $('#AddButton').prop('disabled', true);
+}
 
 /**
  *

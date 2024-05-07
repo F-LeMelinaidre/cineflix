@@ -325,7 +325,10 @@ img.affiche {
     justify-content: space-evenly;
     column-gap: 0.8rem;
 }
-
+/* --- Tableau --- */
+#AdminContent table {
+    height: min-content;
+}
 /* --- Formulaire --- */
 form h2 {
     margin: 0 0 0.8rem 0;

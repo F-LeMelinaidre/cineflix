@@ -36,8 +36,8 @@
             <?php endif; ?>
             </ul>
         </div>
-    </div>
 
+    </div>
     <?php endforeach; ?>
 
 </section>

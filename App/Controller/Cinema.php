@@ -10,6 +10,9 @@
 
     class Cinema extends AbstractController
     {
+
+
+
         /**
          * @param string $ajax
          *

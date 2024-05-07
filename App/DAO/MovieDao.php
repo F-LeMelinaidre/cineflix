@@ -21,6 +21,7 @@
          */
         public function create(object $movie): void
         {
+            var_dump($movie);die();
             try {
 
                 //$this->db->beginTransaction();
