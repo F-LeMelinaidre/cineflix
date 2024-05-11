@@ -77,32 +77,11 @@ function CinemaSearch() {
 function MovieSearch() {
     let movies = [];
     let movieStatus = [];
-    let item = $('#InputNom');
-    let $addMovie = $('#AddMovie');
+    let item = $('#InputFilmNom');
 
     item.on('input', function () {
         let value = $(this).val().trim();
-
-        // Vérifier si la valeur de l'entrée correspond à un nom de film dans la list
         let found = movies.some(movie => movie === value);
-
-        // Si la valeur de l'entrée ne correspond à aucun nom de film dans la list, vider les champs associés
-        if (!found) {
-            $('#InputDateSortie').val('');
-            $('#InputSynopsis').text('');
-
-            $('#InputCinema').val('');
-            $('#InputDateDebut').val('');
-            $('#InputDateFin').val('');
-
-            $('.thumb').attr('src', '').addClass('hidden');
-
-            $('#fiche_id').val('');
-
-            if ($addMovie) {
-                removeAlertInfo();
-            }
-        }
     });
 
     item.autocomplete({
@@ -141,35 +120,6 @@ function MovieSearch() {
             let value = ui.item.label; // Accéder directement à la propriété nom
             let props = movies.find(movie => movie.nom === value);
 
-            $('#InputDateSortie').val(formatDate(props.date_sortie));
-
-            let debut = (null !== props.exploitation.debut) ? formatDate(props.exploitation.debut) : '';
-            let fin = (null !== props.exploitation.debut) ? formatDate(props.exploitation.fin) : '';
-
-            let cinema = [];
-            if (null !== props.cinema.nom) {
-                cinema.push(props.cinema.nom, props.ville.nom);
-            }
-
-            $('#InputDateDebut').val(debut);
-            $('#InputDateFin').val(fin);
-
-            $('#InputCinema').val(cinema.join('-'));
-
-            $('#InputSynopsis').text(props.synopsis);
-
-            $('.thumb img').attr('src', `../../${props.affiche}`);
-
-
-            $('.thumb').removeClass('hidden');
-
-            //ici gerer le message en fonction du status
-            // remettre en ligne si indisponible
-            // modifier le texte du boutton
-
-            if ($addMovie) {
-                setAlertInfo(props.status, movieStatus);
-            }
         }
     });
 

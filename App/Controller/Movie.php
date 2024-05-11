@@ -2,6 +2,7 @@
 
     namespace Cineflix\App\Controller;
 
+    use Cineflix\App\DAO\List\Role;
     use Cineflix\App\DAO\List\StatusMovie;
     use Cineflix\App\DAO\MovieDao;
     use Cineflix\App\DAO\SeanceDao;
@@ -15,7 +16,8 @@
         public function index(?string $status = null): string
         {
             $status_id = (!is_null($status)) ? StatusMovie::getStatus($status) : StatusMovie::EN_SALLE->value;
-
+echo StatusMovie::EN_SALLE->value;
+echo Role::ADHERENT->value;
             $options = [
                 'select'  => ['movie.*','cinema.nom','ville.nom'],
                 'where'  => ['movie.status = :status'],
@@ -28,6 +30,8 @@
 
             $movies = $this->dao->findAll($options);
 
+            $this->addJavascript('api/MovieIndex', 'module');
+            $this->addJavascript('js/ajaxRequest');
             return $this->render('Movie.index',compact('movies', 'status_id'));
         }
 
@@ -58,7 +62,8 @@
 
             $seances = array_chunk($seances, 3);
 
-            $this->addJavascript('ajaxRequest');
+            $this->addJavascript('api/MovieIndex');
+            $this->addJavascript('js/ajaxRequest');
 
             return $this->render('Movie.show', compact('movie', 'seances'));
         }

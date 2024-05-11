@@ -15,7 +15,7 @@
         public ?string $email = null;
         public string $token;
 
-        private int $role = Role::ADHERENT->value;
+        private int $role;
         public string $connect;
         public string $last_connect;
 
@@ -27,7 +27,6 @@
         public function __construct(?array $data = null)
         {
             parent::__construct($data);
-
             $this->hydrate($data);
 
         }
@@ -54,8 +53,9 @@
             if(!empty($profil)) $this->profil = new ProfilModel($profil);
         }
 
-        public function setRole(int|string $role = Role::ADHERENT->value ): void
+        public function setRole(int $role): void
         {
+
             if(is_numeric($role)) {
                 $this->role = $role;
             } else {

@@ -7,7 +7,7 @@
         <h2 class="titre">Information du film</h2>
         <div id="Nom">
             <label class="form-label" for="Nom">Nom</label>
-            <input id="InputNom" class="form-control" type="text" name="nom" value="" aria-required="true" data-action="movieSearch"
+            <input id="InputFilmNom" class="form-control" type="text" name="nom" value="" aria-required="true" data-action="movieSearch"
                    data-validation="alphaNumericExtended">
             <div id="MoviesList"></div>
         </div>

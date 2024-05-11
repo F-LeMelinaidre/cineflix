@@ -18,7 +18,7 @@
 <?php
     if(isset($js_block)):
         foreach($js_block as $js): ?>
-            <script src="<?= $js ?>"></script>
+            <script <?php  if (!is_null($js['type'])) echo "type='{$js['type']}'"; ?> src="<?= $js['path'] ?>"></script>
         <?php
         endforeach;
     endif;

@@ -114,25 +114,15 @@ abstract class AbstractController
      * à la lib $js
      * @return void
      */
-    protected function addJavascript(...$scripts): void
+    protected function addJavascript(string $path, ?string $type = null): void
     {
-        foreach ($scripts as $script) {
-            $js = '';
 
-            if(is_string($script)) {
+        if(!str_starts_with($path,'/public/')) $path = '../../public/'.$path;
+        if(!str_ends_with($path,'.js')) $path .= '.js';
 
-                if(str_starts_with($script,'https')) {
-                    $js = $script;
-                } else {
+        $js = [ 'path' => $path,
+                'type' => $type];
 
-                    if(!str_starts_with($script,'/public/js/')) $js = '../../public/js/'.$script;
-                    if(!str_ends_with($script,'.js')) $js = $js.'.js';
-                }
-
-                if(!empty($js)) array_push($this->js_lib,$js);
-
-            }
-
-        }
+        array_push($this->js_lib,$js);
     }
 }

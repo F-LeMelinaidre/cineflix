@@ -134,8 +134,8 @@
                 'errors'    => $movie->getErrors()
             ];
 
-            $this->addJavascript('validationLib');
-            $this->addJavascript('ajaxRequest');
+            $this->addJavascript('js/validationLib');
+            $this->addJavascript('js/ajaxRequest');
             return $this->render('Movie.admin.edit', $props);
         }
 
