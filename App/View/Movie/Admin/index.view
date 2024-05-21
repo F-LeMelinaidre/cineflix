@@ -17,6 +17,7 @@
 <table class="table table-striped align-middle">
     <thead class="table-light">
     <tr>
+        <th>Type</th>
         <th>Nom</th>
         <th>Cinéma</th>
         <th>Ville</th>
@@ -27,14 +28,17 @@
     </thead>
     <tbody >
 
-    <?php foreach($movies as $movie): ?>
+    <?php foreach($movies as $movie):?>
 
         <tr>
+            <td class="<?= strtolower(\Cineflix\App\DAO\List\StatusMovie::getUrlById($movie->status_id)) ?>">
+                <?= \Cineflix\App\DAO\List\StatusMovie::toString($movie->status_id) ?>
+            </td>
             <td><?= $movie->nom ?></td>
             <td><?= $movie->cinema->nom ?></td>
             <td><?= $movie->cinema->ville->nom ?></td>
-            <td><?= $movie->exploitation->getDebutFr() ?></td>
-            <td><?= $movie->exploitation->getFinFr() ?></td>
+            <td><?= (\Cineflix\App\DAO\List\StatusMovie::EN_SALLE->value === $movie->status_id)? $movie->exploitation->debut_fr : '' ?></td>
+            <td><?= (\Cineflix\App\DAO\List\StatusMovie::EN_SALLE->value === $movie->status_id)? $movie->exploitation->fin_fr : ''?></td>
             <td>
                 <nav class="action-menu">
                     <ul>

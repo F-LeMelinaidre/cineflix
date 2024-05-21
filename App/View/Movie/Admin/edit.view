@@ -7,49 +7,58 @@
         <h2 class="titre">Information du film</h2>
         <div id="Nom">
             <label class="form-label" for="Nom">Nom</label>
-            <input id="InputFilmNom" class="form-control" type="text" name="nom" value="" aria-required="true" data-action="movieSearch"
+            <input id="InputFilmNom" class="js-validation form-control" type="text" name="nom" value=""
+                   aria-required="true"
+                   data-action="movieExist"
                    data-validation="alphaNumericExtended">
             <div id="MoviesList"></div>
         </div>
 
         <div id="DateSortie">
             <label class="form-label" for="DateSortie">Date de sortie</label>
-            <input id="InputDateSortie" class="form-control" type="date" name="date_sortie" value="" max="<?php echo date('Y-m-d'); ?>" min=""
+            <input id="InputDateSortie" class="js-validation form-control" type="date" name="date_sortie" value="" max="<?php echo date('Y-m-d'); ?>" min=""
                    aria-required="true">
         </div>
 
-        <?php if($movie->status === \Cineflix\App\DAO\List\StatusMovie::EN_SALLE->value): ?>
+        <?php if($movie->status_id === \Cineflix\App\DAO\List\StatusMovie::EN_SALLE->value): ?>
 
         <div id="Cinema">
             <label class="form-label" for="Cinema">Cinema</label>
-            <input id="InputCinema" class="form-select" type="text" name="cinema.nom" value=""
-                   placeholder="Saisissez un cinéma ou une ville" aria-required="true" data-validation="alpha"  data-action="cinemaSearch">
+            <input id="InputCinema" class="js-validation form-control" type="text" name="cinema.nom" value=""
+                   placeholder="Saisissez un cinéma ou une ville"
+                   aria-required="true"
+                   data-validation="alpha"
+                   data-action="cinemaSearch">
             <div id="CinemasList"></div>
         </div>
 
         <h2 class="exploitation">Information d'exploitation</h2>
         <div id="DateDebut">
             <label class="form-label" for="DateDebut">Début</label>
-            <input id="InputDateDebut" class="form-control" type="date" name="exploitation_debut" value="" min="<?php echo date('Y-m-d'); ?>"
-                   range-end="InputDateFin" aria-required="true">
+            <input id="InputDateDebut" class="js-validation form-control" type="date" name="exploitation_debut" value="" min="<?php echo date('Y-m-d'); ?>"
+                   range-end="InputDateFin"
+                   aria-required="true">
         </div>
 
         <div id="DateFin">
             <label class="form-label" for="DateFin">Fin</label>
-            <input id="InputDateFin" class="form-control" type="date" name="exploitation_fin" value="" min="<?php echo date('Y-m-d'); ?>"
-                   range-start="InputDateDebut" aria-required="true">
+            <input id="InputDateFin" class="js-validation form-control" type="date" name="exploitation_fin" value="" min="<?php echo date('Y-m-d'); ?>"
+                   range-start="InputDateDebut"
+                   aria-required="true">
         </div>
 
         <?php endif; ?>
         <div id="Synopsis">
             <label class="form-label" for="Synopsis">Synopsis</label>
-            <textarea id="InputSynopsis" class="form-control" name="synopsis" cols="30" rows="7" aria-required="true"
-                      data-validation="alphaNumericExtended"></textarea>
+            <textarea id="InputSynopsis" class="js-validation form-control" name="synopsis" cols="30" rows="7"
+                        aria-required="true"
+                        data-validation="alphaNumericExtended"
+                        data-elements="#Synopsys"></textarea>
         </div>
 
         <div id="Affiche">
             <label class="form-label" for="Affiche">Affiche</label>
-            <input id="InputAffiche" class="form-control" name="affiche" type="file" accept=".png, .jpg, .jpeg">
+            <input id="InputAffiche" class="js-validation form-control" name="affiche" type="file" accept=".png, .jpg, .jpeg">
         </div>
 
 

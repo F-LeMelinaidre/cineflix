@@ -9,10 +9,13 @@
     class MovieDao extends AbstractDAO
     {
 
-        public function findOneBy(string $col, string $val, array $options = null): mixed
+        public function findOneBy(string $col, string $val, array $options = [], $format = 'model'): mixed
         {
-            $result = parent::findOneBy($col, $val, $options);
-            return new MovieModel($result);
+            $result = parent::findOneBy($col, $val, $options, $format);
+
+            if('model' === $format) $result = new MovieModel($result);
+
+            return $result;
         }
 
         /**

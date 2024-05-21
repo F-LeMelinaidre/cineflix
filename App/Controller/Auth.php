@@ -1,5 +1,5 @@
 <?php
-    //mp A5FWNS2ekaejTqt?!
+    //mp 8LR632C8o3_t
     // mp major rRTxrTTMhLkQf4W!?
     namespace Cineflix\App\Controller;
 
@@ -13,10 +13,12 @@
     use Cineflix\Core\Util\MessageFlash;
     use Cineflix\Core\Util\Regex;
     use Cineflix\Core\Util\Security;
+    use ReCaptcha\ReCaptcha;
 
     class Auth extends AbstractController
     {
 
+        private string $site_key = '6Lfny-ApAAAAAKi890lrpa5LSgY8LcsrUAwE7Y2M';
         private array $session;
         private UserDao $userDao;
         private ProfilDao $profilDao;
@@ -38,7 +40,6 @@
 
             $errors = [];
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
                 $user = new UserModel();
 
                 $user->addValidation('email',['email', 'require']);
@@ -57,15 +58,13 @@
 
                     $user->hydrate($data);
 
-
                     AuthConnect::connect($user->email, [
-                        'id'     => $user->getId(),
+                        'id'     => $user->id,
                         'nom'    => $user->profil->nom,
                         'prenom' => $user->profil->prenom,
                         'point'  => $user->profil->point,
-                        'role'   => $user->getRole(),
+                        'role'   => $user->role,
                     ]);
-
                     MessageFlash::create('Connecté',$type = 'valide');
 
                     header('Location: /');
@@ -76,6 +75,8 @@
 
                 $errors = $user->getErrors();
             }
+
+            $this->addJavascript('js/app.js', 'module');
 
             return $this->render('Auth.signin', [$errors]);
 
@@ -93,12 +94,11 @@
                 exit();
             }
 
+            $errors = [];
             $user = new UserModel();
 
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-                $user->setRole(Role::ADHERENT->value);
                 $user->setEmail($_POST['email']);
                 $user->setPassword($_POST['password']);
                 $user->setPasswordConfirm($_POST['password_confirm']);
@@ -117,8 +117,11 @@
 
                 $user_is_valid =$user->isValid();
                 $profil_is_valid = $user->profil->isValid();
-                $valid = $user_is_valid && $profil_is_valid && !$exist;
 
+                $recaptcha = new ReCaptcha($this->site_key);
+                $response = $recaptcha->verify($_POST['g-recaptcha-response']);
+
+                $valid = $user_is_valid && $profil_is_valid && !$exist && $response->isSuccess();
                 if($valid && $this->userDao->create($user)) {
 
                     AuthConnect::connect($user->email,[
@@ -126,7 +129,7 @@
                         'nom'    => $user->profil->nom,
                         'prenom' => $user->profil->prenom,
                         'point'  => $user->profil->point,
-                        'role'   => $user->getRole(),
+                        'role'   => $user->role,
                     ]);
 
                     MessageFlash::create('Merci de compléter votre profil', $type = 'valide');
@@ -134,9 +137,19 @@
                     header('Location: /Signup/Finalise');
                     exit;
                 }
+
+                if($exist) MessageFlash::create('Compte existant !', $type = 'warning');
+
+                $errors = array_merge($user->getErrors(),$user->profil->getErrors());
+
+                if(isset($exist) && $exist) $errors['email'] = ['type'   => 'invalid',
+                                                                'message' =>'Email déja utilisé !'];
+                if(!$response->isSuccess()) $errors['recaptcha'] = ['type'   => 'invalid',
+                                                                    'message' =>'Merci de valider le Recaptcha !'];
             }
-            $errors = array_merge($user->getErrors(),$user->profil->getErrors());
-            if(isset($exist) && $exist) $errors['email'] = 'Email déja utilisé !';
+            $this->addJavascript('https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit');
+            $this->addJavascript('js/class/reCaptcha.js', 'module');
+            $this->addJavascript('js/app.js', 'module');
 
             return $this->render('Auth.signup', compact('user','errors'));
 
@@ -164,11 +177,11 @@
                 $profil->setCreated($this->session['last_connect']);
 
 
-                $profil->addValidation('numero_voie',['alphaNumeric', 'require']);
-                $profil->addValidation('type_voie',['alpha', 'require']);
-                $profil->addValidation('nom_voie',['alphaNumeric', 'require']);
-                $profil->addValidation('code_postale',['numeric', 'require']);
-                $profil->addValidation('ville',['alpha', 'require']);
+                $profil->addValidation('numero_voie',['alphaNumeric']);
+                $profil->addValidation('type_voie',['alpha']);
+                $profil->addValidation('nom_voie',['alphaNumeric']);
+                $profil->addValidation('code_postale',['numeric']);
+                $profil->addValidation('ville',['alpha']);
 
                 if($profil->isValid() && $this->profilDao->update($profil)) {
                     MessageFlash::create('Welcome, Vous êtez connecté', $type = 'valide');
@@ -178,8 +191,9 @@
                 }
             }
 
-
             $errors = $profil->getErrors();
+
+            $this->addJavascript('js/app.js', 'module');
 
             return $this->render('Auth.finalizeSignup', compact( 'profil', 'errors'));
         }

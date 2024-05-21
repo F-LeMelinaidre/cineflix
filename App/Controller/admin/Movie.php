@@ -82,7 +82,7 @@
             $movie->setStatus($status);
 
 
-            $title = "Ajouter un film ".StatusMovie::toString($movie->status);
+            $title = "Ajouter un film ".StatusMovie::toString($movie->status_id);
             $form_id = "AddMovie";
 
             if (!is_null($id)) {
@@ -134,8 +134,8 @@
                 'errors'    => $movie->getErrors()
             ];
 
-            $this->addJavascript('js/validationLib');
-            $this->addJavascript('js/ajaxRequest');
+            $this->addJavascript('js/app.js', 'module');
+            //$this->addJavascript('js/validationLib.js');
             return $this->render('Movie.admin.edit', $props);
         }
 

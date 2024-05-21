@@ -133,14 +133,18 @@
                 ['id' => '[0-9]+']);
 
             //Requete Ajax
-            self::$_Router->ajax('ajax_cinemaSearch', '/Ajax/cinemaSearch', [ Controller\Cinema::class, 'cinemaSearch']);
-            self::$_Router->ajax('ajax_filmSearch', '/Ajax/movieSearch', [ Controller\Movie::class, 'movieSearch']);
+            self::$_Router->ajax('ajax_cinemaSearch', '/Ajax/cinemaSearch', [ Controller\Cinema::class, 'cinemaSearch'],true);
+            self::$_Router->ajax('ajax_movieSearch', '/Ajax/movieSearch', [ Controller\Movie::class, 'movieSearch'],true);
+            self::$_Router->ajax('ajax_movieExist', '/Ajax/movieExist', [ Controller\Movie::class, 'movieExist'],true);
+            self::$_Router->ajax('ajax_statusList', '/Ajax/statusList', [ Controller\Movie::class, 'statusList']);
 
 
             try {
                 // Controlle l'url et dirige vers le bon controller et methode si l'url match avec une route précédement créé
                 // Sinon lève une exception
-                $route = self::$_Router->resolve();
+                $path = $_SERVER['REQUEST_URI'] ?? '/'; // url courant hors nom de domaine
+                $method = $_SERVER['REQUEST_METHOD']; // methode POST ou GET
+                $route = self::$_Router->resolve($method,$path);
                 $callback = $route->callback;
                 $params = $route->matches;
 
@@ -155,7 +159,6 @@
                 // exemple un parametre d'url
                 // return vers public/index.view
 
-                $reflectionClass = new ReflectionClass(ProfilModel::class);
 
                 return call_user_func_array($callback, $params);
 

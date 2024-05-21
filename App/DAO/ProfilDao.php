@@ -8,22 +8,30 @@
     class ProfilDao extends AbstractDAO
     {
 
-        public function findByUserToken(string $token, array $options = null)
+        public function update($profil, string $id_column = 'user_id'): Database
         {
-            if(isset($options['user']['select'])) {
-                $options['hasOne']['user']['select'] = array_merge($options['user']['select'], ['token']);
-                unset($options['user']);
-            } else {
-                $options['hasOne']['user']['select'] = ['id','email','token','connect','last_connect','created','modified'];
-            }
+            $data = [];
 
-            $result = $this->findOneBy(['token' => $token], $options);
-            return $result;
+            $data['id'] = $profil->$id_column;
 
-        }
+            if(!is_null($profil->nom)) $data['nom'] = $profil->nom;
 
-        public function update(object $profil, string $id_column = 'user_id'): Database
-        {
-            return parent::update($profil, $id_column);
+            if(!is_null($profil->prenom)) $data['prenom'] = $profil->prenom;
+
+            if(!is_null($profil->date_naissance)) $data['date_naissance'] = $profil->date_naissance;
+
+            if(!is_null($profil->numero_voie)) $data['numero_voie'] = $profil->numero_voie;
+
+            if(!is_null($profil->type_voie)) $data['type_voie'] = $profil->type_voie;
+
+            if(!is_null($profil->nom_voie)) $data['nom_voie'] = $profil->nom_voie;
+
+            if(!is_null($profil->code_postale)) $data['code_postale'] = $profil->code_postale;
+
+            if(!is_null($profil->ville)) $data['ville'] = $profil->ville;
+
+            if(!is_null($profil->point)) $data['point'] = $profil->point;
+
+            return parent::update($data, $id_column);
         }
     }

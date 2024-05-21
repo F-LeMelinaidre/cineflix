@@ -4,7 +4,7 @@ namespace Cineflix\App\Model;
 
 class CinemaModel extends AbstractModel
 {
-    public ?VilleModel $ville;
+    protected ?VilleModel $ville;
 
 
     /**
@@ -16,6 +16,24 @@ class CinemaModel extends AbstractModel
 
         if(isset($data['ville'])) $this->ville = new VilleModel($data['ville']);
 
+    }
+
+    /**
+     * @param $item
+     *
+     * @return mixed
+     */
+    public function __get($item): mixed
+    {
+        switch ($item) {
+            case 'ville':
+                $item = $this->$item;
+                break;
+            default:
+                $item = parent::__get($item);
+                break;
+        }
+        return $item;
     }
 
 }

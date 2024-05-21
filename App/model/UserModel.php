@@ -1,5 +1,5 @@
 <?php
-
+    //wKV4d:G-i!3Z
     namespace Cineflix\App\Model;
 
     use Cineflix\App\DAO\List\Role;
@@ -7,19 +7,18 @@
 
     class UserModel extends AbstractModel
     {
+        private int $role = Role::ADHERENT->value;
+        private ProfilModel $profil;
 
+        protected ?string $email = null;
+        protected ?string $password_hash = null;
         protected ?string $password = null;
         protected ?string $password_confirm = null;
-        public ?string $password_hash = null;
+        protected string $token;
+        protected string $connect;
+        protected string $last_connect;
 
-        public ?string $email = null;
-        public string $token;
 
-        private int $role;
-        public string $connect;
-        public string $last_connect;
-
-        public ProfilModel $profil;
 
         /**
          * @param array|null $data
@@ -43,30 +42,50 @@
 
             if(isset($data['email'])) $this->email = $data['email'];
 
-            if(isset($data['connect'])) $this->connect = $this->getDateFr($data['connect']);
+            if(isset($data['connect'])) $this->connect = $data['connect'];
 
-            if(isset($data['last_connect'])) $this->last_connect = $this->getDateFr($data['last_connect']);
+            if(isset($data['last_connect'])) $this->last_connect = $data['last_connect'];
 
-            if(isset($data['profil'])) $this->profil = new ProfilModel($data['profil']);
+            $profil = (isset($data['profil'])) ? $data['profil'] : [];
 
-
-            if(!empty($profil)) $this->profil = new ProfilModel($profil);
+            $this->profil = new ProfilModel($profil);
         }
 
+        public function __get($item): mixed
+        {
+            switch($item) {
+                case 'email':
+                case 'password_hash':
+                case 'profil':
+                case 'role':
+                    $item = $this->$item;
+                    break;
+                case 'role_name':
+                    $item = Role::toString($this->role);
+                    break;
+                case 'last_connect_fr':
+                    $item = $this->getDateHeureFr($this->last_connect);
+                    break;
+
+                case 'connect_fr':
+                    $item = $this->getDateHeureFr($this->connect);
+
+                default:
+                    $item = parent::__get($item);
+                    break;
+            }
+            return $item;
+        }
+        /**
+         * @param int $role
+         *
+         * @return void
+         */
         public function setRole(int $role): void
         {
-
-            if(is_numeric($role)) {
-                $this->role = $role;
-            } else {
-                $this->role = Role::getRole($role);
-            }
+            $this->role = Security::sanitize($role);
         }
 
-        public function getRole()
-        {
-            return $this->role;
-        }
         /**
          * @param string $email
          *
@@ -84,8 +103,11 @@
          */
         public function setPassword(string $password): void
         {
-            $this->password = Security::sanitize($password);
-            $this->password_hash = password_hash($this->password, PASSWORD_BCRYPT);
+            if(!empty($password)) {
+                $this->password = Security::sanitize($password);
+                $this->password_hash = password_hash($this->password, PASSWORD_BCRYPT);
+            }
+
         }
 
         /**
@@ -116,9 +138,5 @@
             return $this->password_confirm;
         }
 
-        public function __set(string $item, mixed $value): void
-        {
-            $this->$item = $value;
-        }
 
     }

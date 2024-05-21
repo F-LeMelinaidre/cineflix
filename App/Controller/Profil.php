@@ -26,7 +26,7 @@
 
             $this->session = AuthConnect::getSession();
             $this->userDao = new UserDao();
-
+            $this->page_active = 'Profil';
         }
 
         /**
@@ -36,13 +36,12 @@
         {
 
             $data = $this->dao->findOneBy('user_id', $this->session['id'],[
-                'select'    => ['profil.*', 'user.email'],
+                'select'    => ['profil.*', 'user.role', 'user.email'],
                 'contain'   => ['user' => 'profil.user_id = user.id']
                 ]);
 
             $profil = new ProfilModel($data);
-
-            return $this->render('profil.show',['profil' => $profil]);
+            return $this->render('profil.show',compact('profil'));
         }
 
         /**
@@ -71,24 +70,21 @@
                 $profil->setPrenom($_POST['prenom']);
                 $profil->setDateNaissance($_POST['date_naissance']);
 
-
-
-
                 if($profil->isValid() && $this->dao->update($profil)) {
+
                     unset($data['user_id']);
                     unset($data['created']);
                     unset($data['modified']);
 
-                    // transforme l'objet en array sans valeur null, ni objet
-                    $profil_to_array = array_filter(get_object_vars($profil), function($var) {
+                    $data_updated = $this->dao->getDataUpdated();
 
-                        return !is_null($var) && !is_object($var);
-                    });
+                    /*var_dump($data);
+                    var_dump($data_updated);*/
 
                     // compare $data (issue de la bd) à l'object $profil transformé en array
                     // si ils sont différents informe de la modification des données en bd
                     // TODO faire cette vérification avant et ne pas faire l'update si ils sont identiques
-                    $array_diff = array_diff($data,$profil_to_array);
+                    $array_diff = array_diff($data,$data_updated);
                     if(!empty($array_diff)) MessageFlash::create('Identité modifié',$type = 'valide');
 
                     header('Location: /Profil');
@@ -98,8 +94,9 @@
             }
 
             $errors = $profil->getErrors();
+            $this->addJavascript('js/app.js', 'module');
 
-            return $this->render('profil.editIdentite',['profil' => $profil, 'errors' => $errors]);
+            return $this->render('profil.editIdentite',compact('profil', 'errors'));
         }
 
         /**
@@ -130,17 +127,15 @@
                 $profil->setCodePostale(intval($_POST['code_postale']));
                 $profil->setVille($_POST['ville']);
 
+
                 if($profil->isValid() && $this->dao->update($profil)) {
                     unset($data['user_id']);
                     unset($data['created']);
                     unset($data['modified']);
 
-                    // transforme l'objet en array sans valeur null ni objet
-                    $profil_to_array = array_filter(get_object_vars($profil), function($var) {
-                        return !is_null($var)  && !is_object($var);
-                    });
+                    $data_updated = $this->dao->getDataUpdated();
 
-                    $array_diff = array_diff($data,$profil_to_array);
+                    $array_diff = array_diff($data,$data_updated);
                     if(!empty($array_diff)) MessageFlash::create('Adresse modifié',$type = 'valide');
 
                     header('Location: /Profil');
@@ -151,7 +146,9 @@
 
             $errors = $profil->getErrors();
 
-            return $this->render('profil.editAdresse',['profil' => $profil, 'errors' => $errors]);
+            $this->addJavascript('js/app.js', 'module');
+
+            return $this->render('profil.editAdresse',compact('profil', 'errors'));
         }
 
         /**
@@ -192,7 +189,8 @@
 
             $errors = $user->getErrors();
 
-            $this->addJavascript('lib');
+            $this->addJavascript('js/app.js', 'module');
+            $this->addJavascript('js/class/generatePassword.js', 'module');
             return $this->render('profil.editAuthentification',compact('user','errors'));
         }
     }

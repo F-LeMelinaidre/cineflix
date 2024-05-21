@@ -14,7 +14,6 @@
 </header>
 <section class="container d-flex justify-content-center row-gap-4 column-gap-4 flex-wrap mt-4">
     <?php foreach($movies as $movie): ?>
-
     <div class="card card-info">
         <div class="bill-container">
             <a href="<?= self::$_Router->getUrl("movie_show",['slug' => $movie->getSlug()]) ?>">

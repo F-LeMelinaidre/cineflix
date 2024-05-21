@@ -58,7 +58,6 @@ class AuthConnect
             ->setParameter('email', $identifiant);
 
         $result = $req->fetch();
-
         return $result && password_verify($pwd, $result['password_hash']);
     }
 

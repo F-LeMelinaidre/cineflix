@@ -48,7 +48,6 @@ class Router
      * @param array  $callback
      * @param array  $requirement
      *
-     * @return Route
      */
     public function get(string $name, string $path, array $callback, array $requirement = []):void
     {
@@ -62,16 +61,28 @@ class Router
      * @param array $callback
      * @param array $requirement
      *
-     * @return Route
      */
     public function post(string $name, string $path, array $callback, array $requirement = []):void
     {
         $this->add('POST', $name, $path, $callback, $requirement);
     }
 
-    public function ajax(string $name, string $path, array $callback):void
+    /**
+     * @param string $name
+     * @param string $path
+     * @param array  $callback
+     * @param bool   $methodGET
+     *
+     * @return void
+     */
+    public function ajax(string $name, string $path, array $callback, bool $methodGET = false):void
     {
-        $this->add('AJAX', $name, $path.'{ajax}', $callback, ['ajax' => '\?(?:[a-zA-Z0-9_-]+=[a-zA-Z0-9!?_%\-]+(?:&[a-zA-Z0-9_-]+=[a-zA-Z0-9!?_%\-]+)*)']);
+        if($methodGET) {
+            $this->add('AJAX', $name, $path.'{ajax}', $callback, ['ajax' => '\?(?:[a-zA-Z0-9_-]+=[a-zA-Z0-9!?_%\-]+(?:&[a-zA-Z0-9_-]+=[a-zA-Z0-9!?_%\-]+)*)']);
+        } else {
+            $this->add('AJAX', $name, $path, $callback);
+        }
+
     }
 
     /**
@@ -82,7 +93,6 @@ class Router
      * @param array $callback
      * @param array $requirement
      *
-     * @return Route
      */
     private function add(string $method, string $name, string $path, array $callback, array $requirement = []): void
     {
@@ -120,10 +130,9 @@ class Router
      * @return \Cineflix\Core\Router\Route
      * @throws RouteNotFoundException
      */
-    public function resolve(): Route
+    public function resolve($method, $path): Route
     {
-        $path = $_SERVER['REQUEST_URI'] ?? '/'; // url courant hors nom de domaine
-        $method = $_SERVER['REQUEST_METHOD']; // methode POST ou GET
+
 
         if (str_starts_with($path, '/Ajax') && $method === 'GET') {
             $method = 'AJAX';

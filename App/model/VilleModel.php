@@ -10,4 +10,24 @@ class VilleModel extends AbstractModel
 
     }
 
+    /**
+     * @param string $item
+     *
+     * @return mixed
+     */
+    public function __get(string $item): mixed
+    {
+        switch($item) {
+            case 'nom':
+            case 'ville':
+                $item = $this->$item;
+                break;
+            default:
+                $item = '';
+                break;
+        }
+
+        return $item;
+    }
+
 }

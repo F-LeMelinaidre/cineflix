@@ -8,14 +8,15 @@
     class AbstractModel
     {
 
-
         private array $validation_items;
 
-        protected array $errors = [];
         protected ?int $id = null;
         protected ?string $nom = null;
         protected string $created;
         protected string $modified;
+        protected array $errors = [];
+
+
 
         /**
          * @param array|null $data
@@ -33,18 +34,25 @@
         {
             switch($item) {
                 case 'id':
+                case 'nom':
                 case 'created':
                 case 'modified':
-                case 'nom':
                     $item = $this->$item;
                     break;
-                default:
-                    $item = '';
-                    break;
-            }
 
+                case 'created_fr':
+                    $item = $this->getDateHeureFr($this->created);
+                    break;
+                case 'modified_fr':
+                    $item = $this->getDateHeureFr($this->modified);
+                    break;
+
+                default:
+                    $item ='';
+            }
             return $item;
         }
+
         /**
          * @return int
          */
@@ -105,6 +113,16 @@
          */
         public function getDateFr(string $date): string
         {
+            return date("d-m-Y", strtotime($date));
+        }
+
+        /**
+         * @param string $date
+         *
+         * @return string
+         */
+        public function getDateHeureFr(string $date): string
+        {
             return date("d-m-Y H:i:s", strtotime($date));
         }
 
@@ -150,22 +168,27 @@
                 if(!empty($this->$item) && $rule === 'equal') {
                     $item_confirm = $item."_confirm";
                     $valid = $this->$item == $this->$item_confirm;
+
+                    $type = 'invalid';
                     $message = (isset($messages['equal']))? $messages['equal'] : "les champs ne sont pas identiques !";
 
                 } elseif (!empty($this->$item) && $rule !== 'require') {
 
                     $pattern = Regex::getPattern($rule);
                     $valid = preg_match($pattern, $this->$item);
+
+                    $type = 'error';
                     $message = (isset($messages[$rule]))? $messages[$rule] : Regex::getMessage($rule);
 
                 } elseif(empty($this->$item) && $rule === 'require') {
 
-                    echo $this->$item;
                     $valid = false;
+                    $type = 'invalid';
                     $message = (isset($messages['require']))? $messages['require'] : "Champ requis !";
                 }
 
-                if(!$valid ) $this->errors[$item] = $message;
+                if(!$valid ) $this->errors[$item] = ['type'   => $type,
+                                                     'message' => $message];
 
             }
         }

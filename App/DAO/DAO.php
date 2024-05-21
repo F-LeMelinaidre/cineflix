@@ -7,9 +7,9 @@
 
         public function create(object $model);
 
-        public function findOneBy(string $col, string $val, array $options = null);
+        public function findOneBy(string $col, string $val, array $options = []);
 
-        public function update(object $model);
+        public function update(object $data, string $id_column);
 
         public function delete();
 

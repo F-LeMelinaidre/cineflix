@@ -3,7 +3,7 @@
         <div class="col-sm-6">
             <header>
                 <h1><?= ucfirst($movie->nom) ?></h1>
-                <span>Sortie le <date class="me-5"><?= $movie->date_sortie ?></date></span>
+                <span>Sortie le <date class="me-5"><?= $movie->date_sortie_fr ?></date></span>
             </header>
             <h2>Synopsis</h2>
             <p><?= $movie->synopsis ?></p>
@@ -14,7 +14,7 @@
 
     </section>
     <section id="Cinema" class="row col-xl-3 col-lg-3 col-md-10 col-sm-12">
-        <?php if($movie->status === \Cineflix\App\DAO\List\StatusMovie::EN_SALLE->value): ?>
+        <?php if($movie->status_id === \Cineflix\App\DAO\List\StatusMovie::EN_SALLE->value): ?>
 
         <header>
             <h1><?= $movie->cinema->nom ?></h1>

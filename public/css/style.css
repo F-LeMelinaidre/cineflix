@@ -1,4 +1,6 @@
-
+:root {
+    --bs-orange-text-emphasis: #ffa45d;
+}
 body {
     display: flex;
     flex-direction: column;
@@ -7,6 +9,15 @@ body {
     background-repeat: no-repeat;
     background-position: top center;
 }
+
+h1,
+h2,
+h3,
+p {
+    padding: 0!important;
+    margin: 0!important;
+}
+
 dl,
 dt,
 dd {
@@ -19,7 +30,8 @@ dd {
 }
 /* --- NAV --- */
 
-.nav-link:hover {
+.nav-link:hover,
+.active a {
     color:var(--bs-yellow) !important;
 }
 /* --- ICON --- */
@@ -70,6 +82,9 @@ dd {
 }
 
 /* --- INPUT --- */
+input {
+    transition: border-color 0.5s ease;
+}
 input.valid {
     border-color: #318307 !important;
     box-shadow: #318307 0 0 3px 2px;
@@ -104,7 +119,6 @@ input.error {
     color: var(--bs-red) !important;
 }
 
-
 main.main-page {
     padding-bottom: 3em!important;
 }
@@ -119,7 +133,29 @@ main header h1 {
 /* ---------------------- *\
           Profil
 \* ---------------------- */
-
+#Profil .date-list {
+    display: flex;
+    column-gap: 1.6rem;
+    padding: 0!important;
+    margin: 0!important;
+    list-style: none;
+}
+#Profil .role {
+    align-self: baseline;
+}
+#Profil h2.role {
+    font-size: 1.2rem;
+}
+@media (max-width: 576px) {
+    main>section>header {
+        flex-direction: column;
+    }
+}
+@media (max-width: 768px) {
+    #Profil .date-list {
+        flex-direction: column;
+    }
+}
 /* --- Formulaire --- */
 section .edit-profil {
     max-width: 640px;
@@ -136,6 +172,20 @@ section.sign {
 section.sign div:first-of-type {
     max-width: 550px;
 }
+
+.g-recaptcha div {
+    max-width: 302px!important;
+    max-height: 76px!important;
+    padding: 0;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+.g-recaptcha iframe {
+    max-width: 100%!important;
+    max-height: inherit!important;
+    border-radius: 3px;
+}
+
 @media screen and (max-width: 990px) {
     section.sign div:last-of-type {
         border: none!important;
@@ -173,7 +223,6 @@ img.card-img-top {
 .bill:hover {
     transform: scale(1.2);
     transform-origin: center;
-    cursor: pointer;
 }
 .card-info {
     max-width: 180px;
@@ -329,6 +378,15 @@ img.affiche {
 #AdminContent table {
     height: min-content;
 }
+.en-salle {
+    color: var(--bs-primary-text-emphasis) !important;
+}
+.en-streaming {
+    color: var(--bs-info-text-emphasis)!important;
+}
+.indisponible {
+    color: var(--bs-orange-text-emphasis) !important;
+}
 /* --- Formulaire --- */
 form h2 {
     margin: 0 0 0.8rem 0;
@@ -346,7 +404,8 @@ label {
 input,
 textarea,
 select,
-button {
+button,
+.g-recaptcha {
     margin-bottom: 0.8rem;
 }
 

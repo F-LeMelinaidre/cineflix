@@ -1,17 +1,17 @@
 <section  id="Profil" class="p-0">
     <header class="d-flex
-               justify-content-between
+               justify-content-around
                align-items-center
                position-relative
                mt-4
                border-top border-bottom border-dark">
-        <h1 class="ms-5">Édition: Identité</h1>
-        <ul>
-            <li>Créé le <?= $profil->getCreated() ?></li>
+        <h1>Édition: Identité</h1>
+        <ul class="date-list">
+            <li>Créé le <?= $profil->created_fr ?></li>
 
-            <?php if($profil->getCreated() != $profil->getModified()): ?>
+            <?php if($profil->created != $profil->modified): ?>
 
-                <li>Modifié le  <?= $profil->getModified() ?></li>
+                <li>Modifié le  <?= $profil->modified_fr ?></li>
 
             <?php endif; ?>
 
@@ -24,23 +24,15 @@
             <div class="row justify-content-center">
                 <div class="col-md-6 col-sm-6 col-12">
                     <label class="nom mt-3 mb-1" for="Nom">Nom :</label>
-                    <input id="Nom" class="form-control mb-2" type="text" name="nom" value="<?= $profil->nom ?>">
+                    <input id="Nom" class="js-validation form-control mb-2" type="text" name="nom" value="<?= $profil->nom ?>"
+                           aria-required="true"
+                           data-validation="alpha">
                 </div>
                 <div class="col-md-6 col-sm-6 col-12">
                     <label class="prenom mt-3 mb-1" for="Prenom">Prénom :</label>
-                    <input id="Prenom" class="form-control mb-2" type="text" name="prenom" value="<?= $profil->prenom ?>">
-                </div>
-
-                <?php $class =  (isset($errors['nom'])) ? '' : 'hidden';  ?>
-
-                <div class="col-6 <?= $class ?>">
-                    <?php if(isset($errors['nom'])) echo $errors['nom']; ?>
-                </div>
-
-                <?php $class =  (isset($errors['prenom'])) ? '' : 'hidden';  ?>
-
-                <div class="col-6 <?= $class ?>">
-                    <?php if(isset($errors['prenom'])) echo $errors['prenom']; ?>
+                    <input id="Prenom" class="js-validation form-control mb-2" type="text" name="prenom" value="<?= $profil->prenom ?>"
+                           aria-required="true"
+                           data-validation="alpha">
                 </div>
 
             </div>
@@ -54,7 +46,7 @@
         <div class="row justify-content-between mt-3">
             <div class="col-auto">
 
-                <button type="submit" class="btn btn-warning m-0">Modifier</button>
+                <button class="js-submit-button btn btn-warning m-0" type="submit">Modifier</button>
             </div>
             <div class="col-auto">
                 <a href="<?= self::$_Router->getUrl("profil_show") ?>" class="btn btn-outline-warning">Retour</a>

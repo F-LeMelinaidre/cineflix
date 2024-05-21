@@ -8,18 +8,17 @@
     class ProfilModel extends AbstractModel
     {
         private string $table = 'profil';
+        private UserModel $user;
 
-        #[MyAttribute('truc')]
-        public ?string $prenom = null;
-        public ?string $date_naissance = null;
-        public ?string $numero_voie = null;
-        public ?string $type_voie = null;
-        public ?string $nom_voie = null;
-        public ?int $code_postale = null;
-        public ?string $ville = null;
-        public ?int $point = 0;
+        protected ?string $prenom = null;
+        protected ?string $date_naissance = null;
+        protected ?string $numero_voie = null;
+        protected ?string $type_voie = null;
+        protected ?string $nom_voie = null;
+        protected ?int $code_postale = null;
+        protected ?string $ville = null;
+        protected ?int $point = null;
 
-        public UserModel $user;
 
         /**
          * @param array|null $data
@@ -52,6 +51,46 @@
         }
 
         /**
+         * @param string $item
+         *
+         * @return mixed
+         */
+        public function __get(string $item): mixed
+        {
+            switch($item) {
+                case 'nom':
+                case 'prenom':
+                case 'date_naissance':
+                case 'numero_voie':
+                case 'type_voie':
+                case 'nom_voie':
+                case 'code_postale':
+                case 'ville':
+                case 'point':
+                case 'user':
+                    $item = $this->$item;
+                    break;
+
+                case 'user_id':
+                    $item = $this->id;
+                    break;
+
+                case 'date_naissance_fr':
+                    $item = (!is_null($this->date_naissance)) ? $this->getDateFr($this->date_naissance) : '';
+                    break;
+
+                case 'adresse':
+                    $item = $this->getAddress();
+                    break;
+
+                default:
+                    $item = parent::__get($item);
+                    break;
+            }
+
+            return $item;
+        }
+        /**
          * @param string $prenom
          *
          * @return $this
@@ -69,14 +108,6 @@
         public function setDateNaissance(string $date): void
         {
             $this->date_naissance = Security::sanitize($date);
-        }
-
-        /**
-         * @return string
-         */
-        public function getDateNaissance(): string
-        {
-            return !empty($this->date_naissance)? date("d-m-Y", strtotime($this->date_naissance)) : '';
         }
 
         /**
@@ -132,19 +163,9 @@
         /**
          * @return string
          */
-        public function getAddress(): string
+        private function getAddress(): string
         {
             return $this->numero_voie. ' ' .$this->type_voie. ' ' .$this->nom_voie;
-        }
-
-        /**
-         * @param array $data
-         *
-         * @return void
-         */
-        public function addUser(array $data = null): void
-        {
-            $this->user = new UserModel($data);
         }
 
     }

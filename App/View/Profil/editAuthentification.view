@@ -1,55 +1,61 @@
 <section  id="Profil" class="p-0">
     <header class="d-flex
-               justify-content-between
+               justify-content-around
                align-items-center
                position-relative
                mt-4
                border-top border-bottom border-dark">
-        <h1 class="ms-5">Edition: Paramètres de connexion</h1>
-        <ul>
-            <li>Créé le <?= $user->getCreated() ?></li>
+        <h1>Edition: Paramètres de connexion</h1>
+        <ul class="date-list">
+            <li>Créé le <?= $user->created_fr ?></li>
 
-            <?php if($user->getCreated() != $user->getModified()): ?>
+            <?php if($user->created != $user->modified): ?>
 
-                <li>Modifié le  <?= $user->getModified() ?></li>
+                <li>Modifié le  <?= $user->modified_fr ?></li>
 
             <?php endif; ?>
 
         </ul>
     </header>
 
-    <form action="<?= self::$_Router->getUrl('profil_edit_authentification') ?>" method="post"  class="edit-profil mt-4 m-auto p-4 rounded-2 bg-dark-subtle">
+    <form id="ConnexionParams"
+          class="edit-profil mt-4 m-auto p-4 rounded-2 bg-dark-subtle"
+          action="<?= self::$_Router->getUrl('profil_edit_authentification') ?>"
+          method="post">
+
         <div id="Identity" class="mb-4">
             <h2 class="mb-3">Paramètres de connexion :</h2>
             <div class="row justify-content-start">
                 <div class="col-md-8 col-sm-8 col-12">
                     <label class="email" for="Email">Email :</label>
-                    <input id="Email" type="email" name="email" value="<?= $user->email ?>" class="form-control
-                    mb-3">
+                    <input id="Email" class="js-validation form-control mb-3" type="email" name="email" value="<?= $user->email ?>"
+                    data-validation="email">
                 </div>
             </div>
 
             <div class="row justify-content-start align-items-center">
                 <div class="col-md-5 col-sm-5 col-8">
                     <label for="Password">Modifier le mot de passe</label>
-                    <input type="password" id="Password" name="password" class="form-control mb-3" value="<?php if(!empty($user->getPassword())) echo
-                    $user->getPassword() ?>">
+                    <input id="Password" class="js-validation form-control" type="password" name="password"
+                    data-validation="password">
                 </div>
-                <a class="icon p-0 m-0" href="#" onclick="toggleVisibility()">
+
+                <a class="icon p-0 m-0" href="#">
                     <span id="Visibility" class="visibility-off-icon"></span>
                 </a>
-                <a class="icon p-0 m-0" href="#" onclick="getNewPassword()">
+                <a class="icon p-0 m-0" href="#">
                     <span id="NewPassword" class="renew-icon"></span>
                 </a>
             </div>
         </div>
         <div class="row justify-content-between mt-3">
             <div class="col-auto">
-                <button type="submit" class="btn btn-warning m-0">Modifier</button>
+                <button type="submit" class="js-submit-button btn btn-warning m-0">Modifier</button>
             </div>
             <div class="col-auto">
                 <a href="<?= self::$_Router->getUrl("profil_show") ?>" class="btn btn-outline-warning">Retour</a>
             </div>
         </div>
     </form>
+
 </section>

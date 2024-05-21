@@ -11,13 +11,13 @@
     {
 
         private int $status = 0;
-        private ?string $synopsis;
-        private ?string $affiche;
-        private ?string $date_sortie;
         private ?CinemaModel $cinema = null;
         private ?ExploitationModel $exploitation = null;
         private string $slug = '';
 
+        protected ?string $synopsis;
+        protected ?string $affiche;
+        protected ?string $date_sortie;
 
         /**
          * @param array|null $data
@@ -44,24 +44,29 @@
 
         public function __get(string $item): mixed
         {
-
-            switch($item) {
-                case 'status':
+            switch ($item) {
                 case 'synopsis':
                 case 'affiche':
-                case 'date_sortie':
                 case 'slug':
-                case'cinema':
+                case 'cinema':
                 case 'exploitation':
                     $item = $this->$item;
+                    break;
+
+                case 'status_id':
+                    $item = $this->status;
+                    break;
+
+                case 'date_sortie_fr':
+                    $item = $this->getDateFr($this->date_sortie);
                     break;
                 default:
                     $item = parent::__get($item);
                     break;
             }
-
-            return $item;
+            return  $item;
         }
+
         public function setNom(string $nom): void
         {
             parent::setNom($nom);

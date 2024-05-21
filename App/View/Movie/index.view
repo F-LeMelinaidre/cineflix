@@ -14,7 +14,6 @@
 </header>
 <section class="container d-flex justify-content-center row-gap-4 column-gap-4 flex-wrap mt-4">
     <?php foreach($movies as $movie): ?>
-
     <div class="card card-info">
         <div class="bill-container">
             <a href="<?= self::$_Router->getUrl("movie_show",['slug' => $movie->slug]) ?>">
@@ -29,7 +28,7 @@
                     <?= $movie->nom ?>
                 </a>
             </h5>
-            <?php if($movie->status === \Cineflix\App\DAO\List\StatusMovie::EN_SALLE->value): ?>
+            <?php if($movie->status_id === $status_id): ?>
             <ul class="card-text">
                 <li><?= $movie->cinema->nom ?></li>
                 <li><?= $movie->cinema->ville->nom ?></li>

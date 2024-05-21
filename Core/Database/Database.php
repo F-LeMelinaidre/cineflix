@@ -347,7 +347,6 @@
                 'col' => $col,
                 'val' => $val
             ];
-
             return $this;
         }
 
@@ -377,7 +376,6 @@
             try {
 
                 $this->request = $this->connexion->prepare($sql);
-
                 if (!empty($this->bind_values)) {
 
                     foreach ($this->bind_values as $val) {
@@ -386,7 +384,6 @@
                 }
 
                 $this->bind_values = [];
-
                 return $this;
 
             } catch (Exception $e) {
@@ -438,9 +435,11 @@
 
                 $res = $this->request->fetch();
 
-                $res = isset($this->join)? $this->mapping($res) : $res;
+                if($res && isset($this->join)) $res = $this->mapping($res);
+
                 $this->resetProperties();
-                return $res;
+
+                return $res? $res : [];
 
             } catch (Exception $e) {
                 echo 'erreur fetch() '.$e->getMessage();
@@ -521,7 +520,7 @@
         {
             try {
 
-                $this->prepare();
+                $this->prepare($this->sql);
                 $this->request->execute();
 
                 return $this->request->fetchColumn();
