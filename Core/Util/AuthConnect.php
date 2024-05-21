@@ -52,13 +52,12 @@ class AuthConnect
         $table = self::$_Table;
         $ident_col = self::$_IdColonne;
 
-        $req = self::$_Database->select($ident_col, 'password_hash')
+        $req = self::$_Database->select($ident_col, "password_hash")
             ->from($table)
             ->where("$ident_col = :$ident_col")
             ->setParameter('email', $identifiant);
 
         $result = $req->fetch();
-
         return $result && password_verify($pwd, $result['password_hash']);
     }
 
@@ -81,16 +80,13 @@ class AuthConnect
 
         $result = $req->fetch();
 
-
         $params_default = [
             'token'         => self::getToken(),
             'last_connect'  => date("d-m-Y H:i:s", strtotime($result['connect']))
         ];
         $params = array_merge($params, $params_default);
 
-
         $req = self::$_Database->createUpdate($table)
-            ->set('last_connect', 'connect')
             ->set('connect', ':new_connect')
             ->set('token', ':token')
             ->setParameter('new_connect', date("Y-m-d H:i:s"))

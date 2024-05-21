@@ -16,7 +16,7 @@
 
         <tr>
             <td><?= $cinema->nom ?></td>
-            <td><?= $cinema->ville ?></td>
+            <td><?= $cinema->ville->nom ?></td>
             <td>
                 <nav class="action-menu">
                     <ul>

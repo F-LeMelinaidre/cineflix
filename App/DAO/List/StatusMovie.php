@@ -45,7 +45,7 @@
             };
         }
 
-        public static function getUrl(int $id): string
+        public static function getUrlById(int $id): string
         {
             return match($id)
             {
@@ -57,6 +57,49 @@
                 default => ''
             };
         }
+
+        /**
+         * @param StatusMovie $const
+         *
+         * @return string
+         */
+        public static function getUrlByName(self $const): string
+        {
+            return match($const)
+            {
+                self::INDISPONIBLE => 'Indisponible',
+                self::EN_SALLE => 'En-Salle',
+                self::EN_STREAMING => 'En-Streaming',
+                self::PROCHAINEMENT_EN_SALLE => 'Prochainement-En-Salle',
+                self::PROCHAINEMENT_EN_STREAMING => 'Prochainement-En-Streaming',
+                default => 'En-Salle'
+            };
+        }
+
+        /**
+         * Renvoie un tableau des status
+         * index valeur de la constante
+         * valeur nom de la constante en minuscule sans _
+         * @return array
+         */
+        public static function statusToArray(): array
+        {
+            $constants = [];
+            foreach (self::cases() as $constant) {
+                $name = str_replace('_', ' ', strtolower($constant->name));
+
+                $key = $constant->value;
+                $value = $name;
+
+                $constants[$key] = $value;
+            }
+            return $constants;
+
+        }
+
+        /**
+         * @return array
+         */
         public static function getUrlArray(): array
         {
             $constantNames = [];

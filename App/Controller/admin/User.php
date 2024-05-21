@@ -15,15 +15,21 @@ class User extends AbstractController
     {
         parent::__construct();
 
-        if(!AuthConnect::isConnected() || AuthConnect::getSession()['role'] < Role::SUPER_ADMINISTRATEUR->value) {
-            header('Location: /');
+        if(!AuthConnect::isConnected() || AuthConnect::getSession()['role'] < Role::SUPER_ADMINISTRATEUR) {
+            header('Location: /Signin');
             exit();
         }
     }
 
     public function index()
     {
-        $users = [];
+        $options = [
+            'select' => ['user.email','profil.nom','profil.prenom'],
+            'contain' => [
+                'profil' => 'user.id = profil.user_id',]
+        ];
+
+        $users = $this->dao->findAll($options);
         return $this->render('User.admin.index',compact("users"));
     }
 

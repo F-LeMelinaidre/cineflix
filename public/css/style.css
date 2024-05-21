@@ -1,4 +1,6 @@
-
+:root {
+    --bs-orange-text-emphasis: #ffa45d;
+}
 body {
     display: flex;
     flex-direction: column;
@@ -7,6 +9,15 @@ body {
     background-repeat: no-repeat;
     background-position: top center;
 }
+
+h1,
+h2,
+h3,
+p {
+    padding: 0!important;
+    margin: 0!important;
+}
+
 dl,
 dt,
 dd {
@@ -14,10 +25,13 @@ dd {
     margin: 0!important;
 }
 
+.hidden {
+    visibility: hidden;
+}
 /* --- NAV --- */
 
 .nav-link:hover,
-.require {
+.active a {
     color:var(--bs-yellow) !important;
 }
 /* --- ICON --- */
@@ -68,30 +82,41 @@ dd {
 }
 
 /* --- INPUT --- */
+input {
+    transition: border-color 0.5s ease;
+}
 input.valid {
     border-color: #318307 !important;
     box-shadow: #318307 0 0 3px 2px;
 }
 
+textarea.invalid,
 input.invalid {
     border-color: #ba8b00!important;
     box-shadow: #ba8b00 0 0 3px 2px;
 }
+.invalid-message.invalid {
+    color: var(--bs-yellow) !important;
+}
 
+textarea.error,
 input.error {
     border-color: #721c24!important;
     box-shadow: #721c24 0 0 3px 2px;
 }
 
-.invalid-message {
-    visibility: visible;
+/* --- Message --- */
+.info-alert {
+    width: 100%;
+    padding: 0.4rem;
+    margin-bottom: 0.8rem;
+    color: white;
+    text-align: center;
+    border-radius: 0.4rem;
+    background-color: #721c24;
 }
 .invalid-message.error {
-    color: #b01919;
-}
-
-.invalid-message.hide {
-    visibility: hidden;
+    color: var(--bs-red) !important;
 }
 
 main.main-page {
@@ -104,10 +129,33 @@ main header h1 {
 }
 
 
+
 /* ---------------------- *\
           Profil
 \* ---------------------- */
-
+#Profil .date-list {
+    display: flex;
+    column-gap: 1.6rem;
+    padding: 0!important;
+    margin: 0!important;
+    list-style: none;
+}
+#Profil .role {
+    align-self: baseline;
+}
+#Profil h2.role {
+    font-size: 1.2rem;
+}
+@media (max-width: 576px) {
+    main>section>header {
+        flex-direction: column;
+    }
+}
+@media (max-width: 768px) {
+    #Profil .date-list {
+        flex-direction: column;
+    }
+}
 /* --- Formulaire --- */
 section .edit-profil {
     max-width: 640px;
@@ -124,6 +172,20 @@ section.sign {
 section.sign div:first-of-type {
     max-width: 550px;
 }
+
+.g-recaptcha div {
+    max-width: 302px!important;
+    max-height: 76px!important;
+    padding: 0;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+.g-recaptcha iframe {
+    max-width: 100%!important;
+    max-height: inherit!important;
+    border-radius: 3px;
+}
+
 @media screen and (max-width: 990px) {
     section.sign div:last-of-type {
         border: none!important;
@@ -161,7 +223,6 @@ img.card-img-top {
 .bill:hover {
     transform: scale(1.2);
     transform-origin: center;
-    cursor: pointer;
 }
 .card-info {
     max-width: 180px;
@@ -192,13 +253,15 @@ img.card-img-top {
     text-transform: capitalize;
 }
 
-#Film {
+section#Film {
+    margin: 4rem 0;
     border-right: none;
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
     background-color: rgba(255, 255, 255, 0.2);
 }
-#Cinema {
+section#Cinema {
+    margin: 4rem 0;
     border-left: none;
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
@@ -210,6 +273,17 @@ img.affiche {
     width: 100%;
     margin: 2rem auto;
 }
+
+/* ----- Seance Card ----- */
+#Cinema .card-body {
+    padding:0.5rem!important;
+    text-align: center;
+}
+
+#Cinema .card h4 {
+    font-size: 1rem;
+}
+
 @media screen and (max-width: 990px) {
     #Film {
         border-top-left-radius: 12px;
@@ -300,28 +374,41 @@ img.affiche {
     justify-content: space-evenly;
     column-gap: 0.8rem;
 }
-
+/* --- Tableau --- */
+#AdminContent table {
+    height: min-content;
+}
+.en-salle {
+    color: var(--bs-primary-text-emphasis) !important;
+}
+.en-streaming {
+    color: var(--bs-info-text-emphasis)!important;
+}
+.indisponible {
+    color: var(--bs-orange-text-emphasis) !important;
+}
 /* --- Formulaire --- */
 form h2 {
-    margin: 0;
+    margin: 0 0 0.8rem 0;
     padding: 0;
     font-size: 1rem;
     line-height: 1rem;
+    text-decoration: white 1px underline;
+    text-underline-offset: 0.2rem;
 }
 label {
-    margin: 0!important;
+    margin: 0 0 0.4rem 0!important;
     padding: 0!important;
     font-size: 0.8rem;
 }
 input,
 textarea,
 select,
-button {
+button,
+.g-recaptcha {
     margin-bottom: 0.8rem;
 }
-.test datalist {
-    background-color: #0a3622;
-}
+
 textarea {
     resize: none;
 }
@@ -341,85 +428,74 @@ button {
     grid-row-gap: 0.2rem;
     grid-column-gap: 0.8rem;
 }
+#AdminContent #ThumbAffiche img {
+    display: block;
+    margin: auto;
+}
+#AdminContent .en-salle #ThumbAffiche img {
 
-/* --- ADMIN MOVIE --- */
-#AdminContent .film label:first-of-type {
-    grid-row: 2;
 }
-#AdminContent .film input:first-of-type {
-    grid-row: 3;
+#AdminContent .streaming #ThumbAffiche img {
+    max-width: 240px;
+    width: 100%;
 }
-#AdminContent .film .titre,
-#AdminContent .film .exploitation {
+
+/* --- FORMULAIRE FILM --- */
+#AdminContent .info-alert {
     grid-row: 1;
 }
-#AdminContent label[for="SelectCinema"] {
+#AdminContent .titre,
+#AdminContent .exploitation {
     grid-row: 2;
 }
-#AdminContent #SelectCinema {
+#AdminContent #Nom,
+#AdminContent #Cinema {
     grid-row: 3;
 }
-#AdminContent label[for="InputDateSortie"],
-#AdminContent label[for="InputDateDebut"],
-#AdminContent label[for="InputDateFin"] {
+#AdminContent #DateSortie,
+#AdminContent #DateDebut,
+#AdminContent #DateFin {
     grid-row: 4;
 }
-#AdminContent #InputDateSortie,
-#AdminContent #InputDateDebut,
-#AdminContent #InputDateFin {
+#AdminContent #Synopsis {
     grid-row: 5;
 }
-#AdminContent label[for="TextareaSynopsis"]
-{
+#AdminContent #ThumbAffiche {
+    grid-row: 5/7;
+}
+#AdminContent #Affiche {
     grid-row: 6;
 }
-#AdminContent #TextareaSynopsis,
-#AdminContent #ThumbAffiche {
-    grid-row: 7/9;
-}
-#AdminContent label[for="InputAffiche"] {
-    grid-row: 10;
-}
-#AdminContent #InputAffiche {
-    grid-row: 11;
-}
 #AdminContent button {
-    grid-row: 12;
+    grid-row: 8;
 }
 
-#AdminContent .film .titre,
-#AdminContent .film label:first-of-type,
-#AdminContent .film input:first-of-type {
-    grid-column: 1/5;
+#AdminContent .info-alert {
+    grid-column: 1/7;
 }
-#AdminContent .film .exploitation,
-#AdminContent label[for="SelectCinema"],
-#AdminContent #SelectCinema {
-    grid-column: 5/7;
-}
-#AdminContent label[for="InputDateSortie"],
-#AdminContent #InputDateSortie {
+#AdminContent #DateSortie {
     grid-column: 1;
 }
-#AdminContent label[for="InputDateDebut"],
-#AdminContent #InputDateDebut {
-    grid-column: 5/6;
+#AdminContent #Affiche {
+    grid-column: 1/4;
 }
+#AdminContent .titre,
+#AdminContent #Nom,
+#AdminContent #Synopsis {
+    grid-column: 1/5;
+}
+#AdminContent #DateDebut {
+    grid-column: 5;
+}
+#AdminContent #DateFin {
+    grid-column: 6;
+}
+#AdminContent #Cinema,
 #AdminContent #ThumbAffiche {
     grid-column: 5/7;
 }
-#AdminContent label[for="InputDateFin"],
-#AdminContent #InputDateFin {
-    grid-column: 6/7;
-}
-
-#AdminContent label[for="TextareaSynopsis"],
-#AdminContent #TextareaSynopsis {
-    grid-column: 1/5;
-}
-#AdminContent #InputAffiche,
-#AdminContent label[for="InputAffiche"] {
-    grid-column: 1/4;
+#AdminContent .exploitation {
+    grid-column: 5/7;
 }
 
 #AdminContent button {

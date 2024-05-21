@@ -76,9 +76,9 @@ class Route
         $path = preg_replace_callback('#{([\w]+)}#', [$this, 'requiredMatch'], $this->path);
         $reg = "#^$path$#i"; //i prend en concidération majuscule et minuscule
         $result = preg_match($reg, $url, $matches);
-
         // Si l'url contient des paramètres matché, on réassocie les clés au valeurs matché
         if(!empty($matches)) {
+
             array_shift($matches);
             $this->matches = array_combine($this->requirementKeys, $matches);
         }

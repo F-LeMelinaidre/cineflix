@@ -13,10 +13,9 @@
         private array $select = [];
         private array $set = [];
         private string $table;
-        private array $table_join;
         private array $alias = [];
         private array $where = [];
-        private array $order = [];
+        private string $order = '';
         private array $join = [];
         private array $bind_values = [];
         private $request;
@@ -77,41 +76,58 @@
 
         /**
          * @param string ...$selects
-         * mettre un alias des lors que l'on fait une requete avec jointure table.colonne
          * @return self
          */
         public function select(string ...$selects): self
         {
             $this->select = $selects;
-
             return $this;
         }
 
         /**
-         * Créé la partie Select de la requete à partir du tableau $select
          * @return string
          */
         private function getSelect(): string
         {
-            if(!empty($this->join)) {
+            return !empty($this->join) ? $this->updateSelect($this->select) : implode(', ',$this->select);
+        }
 
-                foreach($this->select as $k => $select) {
+        // construit le select en fonction des colonnes prefixé par leur table lors de jointure table.colonne => t.colonne
+        // Lors de chaque iteration de $selects on index par le nom de colonne $prev_colonne et attribut la valeur true
+        // Lors des iterations on la renomme la colonne AS table_colonne
+        // $this->select stock tous les colonnes indexé par leur table si jointure
+        // Ce tableau est utilisé pour mapper le resultat
+        // - les colonnes des tables jointes sont réorganisé en sous tableau indexé par le nom de la table d'origine et
+        //   on leur réattribu leur nom de colonne d'origine
+        /**
+         * @param $columns
+         *
+         * @return string
+         */
+        private function updateSelect($columns): string
+        {
+            $sql = [];
+            $tables = array_flip($this->alias);
+            foreach ($columns as &$column) {
 
-                    // recupère l'alias de la colonne
-                    $parts = explode('.', $select);
-                    $alias = $parts[0];
-                    $column = $parts[1];
+                $parts = explode('.',$column);
 
-                    // si l'alias récupéré est différent du nom de la table,
-                    // on renomme la référence de la colonne
-                    if($alias !== $this->table && $column !== '*') {
-                        $select = $select.' AS '.$alias.'_'.$column;
-                    }
+                if (in_array($parts[0],$tables)) {
+                    $tbl = $parts[0];
+                    $col = $parts[1];
 
-                    $this->select[$k] = $this->convertToAliasColumn($select);
+                } else {
+                    $tbl = $this->table;
+                    $col = $column;
                 }
+                $column = $this->alias[$tbl].'.'.$col;
+
+                if($col !== '*' && $tbl !== $this->table) $column .= " AS ".$tbl."_".$col;
+
+
             }
-            return implode(', ',$this->select);
+
+            return implode(', ', $columns);
         }
 
         /**
@@ -121,9 +137,7 @@
          */
         public function from(string $table): self
         {
-            // créé l'alias et l'ajoute au tableau $alias
             $this->setAlias($table);
-
             $this->table = $table;
 
             return $this;
@@ -132,53 +146,41 @@
         /**
          * @return string
          */
-        private function getFrom(): string
+        private function getTable(): string
         {
-            // si une jointure est effectué on parametre le FROM avec l'alias stocké dans $alias
-            return (!empty($this->join))? $this->table.' AS '.$this->alias[$this->table] : $this->table;
+            $tbl = $this->table;
+
+            if (!empty($this->join)) $tbl .= " AS ".$this->alias[$tbl];
+
+            return $tbl;
         }
 
         /**
+         * Créé la jointure
          * @param string $table
-         * Créé les alias avec la preimer lettre de la table par defaut
-         * Dans le cas où lors de la création de la jointure,
-         * la table commence par la meme lettre qu'une précédante jointure
-         * present dans le tableau $alias, on boucle et ajoute la second lettre
-         * de la table, ainsi de suite, jusqu'a se que l'alias soit unique
-         * @return void
+         * @param string $alias
+         * @param string $condition
+         * @return $this
          */
-        private function setAlias(string $table): void
+        public function join(string $join, string $type, string $condition): self
         {
-            $i = 1;
-            $alias = substr($table, 0, 1);
-            while (in_array($alias,$this->alias)) {
+            $this->setAlias($join);
 
-                ++$i;
-                $alias = substr($table, 0, $i);
-            }
-            $this->alias[$table] = $alias;
+            $parts = explode('=', $condition);
+            $a = $this->aliasColumn(trim($parts[0]), 'Join');
+            $b = $this->aliasColumn(trim($parts[1]), 'Join');
+
+            array_push($this->join, "$type JOIN $join AS ".$this->alias[$join]." ON $a = $b");
+
+            return $this;
         }
 
         /**
-         * @param string $string
-         * Convertie le nom de la colonne defini lors de la creation de la requete (user.nom)
-         * le prefix qui correspond au nom de la table,
-         * est remplacé par l'alias stocké dans le tableau $alias indexé par le nom de la table
-         *
-         * exemple: user.name
-         * si l'alias stocker dans $alias à l'index user = u ,
-         * la colonne à selectionné sera renommé u.nom
-         *
          * @return string
          */
-        private function convertToAliasColumn(string $string): string
+        private function getJoin(): string
         {
-            $parts = explode('.', $string);
-
-            $alias = $this->alias[$parts[0]];
-            $col = $parts[1];
-
-            return "$alias.$col";
+            return isset($this->join) ? implode(' ', $this->join) : '';
         }
 
         /**
@@ -221,8 +223,34 @@
          * Assemble l'ensemble de condition where stocké dans le tableau $where
          * @return string
          */
-        private function getWhere(): string{
-            return implode(' ',$this->where);
+        private function getWhere(): string
+        {
+            $where = !empty($this->join)? $this->formatWhere($this->where) : implode(' ',$this->where);
+            return $where;
+        }
+
+        /**
+         * @param array $conditions
+         *
+         * @return string
+         */
+        private function formatWhere(array $conditions): string
+        {
+
+            foreach ($conditions as &$condition) {
+
+                $parts = explode(' ',$condition);
+                $pre = trim($parts[0]);
+
+                $col = trim($parts[1]);
+                $col = $this->aliasColumn($col, "Condition $pre");
+
+                $operator = trim($parts[2]);
+                $param = trim($parts[3]);
+
+                $condition = "$pre $col $operator $param";
+            }
+            return implode(' ',$conditions);
         }
 
         /**
@@ -231,70 +259,74 @@
          *
          * @return $this
          */
-        public function order(array $orders, string $direction = 'DESC'): self
+        public function order(string $order, string $direction = 'DESC'): self
         {
+            $order = !empty($this->join) ? $this->aliasColumn($order, 'Order') : $order;
 
-            foreach ($orders as $order) {
-                $column = $this->convertToAliasColumn($order);
-                $this->order[] = "$column $direction";
-            }
+            $this->order = "ORDER BY $order $direction";
+
             return $this;
         }
 
         /**
-         * @return string
-         */
-        private function getOrder(): string
-        {
-            $order = "ORDER BY ".implode(' AND ', $this->order);
-            return !empty($this->order)? $order : '';
-        }
-
-        /**
-         * Créé la jointure
          * @param string $table
-         * @param string $alias
-         * @param string $condition
-         * @return $this
+         * Créé l'e 'Alias avec la premiere lettre de la table
+         * Lors de création de jointure si la table commence par la meme lettre
+         * qu'une précédante jointure stocké dans $this->alias,
+         * on boucle et ajoute la seconde lettre de la table,
+         * ainsi de suite, jusqu'a se que l'Alias soit unique
+         * @return void
          */
-        public function join(string $table, string $type, string $condition): self
+        private function setAlias(string $table): void
         {
-            $this->setAlias($table);
+            $i = 1;
+            $alias = substr($table, 0, 1);
 
-            $condition = $this->formatJoinCondition($condition);
+            while (in_array($alias,$this->alias)) {
 
-            array_push($this->join, "$type JOIN $table AS ".$this->alias[$table]." ON $condition");
+                ++$i;
+                $alias = substr($table, 0, $i);
+            }
 
-            return $this;
+            $this->alias[$table] = $alias;
+            $i = 0;
         }
 
         /**
-         * Converti la condition de jointure en remplaçant le prefix representant le nom de la table
-         * par l'alias stocké dans le tableau $alias et indéxé par le nom de la table
-         *
-         * @param string $condition
+         * @param string $col
          *
          * @return string
          */
-        private function formatJoinCondition(string $condition): string
+        private function aliasColumn(string $col, string $method_name): string
         {
-            $parts = explode('=', $condition);
+            try {
 
-            $table_col = $this->convertToAliasColumn(trim($parts[0]));
-            $join_col = $this->convertToAliasColumn(trim($parts[1]));;
+                $parts = explode('.',$col);
 
-            return "$table_col = $join_col";
-        }
+                if(isset($parts[1])) {
+                    $tbl = $parts[0];
+                    $col = $parts[1];
+                    $alias = $this->alias[$tbl];
 
-        /**
-         * Assemble l'ensemble des jointures stockées de le tableau $join
-         * @return string
-         */
-        private function getJoin(): string{
-            return implode(' ', $this->join);
+                    $col = $alias.'.'.$col;
+
+
+                } else {
+                    throw new Exception("La colonne $parts[0] n'est pas préfixé du nom de sa table !!!");
+                }
+
+            } catch (Exception $e) {
+                echo "$method_name aliasColumn() : " . $e->getMessage();
+            }
+            return $col;
         }
 
         //TODO Pour les requetes complexe
+        /**
+         * @param string $sql
+         *
+         * @return $this
+         */
         public function createCustomQuery(string $sql): self
         {
             $this->sql = $sql;
@@ -315,34 +347,21 @@
                 'col' => $col,
                 'val' => $val
             ];
-
             return $this;
         }
 
         /**
-         * Créé la requete sql
-         * @return string|null
+         * @return string
          */
-        private function queryBuilder()
+        private function buildQuery(): string
         {
-            try {
+            $select = $this->getSelect();
+            $table = $this->getTable();
+            $join = $this->getJoin();
+            $where = $this->getWhere();
+            $order = $this->order;
 
-                if(count($this->where) != count($this->bind_values))
-                    throw new Exception("paramètre manquant");
-
-                $select = $this->getSelect();
-                $table = $this->getFrom();
-                $join = $this->getJoin();
-                $where = $this->getWhere();
-                $order = $this->getOrder();
-                //TODO Order
-
-                return "SELECT $select FROM $table $join $where $order";
-
-            } catch (Exception $e) {
-                echo 'Erreur buildQuery(): '.$e->getMessage();
-                return null;
-            }
+            return "SELECT $select FROM $table $join $where $order";
         }
 
         /**
@@ -351,13 +370,12 @@
          *
          * @return Database
          */
-        private function prepare()
+        private function prepare($sql)
         {
-          
+
             try {
 
-                $this->request = $this->connexion->prepare($this->sql);
-
+                $this->request = $this->connexion->prepare($sql);
                 if (!empty($this->bind_values)) {
 
                     foreach ($this->bind_values as $val) {
@@ -365,67 +383,70 @@
                     }
                 }
 
-                $this->where = [];
-                $this->join = [];
                 $this->bind_values = [];
-
                 return $this;
 
             } catch (Exception $e) {
                 echo 'erreur prepare() '.$e->getMessage();
                 return null;
             }
+
         }
 
+        /**
+         * @return $this
+         */
         public function execute(): self
         {
             $set = implode(', ', $this->set);
             $where = implode(' ',$this->where);
 
             $this->sql .= "$set $where";
-
             //echo __CLASS__.' | '.__FUNCTION__.'<br>';
             //$this->debug();
             //die();
 
-            $this->prepare();
+            $this->prepare($this->sql);
 
             $this->request->execute();
 
             return $this;
         }
+
         /**
          * @param string|null $class_name
          *
          * @return mixed
          */
-        public function fetch(mixed $class = null)
+        public function fetch()
         {
-
-            $mode = (is_null($class))? [PDO::FETCH_ASSOC] : [PDO::FETCH_CLASS, $class];
 
             try {
 
-                $this->sql = $this->queryBuilder();
-
                 //echo __CLASS__.' | '.__FUNCTION__.'<br>';
                 //$this->debug();
+                //die();
+                $sql =  $this->buildQuery();
+                $this->prepare($sql);
 
-                $this->prepare();
+                $this->request->setFetchMode(PDO::FETCH_ASSOC);
 
                 $this->request->execute();
 
-                $this->request->setFetchMode(...$mode);
+                $res = $this->request->fetch();
+
+                if($res && isset($this->join)) $res = $this->mapping($res);
 
                 $this->resetProperties();
 
-                return $this->request->fetch();
+                return $res? $res : [];
 
             } catch (Exception $e) {
                 echo 'erreur fetch() '.$e->getMessage();
                 //MessageFlash::create("Impossible de récupérer les données sur la table! <br>" . $e->getMessage(), 'erreur');
                 return null;
             }
+
         }
 
         /**
@@ -433,29 +454,26 @@
          *
          * @return mixed
          */
-        public function fetchall(string $class_name = null)
+        public function fetchAll()
         {
 
-            $mode = (is_null($class_name))? [PDO::FETCH_ASSOC] : [PDO::FETCH_CLASS, $class_name];
-
             try {
-
-                $this->sql = $this->queryBuilder();
+                $this->sql =  $this->buildQuery();
+                $this->prepare($this->sql);
 
                 //echo __CLASS__.' | '.__FUNCTION__.'<br>';
                 //$this->debug();
-
-                $this->prepare();
-
                 $this->request->execute();
 
-                $this->request->setFetchMode(...$mode);
+                $this->request->setFetchMode(PDO::FETCH_ASSOC);
 
+                $res = $this->request->fetchAll();
+
+                $res = isset($this->join)? $this->mapResults($res) : $res;
                 $this->resetProperties();
+                return $res;
 
-                return $this->request->fetchAll();
-
-            }catch (Exception $e) {
+            } catch (Exception $e) {
                 echo 'erreur fetchAll() '.$e->getMessage();
                 //MessageFlash::create("Impossible de récupérer les données sur la table! <br>" . $e->getMessage(), 'erreur');
                 return null;
@@ -463,13 +481,46 @@
         }
 
         /**
+         * @param array $result
+         *
+         * @return array
+         */
+        private function mapResults(array $result): array
+        {
+            foreach($result as &$row) {
+
+                $row = $this->mapping($row);
+
+            }
+
+            return $result;
+        }
+
+        private function mapping(array $data): array
+        {
+            $tables = array_flip($this->alias);
+            foreach($data as $id => $val) {
+
+                $parts = explode("_",$id);
+                if (in_array($parts[0],$tables)) {
+                    $tbl = $parts[0];
+                    $col = $parts[1];
+
+                    if(!isset($data[$tbl])) $data[$tbl] = [];
+                    $data[$tbl][$col] = $val;
+                    unset($data[$id]);
+                }
+            }
+            return $data;
+        }
+        /**
          * @return null
          */
         public function count()
         {
             try {
 
-                $this->prepare();
+                $this->prepare($this->sql);
                 $this->request->execute();
 
                 return $this->request->fetchColumn();
@@ -543,14 +594,13 @@
         public function set(string $col, string $val): self
         {
             $this->set[] = "$col = $val";
-
             return $this;
         }
 
         /**
          * @return false|string
          */
-        public function getLastInsertId()
+        public function getLastInsertId(): int
         {
             return $this->connexion->lastInsertId();
         }
@@ -582,14 +632,15 @@
             $this->connexion->rollBack();
         }
 
+        /**
+         * @return void
+         */
         private function resetProperties(): void
         {
-            $this->select = [];
-            $this->sql = '';
-            $this->table = '';
+            $this->set = [];
             $this->alias = [];
-            $this->where = [];
             $this->join = [];
+            $this->where = [];
             $this->bind_values = [];
         }
 
@@ -627,7 +678,10 @@
                 echo 'BindValues:<br>';
                 var_dump($this->bind_values);
             }
-            echo 'Requete final:<br>';
-            echo $this->sql.'<br>';
+
+            if(!empty($this->sql)) {
+                echo 'Requete final:<br>';
+                echo $this->sql.'<br>';
+            }
         }
     }

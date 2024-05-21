@@ -16,8 +16,8 @@ class Cinema extends AbstractController
     {
         parent::__construct();
 
-        if(!AuthConnect::isConnected() || AuthConnect::getSession()['role'] < Role::SUPER_ADMINISTRATEUR->value) {
-            header('Location: /');
+        if(!AuthConnect::isConnected() || AuthConnect::getSession()['role'] < Role::SUPER_ADMINISTRATEUR) {
+            header('Location: /Signin');
             exit();
         }
     }
@@ -25,7 +25,15 @@ class Cinema extends AbstractController
     public function index(): string
     {
 
-        $cinemas= [];
+
+        $options = [
+            'select' => ['cinema.*','ville.nom'],
+            'contain' => [
+                'ville'  => 'ville.id = cinema.ville_id',
+            ]
+        ];
+
+        $cinemas = $this->dao->findAll($options);
 
         return $this->render('cinema.admin.index',compact('cinemas'));
     }

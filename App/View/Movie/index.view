@@ -1,1 +1,42 @@
-<p>Require: App/View/Movie/index.php</p>
+<header class="d-flex
+               justify-content-around
+               align-items-center
+               p-0
+               py-2
+               mt-4
+               border-top border-bottom border-dark">
+    <h1 class="p-0 m-0">Films en salles</h1>
+
+    <nav class="d-flex align-items-center">
+        <input type="text" class="form-control m-0">
+        <a href="#" class="btn btn-sm btn-outline-warning ms-4">Rechercher</a>
+    </nav>
+</header>
+<section class="container d-flex justify-content-center row-gap-4 column-gap-4 flex-wrap mt-4">
+    <?php foreach($movies as $movie): ?>
+    <div class="card card-info">
+        <div class="bill-container">
+            <a href="<?= self::$_Router->getUrl("movie_show",['slug' => $movie->slug]) ?>">
+                <img src="<?= $movie->affiche ?>" alt="la bête" class="bill card-img-top">
+            </a>
+        </div>
+        <div class="card-body border-top py-1">
+            <h5 class="card-title">
+                <a href="<?= self::$_Router->getUrl("movie_show",['slug' => $movie->slug]) ?>" class="link-warning link-offset-1
+                link-underline-opacity-50
+                link-underline-opacity-100-hover text-capitalize">
+                    <?= $movie->nom ?>
+                </a>
+            </h5>
+            <?php if($movie->status_id === $status_id): ?>
+            <ul class="card-text">
+                <li><?= $movie->cinema->nom ?></li>
+                <li><?= $movie->cinema->ville->nom ?></li>
+            <?php endif; ?>
+            </ul>
+        </div>
+
+    </div>
+    <?php endforeach; ?>
+
+</section>

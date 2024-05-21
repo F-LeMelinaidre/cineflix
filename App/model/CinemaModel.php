@@ -4,26 +4,36 @@ namespace Cineflix\App\Model;
 
 class CinemaModel extends AbstractModel
 {
-    public ?VilleModel $ville;
+    protected ?VilleModel $ville;
 
 
     /**
      * @param array|null $data
      */
-    public function __construct(?array $data = null)
+    public function __construct(?array $data)
     {
         parent::__construct($data);
 
-        $ville = [];
-        foreach ($data as $col => $val) {
-            $parts = explode('_', $col);
-            if($parts[0] === 'ville') {
-                $ville[$parts[1]] = $val;
-            }
+        if(isset($data['ville'])) $this->ville = new VilleModel($data['ville']);
+
+    }
+
+    /**
+     * @param $item
+     *
+     * @return mixed
+     */
+    public function __get($item): mixed
+    {
+        switch ($item) {
+            case 'ville':
+                $item = $this->$item;
+                break;
+            default:
+                $item = parent::__get($item);
+                break;
         }
-
-        if(!empty($ville)) $this->ville = new VilleModel($ville);
-
+        return $item;
     }
 
 }

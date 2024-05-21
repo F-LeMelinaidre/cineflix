@@ -43,8 +43,8 @@
             <div id="Info" class="row justify-content-start m-0 p-0">
                 <div class="col-md-6 col-sm-6 col-6">
                     <label class="mt-3 mb-1" for="Identifiant">Date de naissance</label>
-                    <input type="date" id="DateNaissance" class="form-control mb-0" name="date_naissance" value="<?= $profil->date_naissance ?>">
-                    <div id="validationMail" class="invalid-message hide"></div>
+                    <input type="date" id="DateNaissance" class="form-control mb-0" name="date_naissance" value="<?=
+                        $profil->date_naissance ?>">
                 </div>
             </div>
 
@@ -52,50 +52,40 @@
                 <h2 class="mt-3">Adresse :</h2>
                 <div class="col-md-3 col-sm-3 col-4">
                     <label class="numero-voie mt-3 mb-1" for="NumeroVoie">N° <span class="require">*</span> :
-                        <input id="NumeroVoie" class="form-control mt-1 mb-0" type="text" name="numero_voie" value="<?= $profil->numero_voie  ?>">
+                        <input id="NumeroVoie" class="js-validation form-control mt-1 mb-0" type="text" name="numero_voie" value="<?= $profil->numero_voie  ?>"
+                               data-validation="alphaNumeric">
                     </label>
-
-                    <?php $class =  (isset($errors['numero_voie'])) ? '' : 'hidden'; ?>
-                    <div class="<?= $class ?>"><?php if(isset($errors['numero_voie'])) echo $errors['numero_voie']; ?></div>
                 </div>
 
                 <div class="col-md-9 col-sm-9 col-8">
                     <label class="type-voie col-md-6 col-sm-7 col-9 mt-3 mb-1" for="TypeVoie">Type <span class="require">*</span> :
-                        <input id="TypeVoie" class="form-control mt-1 mb-0" type="text" name="type_voie" value="<?= $profil->type_voie ?>">
+                        <input id="TypeVoie" class="js-validation form-control mt-1 mb-0" type="text" name="type_voie" value="<?= $profil->type_voie ?>"
+                               data-validation="alpha">
                     </label>
-
-                    <?php $class =  (isset($errors['type_voie'])) ? '' : 'hidden'; ?>
-                    <div class="<?= $class ?>"><?php if(isset($errors['type_voie'])) echo $errors['type_voie']; ?></div>
                 </div>
             </div>
 
             <div class="row justify-content-start m-0">
                 <label class="nom-voie col-12 mt-3 mb-1" for="NomVoie">Nom de la voie <span class="require">*</span> :
-                    <input id="NomVoie" class="form-control mt-1 mb-0" type="text" name="nom_voie" value="<?= $profil->nom_voie ?>">
+                    <input id="NomVoie" class="js-validation form-control mt-1 mb-0" type="text" name="nom_voie" value="<?= $profil->nom_voie ?>"
+                           data-validation="alphaNumeric">
                 </label>
-
-                <?php $class =  (isset($errors['nom_voie'])) ? '' : 'hidden';  ?>
-                <div class="<?= $class ?>"><?php if(isset($errors['nom_voie'])) echo $errors['nom_voie']; ?></div>
             </div>
 
             <div class="row justify-content-start m-0 p-0">
                 <div class="col-md-5 col-sm-4 col-6">
                     <label class="code-postale mt-3 mb-1" for="CodePostale">Code postale <span class="require">*</span> :</label>
-                    <input id="CodePostale" class="form-control mb-0" type="text" name="code_postale" value="<?= $profil->code_postale ?>">
-
-                    <?php $class =  (isset($errors['code_postale'])) ? '' : 'hidden'; ?>
-                    <div class="<?= $class ?>"><?php if(isset($errors['code_postale'])) echo $errors['code_postale']; ?></div>
+                    <input id="CodePostale" class="js-validation form-control mb-0" type="text" name="code_postale" value="<?= $profil->code_postale ?>"
+                           data-validation="numeric">
                 </div>
                 <div class="col-md-7 col-sm-8 col-12">
                     <label class="ville mt-3 mb-1" for="Ville">Ville <span class="require">*</span> :</label>
-                    <input id="Ville" class="form-control mb-0" type="text" name="ville" value="<?= $profil->ville ?>">
-
-                    <?php $class =  (isset($errors['ville'])) ? '' : 'hidden'; ?>
-                    <div class="<?= $class ?>"><?php if(isset($errors['ville'])) echo $errors['ville']; ?></div>
+                    <input id="Ville" class="js-validation form-control mb-0" type="text" name="ville" value="<?= $profil->ville ?>"
+                           data-validation="alpha">
                 </div>
             </div>
             <div class="col-xl-6 col-lg-8 col-md-8 col-sm-7 col-9 row mx-auto mt-4">
-                <button type="submit" class="btn btn-warning">Valider</button>
+                <button type="submit" class="js-submit-button btn btn-warning">Valider</button>
             </div>
         </form>
     </div>

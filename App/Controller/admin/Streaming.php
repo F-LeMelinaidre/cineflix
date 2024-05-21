@@ -16,8 +16,8 @@ class Streaming extends AbstractController
     {
         parent::__construct();
 
-        if(!AuthConnect::isConnected() || AuthConnect::getSession()['role'] < Role::ADMINISTRATEUR->value) {
-            header('Location: /');
+        if(!AuthConnect::isConnected() || AuthConnect::getSession()['role'] < Role::ADMINISTRATEUR) {
+            header('Location: /Signin');
             exit();
         }
     }

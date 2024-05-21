@@ -8,15 +8,15 @@
     class AbstractModel
     {
 
-
         private array $validation_items;
 
-        protected array $errors = [];
         protected ?int $id = null;
+        protected ?string $nom = null;
         protected string $created;
         protected string $modified;
+        protected array $errors = [];
 
-        public ?string $nom = null;
+
 
         /**
          * @param array|null $data
@@ -28,6 +28,29 @@
             if(isset($data['modified'])) $this->modified = $data['modified'];
             if(isset($data['nom'])) $this->nom = $data['nom'];
 
+        }
+
+        public function __get(string $item): mixed
+        {
+            switch($item) {
+                case 'id':
+                case 'nom':
+                case 'created':
+                case 'modified':
+                    $item = $this->$item;
+                    break;
+
+                case 'created_fr':
+                    $item = $this->getDateHeureFr($this->created);
+                    break;
+                case 'modified_fr':
+                    $item = $this->getDateHeureFr($this->modified);
+                    break;
+
+                default:
+                    $item ='';
+            }
+            return $item;
         }
 
         /**
@@ -90,6 +113,16 @@
          */
         public function getDateFr(string $date): string
         {
+            return date("d-m-Y", strtotime($date));
+        }
+
+        /**
+         * @param string $date
+         *
+         * @return string
+         */
+        public function getDateHeureFr(string $date): string
+        {
             return date("d-m-Y H:i:s", strtotime($date));
         }
 
@@ -131,25 +164,31 @@
             $valid = true;
 
             foreach($rules as $rule) {
-                if(!empty($this->$item) && $rule === 'equal') {
 
+                if(!empty($this->$item) && $rule === 'equal') {
                     $item_confirm = $item."_confirm";
                     $valid = $this->$item == $this->$item_confirm;
+
+                    $type = 'invalid';
                     $message = (isset($messages['equal']))? $messages['equal'] : "les champs ne sont pas identiques !";
 
                 } elseif (!empty($this->$item) && $rule !== 'require') {
 
                     $pattern = Regex::getPattern($rule);
                     $valid = preg_match($pattern, $this->$item);
+
+                    $type = 'error';
                     $message = (isset($messages[$rule]))? $messages[$rule] : Regex::getMessage($rule);
 
                 } elseif(empty($this->$item) && $rule === 'require') {
 
                     $valid = false;
+                    $type = 'invalid';
                     $message = (isset($messages['require']))? $messages['require'] : "Champ requis !";
                 }
 
-                if(!$valid ) $this->errors[$item] = $message;
+                if(!$valid ) $this->errors[$item] = ['type'   => $type,
+                                                     'message' => $message];
 
             }
         }
@@ -174,7 +213,7 @@
          *
          * @return void
          */
-        public function hydrate(?array $data)
+        public function hydrate(array $data = null)
         {
             if(isset($data['id'])) $this->id = $data['id'];
             if(isset($data['created'])) $this->created = $data['created'];

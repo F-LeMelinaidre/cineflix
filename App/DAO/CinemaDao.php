@@ -1,8 +1,6 @@
 <?php
 
-namespace Cineflix\App\Model\DAO;
-
-use Cineflix\App\DAO\AbstractDAO;
+namespace Cineflix\App\DAO;
 
 class CinemaDao extends AbstractDAO
 {

@@ -2,18 +2,22 @@
 
     namespace Cineflix\App\Model;
 
+    use Attribute;
+    use Cineflix\App\DAO\List\StatusMovie;
+    use Normalizer;
+    use PHPUnit\Util\Json;
 
     class MovieModel extends AbstractModel
     {
 
-        public int $status = 0;
+        private int $status = 0;
+        private ?CinemaModel $cinema = null;
+        private ?ExploitationModel $exploitation = null;
+        private string $slug = '';
 
-        public ?string $synopsis;
-        public ?string $affiche;
-        public ?string $date_sortie;
-        public ?CinemaModel $cinema = null;
-        public ?string $slug;
-
+        protected ?string $synopsis;
+        protected ?string $affiche;
+        protected ?string $date_sortie;
 
         /**
          * @param array|null $data
@@ -22,46 +26,57 @@
         {
             parent::__construct($data);
 
-            if(isset($data['status'])) {
-                $this->status = $data['status'];
-                unset($data['status']);
-            }
-            if(isset($data['synopsis'])) {
-                $this->synopsis = $data['synopsis'];
-                unset($data['synopsis']);
-            }
-            if(isset($data['affiche'])) {
-                $this->affiche = $data['affiche'];
-                unset($data['affiche']);
-            }
-            if(isset($data['date_sortie'])) {
-                $this->date_sortie = $data['date_sortie'];
-                unset($data['date_sortie']);
-            }
-            if(isset($data['slug'])) {
-                $this->slug = $data['slug'];
-                unset($data['slug']);
-            }
+            if(isset($data['status'])) $this->status = $data['status'];
 
-            $cinema = [];
-            if(!empty($data)) {
-                foreach ($data as $col => $val) {
-                    $parts = explode('_', $col);
-                    if($parts[0] === 'cinema') {
-                        $cinema[$parts[1]] = $val;
-                    } else {
-                        $cinema[$col] = $val;
-                    }
-                }
-            }
-            if(!empty($cinema)) $this->cinema = new CinemaModel($cinema);
+            if(isset($data['synopsis'])) $this->synopsis = $data['synopsis'];
 
+            if(isset($data['affiche'])) $this->affiche = $data['affiche'];
+
+            if(isset($data['date_sortie'])) $this->date_sortie = $data['date_sortie'];
+
+            if(isset($data['slug'])) $this->slug = $data['slug'];
+
+            if(isset($data['ville']) && isset($data['cinema'])) $data['cinema']['ville'] = $data['ville'];
+
+            if(isset($data['cinema'])) $this->cinema = new CinemaModel($data['cinema']);
+            if(isset($data['exploitation'])) $this->exploitation = new ExploitationModel($data['exploitation']);
         }
 
-        public function setName(string $nom): void
+        public function __get(string $item): mixed
+        {
+            switch ($item) {
+                case 'synopsis':
+                case 'affiche':
+                case 'slug':
+                case 'cinema':
+                case 'exploitation':
+                    $item = $this->$item;
+                    break;
+
+                case 'status_id':
+                    $item = $this->status;
+                    break;
+
+                case 'date_sortie_fr':
+                    $item = $this->getDateFr($this->date_sortie);
+                    break;
+                default:
+                    $item = parent::__get($item);
+                    break;
+            }
+            return  $item;
+        }
+
+        public function setNom(string $nom): void
         {
             parent::setNom($nom);
-            $this->slug = str_replace([' ',"'"],'-',$this->nom);
+
+            $this->setSlug($nom);
+        }
+
+        public function setStatus(string $status): void
+        {
+            $this->status = StatusMovie::getStatus($status);
         }
 
         /**
@@ -83,5 +98,20 @@
 
         }
 
+        public function setSlug(string $slug): void
+        {
+            // remplace les caratère accentué par leur equivalant non accentué
+            // Activer l'extention intl de PHP
+            // Parametrer la lib dans composer.json "ext-intl": "*"
+            $normalized =  Normalizer::normalize($slug, Normalizer::FORM_D);
+            $slug = preg_replace('/\p{Mn}/u', '', $normalized);
+            // Remplace les caratère spéciaux par un -
+            $slug = preg_replace('/[^\p{L}\p{N}]/u', '-', $slug);
+            // supprime les doubles --
+            $slug = preg_replace('/-{2,}/', '-', $slug);
+            // supprime les - en debut et fin de chaine
+            $slug = trim($slug, '-');
+            $this->slug = str_replace(' ', '-', ucfirst($slug));
+        }
 
     }

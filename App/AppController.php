@@ -3,11 +3,12 @@
     namespace Cineflix\App;
 
 
-    use Cineflix\App\Model\UserModel;
+    use Cineflix\App\Model\ProfilModel;
     use Cineflix\Core\Database\Database;
     use Cineflix\Core\Router\RouteNotFoundException;
     use Cineflix\Core\Router\Router;
     use Cineflix\Core\Util\AuthConnect;
+    use ReflectionClass;
 
     // Charge la class autoload (package de composer)
     require '../vendor/autoload.php';
@@ -56,7 +57,7 @@
             // 2nd le format de l'url qui doit estre matché
             // 3eme tableau de paramètre contenant la class controller et le nom de la méthode
             // 4eme optionnel tableau [nom du paramètre => format de la valeur (expression régulière)]
-            self::$_Router->get('home', '/', [Controller\Home::class, 'index']);
+            self::$_Router->get('home', '/', [Controller\Movie::class, 'index']);
 
             self::$_Router->get('signin', '/Signin', [Controller\Auth::class, 'signin']);
             self::$_Router->get('signup', '/Signup', [Controller\Auth::class, 'signup']);
@@ -68,14 +69,12 @@
 
             self::$_Router->get('signout', '/Signout', [Controller\Auth::class, 'signout']);
 
-            self::$_Router->get('movie_index', '/Movie', [ Controller\Movie::class, 'index']);
+            self::$_Router->get('movie_index', '/Film-{status}', [ Controller\Movie::class, 'index'],
+                ['status' => '[A-Z-]+']);
             self::$_Router->get('movie_show', '/Movie/{slug}', [ Controller\Movie::class, 'show'],
                 ['slug' => '[A-Z_]+']);
 
-            self::$_Router->get('streaming_index', '/Streaming', [Controller\Streaming::class, 'index']);
-            self::$_Router->get('streaming_show', '/Streaming/{slug}', [Controller\Streaming::class, 'show'],
-                ['slug' => '[A-Z_]+']);
-
+            //Profil
             self::$_Router->get('profil_show', '/Profil', [ Controller\Profil::class, 'show']);
             self::$_Router->get('profil_edit_identite', '/Profil/Edit/Identite', [ Controller\Profil::class, 'editIdentite']);
             self::$_Router->get('profil_edit_adresse', '/Profil/Edit/Adresse', [ Controller\Profil::class, 'editAdresse']);
@@ -102,9 +101,15 @@
                 ['status' => '[A-Z-]+']);
             self::$_Router->get('admin_movie_add', '/Admin/Nouveau/Film-{status}', [ Controller\Admin\Movie::class, 'edit'],
                 ['status' => '[A-Z-]+']);
+            self::$_Router->get('admin_movie_edit', '/Admin/Nouveau/Film-{status}/{id}', [ Controller\Admin\Movie::class, 'edit'],
+                ['status' => '[A-Z-]+',
+                 'id' => '[0-9]+']);
 
             self::$_Router->post('admin_movie_add', '/Admin/Nouveau/Film-{status}', [ Controller\Admin\Movie::class, 'edit'],
                 ['status' => '[A-Z-]+']);
+            self::$_Router->post('admin_movie_edit', '/Admin/Nouveau/Film-{status}/{id}', [ Controller\Admin\Movie::class, 'edit'],
+                ['status' => '[A-Z-]+',
+                 'id' => '[0-9]+']);
 
 
             // self::$_Router->get('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\Movie::class, 'edit'],
@@ -128,38 +133,33 @@
                 ['id' => '[0-9]+']);
 
             //Requete Ajax
-            self::$_Router->post('ajax_cinemaSearch', '/Ajax/cinemaSearch', [ Ajax\AjaxRequest::class, 'cinemaSearch']);
-            self::$_Router->post('ajax_filmSearch', '/Ajax/filmSearch', [ Ajax\AjaxRequest::class, 'filmSearch']);
+            self::$_Router->ajax('ajax_cinemaSearch', '/Ajax/cinemaSearch', [ Controller\Cinema::class, 'cinemaSearch'],true);
+            self::$_Router->ajax('ajax_movieSearch', '/Ajax/movieSearch', [ Controller\Movie::class, 'movieSearch'],true);
+            self::$_Router->ajax('ajax_movieExist', '/Ajax/movieExist', [ Controller\Movie::class, 'movieExist'],true);
+            self::$_Router->ajax('ajax_statusList', '/Ajax/statusList', [ Controller\Movie::class, 'statusList']);
 
 
             try {
                 // Controlle l'url et dirige vers le bon controller et methode si l'url match avec une route précédement créé
                 // Sinon lève une exception
-                $route = self::$_Router->resolve();
+                $path = $_SERVER['REQUEST_URI'] ?? '/'; // url courant hors nom de domaine
+                $method = $_SERVER['REQUEST_METHOD']; // methode POST ou GET
+                $route = self::$_Router->resolve($method,$path);
                 $callback = $route->callback;
                 $params = $route->matches;
 
 
                 $controller = new $callback[0]();
                 $callback[0] = $controller;
-
-
                 // call_user_func_array Retourne une methode de Class instancié
                 // Le parametre $callback doit etre une methode d'objet instancié sous forme de tableau
                 // index 0: la Class
                 // index 1: la methode
                 // $params est un tableau des paramètres passés à la méthode de la Class $callback
+                // exemple un parametre d'url
                 // return vers public/index.view
 
-                return call_user_func_array($callback, $params);
 
-
-                // call_user_func_array Retourne une methode de Class instancié
-                // Le parametre $callback doit etre une methode d'objet instancié sous forme de tableau
-                // index 0: la Class
-                // index 1: la methode
-                // $params est un tableau des paramètres passés à la méthode de la Class $callback
-                // return vers public/index.view
                 return call_user_func_array($callback, $params);
 
             } catch (RouteNotFoundException $exception) {

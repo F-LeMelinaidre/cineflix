@@ -12,7 +12,6 @@ class UserDao extends AbstractDAO
 
     public function create(object $user)
     {
-
         try {
 
             $this->db->beginTransaction();
@@ -51,6 +50,16 @@ class UserDao extends AbstractDAO
 
     }
 
+    public function update($user, string $id_column = 'id'): Database
+    {
+        $data = [];
+        $data['id'] = $user->$id_column;
+
+        if(!is_null($user->email)) $data['email'] = $user->email;
+
+        if(!is_null($user->password_hash)) $data['password_hash'] = $user->password_hash;
+        return parent::update($data, $id_column);
+    }
 
     public function delete()
     {

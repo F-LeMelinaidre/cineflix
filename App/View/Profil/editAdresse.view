@@ -1,17 +1,17 @@
 <section  id="Profil" class="p-0">
     <header class="d-flex
-               justify-content-between
+               justify-content-around
                align-items-center
                position-relative
                mt-4
                border-top border-bottom border-dark">
-        <h1 class="ms-5">Edition: Adresse</h1>
-        <ul>
-            <li>Créé le <?= $profil->getCreated() ?></li>
+        <h1>Edition: Adresse</h1>
+        <ul class="date-list">
+            <li>Créé le <?= $profil->created_fr ?></li>
 
-            <?php if($profil->getCreated() != $profil->getModified()): ?>
+            <?php if($profil->created != $profil->modified): ?>
 
-                <li>Modifié le  <?= $profil->getModified() ?></li>
+                <li>Modifié le  <?= $profil->modified_fr ?></li>
 
             <?php endif; ?>
 
@@ -23,61 +23,45 @@
         <div id="Address">
             <h2>Adresse :</h2>
             <div class="row justify-content-center">
-                <div class="col-md-2 col-sm-2 col-2">
+                <div class="col-sm-2 col">
                     <label class="numero-voie mt-3 mb-1" for="NumeroVoie">N° :</label>
-                    <input id="NumeroVoie" class="form-control mb-2" type="text" name="numero_voie" value="<?= $profil->numero_voie  ?>">
+                    <input id="NumeroVoie" class="js-validation form-control mb-2" type="text" name="numero_voie" value="<?= $profil->numero_voie  ?>"
+                           aria-required="true"
+                           data-validation="alphaNumeric">
                 </div>
-                <div class="col-md-3 col-sm-3 col-3">
+                <div class="col-sm-2 col">
                     <label class="type-voie mt-3 mb-1" for="TypeVoie">Type :</label>
-                    <input id="TypeVoie" class="form-control mb-2" type="text" name="type_voie" value="<?= $profil->type_voie ?>">
+                    <input id="TypeVoie" class="js-validation form-control mb-2" type="text" name="type_voie" value="<?= $profil->type_voie ?>"
+                           aria-required="true"
+                           data-validation="alpha">
                 </div>
-                <div class="col-md-7 col-sm-7 col-7">
+                <div class="col-sm-8 col-12">
                     <label class="nom-voie mt-3 mb-1" for="NomVoie">Nom de la voie :</label>
-                    <input id="NomVoie" class="form-control mb-2" type="text" name="nom_voie" value="<?= $profil->nom_voie ?>">
-                </div>
-
-                <?php $class =  (isset($errors['numero_voie']) || isset($errors['type_voie'])) ? '' : 'hidden'; ?>
-
-                <div class="col-5 <?= $class ?>">
-                    <?php
-                        if(isset($errors['numero_voie'])) echo $errors['numero_voie'].'<br>';
-                        if(isset($errors['type_voie'])) echo $errors['type_voie'].'<br>';
-                    ?>
-                </div>
-
-                <?php $class =  (isset($errors['nom_voie'])) ? '' : 'hidden';  ?>
-
-                <div class="col-7 <?= $class ?>">
-                    <?php if(isset($errors['nom_voie'])) echo $errors['nom_voie']; ?>
+                    <input id="NomVoie" class="js-validation form-control mb-2" type="text" name="nom_voie" value="<?= $profil->nom_voie ?>"
+                           aria-required="true"
+                           data-validation="alphaNumeric">
                 </div>
 
             </div>
-            <div class="row justify-content-center">
-                <div class="col-3">
+            <div class="row justify-content-center mb-3">
+                <div class="col-sm-3 col-12">
                     <label class="code-postale mt-3 mb-1" for="CodePostale">Code postale :</label>
-                    <input id="CodePostale" class="form-control mb-2" type="text" name="code_postale" value="<?= $profil->code_postale ?>">
+                    <input id="CodePostale" class="js-validation form-control mb-2" type="text" name="code_postale" value="<?= $profil->code_postale
+                    ?>"
+                           aria-required="true"
+                           data-validation="numeric">
                 </div>
-                <div class="col-9">
+                <div class="col-sm-6 col-12">
                     <label class="ville mt-3 mb-1" for="Ville">Ville :</label>
-                    <input id="Ville" class="form-control mb-2" type="text" name="ville" value="<?= $profil->ville ?>">
-                </div>
-
-                <?php $class =  (isset($errors['code_postale'])) ? '' : 'hidden'; ?>
-
-                <div class="col-3 <?= $class ?>">
-                    <?php if(isset($errors['code_postale'])) echo $errors['code_postale']; ?>
-                </div>
-
-                <?php $class =  (isset($errors['ville'])) ? '' : 'hidden'; ?>
-
-                <div class="col-9 <?= $class ?>">
-                    <?php if(isset($errors['ville'])) echo $errors['ville']; ?>
+                    <input id="Ville" class="js-validation form-control mb-2" type="text" name="ville" value="<?= $profil->ville ?>"
+                           aria-required="true"
+                           data-validation="alpha">
                 </div>
             </div>
         </div>
-        <div class="row justify-content-between mt-3">
+        <div class="row justify-content-between g-4">
             <div class="col-auto">
-                <button type="submit" class="btn btn-warning m-0">Modifier</button>
+                <button class="js-submit-button btn btn-warning m-0" type="submit">Modifier</button>
             </div>
             <div class="col-auto">
                 <a href="<?= self::$_Router->getUrl("profil_show") ?>" class="btn btn-outline-warning">Retour</a>

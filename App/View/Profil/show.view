@@ -1,52 +1,56 @@
 <section  id="Profil" class="p-0">
     <header class="d-flex
-               justify-content-between
+               justify-content-around
                align-items-center
                position-relative
                mt-4
                border-top border-bottom border-dark">
-        <h1 class="ms-5">Mon Profil</h1>
-        <ul>
-            <li>Créé le <?= $profil->getCreated() ?></li>
 
-            <?php if($profil->getCreated() != $profil->getModified()): ?>
+        <h1>Mon Profil</h1>
 
-            <li>Modifié le  <?= $profil->getModified() ?></li>
+        <ul class="date-list">
+            <li>Créé le <?= $profil->created_fr ?></li>
+
+            <?php if($profil->created != $profil->modified): ?>
+
+            <li>Modifié le  <?= $profil->modified_fr ?></li>
 
             <?php endif; ?>
 
         </ul>
     </header>
 
-    <div class="col-xl-6 col-lg-8 col-md-10 col-sm-12 row mt-4 m-auto p-4 pt-3 rounded-2 bg-dark-subtle">
+    <div class="col-xl-6 col-lg-8 col-md-10 col-sm-12 row justify-content-end mt-4 m-auto p-4 pt-3 rounded-2 bg-dark-subtle">
+        <h2 class="role col-auto me-3">Role</h2>
+        <p class="role col-auto"><?= $profil->user->role_name ?></p>
         <h2 class="p-0 mb-2">Identité</h2>
-        <dl class="identite-view row row-gap-2 align-items-center mb-4">
-            <dt class="col-2 text-end pe-2">Nom :</dt>
-            <dd class="col-3"><?= $profil->nom ?></dd>
-            <dt class="col-4 text-end pe-2">Date de naissance :</dt>
-            <dd class="col-3"><?= $profil->getDateNaissance() ?></dd>
-            <dt class="col-2 text-end pe-2">Prénom :</dt>
-            <dd class="col-3"><?= $profil->prenom ?></dd>
+        <dl class="identite-view row row-cols-lg-4 row-cols-md-4 row-cols-sm-4 row-cols-2 row-gap-2 align-items-center mb-4">
+            <dt class="col-lg-2 order-lg-0 col-md-2 order-md-0 col-sm-2 order-sm-0 text-end pe-2">Nom :</dt>
+            <dd class="col-lg-3 order-lg-1 col-md-3 order-md-1 col-sm-3 order-sm-1"><?= $profil->nom ?></dd>
+            <dt class="col-lg-2 order-lg-4 col-md-2 order-md-4 col-sm-2 order-sm-4 text-end pe-2">Prénom :</dt>
+            <dd class="col-lg-3 order-lg-5 col-md-3 order-md-5 col-sm-3 order-sm-5"><?= $profil->prenom ?></dd>
+            <dt class="col-lg-4 order-lg-2 col-md-4 order-md-2 col-sm-4 order-sm-2 text-end pe-2">Date de naissance :</dt>
+            <dd class="col-lg-3 order-lg-3 col-md-3 order-md-3 col-sm-3 order-sm-3"><?= $profil->date_naissance_fr ?></dd>
         </dl>
         <a href="<?= self::$_Router->getUrl("profil_edit_identite") ?>" class="col-auto ms-auto btn btn-sm btn-outline-warning
         mt-3">Modifier</a>
         <h2 class="p-0 mb-2">Coordonnées</h2>
-        <dl class="contact-view row row-gap-2 align-items-center">
-            <dt class="col-3 text-end pe-2">Adresse postale :</dt>
-            <dd class="col-9"><?= $profil->getAddress() ?></dd>
-            <dt class="col-3 text-end pe-2">Code postale :</dt>
-            <dd class="col-1"><?= $profil->code_postale ?></dd>
-            <dt class="col-2 text-end pe-2">Ville :</dt>
-            <dd class="col-6"><?= $profil->ville ?></dd>
+        <dl class="contact-view row row-cols-sm-4 row-cols-2 row-gap-2 align-items-center">
+            <dt class="col-sm-3 text-end pe-2">Adresse postale :</dt>
+            <dd class="col-sm-9"><?= $profil->adresse ?></dd>
+            <dt class="col-sm-3 text-end pe-2">Code postale :</dt>
+            <dd class="col-sm-3"><?= $profil->code_postale ?></dd>
+            <dt class="col-sm-3 text-end pe-2">Ville :</dt>
+            <dd class="col-sm-3"><?= $profil->ville ?></dd>
         </dl>
         <a href="<?= self::$_Router->getUrl("profil_edit_adresse") ?>" class="col-auto ms-auto btn btn-sm btn-outline-warning
         mt-3">Modifier</a>
         <h2 class="p-0 mb-2">Paramètres de connexion</h2>
-        <dl class="contact-view row row-gap-2 align-items-center">
-            <dt class="col-2 text-end pe-2">Email :</dt>
-            <dd class="col-4"><?= $profil->user->email ?></dd>
-            <dt class="col-3 text-end pe-2">Mot de passe :</dt>
-            <dd class="col-3">******</dd>
+        <dl class="contact-view row row-cols-sm-4 row-cols-2 row-gap-2 align-items-center">
+            <dt class="col-sm-2 text-end pe-2">Email :</dt>
+            <dd class="col-sm-4"><?= $profil->user->email ?></dd>
+            <dt class="col-sm-3 text-end pe-2">Mot de passe :</dt>
+            <dd class="col-sm-3">******</dd>
         </dl>
         <a href="<?= self::$_Router->getUrl("profil_edit_authentification") ?>" class="col-auto ms-auto btn btn-sm btn-outline-warning
         mt-3">Modifier</a>

@@ -2,106 +2,94 @@
 
     namespace Cineflix\App\Model;
 
-    use Cineflix\Core\Util\Regex;
+    use Cineflix\App\Controller\Admin\User;
     use Cineflix\Core\Util\Security;
 
     class ProfilModel extends AbstractModel
     {
         private string $table = 'profil';
-        public ?string $prenom = null;
-        public ?string $date_naissance = null;
-        public ?string $numero_voie = null;
-        public ?string $type_voie = null;
-        public ?string $nom_voie = null;
-        public ?int $code_postale = null;
-        public ?string $ville = null;
-        public ?int $point = null;
+        private UserModel $user;
 
-        public UserModel $user;
+        protected ?string $prenom = null;
+        protected ?string $date_naissance = null;
+        protected ?string $numero_voie = null;
+        protected ?string $type_voie = null;
+        protected ?string $nom_voie = null;
+        protected ?int $code_postale = null;
+        protected ?string $ville = null;
+        protected ?int $point = null;
+
 
         /**
          * @param array|null $data
          */
-        public function __construct(array $data = null)
+        public function __construct(?array $data = null)
         {
             parent::__construct($data);
 
-            $this->hydrate($data);
+            if (isset($data['user_id'])) $this->id = $data['user_id'];
 
+            if (isset($data['nom'])) $this->nom = $data['nom'];
+
+            if (isset($data['prenom'])) $this->prenom = $data['prenom'];
+
+            if (isset($data['date_naissance'])) $this->date_naissance = $data['date_naissance'];
+
+            if (isset($data['numero_voie'])) $this->numero_voie = $data['numero_voie'];
+
+            if (isset($data['type_voie'])) $this->type_voie = $data['type_voie'];
+
+            if (isset($data['nom_voie'])) $this->nom_voie = $data['nom_voie'];
+
+            if (isset($data['code_postale'])) $this->code_postale = $data['code_postale'];
+
+            if (isset($data['ville'])) $this->ville = $data['ville'];
+
+            if (isset($data['point'])) $this->point = $data['point'];
+
+            if (isset($data['user'])) $this->user = new UserModel($data['user']);
         }
 
         /**
-         * @param array|null $data
+         * @param string $item
          *
-         * @return void
+         * @return mixed
          */
-        public function hydrate(array $data = null)
+        public function __get(string $item): mixed
         {
-            parent::hydrate($data);
+            switch($item) {
+                case 'nom':
+                case 'prenom':
+                case 'date_naissance':
+                case 'numero_voie':
+                case 'type_voie':
+                case 'nom_voie':
+                case 'code_postale':
+                case 'ville':
+                case 'point':
+                case 'user':
+                    $item = $this->$item;
+                    break;
 
-            if(isset($data['user_id'])) $this->id = $data['user_id'];
+                case 'user_id':
+                    $item = $this->id;
+                    break;
 
-            if(isset($data['nom'])) {
-                $this->nom = $data['nom'];
-                unset($data['nom']);
+                case 'date_naissance_fr':
+                    $item = (!is_null($this->date_naissance)) ? $this->getDateFr($this->date_naissance) : '';
+                    break;
+
+                case 'adresse':
+                    $item = $this->getAddress();
+                    break;
+
+                default:
+                    $item = parent::__get($item);
+                    break;
             }
 
-            if(isset($data['prenom'])) {
-                $this->prenom = $data['prenom'];
-                unset($data['prenom']);
-            }
-
-            if(isset($data['date_naissance'])) {
-                $this->date_naissance = $data['date_naissance'];
-                unset($data['date_naissance']);
-            }
-
-            if(isset($data['numero_voie'])) {
-                $this->numero_voie = $data['numero_voie'];
-                unset($data['numero_voie']);
-            }
-
-            if(isset($data['type_voie'])) {
-                $this->type_voie = $data['type_voie'];
-                unset($data['type_voie']);
-            }
-
-            if(isset($data['nom_voie'])) {
-                $this->nom_voie = $data['nom_voie'];
-                unset($data['nom_voie']);
-            }
-
-            if(isset($data['code_postale'])) {
-                $this->code_postale = $data['code_postale'];
-                unset($data['code_postale']);
-            }
-
-            if(isset($data['ville'])) {
-                $this->ville = $data['ville'];
-                unset($data['ville']);
-            }
-
-            if(isset($data['point'])) {
-                $this->point = $data['point'];
-                unset($data['point']);
-            }
-
-            $user = [];
-            if(!empty($data)) {
-                foreach ($data as $col => $val) {
-                    $parts = explode('_', $col);
-                    if($parts[0] === 'user') {
-                        $user[$parts[1]] = $val;
-                    }
-                }
-            }
-
-
-            if(!empty($user)) {
-                $this->user = new UserModel($user);
-            }
+            return $item;
         }
-
         /**
          * @param string $prenom
          *
@@ -120,14 +108,6 @@
         public function setDateNaissance(string $date): void
         {
             $this->date_naissance = Security::sanitize($date);
-        }
-
-        /**
-         * @return string
-         */
-        public function getDateNaissance(): string
-        {
-            return !empty($this->date_naissance)? date("d-m-Y", strtotime($this->date_naissance)) : '';
         }
 
         /**
@@ -183,20 +163,9 @@
         /**
          * @return string
          */
-        public function getAddress(): string
+        private function getAddress(): string
         {
             return $this->numero_voie. ' ' .$this->type_voie. ' ' .$this->nom_voie;
         }
-
-        /**
-         * @param array $data
-         *
-         * @return void
-         */
-        public function addUser(array $data = null): void
-        {
-            $this->user = new UserModel($data);
-        }
-
 
     }
