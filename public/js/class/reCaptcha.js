@@ -1,9 +1,13 @@
+export class ReCaptcha {
 
-import { submitButton } from "./SubmitButton"; // Assurez-vous que le chemin est correct
-class ReCaptcha {
+    /** @type {boolean} */
     #isReCaptchaValid = false;
+    /** @type {HTMLElement} */
+    #reCaptcha
 
-    constructor() {
+    constructor(reCaptcha) {
+        this.#reCaptcha = reCaptcha;
+
         window.onloadCallback = this.initializeReCaptcha.bind(this);
     }
 
@@ -14,13 +18,12 @@ class ReCaptcha {
             'expired-callback': this.#setReCaptchaStatus.bind(this, false)
         });
 
-        submitButton.init(this); // Ajouter l'instance de ReCaptcha à SubmitButton
     }
 
     #setReCaptchaStatus(status) {
         this.#isReCaptchaValid = status;
         const event = new CustomEvent('validationChange');
-        document.getElementById('ReCaptcha').dispatchEvent(event);
+        this.#reCaptcha.dispatchEvent(event);
     }
 
     getValid() {
@@ -28,11 +31,11 @@ class ReCaptcha {
     }
 
     getElement() {
-        return document.getElementById('ReCaptcha');
+        return this.#reCaptcha
     }
-}
 
+    checkValidity() {
 
-if (document.getElementById('ReCaptcha')) {
-    new ReCaptcha();
+        return this.getValid();
+    }
 }

@@ -10,6 +10,7 @@
         private string $table = 'profil';
         private UserModel $user;
 
+        protected ?string $adherent_id = null;
         protected ?string $prenom = null;
         protected ?string $date_naissance = null;
         protected ?string $numero_voie = null;
@@ -17,7 +18,7 @@
         protected ?string $nom_voie = null;
         protected ?int $code_postale = null;
         protected ?string $ville = null;
-        protected ?int $point = null;
+        protected int $point = 0;
 
 
         /**
@@ -27,29 +28,43 @@
         {
             parent::__construct($data);
 
-            if (isset($data['user_id'])) $this->id = $data['user_id'];
+            $this->hydrate($data);
 
-            if (isset($data['nom'])) $this->nom = $data['nom'];
+        }
 
-            if (isset($data['prenom'])) $this->prenom = $data['prenom'];
+        /**
+         * @param array|null $data
+         *
+         * @return void
+         */
+        public function hydrate(array $data = null)
+        {
+            parent::hydrate($data);
 
-            if (isset($data['date_naissance'])) $this->date_naissance = $data['date_naissance'];
+            if (isset($data['user_id'])) $this->setId($data['user_id']);
 
-            if (isset($data['numero_voie'])) $this->numero_voie = $data['numero_voie'];
+            if (isset($data['adherent_id'])) $this->setIdAdherent($data['adherent_id']);
 
-            if (isset($data['type_voie'])) $this->type_voie = $data['type_voie'];
+            if (isset($data['nom'])) $this->setNom($data['nom']);
 
-            if (isset($data['nom_voie'])) $this->nom_voie = $data['nom_voie'];
+            if (isset($data['prenom'])) $this->setPrenom($data['prenom']);
 
-            if (isset($data['code_postale'])) $this->code_postale = $data['code_postale'];
+            if (isset($data['date_naissance'])) $this->setDateNaissance($data['date_naissance']);
 
-            if (isset($data['ville'])) $this->ville = $data['ville'];
+            if (isset($data['numero_voie'])) $this->setNumeroVoie($data['numero_voie']);
 
-            if (isset($data['point'])) $this->point = $data['point'];
+            if (isset($data['type_voie'])) $this->setTypeVoie($data['type_voie']);
+
+            if (isset($data['nom_voie'])) $this->setNomVoie($data['nom_voie']);
+
+            if (isset($data['code_postale'])) $this->setCodePostale($data['code_postale']);
+
+            if (isset($data['ville'])) $this->setVille($data['ville']);
+
+            if (isset($data['point'])) $this->setPoint($data['point']);
 
             if (isset($data['user'])) $this->user = new UserModel($data['user']);
         }
-
         /**
          * @param string $item
          *
@@ -58,6 +73,7 @@
         public function __get(string $item): mixed
         {
             switch($item) {
+                case 'adherent_id':
                 case 'nom':
                 case 'prenom':
                 case 'date_naissance':
@@ -90,6 +106,25 @@
 
             return $item;
         }
+
+        /**
+         * @return string
+         */
+        private function getAddress(): string
+        {
+            return $this->numero_voie. ' ' .$this->type_voie. ' ' .$this->nom_voie;
+        }
+
+        /**
+         * @param string $adherent_id
+         *
+         * @return $this
+         */
+        public function setIdAdherent(string $adherent_id): void
+        {
+            $this->adherent_id = ucfirst(Security::sanitize($adherent_id));
+        }
+
         /**
          * @param string $prenom
          *
@@ -161,11 +196,13 @@
         }
 
         /**
-         * @return string
+         * @param int $point
+         *
+         * @return void
          */
-        private function getAddress(): string
+        public function setPoint(int $point): void
         {
-            return $this->numero_voie. ' ' .$this->type_voie. ' ' .$this->nom_voie;
+            $this->point = Security::sanitize($point);
         }
 
     }

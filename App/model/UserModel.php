@@ -7,7 +7,7 @@
 
     class UserModel extends AbstractModel
     {
-        private int $role = Role::ADHERENT->value;
+        private int $role;
         private ProfilModel $profil;
 
         protected ?string $email = null;
@@ -26,6 +26,9 @@
         public function __construct(?array $data = null)
         {
             parent::__construct($data);
+
+            $this->role = Role::ADHERENT->value;
+
             $this->hydrate($data);
 
         }
@@ -38,13 +41,14 @@
         public function hydrate(array $data = null)
         {
             parent::hydrate($data);
-            if(isset($data['role'])) $this->role = $data['role'];
 
-            if(isset($data['email'])) $this->email = $data['email'];
+            if(isset($data['role'])) $this->setRole($data['role']);
 
-            if(isset($data['connect'])) $this->connect = $data['connect'];
+            if(isset($data['email'])) $this->setEmail($data['email']);
 
-            if(isset($data['last_connect'])) $this->last_connect = $data['last_connect'];
+            if(isset($data['connect'])) $this->setConnect($data['connect']);
+
+            if(isset($data['last_connect'])) $this->setLast_connect($data['last_connect']);
 
             $profil = (isset($data['profil'])) ? $data['profil'] : [];
 

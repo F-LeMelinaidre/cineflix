@@ -18,10 +18,10 @@
             <h2>Les Films</h2>
             <ul>
 
-                <li><a href="<?= self::$_Router->getUrl("admin_movie_index") ?>">Tous les films</a></li>
-                <li><a href="<?= self::$_Router->getUrl("admin_movie",['status' => 'En-Salle']) ?>">En salle</a></li>
-                <li><a href="<?= self::$_Router->getUrl("admin_movie",['status' => 'En-Streaming']) ?>">En streaming</a></li>
-                <li><a href="<?= self::$_Router->getUrl("admin_movie",['status' => 'Indisponible']) ?>">Indisponible</a></li>
+                <li><a href="<?= self::$_Router->getUrl("admin_film_index") ?>">Tous les films</a></li>
+                <li><a href="<?= self::$_Router->getUrl("admin_film",['status' => 'En-Salle']) ?>">En salle</a></li>
+                <li><a href="<?= self::$_Router->getUrl("admin_film",['status' => 'En-Streaming']) ?>">En streaming</a></li>
+                <li><a href="<?= self::$_Router->getUrl("admin_film",['status' => 'Indisponible']) ?>">Indisponible</a></li>
             </ul>
 
             <div><a href="<?= self::$_Router->getUrl("admin_cinema_index") ?>">Cinémas</a></div>

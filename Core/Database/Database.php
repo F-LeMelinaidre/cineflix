@@ -157,12 +157,14 @@
 
         /**
          * Créé la jointure
+         *
          * @param string $table
-         * @param string $alias
          * @param string $condition
+         * @param string $alias
+         *
          * @return $this
          */
-        public function join(string $join, string $type, string $condition): self
+        public function join(string $join, string $condition, string $type = 'INNER'): self
         {
             $this->setAlias($join);
 
@@ -492,7 +494,6 @@
                 $row = $this->mapping($row);
 
             }
-
             return $result;
         }
 
@@ -507,10 +508,12 @@
                     $col = $parts[1];
 
                     if(!isset($data[$tbl])) $data[$tbl] = [];
-                    $data[$tbl][$col] = $val;
+
+                    if(!empty($val)) $data[$tbl][$col] = $val;
                     unset($data[$id]);
                 }
             }
+
             return $data;
         }
         /**

@@ -1,6 +1,6 @@
 <?php
     namespace Cineflix\App\DAO\List;
-    enum StatusMovie: int {
+    enum StatusFilm: int {
         case INDISPONIBLE = 0;
         case EN_SALLE = 1;
         case EN_STREAMING = 2;
@@ -27,13 +27,12 @@
         }
 
         /**
-         * @param int $id
+         * @param string $status
          *
-         * @return self
+         * @return int
          */
-        public static function getStatus(string $status): int
+        public static function getStatusId(string $status): int
         {
-            $status = strtoupper(str_replace(['-',' '], '_', $status));
             return match($status)
             {
                 'INDISPONIBLE' => 0,
@@ -42,6 +41,43 @@
                 'PROCHAINEMENT_EN_SALLE' => 3,
                 'PROCHAINEMENT_EN_STREAMING' => 4,
                 default => 0
+            };
+        }
+
+        /**
+         * @param int $id
+         *
+         * @return StatusFilm
+         */
+        public static function getStatusByName(string $status): StatusFilm
+        {
+            $status = strtoupper(str_replace(['-',' '], '_', $status));
+            return match($status)
+            {
+                'INDISPONIBLE' => self::INDISPONIBLE,
+                'EN_SALLE' => self::EN_SALLE,
+                'EN_STREAMING' => self::EN_STREAMING,
+                'PROCHAINEMENT_EN_SALLE' => self::PROCHAINEMENT_EN_SALLE,
+                'PROCHAINEMENT_EN_STREAMING' => self::PROCHAINEMENT_EN_STREAMING,
+                default => self::INDISPONIBLE
+            };
+        }
+
+        /**
+         * @param int $id
+         *
+         * @return StatusFilm
+         */
+        public static function getStatusById(int $id): StatusFilm
+        {
+            return match($id)
+            {
+                0 => self::INDISPONIBLE,
+                1 => self::EN_SALLE,
+                2 => self::EN_STREAMING,
+                3 => self::PROCHAINEMENT_EN_SALLE,
+                4 => self::PROCHAINEMENT_EN_STREAMING,
+                default => self::INDISPONIBLE
             };
         }
 
@@ -59,7 +95,7 @@
         }
 
         /**
-         * @param StatusMovie $const
+         * @param StatusFilm $const
          *
          * @return string
          */

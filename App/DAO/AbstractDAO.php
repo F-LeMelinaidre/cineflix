@@ -13,6 +13,9 @@
         protected Database $db;
         protected string $table;
         protected string $model;
+        protected string $created;
+        protected string $modified;
+
         protected string $path_model = "\\Cineflix\\App\\Model\\";
         protected int $last_id;
 
@@ -26,6 +29,9 @@
             $class_name = basename(get_called_class());
             $this->table = str_replace('dao', '', strtolower($class_name));
             $this->model = $this->path_model.ucfirst($this->table).'Model';
+
+            $this->created = date("Y-m-d H:i:s");
+            $this->modified = date("Y-m-d H:i:s");
 
         }
 
@@ -48,7 +54,9 @@
          *
          * @return void
          */
-        public function create(object $model) {}
+        public function create(object $model) {
+
+        }
 
 
         /**
@@ -69,7 +77,7 @@
             if(isset($options['contain'])) {
 
                 foreach ($options['contain'] as $relation => $condition) {
-                    $req->join($relation, 'LEFT', $condition);
+                    $req->join($relation, $condition, 'LEFT');
 
                 }
             }
@@ -99,16 +107,17 @@
          */
         public function findAll(array $options = [], string $format = 'model') {
 
+            $table = $options['table'] ?? $this->table;
             $select = $options['select'] ?? ['*'];
 
             $req = $this->db->select(...$select)
-                ->from($this->table);
+                ->from($table);
 
 
             if(isset($options['contain'])) {
 
                 foreach ($options['contain'] as $relation => $condition) {
-                    $req->join($relation, 'LEFT', $condition);
+                    $req->join($relation, $condition, 'LEFT');
                 }
             }
 
@@ -193,7 +202,7 @@
             }
 
             $req->set('modified', ':modified')
-                ->setParameter('modified', date("Y-m-d H:i:s"));
+                ->setParameter('modified', $this->modified);
 
             $this->data = $data;
 

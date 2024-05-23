@@ -42,7 +42,7 @@
 
     <?php if (\Cineflix\Core\Util\AuthConnect::isConnected()): ?>
     <div>
-        <ul>
+        <ul class="info-profil">
             <li><?= $_SESSION[\Cineflix\App\AppController::APP_NAME]['point'] ?> point<?= (0 != $_SESSION[\Cineflix\App\AppController::APP_NAME]['point'])?
                     's' : '' ?></li>
             <li>Dernière connexion: <?= $_SESSION[\Cineflix\App\AppController::APP_NAME]['last_connect'] ?></li>
@@ -56,12 +56,12 @@
             <?php if (\Cineflix\Core\Util\AuthConnect::isConnected()): ?>
                 <ul class="navbar-nav align-items-center">
                     <li class="nav-item <?= ('En-Salle' === $active)? 'active' : '' ?>">
-                        <a href="<?= self::$_Router->getUrl("movie_index",['status' => \Cineflix\App\DAO\List\StatusMovie::getUrlByName(\Cineflix\App\DAO\List\StatusMovie::EN_SALLE)]) ?>" class="nav-link">
+                        <a href="<?= self::$_Router->getUrl("movie_index",['status' => \Cineflix\App\DAO\List\StatusFilm::getUrlByName(\Cineflix\App\DAO\List\StatusFilm::EN_SALLE)]) ?>" class="nav-link">
                             Film en salle
                         </a>
                     </li>
                     <li class="nav-item <?= ('En-Streaming' === $active)? 'active' : '' ?>">
-                        <a href="<?= self::$_Router->getUrl("movie_index",['status' => \Cineflix\App\DAO\List\StatusMovie::getUrlByName(\Cineflix\App\DAO\List\StatusMovie::EN_STREAMING)]) ?>" class="nav-link">
+                        <a href="<?= self::$_Router->getUrl("movie_index",['status' => \Cineflix\App\DAO\List\StatusFilm::getUrlByName(\Cineflix\App\DAO\List\StatusFilm::EN_STREAMING)]) ?>" class="nav-link">
                             Streaming
                         </a>
                     </li>

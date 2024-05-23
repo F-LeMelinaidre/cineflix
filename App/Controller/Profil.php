@@ -60,15 +60,13 @@
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 //TODO verifier l'id
 
+                $profil->hydrate($_POST);
+                $profil->setId($this->session['id']);
 
                 $profil->addValidation('nom',['alpha', 'require']);
                 $profil->addValidation('prenom',['alpha', 'require']);
                 $profil->addValidation('date_naissance',['date']);
 
-                $profil->setId($this->session['id']);
-                $profil->setNom($_POST['nom']);
-                $profil->setPrenom($_POST['prenom']);
-                $profil->setDateNaissance($_POST['date_naissance']);
 
                 if($profil->isValid() && $this->dao->update($profil)) {
 
@@ -94,7 +92,8 @@
             }
 
             $errors = $profil->getErrors();
-            $this->addJavascript('js/app.js', 'module');
+
+            $this->addJavascript(...['path' => 'js/app.js', 'module' => true]);
 
             return $this->render('profil.editIdentite',compact('profil', 'errors'));
         }
@@ -112,7 +111,8 @@
             $profil = new ProfilModel($data);
 
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
-                //TODO verifier l'id
+                $profil->hydrate($_POST);
+                $profil->setId($this->session['id']);
 
                 $profil->addValidation('numero_voie', ['alphaNumeric','require']);
                 $profil->addValidation('type_voie', ['alpha','require']);
@@ -120,12 +120,6 @@
                 $profil->addValidation('code_postale', ['numeric', 'require']);
                 $profil->addValidation('ville', ['alpha','require']);
 
-                $profil->setId($this->session['id']);
-                $profil->setNumeroVoie($_POST['numero_voie']);
-                $profil->setTypeVoie($_POST['type_voie']);
-                $profil->setNomVoie($_POST['nom_voie']);
-                $profil->setCodePostale(intval($_POST['code_postale']));
-                $profil->setVille($_POST['ville']);
 
 
                 if($profil->isValid() && $this->dao->update($profil)) {
@@ -146,7 +140,7 @@
 
             $errors = $profil->getErrors();
 
-            $this->addJavascript('js/app.js', 'module');
+            $this->addJavascript(...['path' => 'js/app.js', 'module' => true]);
 
             return $this->render('profil.editAdresse',compact('profil', 'errors'));
         }
@@ -161,9 +155,8 @@
 
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+                $user->hydrate($_POST);
                 $user->setId($this->session['id']);
-                $user->setEmail($_POST['email']);
-                $user->setPassword($_POST['password']);
 
                 $user->addValidation('email',['email']);
                 $user->addValidation('password',['password']);
@@ -189,8 +182,9 @@
 
             $errors = $user->getErrors();
 
-            $this->addJavascript('js/app.js', 'module');
-            $this->addJavascript('js/class/generatePassword.js', 'module');
+            $this->addJavascript(...['path' => 'js/app.js', 'module' => true]);
+            $this->addJavascript(...['path' => 'js/class/generatePassword.js', 'module' => true]);
+
             return $this->render('profil.editAuthentification',compact('user','errors'));
         }
     }

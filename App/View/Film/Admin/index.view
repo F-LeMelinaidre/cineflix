@@ -1,14 +1,13 @@
 <header class="p-0">
-    <h1>Liste des films <?php if(!is_null($status_id)) echo \Cineflix\App\DAO\List\StatusMovie::toString($status_id); ?></h1>
+    <h1>Liste des films <?php if($status) echo \Cineflix\App\DAO\List\StatusFilm::toString($status->value); ?></h1>
     <nav class="d-flex align-items-center">
-        <?php if ($status_id || is_null($status_id))
+        <?php if ($status || is_null($status))
         echo "<h6 class='m-0 p-0 me-2'>Ajouter un Film :</h6>";
         ?>
-
         <?php foreach($buttons as $id => $url): ?>
-            <?php if ($id == $status_id || is_null($status_id)) { ?>
+            <?php if (is_null($status) || $id === $status->value) { ?>
 
-            <a href="<?= $url ?>" class="me-2 btn btn-sm btn-warning"><?php echo \Cineflix\App\DAO\List\StatusMovie::toString($id); ?></a>
+            <a href="<?= $url ?>" class="me-2 btn btn-sm btn-warning"><?php echo \Cineflix\App\DAO\List\StatusFilm::toString($id); ?></a>
 
             <?php } ?>
         <?php endforeach; ?>
@@ -28,17 +27,17 @@
     </thead>
     <tbody >
 
-    <?php foreach($movies as $movie):?>
+    <?php foreach($movies as $movie): ?>
 
-        <tr>
-            <td class="<?= strtolower(\Cineflix\App\DAO\List\StatusMovie::getUrlById($movie->status_id)) ?>">
-                <?= \Cineflix\App\DAO\List\StatusMovie::toString($movie->status_id) ?>
+        <tr <?php if($movie->exploitation && $movie->exploitation->soon_delete === true) echo 'class="warning"'; ?>>
+            <td class="<?= strtolower(\Cineflix\App\DAO\List\StatusFilm::getUrlById($movie->status_id)) ?>">
+                <?= \Cineflix\App\DAO\List\StatusFilm::toString($movie->status_id) ?>
             </td>
             <td><?= $movie->nom ?></td>
             <td><?= $movie->cinema->nom ?></td>
             <td><?= $movie->cinema->ville->nom ?></td>
-            <td><?= (\Cineflix\App\DAO\List\StatusMovie::EN_SALLE->value === $movie->status_id)? $movie->exploitation->debut_fr : '' ?></td>
-            <td><?= (\Cineflix\App\DAO\List\StatusMovie::EN_SALLE->value === $movie->status_id)? $movie->exploitation->fin_fr : ''?></td>
+            <td><?= $movie->exploitation->debut_fr ?? '' ?></td>
+            <td><?=  $movie->exploitation->fin_fr ?? ''?></td>
             <td>
                 <nav class="action-menu">
                     <ul>

@@ -19,7 +19,7 @@
     </header>
 
     <form id="ConnexionParams"
-          class="edit-profil mt-4 m-auto p-4 rounded-2 bg-dark-subtle"
+          class="js-form edit-profil mt-4 m-auto p-4 rounded-2 bg-dark-subtle"
           action="<?= self::$_Router->getUrl('profil_edit_authentification') ?>"
           method="post">
 

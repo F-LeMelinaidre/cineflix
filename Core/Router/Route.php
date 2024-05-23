@@ -2,6 +2,8 @@
 
 namespace Cineflix\Core\Router;
 
+use Cineflix\App\AppController;
+
 /**
  * Class Route représente une route
  * Exemple de route sans le nom de domaine: /pages
@@ -19,7 +21,6 @@ namespace Cineflix\Core\Router;
 
 class Route
 {
-
     private string $name;
     private string $path;
     private array $requirement;

@@ -18,7 +18,7 @@ import {rules} from "../lib/Rules";
  *
  * propriété aria-required prise en compte
  */
-export class Validation {
+export class ValidateClass {
 
     /** @type {AlertBox} */
     #alertBox
@@ -115,7 +115,7 @@ export class Validation {
             i++;
 
         }
-        console.log(this.#valid);
+
         this.#element.dispatchEvent(this.validationChangeEvent);
         this.#setDisplay(!this.#valid);
 

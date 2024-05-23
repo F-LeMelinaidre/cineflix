@@ -14,7 +14,7 @@
 
     </section>
     <section id="Cinema" class="row col-xl-3 col-lg-3 col-md-10 col-sm-12">
-        <?php if($movie->status_id === \Cineflix\App\DAO\List\StatusMovie::EN_SALLE->value): ?>
+        <?php if($movie->status_id === \Cineflix\App\DAO\List\StatusFilm::EN_SALLE->value): ?>
 
         <header>
             <h1><?= $movie->cinema->nom ?></h1>

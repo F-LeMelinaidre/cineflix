@@ -6,6 +6,7 @@ use Cineflix\App\AppController;
 use Cineflix\App\model\ProfilModel;
 use Cineflix\App\Model\UserModel;
 use Cineflix\Core\Database\Database;
+use Cineflix\Core\Util\GenerateIdentifiant;
 
 class UserDao extends AbstractDAO
 {
@@ -26,8 +27,13 @@ class UserDao extends AbstractDAO
 
             $this->last_id = $this->db->getLastInsertId();
 
+            $id_adherent = new GenerateIdentifiant('CFL','_');
+            $id_adherent->additionalPrefix($user->profil->nom, 2)
+                        ->additionalPrefix($user->profil->prenom, 2);
+
             $profil_data = [
                 'user_id'   => $this->last_id,
+                'adherent_id' => $id_adherent->getIdentifiant(),
                 'nom'       => $user->profil->nom,
                 'prenom'    => $user->profil->prenom
             ];
