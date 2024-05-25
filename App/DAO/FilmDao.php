@@ -2,9 +2,9 @@
 
     namespace Cineflix\App\DAO;
 
-    use Cineflix\App\Controller\Film;
     use Cineflix\App\DAO\List\StatusFilm;
     use Cineflix\App\Model\FilmModel;
+    use Cineflix\Core\Util\MessageFlash;
 
     class FilmDao extends AbstractDAO
     {
@@ -53,10 +53,33 @@
                     'date_sortie'   => $movie->date_sortie,
                     'status'        => $movie->status_id,
                     'slug'          => $movie->getSlug(),
-                    'cinema_id'     => 12
                 ];
-                //$movie_data['cinema_id'] = 1;
-                //if($movie->status === StatusFilm::EN_SALLE)
+
+                if($movie->status === StatusFilm::EN_SALLE){
+
+                    if(is_null($movie->cinema->ville->id)) {
+
+                        $ville_data = [
+                            'nom' => $movie->cinema->ville->nom
+                        ];
+                        $this->db->insert('ville', $ville_data);
+                        $movie->cinema->ville->setId($this->db->getLastInsertId());
+                    }
+
+                    if(is_null($movie->cinema->id)) {
+                        $cinema_data = [
+                            'nom' => $movie->cinema->nom,
+                            'ville_id' => $movie->cinema->ville->id
+                        ];
+
+                        $this->db->insert('cinema', $cinema_data);
+                        $movie->cinema->setId($this->db->getLastInsertId());
+
+                    }
+
+                    $movie_data['cinema_id'] = $movie->cinema->id;
+                }
+
 
                 $this->db->insert($this->table,$movie_data);
                 $this->last_id = $this->db->getLastInsertId();
@@ -85,12 +108,16 @@
 
                 $this->db->rollback();
 
-                echo "PDOException: " . $e->getMessage();
+                MessageFlash::create("PDOException: " . $e->getMessage(),'erreur');
             }
-            var_dump($movie);
-            die();
+
 
             return $result;
+
+        }
+
+        private function getVille()
+        {
 
         }
 

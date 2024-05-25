@@ -38,7 +38,7 @@
                 <h2>Information d'exploitation</h2>
                 <div class="cinema">
                     <label class="form-label" for="Cinema">Cinema</label>
-                    <input id="InputCinema" class="js-validation js-autocomplete form-control" type="text" name="cinema" value=""
+                    <input id="InputCinema" class="js-validation js-autocomplete form-control" type="text" name="cinema[nom]" value=""
                            placeholder="Saisissez un cinéma"
                            aria-required="true"
                            data-validation="alpha"
@@ -47,7 +47,7 @@
                 </div>
                 <div class="ville">
                     <label class="form-label" for="ville">Ville</label>
-                    <input id="InputVille" class="js-validation js-autocomplete form-control" type="text" name="Cinema" value=""
+                    <input id="InputVille" class="js-validation js-autocomplete form-control" type="text" name="ville[nom]" value=""
                            placeholder="Saisissez une Ville"
                            aria-required="true"
                            data-validation="alpha"
@@ -82,7 +82,7 @@
             </div>
 
             <?php if($movie->status_id === \Cineflix\App\DAO\List\StatusFilm::EN_STREAMING->value): ?>
-                <div class="">
+                <div>
                     <label class="form-label" for="Stream">Stream</label>
                     <input id="InputStream" class="js-validation form-control" name="stream" type="file" accept=".mp4">
                 </div>
@@ -90,10 +90,13 @@
         </div>
 
         <div class="thumb"><img src="" alt="" width="120px"></div>
-        <?php if($form_id === "AddMovie"): ?>
-            <button id="AddButton" class=" btn btn-warning col-auto" type="submit">Ajouter</button>
-        <?php else: ?>
-            <button id="EditButton" class="js-submit-button btn btn-warning col-auto" type="submit">Modifier</button>
-        <?php endif; ?>
+        <div class="footer-form">
+            <?php if($form_id === "AddMovie"): ?>
+                <button id="AddButton" class="btn btn-warning col-auto" type="submit">Ajouter</button>
+            <?php else: ?>
+                <button id="EditButton" class="js-submit-button btn btn-warning col-auto" type="submit">Modifier</button>
+            <?php endif; ?>
+        </div>
+
     </form>
 </section>

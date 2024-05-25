@@ -22,7 +22,6 @@
          */
         public function __construct(?array $data = null)
         {
-
             parent::__construct($data);
 
             $this->hydrate($data);
@@ -57,6 +56,7 @@
                 case 'affiche':
                 case 'cinema':
                 case 'exploitation':
+                case 'status':
                 case 'status_id':
                     $item = $this->$item;
                     break;

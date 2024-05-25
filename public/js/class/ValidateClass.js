@@ -58,6 +58,7 @@ export class ValidateClass {
 
         this.#addFocusEvent(this.#element);
         this.#addInputEvent(this.#element);
+        this.#addChangeEvent(this.#element);
 
     }
 
@@ -98,6 +99,15 @@ export class ValidateClass {
             clearTimeout(this.timeout);
             this.timeout = setTimeout(() => { this.checkValidity() }, 500);
         });
+    }
+
+    /**
+     *
+     * @param element
+     */
+    #addChangeEvent(element) {
+
+        element.addEventListener('autocomplete', () => { this.checkValidity() });
     }
 
     /**

@@ -2,6 +2,7 @@
     <h1>Administration <span>(brouillon)</span></h1>
 
 </header>
+<?= \Cineflix\Core\Util\MessageFlash::helper(); ?>
 <main id="AdminContent" class="container-fluid p-0">
     <nav class="breadcrumb">
         <ul>

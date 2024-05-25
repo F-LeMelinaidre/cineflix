@@ -65,9 +65,11 @@
                         'point'  => $user->profil->point,
                         'role'   => $user->role,
                     ]);
+
                     MessageFlash::create('Connecté',$type = 'valide');
                     header('Location: /');
                     exit;
+
                 } else {
                     MessageFlash::create('Identifiant / Mot de passe invalide !!!',$type = 'invalide');
                 }

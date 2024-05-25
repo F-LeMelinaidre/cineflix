@@ -7,6 +7,7 @@ use Cineflix\App\model\ProfilModel;
 use Cineflix\App\Model\UserModel;
 use Cineflix\Core\Database\Database;
 use Cineflix\Core\Util\GenerateIdentifiant;
+use Cineflix\Core\Util\MessageFlash;
 
 class UserDao extends AbstractDAO
 {
@@ -49,7 +50,8 @@ class UserDao extends AbstractDAO
 
             $this->db->rollback();
 
-            echo "PDOException: " . $e->getMessage();
+
+            MessageFlash::create("PDOException: " . $e->getMessage(),'erreur');
         }
 
         return $result;

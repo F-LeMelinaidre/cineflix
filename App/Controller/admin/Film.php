@@ -3,9 +3,11 @@
     namespace Cineflix\App\Controller\Admin;
 
     use Cineflix\App\AppController;
+    use Cineflix\App\DAO\CinemaDao;
     use Cineflix\App\DAO\List\Role;
     use Cineflix\App\DAO\List\StatusFilm;
     use Cineflix\App\DAO\FilmDao;
+    use Cineflix\App\DAO\VilleDao;
     use Cineflix\App\Model\FilmModel;
     use Cineflix\Core\AbstractController;
     use Cineflix\Core\Router\Router;
@@ -81,7 +83,6 @@
             $movie = new FilmModel();
             $movie->setStatus($status);
 
-
             $title = "Ajouter un film ".StatusFilm::toString($movie->status_id);
             $form_id = "AddMovie";
 
@@ -91,7 +92,7 @@
             }
 
             $url = self::$_Router->getUrl('admin_film_add',['status' => $status]);
-            $class = ($movie->status == StatusFilm::EN_SALLE->value)? 'en-salle' : 'streaming';
+            $class = ($movie->status == StatusFilm::EN_SALLE)? 'en-salle' : 'streaming';
 
 
             // ajouter si c'est un ajout dans une salle une verification si il n'est pas deja en salle
@@ -99,14 +100,43 @@
 
                 $movie->hydrate($_POST);
 
-                //$movie->addValidation('nom',['alphaNumeric', 'require']);
-                //$movie->addValidation('date_sortie',['date', 'require']);
-                //$movie->addValidation('synopsis',['require']);
-                //$movie->addValidation('cinema_id',['numeric', 'require']);
-                //$movie->exploitation->addValidation('debut',['alphaNumeric', 'require']);
-                //$movie->exploitation->addValidation('fin',['alphaNumeric', 'require']);
+                $villeDAO = new VilleDao();
+
+                $params = ['select' => ['*']];
+                $ville = $villeDAO->findOneBy('nom', $movie->cinema->ville->nom, $params);
+
+                $cinemaDAO = new CinemaDao();
+
+                $params = [
+                    'select' => ['cinema.id','cinema.nom','ville.id', 'ville.nom'],
+                    'contain' => ['ville' => 'ville.id = cinema.ville_id'],
+                    'where' => ['ville.nom = :ville_nom'],
+                    'params' => ['ville_nom' => $movie->cinema->ville->nom]
+                ];
+                $cinema = $cinemaDAO->findOneBy('nom', $movie->cinema->nom, $params);
+
+                if($cinema) {
+                    $movie->cinema->setId($cinema['id']);
+                    $movie->cinema->ville->setId($ville['id']);
+                }
+
+                if(!$cinema && $ville) $movie->cinema->ville->setId($ville['id']);
+
+                $movie->addValidation('nom',['alphaNumeric', 'require']);
+                $movie->addValidation('date_sortie',['date', 'require']);
+                $movie->addValidation('synopsis',['require']);
                 //$movie->addValidation('affiche',['file', 'require']);
-                //$movie->isValid() &&
+
+                if($movie->status == StatusFilm::EN_SALLE->value) {
+
+                    $movie->exploitation->addValidation('debut',['alphaNumeric', 'require']);
+                    $movie->exploitation->addValidation('fin',['alphaNumeric', 'require']);
+                }
+
+
+                if(!$movie->isValid()) {
+                    var_dump($movie->getErrors());die();
+                }
                 if($this->dao->create($movie)) {
 
                 }
@@ -125,6 +155,7 @@
             ];
 
             $this->addJavascript(...['path' => 'js/jquery-ui.js', 'head' => true]);
+            $this->addJavascript(...['path' => 'js/component/CinemaVilleInput.js', 'module' => true]);
             $this->addJavascript(...['path' => 'js/app.js', 'module' => true]);
             return $this->render('Film.admin.edit', $props);
         }

@@ -376,7 +376,6 @@
         {
 
             try {
-
                 $this->request = $this->connexion->prepare($sql);
                 if (!empty($this->bind_values)) {
 
@@ -428,6 +427,7 @@
                 //echo __CLASS__.' | '.__FUNCTION__.'<br>';
                 //$this->debug();
                 //die();
+
                 $sql =  $this->buildQuery();
                 $this->prepare($sql);
 
@@ -465,6 +465,8 @@
 
                 //echo __CLASS__.' | '.__FUNCTION__.'<br>';
                 //$this->debug();
+                // die();
+
                 $this->request->execute();
 
                 $this->request->setFetchMode(PDO::FETCH_ASSOC);
@@ -472,6 +474,7 @@
                 $res = $this->request->fetchAll();
 
                 $res = isset($this->join)? $this->mapResults($res) : $res;
+
                 $this->resetProperties();
                 return $res;
 
@@ -522,9 +525,18 @@
         public function count()
         {
             try {
+                $select = $this->getSelect();
+                $table = $this->getTable();
+                $join = $this->getJoin();
+                $where = $this->getWhere();
 
-                $this->prepare($this->sql);
+                $sql = "SELECT COUNT($select) FROM $table $join $where";
+
+                $this->prepare($sql);
+
                 $this->request->execute();
+
+                $this->resetProperties();
 
                 return $this->request->fetchColumn();
 

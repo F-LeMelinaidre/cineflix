@@ -8,6 +8,7 @@
     use Cineflix\App\DAO\SeanceDao;
     use Cineflix\Core\AbstractController;
     use Cineflix\Core\Util\GenerateIdentifiant;
+    use Cineflix\Core\Util\MessageFlash;
     use Cineflix\Core\Util\Security;
 
     class Film extends AbstractController
@@ -55,21 +56,33 @@
             ];
 
             $movie = $this->dao->findOneBy('slug', $slug, $options);
-            $this->page_active = StatusFilm::getUrlById($movie->status_id);
-            $this->title_page .= ' | ' . ucfirst($movie->nom);
 
-            $seanceDao = new SeanceDao();
-            $options = [
-                'select'  => ['*'],
-                'where'  => ['seance.film_id = :film_id'],
-                'params' => ['film_id' => $movie->id],
-                'order'  => 'seance.date'
-            ];
+            if($movie) {
 
-            $seances = $seanceDao->findAll($options);
+                $this->page_active = StatusFilm::getUrlById($movie->status_id);
+                $this->title_page .= ' | ' . ucfirst($movie->nom);
+
+                $seanceDao = new SeanceDao();
+                $options = [
+                    'select'  => ['*'],
+                    'where'  => ['seance.film_id = :film_id'],
+                    'params' => ['film_id' => $movie->id],
+                    'order'  => 'seance.date'
+                ];
+
+                $seances = $seanceDao->findAll($options);
 
 
-            $seances = array_chunk($seances, 3);
+                $seances = array_chunk($seances, 3);
+
+            } else {
+
+                MessageFlash::create('Film indisponible',$type = 'warning');
+                header('Location: /');
+                exit;
+
+            }
+
 
             $this->addJavascript(...['path' => 'js/ajaxRequest']);
 

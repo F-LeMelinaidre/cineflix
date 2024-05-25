@@ -54,9 +54,7 @@
          *
          * @return void
          */
-        public function create(object $model) {
-
-        }
+        public function create(object $model) {}
 
 
         /**
@@ -74,6 +72,18 @@
                 ->where("$this->table.$col = :$col")
                 ->setParameter($col,$val);
 
+            if(isset($options['where'])) {
+
+                foreach($options['where'] as $where) {
+                    $req->andWhere($where);
+                }
+
+                foreach ($options['params'] as $col => $val) {
+                    $req->setParameter($col, $val);
+                }
+
+            }
+
             if(isset($options['contain'])) {
 
                 foreach ($options['contain'] as $relation => $condition) {
@@ -84,18 +94,22 @@
 
             $result = $req->fetch();
 
-            switch (strtolower($format)) {
+            if($result) {
+                switch (strtolower($format)) {
 
-                case 'model':
-                    $result = new $this->model($result);
-                    break;
-                case 'json':
-                    $result = $this->mapToJson($result);
-                    break;
-                case 'array':
-                default:
-                    break;
+                    case 'model':
+                        $result = new $this->model($result);
+                        break;
+                    case 'json':
+                        $result = $this->mapToJson($result);
+                        break;
+
+                    case 'array':
+                    default:
+                        break;
+                }
             }
+
 
             return $result;
 

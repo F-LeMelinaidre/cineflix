@@ -3,7 +3,6 @@ import apiConfig from './apiConfig';
 
 export default function apiRequest(url, requestData, callback) {
     const api = apiConfig;
-    console.log(api)
 
     if (!api) {
         console.error("API non trouvée :", apiName);
