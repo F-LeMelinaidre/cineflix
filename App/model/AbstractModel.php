@@ -4,6 +4,7 @@
 
     use Cineflix\Core\Util\Regex;
     use Cineflix\Core\Util\Security;
+    use Normalizer;
 
     class AbstractModel
     {
@@ -12,6 +13,7 @@
 
         protected ?int $id = null;
         protected ?string $nom = null;
+        protected ?string $slug = null;
         protected string $created;
         protected string $modified;
         protected array $errors = [];
@@ -37,6 +39,7 @@
                 case 'nom':
                 case 'created':
                 case 'modified':
+                case 'slug':
                     $item = $this->$item;
                     break;
 
@@ -78,6 +81,7 @@
         public function setNom(string $nom): void
         {
             $this->nom = ucfirst(Security::sanitize($nom));
+            $this->slug = $this->setSlug($this->nom);
         }
 
         /**
@@ -85,6 +89,7 @@
          *
          * @return void
          */
+
         public function setCreated(string $date): void
         {
             $this->created = date("Y-m-d H:i:s", strtotime($date));
@@ -95,7 +100,7 @@
          */
         public function getCreated(): string
         {
-            return date("d-m-Y H:i:s", strtotime($this->created));
+            return $this->created;
         }
 
         /**
@@ -103,7 +108,41 @@
          */
         public function getModified(): string
         {
-            return date("d-m-Y H:i:s", strtotime($this->modified));
+            return $this->modified;
+        }
+
+        /**
+         * @param string $slug
+         *
+         * @return void
+         */
+        public function setSlug(string $slug): void
+        {
+            // remplace les caratère accentué par leur equivalant non accentué
+            // Activer l'extention intl de PHP
+            // Parametrer la lib dans composer.json "ext-intl": "*"
+            $normalized =  Normalizer::normalize($slug, Normalizer::FORM_D);
+            $slug = preg_replace('/\p{Mn}/u', '', $normalized);
+            // Remplace les caratère spéciaux par un -
+            $slug = preg_replace('/[^\p{L}\p{N}]/u', '-', $slug);
+            // supprime les doubles --
+            $slug = preg_replace('/-{2,}/', '-', $slug);
+            // supprime les - en debut et fin de chaine
+            $slug = trim($slug, '-');
+            $this->slug = str_replace(' ', '-', ucfirst($slug));
+        }
+
+        /**
+         * @return string
+         */
+        public function getSlug(): string
+        {
+            if(is_null($this->slug)) {
+                $value = (!empty($this->nom)) ? $this->nom : uniqid('', true);
+                $this->setSlug($value);
+            }
+
+            return $this->slug;
         }
 
         /**

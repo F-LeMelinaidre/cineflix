@@ -9,10 +9,14 @@
     {
 
         private array $data = [];
+        protected array $result = [];
 
         protected Database $db;
         protected string $table;
         protected string $model;
+        protected string $created;
+        protected string $modified;
+
         protected string $path_model = "\\Cineflix\\App\\Model\\";
         protected int $last_id;
 
@@ -26,6 +30,9 @@
             $class_name = basename(get_called_class());
             $this->table = str_replace('dao', '', strtolower($class_name));
             $this->model = $this->path_model.ucfirst($this->table).'Model';
+
+            $this->created = date("Y-m-d H:i:s");
+            $this->modified = date("Y-m-d H:i:s");
 
         }
 
@@ -57,7 +64,7 @@
          *
          * @return array
          */
-        public function findOneBy(string $col, string $val, array $options = [], string $format = 'array'): mixed
+        public function findOneBy(string $col, string $val, array $options = []): array
         {   //TODO à completer (Where, Order etc...)
 
             $select = $options['select'] ?? ['*'];
@@ -66,56 +73,56 @@
                 ->where("$this->table.$col = :$col")
                 ->setParameter($col,$val);
 
+            if(isset($options['where'])) {
+
+                foreach($options['where'] as $where) {
+                    $req->andWhere($where);
+                }
+
+                foreach ($options['params'] as $col => $val) {
+                    $req->setParameter($col, $val);
+                }
+
+            }
+
             if(isset($options['contain'])) {
 
                 foreach ($options['contain'] as $relation => $condition) {
-                    $req->join($relation, 'LEFT', $condition);
+                    $req->join($relation, $condition, 'LEFT');
 
                 }
             }
 
             $result = $req->fetch();
 
-            switch (strtolower($format)) {
-
-                case 'model':
-                    $result = new $this->model($result);
-                    break;
-                case 'json':
-                    $result = $this->mapToJson($result);
-                    break;
-                case 'array':
-                default:
-                    break;
-            }
-
             return $result;
 
         }
 
         /**
-         * @param array|null $options
+         * @param array|null $params
+         *
          * @return mixed|null
          */
-        public function findAll(array $options = [], string $format = 'model') {
-
-            $select = $options['select'] ?? ['*'];
+        public function findAll(array $params = []): array
+        {
+            $table = $params['table'] ?? $this->table;
+            $select = $params['select'] ?? [ '*'];
 
             $req = $this->db->select(...$select)
-                ->from($this->table);
+                ->from($table);
 
 
-            if(isset($options['contain'])) {
+            if (isset($params['contain'])) {
 
-                foreach ($options['contain'] as $relation => $condition) {
-                    $req->join($relation, 'LEFT', $condition);
+                foreach ($params['contain'] as $relation => $condition) {
+                    $req->join($relation, $condition, 'LEFT');
                 }
             }
 
-
-            if(isset($options['where'])) {
-                $where  = $options['where'];
-                $params = $options['params'];
+            if (isset($params['where'])) {
+                $where  = $params['where'];
+                $set_param = $params['params'];
 
                 foreach ($where as $k => $condition) {
                     if($k === 0) {
@@ -125,34 +132,19 @@
                     }
                 }
 
-                foreach ($params as $col => $val) {
+                foreach ($set_param as $col => $val) {
                     $req->setParameter($col,$val);
                 }
 
             }
 
 
-            if(isset($options['order'])) {
-                $req->order($options['order']);
+            if (isset($params['order'])) {
+                $req->order($params['order']);
             }
 
 
-            $result = $req->fetchAll();
-
-            switch (strtolower($format)) {
-
-                case 'model':
-                    $result = $this->mapToModel($result);
-                    break;
-                case 'json':
-                    $result = $this->mapToJson($result);
-                    break;
-                case 'array':
-                default:
-                    break;
-            }
-
-            return $result;
+            return $req->fetchAll();
         }
 
 
@@ -181,6 +173,7 @@
          */
         public function update($data, string $id_column = 'id' ): Database
         {
+
             $req = $this->db->createUpdate($this->table);
 
             $id = $data['id'];
@@ -193,13 +186,13 @@
             }
 
             $req->set('modified', ':modified')
-                ->setParameter('modified', date("Y-m-d H:i:s"));
+                ->setParameter('modified', $this->modified);
 
             $this->data = $data;
 
             return $req->where("$id_column = :$id_column")
                 ->setParameter($id_column, $id)
-                ->execute();
+                ->update();
 
         }
 
@@ -209,17 +202,18 @@
          */
         public function delete() {}
 
-        private function mapToModel(array $result): array
+
+        public function mapToModel(): array
         {
-            foreach($result as $k => $data) {
-                $result[$k] = new $this->model($data);
+            foreach($this->result as $k => $data) {
+                $this->result[$k] = new $this->model($data);
             }
 
-            return $result;
+            return $this->result;
         }
 
         private function mapToJson(array $result): string
         {
-            return json_encode($result, JSON_PRETTY_PRINT);
+            return json_encode($this->result, JSON_PRETTY_PRINT);
         }
     }

@@ -39,7 +39,7 @@
                 <h1>Content de vous revoir</h1>
                 <p class="mx-3 mb-0">Nouveau ici? <a href="<?= self::$_Router->getUrl('signup') ?>">Créer un compte</a></p>
             </header>
-            <form action="<?= self::$_Router->getUrl('signin') ?>" method="post" class="row flex-column row-gap-2 mx-auto mt-5">
+            <form class="js-form row flex-column row-gap-2 mx-auto mt-5" action="<?= self::$_Router->getUrl('signin') ?>" method="post">
 
                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-7 col-9 row mx-auto">
                     <label for="Identifiant">Identifiant</label>
@@ -56,11 +56,11 @@
                            data-validation="password">
                 </div>
                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-7 col-9 mx-auto">
-                    <input type="checkbox" id="RememberCheck" name="remember" class="form-check-input">
+                    <input id="RememberCheck" class="form-check-input" type="checkbox" name="remember">
                     <label for="RememberCheck" class="form-check-label">Se souvenir de moi ?</label>
                 </div>
                 <div class="col-xl-6 col-lg-8 col-md-8 col-sm-7 col-9 row mx-auto">
-                    <button type="submit" class="btn btn-warning">Connexion</button>
+                    <button class="js-submit-button btn btn-warning" type="submit">Connexion</button>
                     <a href="#" class="mb-2">Mot de passe oublié?</a>
                 </div>
             </form>

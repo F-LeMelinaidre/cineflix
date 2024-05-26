@@ -1,37 +1,39 @@
 <?php
     namespace Cineflix\App\DAO\List;
-    enum StatusMovie: int {
+    enum StatusFilm: int {
         case INDISPONIBLE = 0;
         case EN_SALLE = 1;
         case EN_STREAMING = 2;
         case PROCHAINEMENT_EN_SALLE = 3;
 
         case PROCHAINEMENT_EN_STREAMING = 4;
+        case BIENTOT_DEPROGRAMME = 5;
 
         /**
          * @param int $id
          *
          * @return string
          */
-        public static function toString(int $id): string
+        public static function toString(self $status): string
         {
-            return match($id)
+            return match($status)
             {
-                0 => 'Indisponibles',
-                1 => 'en Salle',
-                2 => 'en Streaming',
-                3 => 'prochainement en Salle',
-                4 => 'prochainement en Streaming',
-                default => 'statut inconnu'
+                self::INDISPONIBLE => 'Indisponibles',
+                self::EN_SALLE => 'En salle',
+                self::EN_STREAMING => 'En streaming',
+                self::PROCHAINEMENT_EN_SALLE => 'Prochainement en salle',
+                self::PROCHAINEMENT_EN_STREAMING => 'Prochainement en streaming',
+                self::BIENTOT_DEPROGRAMME => 'Bientôt déprogrammé',
+                default => 'Statut inconnu'
             };
         }
 
         /**
-         * @param int $id
+         * @param string $status
          *
-         * @return self
+         * @return int
          */
-        public static function getStatus(string $status): int
+        public static function getStatusId(string $status): int
         {
             $status = strtoupper(str_replace(['-',' '], '_', $status));
             return match($status)
@@ -41,7 +43,47 @@
                 'EN_STREAMING' => 2,
                 'PROCHAINEMENT_EN_SALLE' => 3,
                 'PROCHAINEMENT_EN_STREAMING' => 4,
+                'BIENTOT_DEPROGRAMME' => 5,
                 default => 0
+            };
+        }
+
+        /**
+         * @param int $id
+         *
+         * @return StatusFilm
+         */
+        public static function getStatusByName(string $status): StatusFilm
+        {
+            $status = strtoupper(str_replace(['-',' '], '_', $status));
+            return match($status)
+            {
+                'INDISPONIBLE' => self::INDISPONIBLE,
+                'EN_SALLE' => self::EN_SALLE,
+                'EN_STREAMING' => self::EN_STREAMING,
+                'PROCHAINEMENT_EN_SALLE' => self::PROCHAINEMENT_EN_SALLE,
+                'PROCHAINEMENT_EN_STREAMING' => self::PROCHAINEMENT_EN_STREAMING,
+                'BIENTOT_DEPROGRAMME' => self::BIENTOT_DEPROGRAMME,
+                default => self::INDISPONIBLE
+            };
+        }
+
+        /**
+         * @param int $id
+         *
+         * @return StatusFilm
+         */
+        public static function getStatusById(int $id): StatusFilm
+        {
+            return match($id)
+            {
+                0 => self::INDISPONIBLE,
+                1 => self::EN_SALLE,
+                2 => self::EN_STREAMING,
+                3 => self::PROCHAINEMENT_EN_SALLE,
+                4 => self::PROCHAINEMENT_EN_STREAMING,
+                5 => self::BIENTOT_DEPROGRAMME,
+                default => self::INDISPONIBLE
             };
         }
 
@@ -54,12 +96,13 @@
                 2 => 'En-Streaming',
                 3 => 'Prochainement-En-Salle',
                 4 => 'Prochainement-En-Streaming',
+                5 => 'Bientot-Deprogramme',
                 default => ''
             };
         }
 
         /**
-         * @param StatusMovie $const
+         * @param StatusFilm $const
          *
          * @return string
          */
@@ -72,6 +115,7 @@
                 self::EN_STREAMING => 'En-Streaming',
                 self::PROCHAINEMENT_EN_SALLE => 'Prochainement-En-Salle',
                 self::PROCHAINEMENT_EN_STREAMING => 'Prochainement-En-Streaming',
+                self::BIENTOT_DEPROGRAMME => 'Bientot-Deprogramme',
                 default => 'En-Salle'
             };
         }

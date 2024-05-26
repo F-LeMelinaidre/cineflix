@@ -18,7 +18,7 @@ import {rules} from "../lib/Rules";
  *
  * propriété aria-required prise en compte
  */
-export class Validation {
+export class ValidateClass {
 
     /** @type {AlertBox} */
     #alertBox
@@ -58,6 +58,7 @@ export class Validation {
 
         this.#addFocusEvent(this.#element);
         this.#addInputEvent(this.#element);
+        this.#addChangeEvent(this.#element);
 
     }
 
@@ -102,6 +103,15 @@ export class Validation {
 
     /**
      *
+     * @param element
+     */
+    #addChangeEvent(element) {
+
+        element.addEventListener('autocomplete', () => { this.checkValidity() });
+    }
+
+    /**
+     *
      */
     checkValidity() {
         this.#valid = null;
@@ -115,7 +125,7 @@ export class Validation {
             i++;
 
         }
-        console.log(this.#valid);
+
         this.#element.dispatchEvent(this.validationChangeEvent);
         this.#setDisplay(!this.#valid);
 

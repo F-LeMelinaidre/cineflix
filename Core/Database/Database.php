@@ -11,6 +11,7 @@
 
         private string $sql;
         private array $select = [];
+        private array $max = [];
         private array $set = [];
         private string $table;
         private array $alias = [];
@@ -130,6 +131,7 @@
             return implode(', ', $columns);
         }
 
+
         /**
          * @param string $table
          *
@@ -157,12 +159,14 @@
 
         /**
          * Créé la jointure
+         *
          * @param string $table
-         * @param string $alias
          * @param string $condition
+         * @param string $alias
+         *
          * @return $this
          */
-        public function join(string $join, string $type, string $condition): self
+        public function join(string $join, string $condition, string $type = 'INNER'): self
         {
             $this->setAlias($join);
 
@@ -254,16 +258,20 @@
         }
 
         /**
-         * @param string $column
          * @param string $order
+         * @param string $direction
          *
          * @return $this
          */
-        public function order(string $order, string $direction = 'DESC'): self
+        public function order(array $order): self
         {
-            $order = !empty($this->join) ? $this->aliasColumn($order, 'Order') : $order;
+            foreach($order as &$col) {
+                $col = !empty($this->join) ? $this->aliasColumn($col, 'Order') : $col;
+            }
 
-            $this->order = "ORDER BY $order $direction";
+            $order = implode(', ', $order);
+
+            $this->order = "ORDER BY $order";
 
             return $this;
         }
@@ -341,7 +349,7 @@
          *
          * @return $this
          */
-        public function setParameter(string $col, string $val): self
+        public function setParameter(string $col, mixed $val): self
         {
             $this->bind_values[] = [
                 'col' => $col,
@@ -360,7 +368,6 @@
             $join = $this->getJoin();
             $where = $this->getWhere();
             $order = $this->order;
-
             return "SELECT $select FROM $table $join $where $order";
         }
 
@@ -374,7 +381,6 @@
         {
 
             try {
-
                 $this->request = $this->connexion->prepare($sql);
                 if (!empty($this->bind_values)) {
 
@@ -394,26 +400,6 @@
         }
 
         /**
-         * @return $this
-         */
-        public function execute(): self
-        {
-            $set = implode(', ', $this->set);
-            $where = implode(' ',$this->where);
-
-            $this->sql .= "$set $where";
-            //echo __CLASS__.' | '.__FUNCTION__.'<br>';
-            //$this->debug();
-            //die();
-
-            $this->prepare($this->sql);
-
-            $this->request->execute();
-
-            return $this;
-        }
-
-        /**
          * @param string|null $class_name
          *
          * @return mixed
@@ -426,8 +412,10 @@
                 //echo __CLASS__.' | '.__FUNCTION__.'<br>';
                 //$this->debug();
                 //die();
-                $sql =  $this->buildQuery();
-                $this->prepare($sql);
+                if(empty($this->sql))
+                    $this->sql =  $this->buildQuery();
+
+                $this->prepare($this->sql);
 
                 $this->request->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -458,11 +446,15 @@
         {
 
             try {
-                $this->sql =  $this->buildQuery();
-                $this->prepare($this->sql);
 
+                if(empty($this->sql))
+                    $this->sql =  $this->buildQuery();
+
+                $this->prepare($this->sql);
                 //echo __CLASS__.' | '.__FUNCTION__.'<br>';
                 //$this->debug();
+                //die();
+
                 $this->request->execute();
 
                 $this->request->setFetchMode(PDO::FETCH_ASSOC);
@@ -470,6 +462,7 @@
                 $res = $this->request->fetchAll();
 
                 $res = isset($this->join)? $this->mapResults($res) : $res;
+
                 $this->resetProperties();
                 return $res;
 
@@ -492,7 +485,6 @@
                 $row = $this->mapping($row);
 
             }
-
             return $result;
         }
 
@@ -507,10 +499,12 @@
                     $col = $parts[1];
 
                     if(!isset($data[$tbl])) $data[$tbl] = [];
-                    $data[$tbl][$col] = $val;
+
+                    if(!empty($val)) $data[$tbl][$col] = $val;
                     unset($data[$id]);
                 }
             }
+
             return $data;
         }
         /**
@@ -519,9 +513,18 @@
         public function count()
         {
             try {
+                $select = $this->getSelect();
+                $table = $this->getTable();
+                $join = $this->getJoin();
+                $where = $this->getWhere();
 
-                $this->prepare($this->sql);
+                $sql = "SELECT COUNT($select) FROM $table $join $where";
+
+                $this->prepare($sql);
+
                 $this->request->execute();
+
+                $this->resetProperties();
 
                 return $this->request->fetchColumn();
 
@@ -586,6 +589,26 @@
         }
 
         /**
+         * @return $this
+         */
+        public function update(): self
+        {
+            $set = implode(', ', $this->set);
+            $where = implode(' ',$this->where);
+
+            $this->sql .= "$set $where";
+            //echo __CLASS__.' | '.__FUNCTION__.'<br>';
+            //$this->debug();
+            //die();
+
+            $this->prepare($this->sql);
+
+            $this->request->execute();
+
+            return $this;
+        }
+
+        /**
          * @param string $col
          * @param string $val
          *
@@ -637,11 +660,13 @@
          */
         private function resetProperties(): void
         {
+            $this->sql = '';
             $this->set = [];
             $this->alias = [];
             $this->join = [];
             $this->where = [];
             $this->bind_values = [];
+            $this->order = '';
         }
 
         public function debug(): void
@@ -681,6 +706,7 @@
 
             if(!empty($this->sql)) {
                 echo 'Requete final:<br>';
+                echo $this->order.'<br>';
                 echo $this->sql.'<br>';
             }
         }

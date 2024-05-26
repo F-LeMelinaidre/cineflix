@@ -20,7 +20,11 @@
     {
         // Utilisé entre autre pour le tag HTML title
         const APP_NAME = 'Cinéflix';
-
+        /**
+         * @var string si l'app est hebergé en hote virtuel
+         *             public static string $_PrefixURI = "/frederic/E5/Cineflix/";
+         */
+        public static ?string $_PrefixURI = "";
         /**
          * @var string Racine de l'app
          */
@@ -57,7 +61,7 @@
             // 2nd le format de l'url qui doit estre matché
             // 3eme tableau de paramètre contenant la class controller et le nom de la méthode
             // 4eme optionnel tableau [nom du paramètre => format de la valeur (expression régulière)]
-            self::$_Router->get('home', '/', [Controller\Movie::class, 'index']);
+            self::$_Router->get('home', '/', [ Controller\Film::class, 'index']);
 
             self::$_Router->get('signin', '/Signin', [Controller\Auth::class, 'signin']);
             self::$_Router->get('signup', '/Signup', [Controller\Auth::class, 'signup']);
@@ -69,10 +73,10 @@
 
             self::$_Router->get('signout', '/Signout', [Controller\Auth::class, 'signout']);
 
-            self::$_Router->get('movie_index', '/Film-{status}', [ Controller\Movie::class, 'index'],
+            self::$_Router->get('movie_index', '/Film-{status}', [ Controller\Film::class, 'index'],
                 ['status' => '[A-Z-]+']);
-            self::$_Router->get('movie_show', '/Movie/{slug}', [ Controller\Movie::class, 'show'],
-                ['slug' => '[A-Z_]+']);
+            self::$_Router->get('movie_show', '/Film/{slug}', [ Controller\Film::class, 'show'],
+                ['slug' => '[a-zA-Z-]+']);
 
             //Profil
             self::$_Router->get('profil_show', '/Profil', [ Controller\Profil::class, 'show']);
@@ -96,27 +100,27 @@
 
 
             //Admin Film
-            self::$_Router->get('admin_movie_index', '/Admin/Film', [ Controller\Admin\Movie::class, 'index']);
-            self::$_Router->get('admin_movie', '/Admin/Film-{status}', [ Controller\Admin\Movie::class, 'index'],
+            self::$_Router->get('admin_film_index', '/Admin/Film', [ Controller\Admin\Film::class, 'index']);
+            self::$_Router->get('admin_film', '/Admin/Film-{status}', [ Controller\Admin\Film::class, 'index'],
                 ['status' => '[A-Z-]+']);
-            self::$_Router->get('admin_movie_add', '/Admin/Nouveau/Film-{status}', [ Controller\Admin\Movie::class, 'edit'],
+            self::$_Router->get('admin_film_add', '/Admin/Nouveau/Film-{status}', [ Controller\Admin\Film::class, 'edit'],
                 ['status' => '[A-Z-]+']);
-            self::$_Router->get('admin_movie_edit', '/Admin/Nouveau/Film-{status}/{id}', [ Controller\Admin\Movie::class, 'edit'],
+            self::$_Router->get('admin_film_edit', '/Admin/Nouveau/Film-{status}/{id}', [ Controller\Admin\Film::class, 'edit'],
                 ['status' => '[A-Z-]+',
                  'id' => '[0-9]+']);
 
-            self::$_Router->post('admin_movie_add', '/Admin/Nouveau/Film-{status}', [ Controller\Admin\Movie::class, 'edit'],
+            self::$_Router->post('admin_film_add', '/Admin/Nouveau/Film-{status}', [ Controller\Admin\Film::class, 'edit'],
                 ['status' => '[A-Z-]+']);
-            self::$_Router->post('admin_movie_edit', '/Admin/Nouveau/Film-{status}/{id}', [ Controller\Admin\Movie::class, 'edit'],
+            self::$_Router->post('admin_film_edit', '/Admin/Nouveau/Film-{status}/{id}', [ Controller\Admin\Film::class, 'edit'],
                 ['status' => '[A-Z-]+',
                  'id' => '[0-9]+']);
 
 
-            // self::$_Router->get('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\Movie::class, 'edit'],
+            // self::$_Router->get('admin_movie_edit', '/Admin/Film/Edit/{id}', [ Controller\Admin\Film::class, 'edit'],
             //    ['id' => '[0-9]+']);
 
-            //self::$_Router->post('admin_movie_add', '/Admin/Movie/Add', [ Controller\Admin\Movie::class, 'edit']);
-            //self::$_Router->post('admin_movie_edit', '/Admin/Movie/Edit/{id}', [ Controller\Admin\Movie::class, 'edit'],
+            //self::$_Router->post('admin_movie_add', '/Admin/Film/Add', [ Controller\Admin\Film::class, 'edit']);
+            //self::$_Router->post('admin_movie_edit', '/Admin/Film/Edit/{id}', [ Controller\Admin\Film::class, 'edit'],
             //    ['id' => '[0-9]+']);
 
             //Admin Streaming
@@ -134,15 +138,24 @@
 
             //Requete Ajax
             self::$_Router->ajax('ajax_cinemaSearch', '/Ajax/cinemaSearch', [ Controller\Cinema::class, 'cinemaSearch'],true);
-            self::$_Router->ajax('ajax_movieSearch', '/Ajax/movieSearch', [ Controller\Movie::class, 'movieSearch'],true);
-            self::$_Router->ajax('ajax_movieExist', '/Ajax/movieExist', [ Controller\Movie::class, 'movieExist'],true);
-            self::$_Router->ajax('ajax_statusList', '/Ajax/statusList', [ Controller\Movie::class, 'statusList']);
+            self::$_Router->ajax('ajax_villeSearch', '/Ajax/villeSearch', [ Controller\Cinema::class, 'villeSearch'],true);
+            self::$_Router->ajax('ajax_movieSearch', '/Ajax/movieSearch', [ Controller\Film::class, 'movieSearch'],true);
+            self::$_Router->ajax('ajax_movieExist', '/Ajax/movieExist', [ Controller\Film::class, 'movieExist'],true);
+            self::$_Router->ajax('ajax_statusList', '/Ajax/statusList', [ Controller\Film::class, 'statusList']);
 
 
             try {
                 // Controlle l'url et dirige vers le bon controller et methode si l'url match avec une route précédement créé
                 // Sinon lève une exception
-                $path = $_SERVER['REQUEST_URI'] ?? '/'; // url courant hors nom de domaine
+
+                $requestUri = $_SERVER['REQUEST_URI'];
+                // Si un Prefix URI est défini on le supprime
+                if(self::$_PrefixURI) {
+                    $requestUri = substr($requestUri, strlen(self::$_PrefixURI));
+                }
+                $path = $requestUri ?? '/'; // url courant hors nom de domaine
+
+
                 $method = $_SERVER['REQUEST_METHOD']; // methode POST ou GET
                 $route = self::$_Router->resolve($method,$path);
                 $callback = $route->callback;

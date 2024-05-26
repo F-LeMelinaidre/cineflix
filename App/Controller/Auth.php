@@ -3,7 +3,6 @@
     // mp major rRTxrTTMhLkQf4W!?
     namespace Cineflix\App\Controller;
 
-    use Cineflix\App\DAO\List\Role;
     use Cineflix\App\DAO\ProfilDao;
     use Cineflix\App\DAO\UserDao;
     use Cineflix\App\model\ProfilModel;
@@ -11,8 +10,6 @@
     use Cineflix\Core\AbstractController;
     use Cineflix\Core\Util\AuthConnect;
     use Cineflix\Core\Util\MessageFlash;
-    use Cineflix\Core\Util\Regex;
-    use Cineflix\Core\Util\Security;
     use ReCaptcha\ReCaptcha;
 
     class Auth extends AbstractController
@@ -65,10 +62,11 @@
                         'point'  => $user->profil->point,
                         'role'   => $user->role,
                     ]);
-                    MessageFlash::create('Connecté',$type = 'valide');
 
+                    MessageFlash::create('Connecté',$type = 'valide');
                     header('Location: /');
                     exit;
+
                 } else {
                     MessageFlash::create('Identifiant / Mot de passe invalide !!!',$type = 'invalide');
                 }
@@ -76,7 +74,7 @@
                 $errors = $user->getErrors();
             }
 
-            $this->addJavascript('js/app.js', 'module');
+            $this->addJavascript(...['path' => 'js/component/FormValidation.js', 'module' => true]);
 
             return $this->render('Auth.signin', [$errors]);
 
@@ -88,31 +86,27 @@
          */
         public function signup(): string
         {
-
+            $user = new UserModel();
             if(AuthConnect::isConnected()) {
                 header('Location: /');
                 exit();
             }
 
             $errors = [];
-            $user = new UserModel();
 
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $user->setEmail($_POST['email']);
+
+                $user->hydrate($_POST);
                 $user->setPassword($_POST['password']);
                 $user->setPasswordConfirm($_POST['password_confirm']);
-
                 $user->addValidation('email',['email', 'require']);
                 $user->addValidation('password',['password', 'equal', 'require']);
-
-
-                $user->profil->setNom($_POST['nom']);
-                $user->profil->setPrenom($_POST['prenom']);
-
                 $user->profil->addValidation('nom',['alpha', 'require']);
                 $user->profil->addValidation('prenom',['alpha', 'require']);
 
+
+                //TODO REVOIR
                 $exist = $this->userDao->isExist('email', $user->email);
 
                 $user_is_valid =$user->isValid();
@@ -141,15 +135,18 @@
                 if($exist) MessageFlash::create('Compte existant !', $type = 'warning');
 
                 $errors = array_merge($user->getErrors(),$user->profil->getErrors());
-
                 if(isset($exist) && $exist) $errors['email'] = ['type'   => 'invalid',
                                                                 'message' =>'Email déja utilisé !'];
                 if(!$response->isSuccess()) $errors['recaptcha'] = ['type'   => 'invalid',
                                                                     'message' =>'Merci de valider le Recaptcha !'];
             }
-            $this->addJavascript('https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit');
-            $this->addJavascript('js/class/reCaptcha.js', 'module');
-            $this->addJavascript('js/app.js', 'module');
+
+            $this->addJavascript(...['path'  => 'https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit',
+                                     'defer' => true,
+                                     'head'  => true]);
+
+            $this->addJavascript(...['path' => 'js/class/reCaptcha.js', 'module' => true]);
+            $this->addJavascript(...['path' => 'js/component/FormValidation.js', 'module' => true]);
 
             return $this->render('Auth.signup', compact('user','errors'));
 
@@ -193,7 +190,7 @@
 
             $errors = $profil->getErrors();
 
-            $this->addJavascript('js/app.js', 'module');
+            $this->addJavascript(...['path' => 'js/component/FormValidation.js', 'module' => true]);
 
             return $this->render('Auth.finalizeSignup', compact( 'profil', 'errors'));
         }

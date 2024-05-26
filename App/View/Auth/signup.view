@@ -41,11 +41,11 @@
             <p class="mx-3 mb-1">Explorez les films près de chez vous!</p>
             <p class="mx-3 mb-0">Vous avez déjà un compte? <a href="<?= self::$_Router->getUrl("signin") ?>">Connexion!</a></p>
         </header>
-        <form action="<?= self::$_Router->getUrl('signup') ?>" method="post" id="Signup" class="container-fluid">
+        <form id="Signup" class="js-form container-fluid" action="<?= self::$_Router->getUrl('signup') ?>" method="post">
             <div class="row justify-content-center">
                 <div class="col-md-6 col-sm-6 col-12">
                     <label for="Name">Nom</label>
-                    <input id="Name" class="js-validation form-control mb-2" type="text" name="nom"
+                    <input id="Name" class="js-validation form-control mb-2" type="text" name="profil[nom]"
                            value="<?= $user->profil->nom ?>"
                            aria-required="true"
                            data-validation="alpha">
@@ -53,7 +53,7 @@
                 </div>
                 <div class="col-md-6 col-sm-6 col-12">
                     <label for="Firstname">Prénom</label>
-                    <input id="Firstname" class="js-validation form-control mb-2" type="text" name="prenom"
+                    <input id="Firstname" class="js-validation form-control mb-2" type="text" name="profil[prenom]"
                            value="<?= $user->profil->prenom ?>"
                            aria-required="true"
                            data-validation="alpha">

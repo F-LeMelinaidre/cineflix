@@ -8,7 +8,7 @@ use Cineflix\Core\Router\Router;
 abstract class AbstractController
 
 {
-    private array $js_lib = [];
+    private array $js_script_tags = ['head' => [], 'footer' => []];
     private array $script_block = [];
     private string $path_view;
 
@@ -60,7 +60,7 @@ abstract class AbstractController
         $layout = str_replace('{{content}}', $contentView, $layout);
 
         // Declaration de la variable $js_block pour l'ajout des scripts js
-        if(!empty($this->js_lib)) $js_block = $this->js_lib;
+        if(!empty($this->js_script_tags)) $script_tags = $this->js_script_tags;
         if(!empty($this->script_block)) $script_block = $this->script_block;
 
             // Enclenche la temporisation de sortie, quand elle est activé aucune sortie n'est effectué.
@@ -119,18 +119,26 @@ abstract class AbstractController
      * @param ...$scripts
      * Formatage de la chaine et ajout du chemin du fichier ou lien js
      * à la lib $js
+     * @param array $params [module = true , defer = true , async = true ]
      * @return void
      */
-    protected function addJavascript(string $path, ?string $type = null): void
+    protected function addJavascript(string $path, $module = false, $defer = false, $async = false, $head = false): void
     {
+
         if(!str_starts_with($path,'https://') && !str_starts_with($path,'/public/')) {
             $path = '/public/'.$path;
         }
 
-        $js = [ 'path' => $path,
-                'type' => $type];
+        $id = ($head) ? "head" : "footer";
 
-        array_push($this->js_lib,$js);
+        if($module) $js[] = 'type="module"';
+
+        $js[] = "src=\"$path\"";
+
+        if($defer) $js[] = "defer";
+        if($async) $js[] = "async";
+
+            array_push($this->js_script_tags[$id],$js);
     }
 
     protected function addScriptBlock(string $script): void

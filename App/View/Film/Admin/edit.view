@@ -1,0 +1,102 @@
+<header>
+    <h1><?= $title ?></h1>
+</header>
+<section class="container p-0">
+
+    <form id="<?= $form_id ?>" class="<?= $class ?>" action="<?= $url ?>" method="post">
+        <fieldset class="film">
+            <h2>Information du film</h2>
+            <div class="titre">
+                <label class="js-form form-label" for="Nom">Nom</label>
+                <input id="InputFilmNom" class="js-validation form-control" type="text" name="nom" value=""
+                       aria-required="true"
+                       data-action="movieExist"
+                       data-validation="alphaNumericExtended">
+                <div id="MoviesList"></div>
+            </div>
+
+            <div class="date_de_sortie">
+                <label class="form-label" for="DateSortie">Date de sortie</label>
+                <input id="InputDateSortie" class="js-validation form-control" type="date" name="date_sortie" value=""
+                       max="<?= date('Y-m-d') ?>"
+                       min=""
+                       aria-required="true">
+            </div>
+            <div class="synopsis">
+                <label class="form-label" for="Synopsis">Synopsis</label>
+                <textarea id="InputSynopsis" class="js-validation form-control" name="synopsis" cols="30" rows="7"
+                          aria-required="true"
+                          data-validation="alphaNumericExtended"
+                          data-elements="#Synopsys"></textarea>
+            </div>
+        </fieldset>
+
+
+        <?php if($movie->status_id === \Cineflix\App\DAO\List\StatusFilm::EN_SALLE->value): ?>
+
+            <fieldset class="exploitation">
+                <h2>Information d'exploitation</h2>
+                <div class="cinema">
+                    <label class="form-label" for="Cinema">Cinema</label>
+                    <input id="InputCinema" class="js-validation js-autocomplete form-control" type="text" name="cinema[nom]" value=""
+                           placeholder="Saisissez un cinéma"
+                           aria-required="true"
+                           data-validation="alpha"
+                           data-action="cinemaSearch">
+                    <div id="CinemasList"></div>
+                </div>
+                <div class="ville">
+                    <label class="form-label" for="ville">Ville</label>
+                    <input id="InputVille" class="js-validation js-autocomplete form-control" type="text" name="ville[nom]" value=""
+                           placeholder="Saisissez une Ville"
+                           aria-required="true"
+                           data-validation="alpha"
+                           data-action="villeSearch">
+                    <div id="CvilleList"></div>
+                </div>
+                <div class="date-exploitation debut">
+                    <label class="form-label" for="DateDebut">Début</label>
+                    <input id="InputDateDebut" class="js-validation form-control" type="date" name="exploitation[debut]" value="" min="<?php echo date
+                    ('Y-m-d');
+                    ?>"
+                           range-end="InputDateFin"
+                           aria-required="true">
+                </div>
+                <div class="date-exploitation fin">
+                    <label class="form-label" for="DateFin">Fin</label>
+                    <input id="InputDateFin" class="js-validation form-control" type="date" name="exploitation[fin]" value="" min="<?php echo date('Y-m-d');
+                    ?>"
+                           range-start="InputDateDebut"
+                           aria-required="true">
+                </div>
+
+            </fieldset>
+
+
+        <?php endif; ?>
+
+        <div class="input-file">
+            <div>
+                <label class="form-label" for="Affiche">Affiche</label>
+                <input id="InputAffiche" class="js-validation form-control" name="affiche" type="file" accept=".png, .jpg, .jpeg">
+            </div>
+
+            <?php if($movie->status_id === \Cineflix\App\DAO\List\StatusFilm::EN_STREAMING->value): ?>
+                <div>
+                    <label class="form-label" for="Stream">Stream</label>
+                    <input id="InputStream" class="js-validation form-control" name="stream" type="file" accept=".mp4">
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <div class="thumb"><img src="" alt="" width="120px"></div>
+        <div class="footer-form">
+            <?php if($form_id === "AddMovie"): ?>
+                <button id="AddButton" class="btn btn-warning col-auto" type="submit">Ajouter</button>
+            <?php else: ?>
+                <button id="EditButton" class="js-submit-button btn btn-warning col-auto" type="submit">Modifier</button>
+            <?php endif; ?>
+        </div>
+
+    </form>
+</section>

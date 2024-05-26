@@ -4,18 +4,16 @@ namespace Cineflix\App\DAO;
 
 use Cineflix\Core\Util\MessageFlash;
 
-class CinemaDao extends AbstractDAO
+class VilleDao extends AbstractDAO
 {
 
-    public function create(object $cinema)
+    public function create(object $ville)
     {
         try {
-
             $this->db->beginTransaction();
 
             $data = [
-                'nom'      => $cinema->nom,
-                'ville_id' => $cinema->ville_id,
+                'nom'     => $ville->nom,
             ];
 
 
@@ -31,11 +29,12 @@ class CinemaDao extends AbstractDAO
             $result = false;
 
             $this->db->rollback();
+
+
             MessageFlash::create("PDOException: " . $e->getMessage(),'erreur');
         }
 
         return $result;
 
     }
-
 }
