@@ -28,8 +28,9 @@
                     <?= $movie->nom ?>
                 </a>
             </h5>
-            <?php if($movie->status_id === $status_id): ?>
+            <?php if($movie->cinema->nom): ?>
             <ul class="card-text">
+                <li><?= \Cineflix\App\DAO\List\StatusFilm::toString($movie->status) ?></li>
                 <li><?= $movie->cinema->nom ?></li>
                 <li><?= $movie->cinema->ville->nom ?></li>
             <?php endif; ?>

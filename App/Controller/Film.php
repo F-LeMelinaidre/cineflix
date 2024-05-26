@@ -6,6 +6,8 @@
     use Cineflix\App\DAO\List\StatusFilm;
     use Cineflix\App\DAO\FilmDao;
     use Cineflix\App\DAO\SeanceDao;
+    use Cineflix\App\Model\FilmModel;
+    use Cineflix\App\Model\SeanceModel;
     use Cineflix\Core\AbstractController;
     use Cineflix\Core\Util\GenerateIdentifiant;
     use Cineflix\Core\Util\MessageFlash;
@@ -30,15 +32,26 @@
                     'cinema' => 'cinema.id = film.cinema_id',
                     'ville'  => 'ville.id = cinema.ville_id',
                     'exploitation' => 'exploitation.film_id = film.id'],
-                'order'  => 'film.modified'
+                'order'  => ['exploitation.debut', 'ASC']
             ];
 
             if($status_id === StatusFilm::EN_SALLE->value) {
-                $options['where'][] = 'exploitation.fin >= :current_date';
-                $options['params']['current_date'] = date('Y-m-d');
+                $options['where'][] = 'exploitation.debut <= :debut';
+
+                $date = new \DateTime();
+                $date->modify('+2 days');
+                $date = $date->format('Y-m-d');
+                $options['params']['debut'] = $date
+                ;
+                $options['where'][] = 'exploitation.fin >= :fin';
+                $options['params']['fin'] = date('Y-m-d');
             }
 
             $movies = $this->dao->findAll($options);
+
+            foreach ($movies as $k => $movie) {
+                $movies[$k] = new FilmModel($movie);
+            }
 
             $this->addJavascript(...['path' => 'api/MovieIndex.js', 'module' => true]);
             $this->addJavascript(...['path' => 'js/ajaxRequest.js']);
@@ -49,13 +62,16 @@
         {
 
             $options = [
-                'select'  => ['*','cinema.nom','ville.nom'],
+                'select'  => ['*','cinema.nom','ville.nom','exploitation.debut','exploitation.fin'],
                 'contain' => [
                     'cinema' => 'cinema.id = film.cinema_id',
-                    'ville'  => 'ville.id = cinema.ville_id'],
+                    'ville'  => 'ville.id = cinema.ville_id',
+                    'exploitation' => 'exploitation.film_id = film.id'],
             ];
 
-            $movie = $this->dao->findOneBy('slug', $slug, $options);
+            $data = $this->dao->findOneBy('slug', $slug, $options);
+
+            $movie = new FilmModel($data);
 
             if($movie) {
 
@@ -71,7 +87,9 @@
                 ];
 
                 $seances = $seanceDao->findAll($options);
-
+                foreach ($seances as $k => $seance) {
+                    $seances[$k] = new SeanceModel($seance);
+                }
 
                 $seances = array_chunk($seances, 3);
 

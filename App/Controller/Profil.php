@@ -93,7 +93,7 @@
 
             $errors = $profil->getErrors();
 
-            $this->addJavascript(...['path' => 'js/app.js', 'module' => true]);
+            $this->addJavascript(...['path' => 'js/component/FormValidation.js', 'module' => true]);
 
             return $this->render('profil.editIdentite',compact('profil', 'errors'));
         }
@@ -140,7 +140,7 @@
 
             $errors = $profil->getErrors();
 
-            $this->addJavascript(...['path' => 'js/app.js', 'module' => true]);
+            $this->addJavascript(...['path' => 'js/component/FormValidation.js', 'module' => true]);
 
             return $this->render('profil.editAdresse',compact('profil', 'errors'));
         }
@@ -182,8 +182,8 @@
 
             $errors = $user->getErrors();
 
-            $this->addJavascript(...['path' => 'js/app.js', 'module' => true]);
-            $this->addJavascript(...['path' => 'js/class/generatePassword.js', 'module' => true]);
+            $this->addJavascript(...['path' => 'js/component/FormValidation.js', 'module' => true]);
+            $this->addJavascript(...['path' => 'js/component/generatePassword.js', 'module' => true]);
 
             return $this->render('profil.editAuthentification',compact('user','errors'));
         }

@@ -23,11 +23,12 @@ class VilleModel extends AbstractModel
                 $item = $this->$item;
                 break;
             default:
-                $item = '';
+                $item = parent::__get($item);
                 break;
         }
 
         return $item;
     }
+
 
 }

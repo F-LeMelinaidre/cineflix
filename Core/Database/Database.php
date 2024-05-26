@@ -11,6 +11,7 @@
 
         private string $sql;
         private array $select = [];
+        private array $max = [];
         private array $set = [];
         private string $table;
         private array $alias = [];
@@ -129,6 +130,7 @@
 
             return implode(', ', $columns);
         }
+
 
         /**
          * @param string $table
@@ -256,8 +258,8 @@
         }
 
         /**
-         * @param string $column
          * @param string $order
+         * @param string $direction
          *
          * @return $this
          */
@@ -343,7 +345,7 @@
          *
          * @return $this
          */
-        public function setParameter(string $col, string $val): self
+        public function setParameter(string $col, mixed $val): self
         {
             $this->bind_values[] = [
                 'col' => $col,
@@ -362,7 +364,6 @@
             $join = $this->getJoin();
             $where = $this->getWhere();
             $order = $this->order;
-
             return "SELECT $select FROM $table $join $where $order";
         }
 
@@ -395,26 +396,6 @@
         }
 
         /**
-         * @return $this
-         */
-        public function execute(): self
-        {
-            $set = implode(', ', $this->set);
-            $where = implode(' ',$this->where);
-
-            $this->sql .= "$set $where";
-            //echo __CLASS__.' | '.__FUNCTION__.'<br>';
-            //$this->debug();
-            //die();
-
-            $this->prepare($this->sql);
-
-            $this->request->execute();
-
-            return $this;
-        }
-
-        /**
          * @param string|null $class_name
          *
          * @return mixed
@@ -427,9 +408,10 @@
                 //echo __CLASS__.' | '.__FUNCTION__.'<br>';
                 //$this->debug();
                 //die();
+                if(empty($this->sql))
+                    $this->sql =  $this->buildQuery();
 
-                $sql =  $this->buildQuery();
-                $this->prepare($sql);
+                $this->prepare($this->sql);
 
                 $this->request->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -460,12 +442,14 @@
         {
 
             try {
-                $this->sql =  $this->buildQuery();
-                $this->prepare($this->sql);
 
+                if(empty($this->sql))
+                    $this->sql =  $this->buildQuery();
+
+                $this->prepare($this->sql);
                 //echo __CLASS__.' | '.__FUNCTION__.'<br>';
                 //$this->debug();
-                // die();
+                //die();
 
                 $this->request->execute();
 
@@ -601,6 +585,26 @@
         }
 
         /**
+         * @return $this
+         */
+        public function update(): self
+        {
+            $set = implode(', ', $this->set);
+            $where = implode(' ',$this->where);
+
+            $this->sql .= "$set $where";
+            //echo __CLASS__.' | '.__FUNCTION__.'<br>';
+            //$this->debug();
+            //die();
+
+            $this->prepare($this->sql);
+
+            $this->request->execute();
+
+            return $this;
+        }
+
+        /**
          * @param string $col
          * @param string $val
          *
@@ -652,11 +656,13 @@
          */
         private function resetProperties(): void
         {
+            $this->sql = '';
             $this->set = [];
             $this->alias = [];
             $this->join = [];
             $this->where = [];
             $this->bind_values = [];
+            $this->order = '';
         }
 
         public function debug(): void
@@ -696,6 +702,7 @@
 
             if(!empty($this->sql)) {
                 echo 'Requete final:<br>';
+                echo $this->order.'<br>';
                 echo $this->sql.'<br>';
             }
         }

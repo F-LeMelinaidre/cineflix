@@ -39,33 +39,45 @@
          */
         public function index(?string $status = null): string
         {
+            $request_options = [
+                'select'  => ['film.*','cinema.id', 'cinema.nom', 'ville.id', 'ville.nom', 'exploitation.debut', 'exploitation.fin'],
+                'contain' => [
+                    'cinema' => 'film.cinema_id = cinema.id',
+                    'ville' => 'cinema.ville_id = ville.id',
+                    'exploitation' => 'exploitation.film_id = film.id'
+                ],
+                'order'  => ['exploitation.fin', 'ASC']
+            ];
+
             $status = (!is_null($status)) ? StatusFilm::getStatusByName($status) : null;
             $buttons = [];
 
-            if($status !== StatusFilm::EN_SALLE || !is_null($status)){
-                $id = StatusFilm::EN_SALLE->value;
-                $buttons[$id] = self::$_Router->getUrl('admin_film_add', [ 'status' => StatusFilm::getUrlById($id) ]);
-            }
-            if($status !== StatusFilm::EN_STREAMING || !is_null($status)) {
-                $id = StatusFilm::EN_STREAMING->value;
-                $buttons[$id] = self::$_Router->getUrl('admin_film_add',[ 'status' => StatusFilm::getUrlById($id)]);
-            }
-
-            $options = [
-                'select'  => ['film.*','cinema.nom','ville.nom','exploitation.debut','exploitation.fin'],
-                'contain' => [
-                    'cinema' => 'cinema.id = film.cinema_id',
-                    'ville'  => 'ville.id = cinema.ville_id',
-                    'exploitation' => 'exploitation.film_id = film.id'],
-                'order'  => 'film.modified'
-            ];
-
             if(!is_null($status)) {
-                $options['where']  = ['film.status = :status'];
-                $options['params'] = ['status' => StatusFilm::getStatusId($status->name)];
+
+                $id = $status->value;
+                if ($status === StatusFilm::EN_SALLE || $status === StatusFilm::EN_STREAMING)
+                    $buttons[StatusFilm::toString($status)] = self::$_Router->getUrl('admin_film_add', [ 'status' => StatusFilm::getUrlById($id) ]);
+
+                $request_options['where']  = ['film.status = :status'];
+                $request_options['params'] = ['status' => $id];
+
+            } else {
+
+                $buttons = [
+
+                    StatusFilm::toString(StatusFilm::EN_SALLE) => self::$_Router->getUrl('admin_film_add', [
+                        'status' => StatusFilm::getUrlById(StatusFilm::EN_SALLE->value) ]),
+
+                    StatusFilm::toString(StatusFilm::EN_STREAMING) => self::$_Router->getUrl('admin_film_add', [
+                        'status' => StatusFilm::getUrlById(StatusFilm::EN_STREAMING->value) ]),
+                ];
             }
 
-            $movies = $this->dao->findAll($options);
+            $movies = $this->dao->findAll($request_options);
+
+            foreach ($movies as $k => $movie) {
+                $movies[$k] = new FilmModel($movie);
+            }
 
             return $this->render('Film.admin.index',compact('movies', 'buttons', 'status'));
         }
@@ -83,7 +95,7 @@
             $movie = new FilmModel();
             $movie->setStatus($status);
 
-            $title = "Ajouter un film ".StatusFilm::toString($movie->status_id);
+            $title = "Ajouter un film ".StatusFilm::toString($movie->status);
             $form_id = "AddMovie";
 
             if (!is_null($id)) {
@@ -156,7 +168,7 @@
 
             $this->addJavascript(...['path' => 'js/jquery-ui.js', 'head' => true]);
             $this->addJavascript(...['path' => 'js/component/CinemaVilleInput.js', 'module' => true]);
-            $this->addJavascript(...['path' => 'js/app.js', 'module' => true]);
+            $this->addJavascript(...['path' => 'js/component/FormValidation.js', 'module' => true]);
             return $this->render('Film.admin.edit', $props);
         }
 

@@ -327,6 +327,16 @@ img.affiche {
 /* ------------------ *\
    CSS ADMINISTRATION
 \* ------------------ */
+.en-salle-txt {
+    color: #1b9fff !important;
+}
+.en-streaming-txt {
+    color: #8466ff !important;
+}
+.bientot-txt {
+    color: #42a247!important;
+}
+
 #AdminHeader {
     height: 4rem;
 }

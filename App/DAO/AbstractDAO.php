@@ -9,6 +9,7 @@
     {
 
         private array $data = [];
+        protected array $result = [];
 
         protected Database $db;
         protected string $table;
@@ -63,7 +64,7 @@
          *
          * @return array
          */
-        public function findOneBy(string $col, string $val, array $options = [], string $format = 'array'): mixed
+        public function findOneBy(string $col, string $val, array $options = []): array
         {   //TODO à completer (Where, Order etc...)
 
             $select = $options['select'] ?? ['*'];
@@ -94,51 +95,34 @@
 
             $result = $req->fetch();
 
-            if($result) {
-                switch (strtolower($format)) {
-
-                    case 'model':
-                        $result = new $this->model($result);
-                        break;
-                    case 'json':
-                        $result = $this->mapToJson($result);
-                        break;
-
-                    case 'array':
-                    default:
-                        break;
-                }
-            }
-
-
             return $result;
 
         }
 
         /**
-         * @param array|null $options
+         * @param array|null $params
+         *
          * @return mixed|null
          */
-        public function findAll(array $options = [], string $format = 'model') {
-
-            $table = $options['table'] ?? $this->table;
-            $select = $options['select'] ?? ['*'];
+        public function findAll(array $params = []): array
+        {
+            $table = $params['table'] ?? $this->table;
+            $select = $params['select'] ?? [ '*'];
 
             $req = $this->db->select(...$select)
                 ->from($table);
 
 
-            if(isset($options['contain'])) {
+            if (isset($params['contain'])) {
 
-                foreach ($options['contain'] as $relation => $condition) {
+                foreach ($params['contain'] as $relation => $condition) {
                     $req->join($relation, $condition, 'LEFT');
                 }
             }
 
-
-            if(isset($options['where'])) {
-                $where  = $options['where'];
-                $params = $options['params'];
+            if (isset($params['where'])) {
+                $where  = $params['where'];
+                $set_param = $params['params'];
 
                 foreach ($where as $k => $condition) {
                     if($k === 0) {
@@ -148,34 +132,19 @@
                     }
                 }
 
-                foreach ($params as $col => $val) {
+                foreach ($set_param as $col => $val) {
                     $req->setParameter($col,$val);
                 }
 
             }
 
 
-            if(isset($options['order'])) {
-                $req->order($options['order']);
+            if (isset($params['order'])) {
+                $req->order(...$params['order']);
             }
 
 
-            $result = $req->fetchAll();
-
-            switch (strtolower($format)) {
-
-                case 'model':
-                    $result = $this->mapToModel($result);
-                    break;
-                case 'json':
-                    $result = $this->mapToJson($result);
-                    break;
-                case 'array':
-                default:
-                    break;
-            }
-
-            return $result;
+            return $req->fetchAll();
         }
 
 
@@ -204,6 +173,7 @@
          */
         public function update($data, string $id_column = 'id' ): Database
         {
+
             $req = $this->db->createUpdate($this->table);
 
             $id = $data['id'];
@@ -222,7 +192,7 @@
 
             return $req->where("$id_column = :$id_column")
                 ->setParameter($id_column, $id)
-                ->execute();
+                ->update();
 
         }
 
@@ -232,17 +202,18 @@
          */
         public function delete() {}
 
-        private function mapToModel(array $result): array
+
+        public function mapToModel(): array
         {
-            foreach($result as $k => $data) {
-                $result[$k] = new $this->model($data);
+            foreach($this->result as $k => $data) {
+                $this->result[$k] = new $this->model($data);
             }
 
-            return $result;
+            return $this->result;
         }
 
         private function mapToJson(array $result): string
         {
-            return json_encode($result, JSON_PRETTY_PRINT);
+            return json_encode($this->result, JSON_PRETTY_PRINT);
         }
     }

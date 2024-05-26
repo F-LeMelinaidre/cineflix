@@ -3,7 +3,6 @@
     // mp major rRTxrTTMhLkQf4W!?
     namespace Cineflix\App\Controller;
 
-    use Cineflix\App\DAO\List\Role;
     use Cineflix\App\DAO\ProfilDao;
     use Cineflix\App\DAO\UserDao;
     use Cineflix\App\model\ProfilModel;
@@ -11,8 +10,6 @@
     use Cineflix\Core\AbstractController;
     use Cineflix\Core\Util\AuthConnect;
     use Cineflix\Core\Util\MessageFlash;
-    use Cineflix\Core\Util\Regex;
-    use Cineflix\Core\Util\Security;
     use ReCaptcha\ReCaptcha;
 
     class Auth extends AbstractController
@@ -77,7 +74,7 @@
                 $errors = $user->getErrors();
             }
 
-            $this->addJavascript(...['path' => 'js/app.js', 'module' => true]);
+            $this->addJavascript(...['path' => 'js/component/FormValidation.js', 'module' => true]);
 
             return $this->render('Auth.signin', [$errors]);
 
@@ -109,6 +106,7 @@
                 $user->profil->addValidation('prenom',['alpha', 'require']);
 
 
+                //TODO REVOIR
                 $exist = $this->userDao->isExist('email', $user->email);
 
                 $user_is_valid =$user->isValid();
@@ -148,7 +146,7 @@
                                      'head'  => true]);
 
             $this->addJavascript(...['path' => 'js/class/reCaptcha.js', 'module' => true]);
-            $this->addJavascript(...['path' => 'js/app.js', 'module' => true]);
+            $this->addJavascript(...['path' => 'js/component/FormValidation.js', 'module' => true]);
 
             return $this->render('Auth.signup', compact('user','errors'));
 
@@ -192,7 +190,7 @@
 
             $errors = $profil->getErrors();
 
-            $this->addJavascript(...['path' => 'js/app.js', 'module' => true]);
+            $this->addJavascript(...['path' => 'js/component/FormValidation.js', 'module' => true]);
 
             return $this->render('Auth.finalizeSignup', compact( 'profil', 'errors'));
         }

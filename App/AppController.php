@@ -24,7 +24,7 @@
          * @var string si l'app est hebergé en hote virtuel
          *             public static string $_PrefixURI = "/frederic/E5/Cineflix/";
          */
-        public static ?string $_PrefixURI = null;
+        public static ?string $_PrefixURI = "";
         /**
          * @var string Racine de l'app
          */
@@ -76,7 +76,7 @@
             self::$_Router->get('movie_index', '/Film-{status}', [ Controller\Film::class, 'index'],
                 ['status' => '[A-Z-]+']);
             self::$_Router->get('movie_show', '/Film/{slug}', [ Controller\Film::class, 'show'],
-                ['slug' => '[A-Z_]+']);
+                ['slug' => '[a-zA-Z-]+']);
 
             //Profil
             self::$_Router->get('profil_show', '/Profil', [ Controller\Profil::class, 'show']);

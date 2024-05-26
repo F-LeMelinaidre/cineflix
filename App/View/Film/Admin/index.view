@@ -1,16 +1,17 @@
 <header class="p-0">
-    <h1>Liste des films <?php if($status) echo \Cineflix\App\DAO\List\StatusFilm::toString($status->value); ?></h1>
+    <h1>Liste des films <?php if($status) echo \Cineflix\App\DAO\List\StatusFilm::toString($status); ?></h1>
     <nav class="d-flex align-items-center">
-        <?php if ($status || is_null($status))
+
+        <?php if (!empty($buttons))
         echo "<h6 class='m-0 p-0 me-2'>Ajouter un Film :</h6>";
         ?>
-        <?php foreach($buttons as $id => $url): ?>
-            <?php if (is_null($status) || $id === $status->value) { ?>
 
-            <a href="<?= $url ?>" class="me-2 btn btn-sm btn-warning"><?php echo \Cineflix\App\DAO\List\StatusFilm::toString($id); ?></a>
+        <?php foreach($buttons as $label => $url): ?>
 
-            <?php } ?>
+            <a href="<?= $url ?>" class="me-2 btn btn-sm btn-warning"><?php echo $label; ?></a>
+
         <?php endforeach; ?>
+
     </nav>
 </header>
 <table class="table table-striped align-middle">
@@ -18,10 +19,15 @@
     <tr>
         <th>Type</th>
         <th>Nom</th>
+
+        <?php if($status === \Cineflix\App\DAO\List\StatusFilm::EN_SALLE): ?>
+
         <th>Cinéma</th>
         <th>Ville</th>
         <th>Début d'exploitation</th>
         <th>Fin d'exploitation</th>
+        <?php endif; ?>
+
         <th>Action</th>
     </tr>
     </thead>
@@ -29,15 +35,22 @@
 
     <?php foreach($movies as $movie): ?>
 
-        <tr <?php if($movie->exploitation && $movie->exploitation->soon_delete === true) echo 'class="warning"'; ?>>
-            <td class="<?= strtolower(\Cineflix\App\DAO\List\StatusFilm::getUrlById($movie->status_id)) ?>">
-                <?= \Cineflix\App\DAO\List\StatusFilm::toString($movie->status_id) ?>
+        <tr>
+
+            <td class="<?= $movie->getColorText() ?>">
+                <?= \Cineflix\App\DAO\List\StatusFilm::toString($movie->status) ?>
             </td>
+
             <td><?= $movie->nom ?></td>
+
+            <?php if($status === \Cineflix\App\DAO\List\StatusFilm::EN_SALLE): ?>
             <td><?= $movie->cinema->nom ?></td>
             <td><?= $movie->cinema->ville->nom ?></td>
-            <td><?= $movie->exploitation->debut_fr ?? '' ?></td>
-            <td><?=  $movie->exploitation->fin_fr ?? ''?></td>
+            <td><?= $movie->exploitation->debut_fr ?></td>
+            <td class="<?php if($movie->status === \Cineflix\App\DAO\List\StatusFilm::BIENTOT_DEPROGRAMME) echo $movie->getColorText() ?>">
+                <?= $movie->exploitation->fin_fr ?></td>
+            <?php endif; ?>
+
             <td>
                 <nav class="action-menu">
                     <ul>
@@ -52,7 +65,7 @@
 
     </tbody>
 
-    <tfoot>
+    <tfoot class="text-success">
     <tr>
         <td colspan="6">Pagination</td>
     </tr>
