@@ -35,10 +35,10 @@
                 'contain' => ['ville'  => 'ville.id = cinema.ville_id']
             ];
 
-            $json = $this->dao->findAll($options,'Json');
+            $data = $this->dao->findAll($options);
 
             // Afficher le JSON
-            echo $json;
+            echo json_encode($data, JSON_PRETTY_PRINT);
         }
 
         /**
@@ -62,10 +62,10 @@
                 'where'  => ["ville.$col LIKE :$col"],
                 'params' => [$col => '%'.urldecode($val).'%'],
             ];
-            $json = $this->dao->findAll($options,'Json');
+            $data = $this->dao->findAll($options,'Json');
 
             // Afficher le JSON
-            echo $json;
+            echo json_encode($data, JSON_PRETTY_PRINT);
         }
 
     }

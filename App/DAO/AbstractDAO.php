@@ -140,7 +140,7 @@
 
 
             if (isset($params['order'])) {
-                $req->order(...$params['order']);
+                $req->order($params['order']);
             }
 
 

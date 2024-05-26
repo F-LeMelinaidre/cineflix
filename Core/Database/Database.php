@@ -263,11 +263,15 @@
          *
          * @return $this
          */
-        public function order(string $order, string $direction = 'DESC'): self
+        public function order(array $order): self
         {
-            $order = !empty($this->join) ? $this->aliasColumn($order, 'Order') : $order;
+            foreach($order as &$col) {
+                $col = !empty($this->join) ? $this->aliasColumn($col, 'Order') : $col;
+            }
 
-            $this->order = "ORDER BY $order $direction";
+            $order = implode(', ', $order);
+
+            $this->order = "ORDER BY $order";
 
             return $this;
         }

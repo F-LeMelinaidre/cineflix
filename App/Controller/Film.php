@@ -32,7 +32,7 @@
                     'cinema' => 'cinema.id = film.cinema_id',
                     'ville'  => 'ville.id = cinema.ville_id',
                     'exploitation' => 'exploitation.film_id = film.id'],
-                'order'  => ['exploitation.debut', 'ASC']
+                'order'  => ['exploitation.debut ASC']
             ];
 
             if($status_id === StatusFilm::EN_SALLE->value) {
@@ -83,10 +83,11 @@
                     'select'  => ['*'],
                     'where'  => ['seance.film_id = :film_id'],
                     'params' => ['film_id' => $movie->id],
-                    'order'  => 'seance.date'
+                    'order'  => ['seance.date']
                 ];
 
                 $seances = $seanceDao->findAll($options);
+
                 foreach ($seances as $k => $seance) {
                     $seances[$k] = new SeanceModel($seance);
                 }
@@ -162,9 +163,9 @@
                     'exploitation' => 'exploitation.film_id = film.id']
             ];
 
-            $movie = $this->dao->findOneBy($col, $val, $options, 'Json');
+            $movie = $this->dao->findOneBy($col, $val, $options);
 
-            echo $movie;
+            echo json_encode($movie, JSON_PRETTY_PRINT);
         }
 
         /**
