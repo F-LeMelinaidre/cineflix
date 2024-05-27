@@ -13,7 +13,7 @@
         private ?CinemaModel $cinema = null;
         private ?ExploitationModel $exploitation = null;
 
-        protected ?string $affiche;
+        protected string $affiche = '';
         protected ?string $synopsis;
         protected ?int $status_id;
         protected ?string $date_sortie;

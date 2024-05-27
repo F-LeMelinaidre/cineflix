@@ -107,7 +107,7 @@
 
 
                 //TODO REVOIR
-                $exist = $this->userDao->isExist('email', $user->email);
+                //$exist = $this->userDao->isExist('email', $user->email);
 
                 $user_is_valid =$user->isValid();
                 $profil_is_valid = $user->profil->isValid();
@@ -115,7 +115,7 @@
                 $recaptcha = new ReCaptcha($this->site_key);
                 $response = $recaptcha->verify($_POST['g-recaptcha-response']);
 
-                $valid = $user_is_valid && $profil_is_valid && !$exist && $response->isSuccess();
+                $valid = $user_is_valid && $profil_is_valid && $response->isSuccess();
                 if($valid && $this->userDao->create($user)) {
 
                     AuthConnect::connect($user->email,[
@@ -132,7 +132,7 @@
                     exit;
                 }
 
-                if($exist) MessageFlash::create('Compte existant !', $type = 'warning');
+                //if($exist) MessageFlash::create('Compte existant !', $type = 'warning');
 
                 $errors = array_merge($user->getErrors(),$user->profil->getErrors());
                 if(isset($exist) && $exist) $errors['email'] = ['type'   => 'invalid',

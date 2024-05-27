@@ -46,7 +46,7 @@
                     'ville' => 'cinema.ville_id = ville.id',
                     'exploitation' => 'exploitation.film_id = film.id'
                 ],
-                'order'  => ['exploitation.fin', 'ASC']
+                'order'  => ['exploitation.fin IS NULL', 'exploitation.fin']
             ];
 
             $status = (!is_null($status)) ? StatusFilm::getStatusByName($status) : null;
