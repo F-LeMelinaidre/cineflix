@@ -14,14 +14,18 @@
 
     </section>
     <section id="Cinema" class="row col-xl-3 col-lg-3 col-md-10 col-sm-12">
-        <?php if($movie->status_id === \Cineflix\App\DAO\List\StatusFilm::EN_SALLE->value): ?>
+        <a class="return-link btn btn-sm btn-outline-warning"
+           href="<?= self::$_Router->getUrl('movie_index',['status' => \Cineflix\App\DAO\List\StatusFilm::getUrlById($this->page_active->value)]) ?>">
+            Retour
+        </a>
+        <?php if($movie->status !== \Cineflix\App\DAO\List\StatusFilm::EN_STREAMING): ?>
 
         <header>
             <h1><?= $movie->cinema->nom ?></h1>
             <h2><?= $movie->cinema->ville->nom ?></h2>
         </header>
         <div id="Seances" class="carousel slide p-0" data-bs-ride="false">
-            <h3>Séance</h3>
+            <h3>Séances</h3>
 
             <div class="carousel-inner">
 
@@ -32,13 +36,13 @@
                     <div class="row gap-3 justify-content-center m-0">
 
                     <?php foreach ($seance_group as $seance):?>
-                        <div class="col-3 card p-0">
+                        <div class="col-3 card">
                             <div class="card-body p-0">
                                 <h4><?= $seance->date_fr ?></h4>
                                 <p><?= $seance->horaire ?></p>
                                 <?php if(\Cineflix\Core\Util\AuthConnect::isConnected()): ?>
-                                <button class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button"
-                                        data-token="<?= \Cineflix\Core\Util\Security::getAndStoreToken() ?>">Achat</button>
+                                <a class="btn btn-warning" href="<?= self::$_Router->getUrl("ticket_select",['seance' => $seance->id]) ?>"
+                                        role="button">Achat</a>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -52,65 +56,18 @@
                 <?php endforeach; ?>
             </div>
 
-            <button class="carousel-control-prev" type="button" data-bs-target="#Seances" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#Seances" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
 
+            <div class="carousel-nav row">
+                <button class="prev" type="button" data-bs-target="#Seances" data-bs-slide="prev">
+                    <span class="icon prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="next" type="button" data-bs-target="#Seances" data-bs-slide="next">
+                    <span class="icon next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
         </div>
         <?php endif; ?>
     </section>
-    <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Combien de fauteuils ?</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <label for="quantity">Nombre de tickets :</label>
-                    <input type="number" name="quantity" min="1" max="10">
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Confirmer</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Modal 2</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Hide this modal and show the first with the button below.
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" data-bs-target="#exampleModalToggle3" data-bs-toggle="modal">Valider</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="exampleModalToggle3" aria-hidden="true" aria-labelledby="exampleModalToggleLabel3" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel3">Modal 3</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Hide this modal and show the first with the button below.
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Back to first</button>
-                </div>
-            </div>
-        </div>
-    </div>
 

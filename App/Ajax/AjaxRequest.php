@@ -2,7 +2,6 @@
 
     namespace Cineflix\App\Ajax;
 
-    use Cineflix\App\AppController;
     use Cineflix\App\DAO\FilmDao;
     use Cineflix\App\Model\DAO\CinemaDao;
     use Cineflix\App\Model\DAO\FicheDao;

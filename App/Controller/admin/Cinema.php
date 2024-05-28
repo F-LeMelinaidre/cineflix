@@ -2,9 +2,7 @@
 
 namespace Cineflix\App\Controller\Admin;
 
-use Cineflix\App\AppController;
 use Cineflix\App\DAO\List\Role;
-use Cineflix\App\Model\CinemaModel;
 use Cineflix\Core\AbstractController;
 use Cineflix\Core\Util\AuthConnect;
 

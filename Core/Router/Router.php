@@ -2,9 +2,6 @@
 
 namespace Cineflix\Core\Router;
 
-use Cineflix\App\AppController;
-use Cineflix\Core\Router\Route;
-use Exception;
 
 /**
  * $path = url courante
@@ -146,6 +143,9 @@ class Router
             $route = array_shift($routes);
 
             if($route->match($path)) {
+
+                $this->setSessionLastPageVisited($route);
+
                 $matched = true;
             } else {
                 unset($route);
@@ -158,6 +158,44 @@ class Router
         }
 
         return $route;
+    }
+
+    /**
+     * @param \Cineflix\Core\Router\Route $route
+     *
+     * @return void
+     */
+    private function setSessionLastPageVisited(Route $route): void
+    {
+        if(!isset($_SESSION['nav_store'])) {
+            $_SESSION['nav_store'] = [
+                'last' => [
+                    'name' => [],
+                    'params'=> []
+                ],
+                'previous' => null
+            ];
+        }
+
+        $last = $_SESSION['nav_store']['last'];
+
+        $store['name'] = $route->getName();
+        if(isset($route->matches)) $store['params'] = $route->matches;
+
+        if(empty($last['name']) || $last['name'] !== $store['name']) {
+
+            if(!empty($last['name'])) $_SESSION['nav_store']['previous'] = $last;
+
+            $_SESSION['nav_store']['last'] = $store;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastPageVisited(): string
+    {
+        return $this->getUrl($_SESSION['nav_store']['previous']['name'], $_SESSION['nav_store']['previous']['params']);;
     }
 
 }

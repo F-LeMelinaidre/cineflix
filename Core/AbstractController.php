@@ -3,23 +3,30 @@
 namespace Cineflix\Core;
 
 use Cineflix\App\AppController;
+use Cineflix\App\DAO\List\StatusFilm;
 use Cineflix\Core\Router\Router;
 
 abstract class AbstractController
 
 {
+    private string $path_view;
     private array $js_script_tags = ['head' => [], 'footer' => []];
     private array $script_block = [];
-    private string $path_view;
+
 
     protected static Router $_Router;
     protected string $layout = 'main';
+
 
     // APP_NAME est défini dans la Class AppController
     // $title_page correspond à la valeur de l'élément <title></title>
     // Peux être complèté ou modifié directement dans le controller de la page
     protected string $title_page = AppController::APP_NAME;
-    protected string $page_active = '';
+
+    //TODO à supprimer et utiliser la Session nav_storage
+    protected ?StatusFilm $page_active = null;
+    protected array $nav_storage;
+
     protected $dao;
     protected string $path_dao = "\\Cineflix\\App\\DAO\\";
 
@@ -40,6 +47,7 @@ abstract class AbstractController
 
         $this->path_view = AppController::$_Root.'/App/View/';
     }
+
 
     /**
      * Cette methode est appelé dans la methode du controller fille dans un return
@@ -79,7 +87,7 @@ abstract class AbstractController
      * Enclenche la temporisation de sortie
      * Stock en memoire le code du fichier appeler par include_once
      * ob_get_clean renvoi le contenu du tampon en cas de succès (renvoi le code du fichier inclus)
-     * @return string retourne le html contenu que l'on inserera entre les Tags <body> </body> du fichier Base/index.view
+     * @return string retourne le html contenu que l'on inserera entre les Tags <body> </body> du fichier Base/add.view
      */
     protected function renderLayout($data): string
     {

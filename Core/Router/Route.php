@@ -2,7 +2,6 @@
 
 namespace Cineflix\Core\Router;
 
-use Cineflix\App\AppController;
 
 /**
  * Class Route représente une route
@@ -27,7 +26,7 @@ class Route
     private array $requirementKeys;
 
     public array $callback;
-    public array $matches;
+    public array $matches = [];
 
     public function __construct(string $name, string $path, array $callback, array $requirement = [])
     {
@@ -75,8 +74,10 @@ class Route
     {
         $url = trim($url, '/');
         $path = preg_replace_callback('#{([\w]+)}#', [$this, 'requiredMatch'], $this->path);
+
         $reg = "#^$path$#i"; //i prend en concidération majuscule et minuscule
         $result = preg_match($reg, $url, $matches);
+
         // Si l'url contient des paramètres matché, on réassocie les clés au valeurs matché
         if(!empty($matches)) {
 
@@ -99,6 +100,12 @@ class Route
     {
         return (isset($this->requirement[$match[1]]))? '('.$this->requirement[$match[1]].')' : '([^\]+)';
     }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
 
     /**
      * @return

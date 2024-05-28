@@ -2,7 +2,6 @@
 
     namespace Cineflix\App\Model;
 
-    use Cineflix\App\AppController;
     use Cineflix\App\DAO\List\StatusFilm;
     use Cineflix\Core\Util\Security;
 
