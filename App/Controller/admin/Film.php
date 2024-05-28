@@ -2,17 +2,12 @@
 
     namespace Cineflix\App\Controller\Admin;
 
-    use Cineflix\App\AppController;
     use Cineflix\App\DAO\CinemaDao;
     use Cineflix\App\DAO\List\Role;
     use Cineflix\App\DAO\List\StatusFilm;
-    use Cineflix\App\DAO\FilmDao;
     use Cineflix\App\DAO\VilleDao;
     use Cineflix\App\Model\FilmModel;
-    use Cineflix\Core\AbstractController;
-    use Cineflix\Core\Router\Router;
     use Cineflix\Core\Util\AuthConnect;
-    use Normalizer;
 
     class Film extends \Cineflix\App\Controller\Film
     {
@@ -46,7 +41,7 @@
                     'ville' => 'cinema.ville_id = ville.id',
                     'exploitation' => 'exploitation.film_id = film.id'
                 ],
-                'order'  => ['exploitation.fin', 'ASC']
+                'order'  => ['exploitation.fin IS NULL', 'exploitation.fin']
             ];
 
             $status = (!is_null($status)) ? StatusFilm::getStatusByName($status) : null;

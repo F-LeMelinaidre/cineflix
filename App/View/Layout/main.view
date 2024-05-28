@@ -55,12 +55,12 @@
         <div class="collapse navbar-collapse">
             <?php if (\Cineflix\Core\Util\AuthConnect::isConnected()): ?>
                 <ul class="navbar-nav align-items-center">
-                    <li class="nav-item <?= ('En-Salle' === $active)? 'active' : '' ?>">
+                    <li class="nav-item <?= (\Cineflix\App\DAO\List\StatusFilm::EN_SALLE === $active)? 'active' : '' ?>">
                         <a href="<?= self::$_Router->getUrl("movie_index",['status' => \Cineflix\App\DAO\List\StatusFilm::getUrlByName(\Cineflix\App\DAO\List\StatusFilm::EN_SALLE)]) ?>" class="nav-link">
                             Film en salle
                         </a>
                     </li>
-                    <li class="nav-item <?= ('En-Streaming' === $active)? 'active' : '' ?>">
+                    <li class="nav-item <?= (\Cineflix\App\DAO\List\StatusFilm::EN_STREAMING === $active)? 'active' : '' ?>">
                         <a href="<?= self::$_Router->getUrl("movie_index",['status' => \Cineflix\App\DAO\List\StatusFilm::getUrlByName(\Cineflix\App\DAO\List\StatusFilm::EN_STREAMING)]) ?>" class="nav-link">
                             Streaming
                         </a>

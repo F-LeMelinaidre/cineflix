@@ -574,6 +574,26 @@
             return $result;
         }
 
+        public function insertAll(string $table, array $data): bool
+        {
+            $result = false;
+
+            try {
+
+                foreach ($data as $row) {
+                    var_dump($row); die();
+                }
+                die();
+
+            } catch (\PDOException $e) {
+
+                $result = false;
+
+                throw $e;
+            }
+
+            return $result;
+        }
 
         /**
          * @param string $table

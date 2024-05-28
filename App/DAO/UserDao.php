@@ -2,9 +2,6 @@
 
 namespace Cineflix\App\DAO;
 
-use Cineflix\App\AppController;
-use Cineflix\App\model\ProfilModel;
-use Cineflix\App\Model\UserModel;
 use Cineflix\Core\Database\Database;
 use Cineflix\Core\Util\GenerateIdentifiant;
 use Cineflix\Core\Util\MessageFlash;

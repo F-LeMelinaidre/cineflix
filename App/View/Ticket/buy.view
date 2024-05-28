@@ -1,0 +1,31 @@
+<section  id="Ticket" class="p-0">
+    <header class="d-flex
+               justify-content-around
+               align-items-center
+               position-relative
+               mt-4
+               border-top border-bottom border-dark">
+        <h1>Achat de ticket</h1>
+    </header>
+
+    <form  class="js-form achat-ticket mt-4 m-auto p-4 rounded-2 bg-dark-subtle" action="<?= self::$_Router->getUrl('ticket_buy') ?>"
+           method="post">
+        <div class="row align-items-center justify-content-center mb-4">
+            <label class="col-2 col-form-label nom mb-1" for="Nom">Ticket :</label>
+            <div class="col-4">
+                <input id="Ticket" class="js-validation form-control m-0" type="number" name="quantity"
+                       min="1" max="10" value="1"
+                       aria-required="true">
+            </div>
+        </div>
+        <div class="row justify-content-between mt-3">
+            <div class="col-auto">
+
+                <button class="js-submit-button btn btn-warning m-0" type="submit">Valider</button>
+            </div>
+            <div class="col-auto">
+                <a href="<?= self::$_Router->getLastPageVisited() ?>" class="btn btn-outline-warning">Annuler</a>
+            </div>
+        </div>
+    </form>
+</section>

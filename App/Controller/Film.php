@@ -2,14 +2,12 @@
 
     namespace Cineflix\App\Controller;
 
-    use Cineflix\App\DAO\List\Role;
     use Cineflix\App\DAO\List\StatusFilm;
     use Cineflix\App\DAO\FilmDao;
     use Cineflix\App\DAO\SeanceDao;
     use Cineflix\App\Model\FilmModel;
     use Cineflix\App\Model\SeanceModel;
     use Cineflix\Core\AbstractController;
-    use Cineflix\Core\Util\GenerateIdentifiant;
     use Cineflix\Core\Util\MessageFlash;
     use Cineflix\Core\Util\Security;
 
@@ -17,12 +15,19 @@
     {
         protected FilmDao $filmDao;
 
+        public function __construct()
+        {
+            parent::__construct();
+
+
+        }
+
         public function index(?string $status = null): string
         {
 
             $status_id = (!is_null($status)) ? StatusFilm::getStatusId($status) : StatusFilm::EN_SALLE->value;
 
-            $this->page_active = StatusFilm::getUrlById($status_id);
+            $this->page_active = ($status_id !== StatusFilm::EN_STREAMING->value)? StatusFilm::EN_SALLE : StatusFilm::EN_STREAMING;
 
             $options = [
                 'select'  => ['film.*','cinema.nom','ville.nom','exploitation.debut','exploitation.fin'],
@@ -62,7 +67,7 @@
         {
 
             $options = [
-                'select'  => ['*','cinema.nom','ville.nom','exploitation.debut','exploitation.fin'],
+                'select'  => ['*','cinema.nom','ville.id', 'ville.nom','exploitation.debut','exploitation.fin'],
                 'contain' => [
                     'cinema' => 'cinema.id = film.cinema_id',
                     'ville'  => 'ville.id = cinema.ville_id',
@@ -75,7 +80,21 @@
 
             if($movie) {
 
-                $this->page_active = StatusFilm::getUrlById($movie->status_id);
+                $_SESSION['film'] = [
+                    'id'    => $movie->id,
+                    'nom'   => $movie->nom,
+                    'cinema' => [
+                        'id'    => $movie->cinema->id,
+                        'nom'   => $movie->cinema->nom
+                    ],
+                    'ville' => [
+                        'id'    => $movie->cinema->ville->id,
+                        'nom'   => $movie->cinema->ville->nom
+                    ]
+                ];
+
+                $this->page_active = ($movie->status !== StatusFilm::EN_STREAMING)? StatusFilm::EN_SALLE : StatusFilm::EN_STREAMING;
+
                 $this->title_page .= ' | ' . ucfirst($movie->nom);
 
                 $seanceDao = new SeanceDao();

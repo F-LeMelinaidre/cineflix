@@ -78,6 +78,10 @@
             self::$_Router->get('movie_show', '/Film/{slug}', [ Controller\Film::class, 'show'],
                 ['slug' => '[a-zA-Z-]+']);
 
+            self::$_Router->get('ticket_select', '/Achat-Ticket/{seance}', [ Controller\Ticket::class, 'buy'],
+                ['seance' => '[0-9]+']);
+            self::$_Router->post('ticket_buy', '/Achat-Ticket/Payement', [ Controller\Ticket::class, 'buy']);
+
             //Profil
             self::$_Router->get('profil_show', '/Profil', [ Controller\Profil::class, 'show']);
             self::$_Router->get('profil_edit_identite', '/Profil/Edit/Identite', [ Controller\Profil::class, 'editIdentite']);
@@ -140,7 +144,9 @@
             self::$_Router->ajax('ajax_cinemaSearch', '/Ajax/cinemaSearch', [ Controller\Cinema::class, 'cinemaSearch'],true);
             self::$_Router->ajax('ajax_villeSearch', '/Ajax/villeSearch', [ Controller\Cinema::class, 'villeSearch'],true);
             self::$_Router->ajax('ajax_movieSearch', '/Ajax/movieSearch', [ Controller\Film::class, 'movieSearch'],true);
+
             self::$_Router->ajax('ajax_movieExist', '/Ajax/movieExist', [ Controller\Film::class, 'movieExist'],true);
+
             self::$_Router->ajax('ajax_statusList', '/Ajax/statusList', [ Controller\Film::class, 'statusList']);
 
 
@@ -170,7 +176,7 @@
                 // index 1: la methode
                 // $params est un tableau des paramètres passés à la méthode de la Class $callback
                 // exemple un parametre d'url
-                // return vers public/index.view
+                // return vers public/add.view
 
 
                 return call_user_func_array($callback, $params);

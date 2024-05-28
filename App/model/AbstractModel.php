@@ -2,6 +2,7 @@
 
     namespace Cineflix\App\model;
 
+    use Cineflix\Core\Util\Code;
     use Cineflix\Core\Util\Regex;
     use Cineflix\Core\Util\Security;
     use Normalizer;
@@ -25,10 +26,10 @@
          */
         public function __construct(?array $data)
         {
-            if(isset($data['id'])) $this->id = $data['id'];
+            if(isset($data['id'])) $this->setId($data['id']);
             if(isset($data['created'])) $this->created = $data['created'];
             if(isset($data['modified'])) $this->modified = $data['modified'];
-            if(isset($data['nom'])) $this->nom = $data['nom'];
+            if(isset($data['nom'])) $this->setNom($data['nom']);
 
         }
 
@@ -155,6 +156,7 @@
             return date("d-m-Y", strtotime($date));
         }
 
+
         /**
          * @param string $date
          *
@@ -164,6 +166,18 @@
         {
             return date("d-m-Y H:i:s", strtotime($date));
         }
+
+
+        /**
+         * @return string
+         */
+        protected function getCode(bool $id = true): string
+        {
+            $code = Code::getCode($this->nom,3);
+
+            return ($id) ? $this->id.$code : $code ;
+        }
+
 
         /**
          * @param string $item

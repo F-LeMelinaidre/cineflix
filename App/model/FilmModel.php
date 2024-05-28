@@ -2,7 +2,6 @@
 
     namespace Cineflix\App\Model;
 
-    use Cineflix\App\AppController;
     use Cineflix\App\DAO\List\StatusFilm;
     use Cineflix\Core\Util\Security;
 
@@ -13,7 +12,7 @@
         private ?CinemaModel $cinema = null;
         private ?ExploitationModel $exploitation = null;
 
-        protected ?string $affiche;
+        protected string $affiche = '';
         protected ?string $synopsis;
         protected ?int $status_id;
         protected ?string $date_sortie;

@@ -93,7 +93,7 @@ class AuthConnect
             ->setParameter('token', self::$_Token)
             ->where("$ident_col = :$ident_col")
             ->setParameter($ident_col, $id_value)
-            ->execute();
+            ->update();
 
         if($req) {
             self::$_Connect = true;
